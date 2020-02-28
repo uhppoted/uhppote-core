@@ -3,7 +3,7 @@ package types
 import (
 	"errors"
 	"fmt"
-	"github.com/uhppoted/uhppoted/src/uhppote/encoding/bcd"
+	"github.com/uhppoted/uhppote-core/encoding/bcd"
 	"time"
 )
 

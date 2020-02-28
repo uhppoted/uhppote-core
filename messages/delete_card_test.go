@@ -1,7 +1,7 @@
 package messages
 
 import (
-	codec "github.com/uhppoted/uhppoted/src/uhppote/encoding/UTO311-L0x"
+	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
 	"reflect"
 	"testing"
 )

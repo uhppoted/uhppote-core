@@ -3,8 +3,8 @@ package uhppote
 import (
 	"errors"
 	"fmt"
-	"github.com/uhppoted/uhppoted/src/uhppote/messages"
-	"github.com/uhppoted/uhppoted/src/uhppote/types"
+	"github.com/uhppoted/uhppote-core/messages"
+	"github.com/uhppoted/uhppote-core/types"
 	"net"
 )
 

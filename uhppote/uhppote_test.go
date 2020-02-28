@@ -1,9 +1,9 @@
 package uhppote
 
 import (
-	codec "github.com/uhppoted/uhppoted/src/uhppote/encoding/UTO311-L0x"
-	"github.com/uhppoted/uhppoted/src/uhppote/messages"
-	"github.com/uhppoted/uhppoted/src/uhppote/types"
+	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
+	"github.com/uhppoted/uhppote-core/messages"
+	"github.com/uhppoted/uhppote-core/types"
 	"net"
 	"reflect"
 	"sync"

@@ -3,7 +3,7 @@ package UTO311_L0x
 import (
 	"encoding/hex"
 	"fmt"
-	"github.com/uhppoted/uhppoted/src/uhppote/types"
+	"github.com/uhppoted/uhppote-core/types"
 	"net"
 	"reflect"
 	"regexp"

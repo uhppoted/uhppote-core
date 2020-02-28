@@ -1,7 +1,7 @@
 package uhppote
 
 import (
-	"github.com/uhppoted/uhppoted/src/uhppote/types"
+	"github.com/uhppoted/uhppote-core/types"
 	"os"
 	"time"
 )

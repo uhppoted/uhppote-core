@@ -3,17 +3,23 @@ package uhppote
 import (
 	"errors"
 	"fmt"
-	"github.com/uhppoted/uhppoted/src/uhppote/messages"
-	"github.com/uhppoted/uhppoted/src/uhppote/types"
+	"github.com/uhppoted/uhppote-core/messages"
+	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) DeleteCard(serialNumber, cardNumber uint32) (*types.Result, error) {
-	request := messages.DeleteCardRequest{
+func (u *UHPPOTE) PutCard(serialNumber uint32, card types.Card) (*types.Result, error) {
+	request := messages.PutCardRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
-		CardNumber:   cardNumber,
+		CardNumber:   card.CardNumber,
+		From:         card.From,
+		To:           card.To,
+		Door1:        card.Doors[0],
+		Door2:        card.Doors[1],
+		Door3:        card.Doors[2],
+		Door4:        card.Doors[3],
 	}
 
-	reply := messages.DeleteCardResponse{}
+	reply := messages.PutCardResponse{}
 
 	err := u.Execute(serialNumber, request, &reply)
 	if err != nil {
