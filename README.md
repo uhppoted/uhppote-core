@@ -8,11 +8,6 @@ Supported operating systems:
 - MacOS
 - Windows
 
-## Raison d'être
-
-The manufacturer supplied application is 'Windows-only' and provides limited support for integration with other
-systems.
-
 ## Releases
 
 ## Development
