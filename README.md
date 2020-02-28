@@ -18,6 +18,7 @@ Supported operating systems:
 
 | *Dependency*                        | *Description*                                          |
 | ----------------------------------- | ------------------------------------------------------ |
+| golang.org/x/lint/golint            | Additional *lint* check for release builds             |
 
 ## API
 
