@@ -14,6 +14,7 @@ format:
 	go fmt ./...
 
 build: format
+	go build ./...
 
 test: build
 	go test ./...
@@ -29,6 +30,8 @@ benchmark: build
 
 coverage: build
 	go test -cover ./...
+
+release: test vet
 
 debug: build
 	go test ./...
