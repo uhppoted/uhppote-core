@@ -20,6 +20,18 @@
 - [ ] Rework plist encoder/decoder to be only for launchd (and remove 'parse' from daemonize/undaemonize)
 - [ ] Unify event buffer operations
 
+- [ ] bad udp cksum
+ 
+      tcpdump: listening on en3, link-type EN10MB (Ethernet), capture size 262144 bytes
+      14:08:25.074807 IP (tos 0x0, ttl 64, id 55147, offset 0, flags [none], proto UDP (17), length 92, bad cksum 0 (->9bf4)!)
+      192.168.66.225.60267 > 192.168.66.255.60000: [bad udp cksum 0x078b -> 0x0acc!] UDP, length 64
+      0x0000:  4500 005c d76b 0000 4011 0000 c0a8 42e1  E..\.k..@.....B.
+      0x0010:  c0a8 42ff eb6b ea60 0048 078b 1794 0000  ..B..k.`.H......
+      0x0020:  0000 0000 0000 0000 0000 0000 0000 0000  ................
+      0x0030:  0000 0000 0000 0000 0000 0000 0000 0000  ................
+      0x0040:  0000 0000 0000 0000 0000 0000 0000 0000  ................
+      0x0050:  0000 0000 0000 0000 0000 0000            ............
+
 ### Documentation
 
 - [ ] TeX protocol description
