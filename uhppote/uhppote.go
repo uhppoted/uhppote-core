@@ -29,12 +29,12 @@ type Device struct {
 	Doors    []string
 }
 
-func NewDevice(deviceID uint32, address *net.UDPAddr, rollover uint32) *Device {
+func NewDevice(deviceID uint32, address *net.UDPAddr, rollover uint32, doors []string) *Device {
 	return &Device{
 		DeviceID: deviceID,
 		Address:  address,
 		Rollover: rollover,
-		Doors:    []string{},
+		Doors:    doors,
 	}
 }
 
