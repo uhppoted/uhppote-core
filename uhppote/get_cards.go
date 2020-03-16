@@ -22,3 +22,18 @@ func (u *UHPPOTE) GetCards(serialNumber uint32) (*types.RecordCount, error) {
 		Records:      reply.Records,
 	}, nil
 }
+
+func (u *UHPPOTE) GetCardsN(deviceID uint32) (uint32, error) {
+	request := messages.GetCardsRequest{
+		SerialNumber: types.SerialNumber(deviceID),
+	}
+
+	reply := messages.GetCardsResponse{}
+
+	err := u.Execute(deviceID, request, &reply)
+	if err != nil {
+		return 0, err
+	}
+
+	return reply.Records,nil
+}
