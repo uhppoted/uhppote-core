@@ -21,11 +21,31 @@ func (u *UHPPOTE) DeleteCard(serialNumber, cardNumber uint32) (*types.Result, er
 	}
 
 	if uint32(reply.SerialNumber) != serialNumber {
-		return nil, errors.New(fmt.Sprintf("Incorrect serial number in response - expect '%v', received '%v'", serialNumber, reply.SerialNumber))
+		return nil, errors.New(fmt.Sprintf("Incorrect serial number in response - expected '%v', received '%v'", serialNumber, reply.SerialNumber))
 	}
 
 	return &types.Result{
 		SerialNumber: reply.SerialNumber,
 		Succeeded:    reply.Succeeded,
 	}, nil
+}
+
+func (u *UHPPOTE) DeleteCardN(deviceID uint32, card types.Card) (bool, error) {
+	request := messages.DeleteCardRequest{
+		SerialNumber: types.SerialNumber(deviceID),
+		CardNumber:   card.CardNumber,
+	}
+
+	reply := messages.DeleteCardResponse{}
+
+	err := u.Execute(deviceID, request, &reply)
+	if err != nil {
+		return false, err
+	}
+
+	if uint32(reply.SerialNumber) != deviceID {
+		return false, errors.New(fmt.Sprintf("Incorrect serial number in response - expected '%v', received '%v'", deviceID, reply.SerialNumber))
+	}
+
+	return reply.Succeeded, nil
 }

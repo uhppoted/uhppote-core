@@ -87,7 +87,6 @@ func (u *UHPPOTE) GetCardByIndexN(deviceID, index uint32) (*types.Card, error) {
 	}, nil
 }
 
-
 func (u *UHPPOTE) GetCardByID(serialNumber, cardNumber uint32) (*types.Card, error) {
 	request := messages.GetCardByIDRequest{
 		SerialNumber: types.SerialNumber(serialNumber),

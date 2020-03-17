@@ -35,5 +35,5 @@ func (u *UHPPOTE) GetCardsN(deviceID uint32) (uint32, error) {
 		return 0, err
 	}
 
-	return reply.Records,nil
+	return reply.Records, nil
 }
