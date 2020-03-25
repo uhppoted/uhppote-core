@@ -10,6 +10,14 @@ import (
 
 type Date time.Time
 
+func (d Date) Before(p Date) bool {
+	return time.Time(d).Before(time.Time(p))
+}
+
+func (d Date) After(p Date) bool {
+	return time.Time(d).After(time.Time(p))
+}
+
 func (d Date) String() string {
 	return time.Time(d).Format("2006-01-02")
 }
