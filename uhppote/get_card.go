@@ -131,7 +131,7 @@ func (u *UHPPOTE) GetCardByID(serialNumber, cardNumber uint32) (*types.Card, err
 	}, nil
 }
 
-func (u *UHPPOTE) GetCardByIDN(deviceID, cardID uint32) (*types.Card, error) {
+func (u *UHPPOTE) GetCardByIdN(deviceID, cardID uint32) (*types.Card, error) {
 	request := messages.GetCardByIDRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   cardID,
