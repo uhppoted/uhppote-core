@@ -10,6 +10,12 @@ Supported operating systems:
 
 ## Releases
 
+| *Version* | *Description*                                                                             |
+| --------- | ----------------------------------------------------------------------------------------- |
+| v0.6.1    | Added support for CLI ACL commands                                                        |
+| v0.6.0    | Added `IDevice` interface to support `uhppoted-api` ACL functionality                     |
+| v0.5.1    | Initial release following restructuring into standalone Go *modules* and *git submodules* |
+
 ## Development
 
 ### Building from source
