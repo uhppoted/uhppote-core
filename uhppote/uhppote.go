@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-var VERSION string = "v0.6.0"
+var VERSION string = "v0.6.1"
 
 type UHPPOTE struct {
 	BindAddress      *net.UDPAddr
