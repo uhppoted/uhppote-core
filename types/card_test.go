@@ -104,7 +104,7 @@ func TestCardToStringWithExtraDoors(t *testing.T) {
 	}
 }
 
-func TestUmarshalCard(t *testing.T) {
+func TestUnmarshalCard(t *testing.T) {
 	from := date("2020-01-01")
 	to := date("2020-12-31")
 
@@ -139,7 +139,7 @@ func TestUmarshalCard(t *testing.T) {
 	}
 }
 
-func TestUmarshalCardWithMissingCardNumber(t *testing.T) {
+func TestUnmarshalCardWithMissingCardNumber(t *testing.T) {
 	from := date("2020-01-01")
 	to := date("2020-12-31")
 
@@ -173,7 +173,7 @@ func TestUmarshalCardWithMissingCardNumber(t *testing.T) {
 	}
 }
 
-func TestUmarshalCardWithMissingStartDate(t *testing.T) {
+func TestUnmarshalCardWithMissingStartDate(t *testing.T) {
 	blob := `{
   "card-number": 12345,
   "end-date": "2020-12-31",
@@ -192,7 +192,7 @@ func TestUmarshalCardWithMissingStartDate(t *testing.T) {
 	}
 }
 
-func TestUmarshalCardWithMissingEndDate(t *testing.T) {
+func TestUnmarshalCardWithMissingEndDate(t *testing.T) {
 	blob := `{
   "card-number": 12345,
   "start-date": "2020-01-01",
@@ -211,7 +211,7 @@ func TestUmarshalCardWithMissingEndDate(t *testing.T) {
 	}
 }
 
-func TestUmarshalCardWithMissingDoors(t *testing.T) {
+func TestUnmarshalCardWithMissingDoors(t *testing.T) {
 	from := date("2020-01-01")
 	to := date("2020-12-31")
 
@@ -240,7 +240,7 @@ func TestUmarshalCardWithMissingDoors(t *testing.T) {
 	}
 }
 
-func TestUmarshalCardWithInvalidDoors(t *testing.T) {
+func TestUnmarshalCardWithInvalidDoors(t *testing.T) {
 	blob := `{
   "card-number": 12345,
   "start-date": "2020-01-01",

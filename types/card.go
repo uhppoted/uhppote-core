@@ -55,12 +55,12 @@ func (c *Card) UnmarshalJSON(bytes []byte) error {
 
 	from, err := DateFromString(card.From)
 	if err != nil {
-		return err
+		return fmt.Errorf("invalid start-date '%s'", card.From)
 	}
 
 	to, err := DateFromString(card.To)
 	if err != nil {
-		return err
+		return fmt.Errorf("invalid end-date '%s'", card.To)
 	}
 
 	doors := card.Doors
