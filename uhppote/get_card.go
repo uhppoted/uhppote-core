@@ -41,8 +41,8 @@ func (u *UHPPOTE) GetCardByIndex(serialNumber, index uint32) (*types.Card, error
 
 	return &types.Card{
 		CardNumber: response.CardNumber,
-		From:       *response.From,
-		To:         *response.To,
+		From:       response.From,
+		To:         response.To,
 		Doors:      []bool{response.Door1, response.Door2, response.Door3, response.Door4},
 	}, nil
 }
@@ -81,8 +81,8 @@ func (u *UHPPOTE) GetCardByIndexN(deviceID, index uint32) (*types.Card, error) {
 
 	return &types.Card{
 		CardNumber: response.CardNumber,
-		From:       *response.From,
-		To:         *response.To,
+		From:       response.From,
+		To:         response.To,
 		Doors:      []bool{response.Door1, response.Door2, response.Door3, response.Door4},
 	}, nil
 }
@@ -125,8 +125,8 @@ func (u *UHPPOTE) GetCardByID(serialNumber, cardNumber uint32) (*types.Card, err
 
 	return &types.Card{
 		CardNumber: response.CardNumber,
-		From:       *response.From,
-		To:         *response.To,
+		From:       response.From,
+		To:         response.To,
 		Doors:      []bool{response.Door1, response.Door2, response.Door3, response.Door4},
 	}, nil
 }
@@ -169,8 +169,8 @@ func (u *UHPPOTE) GetCardByIdN(deviceID, cardID uint32) (*types.Card, error) {
 
 	return &types.Card{
 		CardNumber: response.CardNumber,
-		From:       *response.From,
-		To:         *response.To,
+		From:       response.From,
+		To:         response.To,
 		Doors:      []bool{response.Door1, response.Door2, response.Door3, response.Door4},
 	}, nil
 }

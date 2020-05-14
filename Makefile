@@ -34,5 +34,5 @@ coverage: build
 release: test vet
 
 debug: build
-	go test ./...
+	go test ./... -run TestCard
 
