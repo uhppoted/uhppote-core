@@ -14,6 +14,10 @@ import (
 
 var VERSION string = "v0.6.1"
 
+type IUHPPOTE interface {
+	Execute(serialNumber uint32, request, reply interface{}) error
+}
+
 type UHPPOTE struct {
 	BindAddress      *net.UDPAddr
 	BroadcastAddress *net.UDPAddr

@@ -19,6 +19,6 @@ type GetEventResponse struct {
 	Door         uint8              `uhppote:"offset:14"`
 	DoorOpened   bool               `uhppote:"offset:15"`
 	UserID       uint32             `uhppote:"offset:16"`
-	Timestamp    types.DateTime     `uhppote:"offset:20"`
+	Timestamp    *types.DateTime    `uhppote:"offset:20"`
 	Result       uint8              `uhppote:"offset:27"`
 }

@@ -1,11 +1,12 @@
 package uhppote
 
 import (
+	"fmt"
 	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) GetEvent(serialNumber, index uint32) (*types.Event, error) {
+func GetEvent(u IUHPPOTE, serialNumber, index uint32) (*types.Event, error) {
 	request := messages.GetEventRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 		Index:        index,
@@ -18,6 +19,14 @@ func (u *UHPPOTE) GetEvent(serialNumber, index uint32) (*types.Event, error) {
 		return nil, err
 	}
 
+	if reply.Index == 0 {
+		return nil, nil
+	}
+
+	if reply.Timestamp == nil {
+		return nil, fmt.Errorf("Invalid 'timestamp' in response")
+	}
+
 	return &types.Event{
 		SerialNumber: reply.SerialNumber,
 		Index:        reply.Index,
@@ -26,7 +35,7 @@ func (u *UHPPOTE) GetEvent(serialNumber, index uint32) (*types.Event, error) {
 		Door:         reply.Door,
 		DoorOpened:   reply.DoorOpened,
 		UserID:       reply.UserID,
-		Timestamp:    reply.Timestamp,
+		Timestamp:    *reply.Timestamp,
 		Result:       reply.Result,
 	}, nil
 }

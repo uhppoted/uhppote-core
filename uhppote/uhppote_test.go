@@ -11,6 +11,14 @@ import (
 	"time"
 )
 
+type mock struct {
+	execute func(uint32, interface{}, interface{}) error
+}
+
+func (m *mock) Execute(deviceID uint32, request, reply interface{}) error {
+	return m.execute(deviceID, request, reply)
+}
+
 func TestBroadcastAddressRequest(t *testing.T) {
 	expected, _ := messages.UnmarshalResponse([]byte{
 		0x17, 0x52, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

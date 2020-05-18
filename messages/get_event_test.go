@@ -118,8 +118,36 @@ func TestUnmarshalGetEventResponse(t *testing.T) {
 	}
 
 	timestamp, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-02-10 07:12:01", time.Local)
-	if reply.Timestamp != types.DateTime(timestamp) {
+	if *reply.Timestamp != types.DateTime(timestamp) {
 		t.Errorf("Incorrect 'timestamp' - expected:%s, got:%s\n", timestamp.Format("2006-01-02 15:04:05"), reply.Timestamp)
+	}
+}
+
+func TestUnmarshalGetEventResponseWithNoEvents(t *testing.T) {
+	message := []byte{
+		0x17, 0xb0, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	}
+
+	expected := GetEventResponse{
+		MsgType:      0xb0,
+		SerialNumber: 423187757,
+		Index:        0,
+		Timestamp:    nil,
+	}
+
+	response := GetEventResponse{}
+
+	err := codec.Unmarshal(message, &response)
+	if err != nil {
+		t.Errorf("Unexpected error: %v\n", err)
+	}
+
+	if !reflect.DeepEqual(response, expected) {
+		t.Errorf("Invalid unmarshalled response:\nexpected:%#v\ngot:     %#v", expected, response)
+		return
 	}
 }
 
@@ -131,7 +159,8 @@ func TestFactoryUnmarshalGetEventResponse(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4a, 0x26, 0x80, 0x39, 0x08, 0x92, 0x00, 0x00,
 	}
 
-	timestamp, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-02-10 07:12:01", time.Local)
+	datetime, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-02-10 07:12:01", time.Local)
+	timestamp := types.DateTime(datetime)
 	expected := GetEventResponse{
 		MsgType:      0xb0,
 		SerialNumber: 423187757,
@@ -141,7 +170,7 @@ func TestFactoryUnmarshalGetEventResponse(t *testing.T) {
 		Door:         3,
 		DoorOpened:   true,
 		UserID:       6154413,
-		Timestamp:    types.DateTime(timestamp),
+		Timestamp:    &timestamp,
 		Result:       0x06,
 	}
 
