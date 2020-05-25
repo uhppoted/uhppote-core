@@ -1,5 +1,5 @@
 DEBUG ?= --debug
-VERSION = v0.6.2
+VERSION = v0.6.x
 LDFLAGS = -ldflags "-X uhppote.VERSION=$(VERSION)" 
 
 all: test      \
