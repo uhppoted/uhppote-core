@@ -26,7 +26,9 @@ func (u *UHPPOTE) GetCardByIndex(serialNumber, index uint32) (*types.Card, error
 		return nil, fmt.Errorf("Incorrect serial number in response - expect '%v', received '%v'", serialNumber, response.SerialNumber)
 	}
 
-	if response.CardNumber == 0 {
+    // 0:          not found
+    // 0xffffffff: deleted
+	if response.CardNumber == 0 || response.CardNumber == 0xffffffff {
 		return nil, nil
 	}
 
@@ -66,7 +68,9 @@ func (u *UHPPOTE) GetCardByIndexN(deviceID, index uint32) (*types.Card, error) {
 		return nil, fmt.Errorf("Incorrect device ID in response - expected '%v', received '%v'", deviceID, response.SerialNumber)
 	}
 
-	if response.CardNumber == 0 {
+    // 0:          not found
+    // 0xffffffff: deleted
+	if response.CardNumber == 0 || response.CardNumber == 0xffffffff {
 		return nil, nil
 	}
 
