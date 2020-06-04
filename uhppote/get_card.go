@@ -134,10 +134,10 @@ func (u *UHPPOTE) GetCardByID(serialNumber, cardNumber uint32) (*types.Card, err
 	}, nil
 }
 
-func (u *UHPPOTE) GetCardByIdN(deviceID, cardID uint32) (*types.Card, error) {
+func (u *UHPPOTE) GetCardByIdN(deviceID, cardNumber uint32) (*types.Card, error) {
 	request := messages.GetCardByIDRequest{
 		SerialNumber: types.SerialNumber(deviceID),
-		CardNumber:   cardID,
+		CardNumber:   cardNumber,
 	}
 
 	reply, err := u.Send(deviceID, request)
@@ -158,8 +158,8 @@ func (u *UHPPOTE) GetCardByIdN(deviceID, cardID uint32) (*types.Card, error) {
 		return nil, nil
 	}
 
-	if response.CardNumber != cardID {
-		return nil, fmt.Errorf("Incorrect card number in response - expected '%v', received '%v'", cardID, response.CardNumber)
+	if response.CardNumber != cardNumber {
+		return nil, fmt.Errorf("Incorrect card number in response - expected '%v', received '%v'", cardNumber, response.CardNumber)
 	}
 
 	if response.From == nil {
