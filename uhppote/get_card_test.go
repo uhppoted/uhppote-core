@@ -9,7 +9,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func TestGetCardByIndexN(t *testing.T) {
+func TestGetCardByIndex(t *testing.T) {
 	message := []byte{
 		0x17, 0x5c, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0xd4, 0x88, 0x5d, 0x00, 0x20, 0x20, 0x01, 0x01,
 		0x20, 0x20, 0x12, 0x31, 0x01, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -32,13 +32,13 @@ func TestGetCardByIndexN(t *testing.T) {
 		},
 	}
 
-	card, err := GetCardByIndexN(&u, 423187757, 6129876)
+	card, err := GetCardByIndex(&u, 423187757, 6129876)
 	if err != nil {
-		t.Fatalf("Unexpected error returned from GetCardByIndexN (%v)", err)
+		t.Fatalf("Unexpected error returned from GetCardByIndex (%v)", err)
 	}
 
 	if card == nil {
-		t.Fatalf("Expected response from GetCardByIndexN, got:%v", card)
+		t.Fatalf("Expected response from GetCardByIndex, got:%v", card)
 	}
 
 	if !reflect.DeepEqual(*card, expected) {
@@ -46,7 +46,7 @@ func TestGetCardByIndexN(t *testing.T) {
 	}
 }
 
-func TestGetCardByIndexNWithCardNotFound(t *testing.T) {
+func TestGetCardByIndexWithCardNotFound(t *testing.T) {
 	message := []byte{
 		0x17, 0x5c, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -62,17 +62,17 @@ func TestGetCardByIndexNWithCardNotFound(t *testing.T) {
 		},
 	}
 
-	card, err := GetCardByIndexN(&u, 423187757, 6129876)
+	card, err := GetCardByIndex(&u, 423187757, 6129876)
 	if err != nil {
-		t.Fatalf("Unexpected error returned from GetCardByIndexN (%v)", err)
+		t.Fatalf("Unexpected error returned from GetCardByIndex (%v)", err)
 	}
 
 	if card != nil {
-		t.Fatalf("Expected <nil> from GetCardByIndexN, got:%v", *card)
+		t.Fatalf("Expected <nil> from GetCardByIndex, got:%v", *card)
 	}
 }
 
-func TestGetCardByIndexNWithCardDeleted(t *testing.T) {
+func TestGetCardByIndexWithCardDeleted(t *testing.T) {
 	message := []byte{
 		0x17, 0x5c, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -88,12 +88,12 @@ func TestGetCardByIndexNWithCardDeleted(t *testing.T) {
 		},
 	}
 
-	card, err := GetCardByIndexN(&u, 423187757, 6129876)
+	card, err := GetCardByIndex(&u, 423187757, 6129876)
 	if err != nil {
-		t.Fatalf("Unexpected error returned from GetCardByIndexN (%v)", err)
+		t.Fatalf("Unexpected error returned from GetCardByIndex (%v)", err)
 	}
 
 	if card != nil {
-		t.Fatalf("Expected <nil> from GetCardByIndexN, got:%v", *card)
+		t.Fatalf("Expected <nil> from GetCardByIndex, got:%v", *card)
 	}
 }
