@@ -13,10 +13,21 @@ import (
 
 type mock struct {
 	execute func(uint32, interface{}, interface{}) error
+	send    func(uint32, interface{}) (messages.Response, error)
 }
 
 func (m *mock) Execute(deviceID uint32, request, reply interface{}) error {
 	return m.execute(deviceID, request, reply)
+}
+
+func (m *mock) Send(deviceID uint32, request interface{}) (messages.Response, error) {
+	return m.send(deviceID, request)
+}
+
+var date = func(s string) *types.Date {
+	d, _ := time.ParseInLocation("2006-01-02", s, time.Local)
+	p := types.Date(d)
+	return &p
 }
 
 func TestBroadcastAddressRequest(t *testing.T) {

@@ -22,7 +22,6 @@ func TestMarshalGetEventRequest(t *testing.T) {
 	}
 
 	m, err := codec.Marshal(request)
-
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
 		return
@@ -76,7 +75,6 @@ func TestUnmarshalGetEventResponse(t *testing.T) {
 	reply := GetEventResponse{}
 
 	err := codec.Unmarshal(message, &reply)
-
 	if err != nil {
 		t.Errorf("Unexpected error: %v\n", err)
 	}

@@ -16,6 +16,7 @@ var VERSION string = "v0.6.x"
 
 type IUHPPOTE interface {
 	Execute(serialNumber uint32, request, reply interface{}) error
+	Send(serialNumber uint32, request interface{}) (messages.Response, error)
 }
 
 type UHPPOTE struct {
