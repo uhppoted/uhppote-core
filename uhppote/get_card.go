@@ -10,7 +10,7 @@ func (u *UHPPOTE) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
 	return GetCardByIndex(u, deviceID, index)
 }
 
-func GetCardByIndex(u IUHPPOTE, deviceID, index uint32) (*types.Card, error) {
+func GetCardByIndex(u iuhppote, deviceID, index uint32) (*types.Card, error) {
 	request := messages.GetCardByIndexRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		Index:        index,

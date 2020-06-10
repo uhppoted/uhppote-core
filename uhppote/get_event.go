@@ -6,7 +6,11 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func GetEvent(u IUHPPOTE, serialNumber, index uint32) (*types.Event, error) {
+func (u *UHPPOTE) GetEvent(serialNumber, index uint32) (*types.Event, error) {
+	return getEvent(u, serialNumber, index)
+}
+
+func getEvent(u iuhppote, serialNumber, index uint32) (*types.Event, error) {
 	request := messages.GetEventRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 		Index:        index,

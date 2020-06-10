@@ -14,7 +14,7 @@ import (
 
 var VERSION string = "v0.6.x"
 
-type IUHPPOTE interface {
+type iuhppote interface {
 	Execute(serialNumber uint32, request, reply interface{}) error
 	Send(serialNumber uint32, request interface{}) (messages.Response, error)
 }

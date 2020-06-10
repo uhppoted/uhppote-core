@@ -36,7 +36,7 @@ func TestGetEvent(t *testing.T) {
 		Result:       0x06,
 	}
 
-	response, err := GetEvent(&u, 423187757, 37)
+	response, err := getEvent(&u, 423187757, 37)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetEvent (%v)", err)
 	}
@@ -65,7 +65,7 @@ func TestGetEventWithNoEvents(t *testing.T) {
 		},
 	}
 
-	response, err := GetEvent(&u, 423187757, 37)
+	response, err := getEvent(&u, 423187757, 37)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetEvent (%v)", err)
 	}
@@ -82,7 +82,7 @@ func TestGetEventWithError(t *testing.T) {
 		},
 	}
 
-	_, err := GetEvent(&u, 423187757, 37)
+	_, err := getEvent(&u, 423187757, 37)
 	if err == nil {
 		t.Fatalf("Expected error return from GetEvent")
 	}
