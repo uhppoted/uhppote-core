@@ -12,6 +12,7 @@ Supported operating systems:
 
 | *Version* | *Description*                                                                             |
 | --------- | ----------------------------------------------------------------------------------------- |
+| v0.6.3    | Added support for MQTT ACL API                                                            |
 | v0.6.2    | Added support for REST ACL API                                                            |
 | v0.6.1    | Added support for CLI ACL commands                                                        |
 | v0.6.0    | Added `IDevice` interface to support `uhppoted-api` ACL functionality                     |
