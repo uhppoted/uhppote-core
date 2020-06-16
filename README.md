@@ -1,3 +1,5 @@
+![build](https://github.com/uhppoted/uhppote-core/workflows/build/badge.svg)
+
 # uhppote-core
 
 Go API for low-level access to the UT0311-L0x* TCP/IP Wiegand access control boards. This module provides the device level
