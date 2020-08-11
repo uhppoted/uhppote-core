@@ -30,10 +30,10 @@ func TestGetEvent(t *testing.T) {
 		Type:         2,
 		Granted:      true,
 		Door:         3,
-		DoorOpened:   true,
-		UserID:       6154413,
+		Direction:    1,
+		CardNumber:   6154413,
 		Timestamp:    types.DateTime(timestamp),
-		Result:       0x06,
+		Reason:       0x06,
 	}
 
 	response, err := getEvent(&u, 423187757, 37)

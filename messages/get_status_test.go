@@ -102,12 +102,12 @@ func TestUnmarshalGetStatusResponse(t *testing.T) {
 		t.Errorf("Incorrect 'door' - expected:%v, got:%v", 3, reply.Door)
 	}
 
-	if !reply.DoorOpened {
-		t.Errorf("Incorrect 'door opened' - expected:%v, got:%v", true, reply.DoorOpened)
+	if reply.Direction != 0x01 {
+		t.Errorf("Incorrect 'direction' - expected:%v, got:%v", 0x01, reply.Direction)
 	}
 
-	if reply.UserID != 6154410 {
-		t.Errorf("Incorrect 'user ID' - expected:%v, got:%v", 6154410, reply.UserID)
+	if reply.CardNumber != 6154410 {
+		t.Errorf("Incorrect 'card number' - expected:%v, got:%v", 6154410, reply.CardNumber)
 	}
 
 	swiped, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-04-19 17:00:09", time.Local)
@@ -115,8 +115,8 @@ func TestUnmarshalGetStatusResponse(t *testing.T) {
 		t.Errorf("Incorrect 'event timestamp' - expected:%s, got:%s", swiped.Format("2006-01-02 15:04:05"), reply.EventTimestamp)
 	}
 
-	if reply.EventResult != 6 {
-		t.Errorf("Incorrect 'event result' - expected:%v, got:%v", 6, reply.EventResult)
+	if reply.EventReason != 6 {
+		t.Errorf("Incorrect 'event reason' - expected:%v, got:%v", 6, reply.EventReason)
 	}
 
 	if !reply.Door1State {
@@ -233,12 +233,12 @@ func TestFactoryUnmarshalGetStatusResponse(t *testing.T) {
 		t.Errorf("Incorrect 'door' - expected:%v, got:%v", 3, reply.Door)
 	}
 
-	if !reply.DoorOpened {
-		t.Errorf("Incorrect 'door opened' - expected:%v, got:%v", true, reply.DoorOpened)
+	if reply.Direction != 0x01 {
+		t.Errorf("Incorrect 'direction' - expected:%v, got:%v", 0x01, reply.Direction)
 	}
 
-	if reply.UserID != 6154410 {
-		t.Errorf("Incorrect 'user ID' - expected:%v, got:%v", 6154410, reply.UserID)
+	if reply.CardNumber != 6154410 {
+		t.Errorf("Incorrect 'card number' - expected:%v, got:%v", 6154410, reply.CardNumber)
 	}
 
 	swiped, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-04-19 17:00:09", time.Local)
@@ -246,8 +246,8 @@ func TestFactoryUnmarshalGetStatusResponse(t *testing.T) {
 		t.Errorf("Incorrect 'event timestamp' - expected:%s, got:%s", swiped.Format("2006-01-02 15:04:05"), reply.EventTimestamp)
 	}
 
-	if reply.EventResult != 6 {
-		t.Errorf("Incorrect 'event result' - expected:%v, got:%v", 6, reply.EventResult)
+	if reply.EventReason != 6 {
+		t.Errorf("Incorrect 'event reason' - expected:%v, got:%v", 6, reply.EventReason)
 	}
 
 	if !reply.Door1State {

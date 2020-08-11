@@ -13,10 +13,10 @@ type Event struct {
 	EventType      byte               `uhppote:"offset:12"`
 	Granted        bool               `uhppote:"offset:13"`
 	Door           byte               `uhppote:"offset:14"`
-	DoorOpened     bool               `uhppote:"offset:15"`
-	UserID         uint32             `uhppote:"offset:16"`
+	Direction      uint8              `uhppote:"offset:15"`
+	CardNumber     uint32             `uhppote:"offset:16"`
 	Timestamp      types.DateTime     `uhppote:"offset:20"`
-	EventResult    byte               `uhppote:"offset:27"`
+	EventReason    byte               `uhppote:"offset:27"`
 	Door1State     bool               `uhppote:"offset:28"`
 	Door2State     bool               `uhppote:"offset:29"`
 	Door3State     bool               `uhppote:"offset:30"`
@@ -70,10 +70,10 @@ func (event *Event) transform() *types.Status {
 		EventType:      event.EventType,
 		Granted:        event.Granted,
 		Door:           event.Door,
-		DoorOpened:     event.DoorOpened,
-		UserID:         event.UserID,
+		Direction:      event.Direction,
+		CardNumber:     event.CardNumber,
 		EventTimestamp: event.Timestamp,
-		EventResult:    event.EventResult,
+		EventReason:    event.EventReason,
 		DoorState:      []bool{event.Door1State, event.Door2State, event.Door3State, event.Door4State},
 		DoorButton:     []bool{event.Door1Button, event.Door2Button, event.Door3Button, event.Door4Button},
 		SystemState:    event.SystemState,

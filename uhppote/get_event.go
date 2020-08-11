@@ -37,9 +37,9 @@ func getEvent(u iuhppote, serialNumber, index uint32) (*types.Event, error) {
 		Type:         reply.Type,
 		Granted:      reply.Granted,
 		Door:         reply.Door,
-		DoorOpened:   reply.DoorOpened,
-		UserID:       reply.UserID,
+		Direction:    reply.Direction,
+		CardNumber:   reply.CardNumber,
 		Timestamp:    *reply.Timestamp,
-		Result:       reply.Result,
+		Reason:       reply.Reason,
 	}, nil
 }

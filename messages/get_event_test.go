@@ -103,16 +103,16 @@ func TestUnmarshalGetEventResponse(t *testing.T) {
 		t.Errorf("Incorrect 'door' - expected:%d, got:%d\n", 3, reply.Door)
 	}
 
-	if reply.DoorOpened != true {
-		t.Errorf("Incorrect 'door opened' - expected:%v, got:%v\n", true, reply.DoorOpened)
+	if reply.Direction != 0x01 {
+		t.Errorf("Incorrect 'direction' - expected:%v, got:%v\n", 0x01, reply.Direction)
 	}
 
-	if reply.UserID != 6154413 {
-		t.Errorf("Incorrect 'user ID' - expected:%d, got: %v\n", 6154413, reply.UserID)
+	if reply.CardNumber != 6154413 {
+		t.Errorf("Incorrect 'card number' - expected:%d, got: %v\n", 6154413, reply.CardNumber)
 	}
 
-	if reply.Result != 6 {
-		t.Errorf("Incorrect 'result' - expected:%d, got: %v\n", 6, reply.Result)
+	if reply.Reason != 6 {
+		t.Errorf("Incorrect 'reason' - expected:%d, got: %v\n", 6, reply.Reason)
 	}
 
 	timestamp, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-02-10 07:12:01", time.Local)
@@ -166,10 +166,10 @@ func TestFactoryUnmarshalGetEventResponse(t *testing.T) {
 		Type:         2,
 		Granted:      true,
 		Door:         3,
-		DoorOpened:   true,
-		UserID:       6154413,
+		Direction:    0x01,
+		CardNumber:   6154413,
 		Timestamp:    &timestamp,
-		Result:       0x06,
+		Reason:       0x06,
 	}
 
 	response, err := UnmarshalResponse(message)
