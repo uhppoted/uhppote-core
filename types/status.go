@@ -7,46 +7,44 @@ import (
 
 type Status struct {
 	SerialNumber   SerialNumber
-	LastIndex      uint32
+	EventIndex     uint32
 	EventType      byte
 	Granted        bool
 	Door           byte
 	Direction      uint8
 	CardNumber     uint32
-	EventTimestamp DateTime
-	EventReason    uint8
+	Timestamp      DateTime
+	Reason         uint8
 	DoorState      []bool
 	DoorButton     []bool
-	SystemState    byte
+	SystemError    uint8
 	SystemDateTime DateTime
-	PacketNumber   uint32
-	Backup         uint32
-	SpecialMessage byte
-	Battery        byte
-	FireAlarm      byte
+	SequenceId     uint32
+	SpecialInfo    uint8
+	RelayState     uint8
+	InputState     uint8
 }
 
 func (s *Status) String() string {
 	var b strings.Builder
 
 	b.WriteString(fmt.Sprintf("%s", s.SerialNumber))
-	b.WriteString(fmt.Sprintf(" %-5d", s.LastIndex))
+	b.WriteString(fmt.Sprintf(" %-5d", s.EventIndex))
 	b.WriteString(fmt.Sprintf(" %-3d", s.EventType))
 	b.WriteString(fmt.Sprintf(" %-5v", s.Granted))
 	b.WriteString(fmt.Sprintf(" %d", s.Door))
 	b.WriteString(fmt.Sprintf(" %-5v", s.Direction))
 	b.WriteString(fmt.Sprintf(" %-10d", s.CardNumber))
-	b.WriteString(fmt.Sprintf(" %s", s.EventTimestamp.String()))
-	b.WriteString(fmt.Sprintf(" %-3d", s.EventReason))
+	b.WriteString(fmt.Sprintf(" %s", s.Timestamp.String()))
+	b.WriteString(fmt.Sprintf(" %-3d", s.Reason))
 	b.WriteString(fmt.Sprintf(" %-5v %-5v %-5v %-5v", s.DoorState[0], s.DoorState[1], s.DoorState[2], s.DoorState[3]))
 	b.WriteString(fmt.Sprintf(" %-5v %-5v %-5v %-5v", s.DoorButton[0], s.DoorButton[1], s.DoorButton[2], s.DoorButton[3]))
-	b.WriteString(fmt.Sprintf(" %d", s.SystemState))
+	b.WriteString(fmt.Sprintf(" %-4d", s.SystemError))
 	b.WriteString(fmt.Sprintf(" %s", s.SystemDateTime.String()))
-	b.WriteString(fmt.Sprintf(" %d", s.PacketNumber))
-	b.WriteString(fmt.Sprintf(" %d", s.Backup))
-	b.WriteString(fmt.Sprintf(" %d", s.SpecialMessage))
-	b.WriteString(fmt.Sprintf(" %v", s.Battery))
-	b.WriteString(fmt.Sprintf(" %v", s.FireAlarm))
+	b.WriteString(fmt.Sprintf(" %-10d", s.SequenceId))
+	b.WriteString(fmt.Sprintf(" %d", s.SpecialInfo))
+	b.WriteString(fmt.Sprintf(" %02X", s.RelayState))
+	b.WriteString(fmt.Sprintf(" %02X", s.InputState))
 
 	return b.String()
 }

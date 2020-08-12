@@ -86,8 +86,8 @@ func TestUnmarshalGetStatusResponse(t *testing.T) {
 		t.Errorf("Incorrect 'serial number' - expected:%v, got:%v", 423187757, reply.SerialNumber)
 	}
 
-	if reply.LastIndex != 57 {
-		t.Errorf("Incorrect 'last index' - expected:%v, got:%v", 57, reply.LastIndex)
+	if reply.EventIndex != 57 {
+		t.Errorf("Incorrect 'last index' - expected:%v, got:%v", 57, reply.EventIndex)
 	}
 
 	if reply.EventType != 1 {
@@ -111,12 +111,12 @@ func TestUnmarshalGetStatusResponse(t *testing.T) {
 	}
 
 	swiped, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-04-19 17:00:09", time.Local)
-	if reply.EventTimestamp != types.DateTime(swiped) {
-		t.Errorf("Incorrect 'event timestamp' - expected:%s, got:%s", swiped.Format("2006-01-02 15:04:05"), reply.EventTimestamp)
+	if reply.Timestamp != types.DateTime(swiped) {
+		t.Errorf("Incorrect 'event timestamp' - expected:%s, got:%s", swiped.Format("2006-01-02 15:04:05"), reply.Timestamp)
 	}
 
-	if reply.EventReason != 6 {
-		t.Errorf("Incorrect 'event reason' - expected:%v, got:%v", 6, reply.EventReason)
+	if reply.Reason != 6 {
+		t.Errorf("Incorrect 'event reason' - expected:%v, got:%v", 6, reply.Reason)
 	}
 
 	if !reply.Door1State {
@@ -151,8 +151,8 @@ func TestUnmarshalGetStatusResponse(t *testing.T) {
 		t.Errorf("Incorrect 'door 4 button' - expected:%v, got:%v", true, reply.Door4Button)
 	}
 
-	if reply.SystemState != 9 {
-		t.Errorf("Incorrect 'system state' - expected:%v, got:%v", 9, reply.SystemState)
+	if reply.SystemError != 0x09 {
+		t.Errorf("Incorrect 'system error' - expected:%v, got:%v", 0x09, reply.SystemError)
 	}
 
 	sysdate, _ := time.ParseInLocation("2006-01-02", "2019-04-20", time.Local)
@@ -165,24 +165,20 @@ func TestUnmarshalGetStatusResponse(t *testing.T) {
 		t.Errorf("Incorrect 'system time' - expected:%s, got:%s", systime.Format("15:04:05"), reply.SystemTime.String())
 	}
 
-	if reply.PacketNumber != 17 {
-		t.Errorf("Incorrect 'packet number' - expected:%v, got:%v", 17, reply.PacketNumber)
+	if reply.SequenceId != 17 {
+		t.Errorf("Incorrect 'sequence ID' - expected:%v, got:%v", 17, reply.SequenceId)
 	}
 
-	if reply.Backup != 33 {
-		t.Errorf("Incorrect 'backup' - expected:%v, got:%v", 33, reply.Backup)
+	if reply.SpecialInfo != 43 {
+		t.Errorf("Incorrect 'special info' - expected:%v, got:%v", 43, reply.SpecialInfo)
 	}
 
-	if reply.SpecialMessage != 43 {
-		t.Errorf("Incorrect 'special message' - expected:%v, got:%v", 43, reply.SpecialMessage)
+	if reply.RelayState != 0x04 {
+		t.Errorf("Incorrect 'relay state' - expected:%v, got:%v", 0x04, reply.RelayState)
 	}
 
-	if reply.Battery != 0x04 {
-		t.Errorf("Incorrect 'battery status' - expected:%v, got:%v", 0x04, reply.Battery)
-	}
-
-	if reply.FireAlarm != 0x01 {
-		t.Errorf("Incorrect 'fire alarm' - expected:%v, got:%v", 0x01, reply.FireAlarm)
+	if reply.InputState != 0x01 {
+		t.Errorf("Incorrect 'input state' - expected:%v, got:%v", 0x01, reply.InputState)
 	}
 }
 
@@ -217,8 +213,8 @@ func TestFactoryUnmarshalGetStatusResponse(t *testing.T) {
 		t.Errorf("Incorrect 'serial number' - expected:%v, got:%v", 423187757, reply.SerialNumber)
 	}
 
-	if reply.LastIndex != 57 {
-		t.Errorf("Incorrect 'last index' - expected:%v, got:%v", 57, reply.LastIndex)
+	if reply.EventIndex != 57 {
+		t.Errorf("Incorrect 'last index' - expected:%v, got:%v", 57, reply.EventIndex)
 	}
 
 	if reply.EventType != 1 {
@@ -242,12 +238,12 @@ func TestFactoryUnmarshalGetStatusResponse(t *testing.T) {
 	}
 
 	swiped, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-04-19 17:00:09", time.Local)
-	if reply.EventTimestamp != types.DateTime(swiped) {
-		t.Errorf("Incorrect 'event timestamp' - expected:%s, got:%s", swiped.Format("2006-01-02 15:04:05"), reply.EventTimestamp)
+	if reply.Timestamp != types.DateTime(swiped) {
+		t.Errorf("Incorrect 'event timestamp' - expected:%s, got:%s", swiped.Format("2006-01-02 15:04:05"), reply.Timestamp)
 	}
 
-	if reply.EventReason != 6 {
-		t.Errorf("Incorrect 'event reason' - expected:%v, got:%v", 6, reply.EventReason)
+	if reply.Reason != 6 {
+		t.Errorf("Incorrect 'event reason' - expected:%v, got:%v", 6, reply.Reason)
 	}
 
 	if !reply.Door1State {
@@ -282,8 +278,8 @@ func TestFactoryUnmarshalGetStatusResponse(t *testing.T) {
 		t.Errorf("Incorrect 'door 4 button' - expected:%v, got:%v", true, reply.Door4Button)
 	}
 
-	if reply.SystemState != 9 {
-		t.Errorf("Incorrect 'system state' - expected:%v, got:%v", 9, reply.SystemState)
+	if reply.SystemError != 9 {
+		t.Errorf("Incorrect 'system error' - expected:%v, got:%v", 9, reply.SystemError)
 	}
 
 	sysdate, _ := time.ParseInLocation("2006-01-02", "2019-04-20", time.Local)
@@ -296,24 +292,20 @@ func TestFactoryUnmarshalGetStatusResponse(t *testing.T) {
 		t.Errorf("Incorrect 'system time' - expected:%s, got:%s", systime.Format("15:04:05"), reply.SystemTime.String())
 	}
 
-	if reply.PacketNumber != 17 {
-		t.Errorf("Incorrect 'packet number' - expected:%v, got:%v", 17, reply.PacketNumber)
+	if reply.SequenceId != 17 {
+		t.Errorf("Incorrect 'sequence ID' - expected:%v, got:%v", 17, reply.SequenceId)
 	}
 
-	if reply.Backup != 33 {
-		t.Errorf("Incorrect 'backup' - expected:%v, got:%v", 33, reply.Backup)
+	if reply.SpecialInfo != 43 {
+		t.Errorf("Incorrect 'special info' - expected:%v, got:%v", 43, reply.SpecialInfo)
 	}
 
-	if reply.SpecialMessage != 43 {
-		t.Errorf("Incorrect 'special message' - expected:%v, got:%v", 43, reply.SpecialMessage)
+	if reply.RelayState != 0x04 {
+		t.Errorf("Incorrect 'relay state' - expected:%v, got:%v", 0x04, reply.RelayState)
 	}
 
-	if reply.Battery != 0x04 {
-		t.Errorf("Incorrect 'battery status' - expected:%v, got:%v", 0x04, reply.Battery)
-	}
-
-	if reply.FireAlarm != 0x01 {
-		t.Errorf("Incorrect 'fire alarm' - expected:%v, got:%v", 0x01, reply.FireAlarm)
+	if reply.InputState != 0x01 {
+		t.Errorf("Incorrect 'input state' - expected:%v, got:%v", 0x01, reply.InputState)
 	}
 }
 
