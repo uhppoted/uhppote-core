@@ -6,7 +6,8 @@ import (
 )
 
 type FindDevicesRequest struct {
-	MsgType types.MsgType `uhppote:"value:0x94"`
+	MsgType      types.MsgType      `uhppote:"value:0x94"`
+	SerialNumber types.SerialNumber `uhppote:"offset:4"`
 }
 
 type FindDevicesResponse struct {

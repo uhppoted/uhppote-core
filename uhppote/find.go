@@ -30,7 +30,9 @@ func (u *UHPPOTE) FindDevices() ([]types.Device, error) {
 }
 
 func (u *UHPPOTE) FindDevice(serialNumber uint32) (*types.Device, error) {
-	request := messages.FindDevicesRequest{}
+	request := messages.FindDevicesRequest{
+		SerialNumber: types.SerialNumber(serialNumber),
+	}
 	replies := []messages.FindDevicesResponse{}
 
 	if err := u.DirectedBroadcast(serialNumber, request, &replies); err != nil {

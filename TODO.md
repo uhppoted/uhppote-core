@@ -3,8 +3,8 @@
 ## IN PROGRESS
 
 - [x] unit test for config.Write
-- [x] MQTT CommandV
-- [ ] get-device with serial number
+- [x] MQTT Command
+- [x] get-device with serial number
 
 ## TODO
 
