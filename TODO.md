@@ -2,7 +2,13 @@
 
 ## IN PROGRESS
 
+- [x] unit test for config.Write
+- [x] MQTT CommandV
+- [ ] get-device with serial number
+
 ## TODO
+
+- [ ] Add https://odi.ch/weblog/posting.php?posting=731 to cookbook
 
 ### uhppote
 - [ ] concurrent requests
@@ -17,9 +23,52 @@
 - [ ] Invert conf Unmarshal so that it iterates struct rather than file (simplifies e.g. DeviceMap)
 - [ ] Rework plist encoder/decoder to be only for launchd (and remove 'parse' from daemonize/undaemonize)
 - [ ] Unify event buffer operations
+- [ ] Test IPConfig utility 'search message'
+       ... received 20 bytes from 155.138.158.102:54544
+       ...          00000000  24 10 f4 33 02 06 00 00  00 00 00 00 ff ff ff ff
+       ...          00000010  00 00 02 00
+      
+       ... received 20 bytes from 155.138.158.102:54544
+       ...          00000000  24 10 b0 31 01 02 00 00  00 00 00 00 ff ff ff ff
+       ...          00000010  00 00 01 00
+       ...
+
+       ... received 20 bytes from 155.138.158.102:54544
+       ...          00000000  24 10 f4 33 02 06 00 00  00 00 00 00 ff ff ff ff
+       ...          00000010  00 00 02 00
+       ...
+
+       ... received 20 bytes from 155.138.158.102:54544
+       ...          00000000  24 10 ba 37 03 08 00 00  00 00 00 00 ff ff ff ff
+       ...          00000010  00 00 03 00
+       ...
+
+       ... received 20 bytes from 155.138.158.102:54544
+       ...          00000000  24 10 b0 32 05 02 00 00  00 00 00 00 ff ff ff ff
+       ...          00000010  00 00 05 00
+       ...
+
+       ... received 24 bytes from 155.138.158.102:54544
+       ...          00000000  20 10 b1 f9 06 02 00 00  00 00 00 00 ff ff ff ff
+       ...          00000010  00 00 01 00 ff ff ff ff
+       ...
+
+       ... received 24 bytes from 155.138.158.102:54544
+       ...          00000000  20 10 7d 2b 07 06 00 00  00 00 00 00 ff ff ff ff
+       ...          00000010  00 00 02 00 ff ff ff ff
+       ...
+
+       ... received 24 bytes from 155.138.158.102:54544
+       ...          00000000  20 10 42 ed 08 08 00 00  00 00 00 00 ff ff ff ff
+       ...          00000010  00 00 03 00 ff ff ff ff
+       ...
+
+       ... received 24 bytes from 155.138.158.102:54544
+       ...          00000000  20 10 e4 83 09 02 00 00  00 00 00 00 ff ff ff ff  | ...............|
+       ...          00000010  00 00 05 00 ff ff ff ff                           |........|
+       ...
 
 - [ ] bad udp cksum
- 
       tcpdump: listening on en3, link-type EN10MB (Ethernet), capture size 262144 bytes
       14:08:25.074807 IP (tos 0x0, ttl 64, id 55147, offset 0, flags [none], proto UDP (17), length 92, bad cksum 0 (->9bf4)!)
       192.168.66.225.60267 > 192.168.66.255.60000: [bad udp cksum 0x078b -> 0x0acc!] UDP, length 64
