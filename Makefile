@@ -1,7 +1,9 @@
 DIST  ?= development
 DEBUG ?= --debug
-VERSION = v0.6.3
+VERSION = v0.6.4
 LDFLAGS = -ldflags "-X uhppote.VERSION=$(VERSION)" 
+
+.PHONY: bump
 
 all: test      \
 	 benchmark \
@@ -42,6 +44,7 @@ release: test vet
 	env GOOS=darwin  GOARCH=amd64       go build ./...
 	env GOOS=windows GOARCH=amd64       go build ./...
 
+bump:
 
 debug: build
 	go test ./... -run TestGetCard*
