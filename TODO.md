@@ -1,10 +1,6 @@
 ## v0.6.x
 
-## IN PROGRESS
-
-- [x] unit test for config.Write
-- [x] MQTT Command
-- [x] get-device with serial number
+### IN PROGRESS
 
 ## TODO
 
