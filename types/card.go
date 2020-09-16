@@ -12,6 +12,13 @@ type Card struct {
 	Doors      []bool `json:"doors"`
 }
 
+type CardN struct {
+	CardNumber uint32         `json:"card-number"`
+	From       *Date          `json:"start-date"`
+	To         *Date          `json:"end-date"`
+	Doors      map[uint8]bool `json:"doors"`
+}
+
 type Authorised struct {
 	SerialNumber uint32
 	Authorised   bool
@@ -39,6 +46,27 @@ func (c Card) String() string {
 	copy(doors, c.Doors)
 
 	return fmt.Sprintf("%-8v %v %v %s %s %s %s", c.CardNumber, from, to, f(doors[0]), f(doors[1]), f(doors[2]), f(doors[3]))
+}
+
+func (c CardN) String() string {
+	f := func(d bool) string {
+		if d {
+			return "Y"
+		}
+		return "N"
+	}
+
+	from := "-         "
+	if c.From != nil {
+		from = fmt.Sprintf("%v", c.From)
+	}
+
+	to := "-         "
+	if c.To != nil {
+		to = fmt.Sprintf("%v", c.To)
+	}
+
+	return fmt.Sprintf("%-8v %v %v %s %s %s %s", c.CardNumber, from, to, f(c.Doors[1]), f(c.Doors[2]), f(c.Doors[3]), f(c.Doors[4]))
 }
 
 func (c *Card) UnmarshalJSON(bytes []byte) error {
