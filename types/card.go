@@ -121,6 +121,21 @@ func (c *Card) Clone() Card {
 	return card
 }
 
+func (c *Card) CloneN() CardN {
+	card := CardN{
+		CardNumber: c.CardNumber,
+		From:       c.From,
+		To:         c.To,
+		Doors:      map[uint8]bool{1: false, 2: false, 3: false, 4: false},
+	}
+
+	for ix, d := range c.Doors {
+		card.Doors[uint8(ix+1)] = d
+	}
+
+	return card
+}
+
 func (r *Authorised) String() string {
 	return fmt.Sprintf("%v %v", r.SerialNumber, r.Authorised)
 }
