@@ -82,17 +82,18 @@ func (c *CardX) UnmarshalJSON(bytes []byte) error {
 	return nil
 }
 
-// func (c *Card) CloneN() CardX {
-// 	card := CardX{
-// 		CardNumber: c.CardNumber,
-// 		From:       c.From,
-// 		To:         c.To,
-// 		Doors:      map[uint8]bool{1: false, 2: false, 3: false, 4: false},
-// 	}
-//
-// 	for ix, d := range c.Doors {
-// 		card.Doors[uint8(ix+1)] = d
-// 	}
-//
-// 	return card
-// }
+func (c *CardX) Clone() CardX {
+	card := CardX{
+		CardNumber: c.CardNumber,
+		From:       c.From,
+		To:         c.To,
+		Doors:      map[uint8]bool{},
+	}
+
+		card.Doors[1] = c.Doors[1]
+		card.Doors[2] = c.Doors[2]
+		card.Doors[3] = c.Doors[3]
+		card.Doors[4] = c.Doors[4]
+
+	return card
+}
