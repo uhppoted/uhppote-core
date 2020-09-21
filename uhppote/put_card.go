@@ -6,16 +6,16 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) PutCard(serialNumber uint32, card types.Card) (*types.Result, error) {
+func (u *UHPPOTE) PutCard(serialNumber uint32, card types.CardX) (*types.Result, error) {
 	request := messages.PutCardRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 		CardNumber:   card.CardNumber,
 		From:         *card.From,
 		To:           *card.To,
-		Door1:        card.Doors[0],
-		Door2:        card.Doors[1],
-		Door3:        card.Doors[2],
-		Door4:        card.Doors[3],
+		Door1:        card.Doors[1],
+		Door2:        card.Doors[2],
+		Door3:        card.Doors[3],
+		Door4:        card.Doors[4],
 	}
 
 	reply := messages.PutCardResponse{}
@@ -35,33 +35,7 @@ func (u *UHPPOTE) PutCard(serialNumber uint32, card types.Card) (*types.Result, 
 	}, nil
 }
 
-func (u *UHPPOTE) PutCardN(deviceID uint32, card types.Card) (bool, error) {
-	request := messages.PutCardRequest{
-		SerialNumber: types.SerialNumber(deviceID),
-		CardNumber:   card.CardNumber,
-		From:         *card.From,
-		To:           *card.To,
-		Door1:        card.Doors[0],
-		Door2:        card.Doors[1],
-		Door3:        card.Doors[2],
-		Door4:        card.Doors[3],
-	}
-
-	reply := messages.PutCardResponse{}
-
-	err := u.Execute(deviceID, request, &reply)
-	if err != nil {
-		return false, err
-	}
-
-	if uint32(reply.SerialNumber) != deviceID {
-		return false, fmt.Errorf("Incorrect serial number in response - expect '%v', received '%v'", deviceID, reply.SerialNumber)
-	}
-
-	return reply.Succeeded, nil
-}
-
-func (u *UHPPOTE) PutCardX(deviceID uint32, card types.CardX) (bool, error) {
+func (u *UHPPOTE) PutCardN(deviceID uint32, card types.CardX) (bool, error) {
 	request := messages.PutCardRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   card.CardNumber,

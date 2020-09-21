@@ -17,11 +17,11 @@ func TestGetCardByIndex(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	expected := types.Card{
+	expected := types.CardX{
 		CardNumber: 6129876,
 		From:       date("2020-01-01"),
 		To:         date("2020-12-31"),
-		Doors:      []bool{true, false, false, true},
+		Doors:      map[uint8]bool{1: true, 2: false, 3: false, 4: true},
 	}
 
 	u := mock{

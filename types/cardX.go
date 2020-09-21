@@ -5,6 +5,15 @@ import (
 	"fmt"
 )
 
+type Authorised struct {
+	SerialNumber uint32
+	Authorised   bool
+}
+
+func (r *Authorised) String() string {
+	return fmt.Sprintf("%v %v", r.SerialNumber, r.Authorised)
+}
+
 type CardX struct {
 	CardNumber uint32         `json:"card-number"`
 	From       *Date          `json:"start-date"`
@@ -73,17 +82,17 @@ func (c *CardX) UnmarshalJSON(bytes []byte) error {
 	return nil
 }
 
-func (c *Card) CloneN() CardX {
-	card := CardX{
-		CardNumber: c.CardNumber,
-		From:       c.From,
-		To:         c.To,
-		Doors:      map[uint8]bool{1: false, 2: false, 3: false, 4: false},
-	}
-
-	for ix, d := range c.Doors {
-		card.Doors[uint8(ix+1)] = d
-	}
-
-	return card
-}
+// func (c *Card) CloneN() CardX {
+// 	card := CardX{
+// 		CardNumber: c.CardNumber,
+// 		From:       c.From,
+// 		To:         c.To,
+// 		Doors:      map[uint8]bool{1: false, 2: false, 3: false, 4: false},
+// 	}
+//
+// 	for ix, d := range c.Doors {
+// 		card.Doors[uint8(ix+1)] = d
+// 	}
+//
+// 	return card
+// }

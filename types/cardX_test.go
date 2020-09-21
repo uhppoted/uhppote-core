@@ -5,7 +5,13 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+	"time"
 )
+
+var date = func(s string) Date {
+	d, _ := time.ParseInLocation("2006-01-02", s, time.Local)
+	return Date(d)
+}
 
 func TestCardXToString(t *testing.T) {
 	expected := "12345    2020-01-01 2020-12-31 Y N N Y"
