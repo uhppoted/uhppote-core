@@ -11,6 +11,6 @@ type IDevice interface {
 	PutCardN(deviceID uint32, card types.Card) (bool, error)
 	DeleteCardN(deviceID uint32, card types.Card) (bool, error)
 
-	PutCardX(deviceID uint32, card types.CardN) (bool, error)
-	DeleteCardX(deviceID uint32, card types.CardN) (bool, error)
+	PutCardX(deviceID uint32, card types.CardX) (bool, error)
+	DeleteCardX(deviceID uint32, card types.CardX) (bool, error)
 }

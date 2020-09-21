@@ -61,7 +61,7 @@ func (u *UHPPOTE) PutCardN(deviceID uint32, card types.Card) (bool, error) {
 	return reply.Succeeded, nil
 }
 
-func (u *UHPPOTE) PutCardX(deviceID uint32, card types.CardN) (bool, error) {
+func (u *UHPPOTE) PutCardX(deviceID uint32, card types.CardX) (bool, error) {
 	request := messages.PutCardRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   card.CardNumber,

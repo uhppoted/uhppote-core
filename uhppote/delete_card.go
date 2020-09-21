@@ -50,7 +50,7 @@ func (u *UHPPOTE) DeleteCardN(deviceID uint32, card types.Card) (bool, error) {
 	return reply.Succeeded, nil
 }
 
-func (u *UHPPOTE) DeleteCardX(deviceID uint32, card types.CardN) (bool, error) {
+func (u *UHPPOTE) DeleteCardX(deviceID uint32, card types.CardX) (bool, error) {
 	request := messages.DeleteCardRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   card.CardNumber,
