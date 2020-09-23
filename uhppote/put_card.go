@@ -6,7 +6,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) PutCard(serialNumber uint32, card types.CardX) (*types.Result, error) {
+func (u *UHPPOTE) PutCard(serialNumber uint32, card types.Card) (*types.Result, error) {
 	request := messages.PutCardRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 		CardNumber:   card.CardNumber,
@@ -35,7 +35,7 @@ func (u *UHPPOTE) PutCard(serialNumber uint32, card types.CardX) (*types.Result,
 	}, nil
 }
 
-func (u *UHPPOTE) PutCardN(deviceID uint32, card types.CardX) (bool, error) {
+func (u *UHPPOTE) PutCardN(deviceID uint32, card types.Card) (bool, error) {
 	request := messages.PutCardRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   card.CardNumber,

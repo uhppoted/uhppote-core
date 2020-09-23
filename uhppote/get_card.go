@@ -6,11 +6,11 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) GetCardByIndex(deviceID, index uint32) (*types.CardX, error) {
+func (u *UHPPOTE) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
 	return GetCardByIndex(u, deviceID, index)
 }
 
-func GetCardByIndex(u iuhppote, deviceID, index uint32) (*types.CardX, error) {
+func GetCardByIndex(u iuhppote, deviceID, index uint32) (*types.Card, error) {
 	request := messages.GetCardByIndexRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		Index:        index,
@@ -44,7 +44,7 @@ func GetCardByIndex(u iuhppote, deviceID, index uint32) (*types.CardX, error) {
 		return nil, fmt.Errorf("Invalid 'to' date in response")
 	}
 
-	return &types.CardX{
+	return &types.Card{
 		CardNumber: response.CardNumber,
 		From:       response.From,
 		To:         response.To,
@@ -52,7 +52,7 @@ func GetCardByIndex(u iuhppote, deviceID, index uint32) (*types.CardX, error) {
 	}, nil
 }
 
-func (u *UHPPOTE) GetCardByID(serialNumber, cardNumber uint32) (*types.CardX, error) {
+func (u *UHPPOTE) GetCardByID(serialNumber, cardNumber uint32) (*types.Card, error) {
 	request := messages.GetCardByIDRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 		CardNumber:   cardNumber,
@@ -88,7 +88,7 @@ func (u *UHPPOTE) GetCardByID(serialNumber, cardNumber uint32) (*types.CardX, er
 		return nil, fmt.Errorf("Invalid 'to' date in response")
 	}
 
-	return &types.CardX{
+	return &types.Card{
 		CardNumber: response.CardNumber,
 		From:       response.From,
 		To:         response.To,
@@ -96,7 +96,7 @@ func (u *UHPPOTE) GetCardByID(serialNumber, cardNumber uint32) (*types.CardX, er
 	}, nil
 }
 
-func (u *UHPPOTE) GetCardByIdN(deviceID, cardNumber uint32) (*types.CardX, error) {
+func (u *UHPPOTE) GetCardByIdN(deviceID, cardNumber uint32) (*types.Card, error) {
 	request := messages.GetCardByIDRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   cardNumber,
@@ -132,7 +132,7 @@ func (u *UHPPOTE) GetCardByIdN(deviceID, cardNumber uint32) (*types.CardX, error
 		return nil, fmt.Errorf("Invalid 'to' date in response")
 	}
 
-	return &types.CardX{
+	return &types.Card{
 		CardNumber: response.CardNumber,
 		From:       response.From,
 		To:         response.To,
