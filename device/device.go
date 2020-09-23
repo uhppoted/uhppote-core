@@ -9,5 +9,5 @@ type IDevice interface {
 	GetCardByIndex(deviceID, index uint32) (*types.Card, error)
 	GetCardByIdN(deviceID, cardNumber uint32) (*types.Card, error)
 	PutCardN(deviceID uint32, card types.Card) (bool, error)
-	DeleteCardN(deviceID uint32, cardNumber uint32) (bool, error)
+	DeleteCard(deviceID uint32, cardNumber uint32) (bool, error)
 }

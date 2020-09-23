@@ -7,30 +7,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) DeleteCard(serialNumber, cardNumber uint32) (*types.Result, error) {
-	request := messages.DeleteCardRequest{
-		SerialNumber: types.SerialNumber(serialNumber),
-		CardNumber:   cardNumber,
-	}
-
-	reply := messages.DeleteCardResponse{}
-
-	err := u.Execute(serialNumber, request, &reply)
-	if err != nil {
-		return nil, err
-	}
-
-	if uint32(reply.SerialNumber) != serialNumber {
-		return nil, errors.New(fmt.Sprintf("Incorrect serial number in response - expected '%v', received '%v'", serialNumber, reply.SerialNumber))
-	}
-
-	return &types.Result{
-		SerialNumber: reply.SerialNumber,
-		Succeeded:    reply.Succeeded,
-	}, nil
-}
-
-func (u *UHPPOTE) DeleteCardN(deviceID uint32, cardNumber uint32) (bool, error) {
+func (u *UHPPOTE) DeleteCard(deviceID uint32, cardNumber uint32) (bool, error) {
 	request := messages.DeleteCardRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   cardNumber,
