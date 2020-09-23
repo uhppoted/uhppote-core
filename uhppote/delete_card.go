@@ -30,10 +30,10 @@ func (u *UHPPOTE) DeleteCard(serialNumber, cardNumber uint32) (*types.Result, er
 	}, nil
 }
 
-func (u *UHPPOTE) DeleteCardN(deviceID uint32, card types.Card) (bool, error) {
+func (u *UHPPOTE) DeleteCardN(deviceID uint32, cardNumber uint32) (bool, error) {
 	request := messages.DeleteCardRequest{
 		SerialNumber: types.SerialNumber(deviceID),
-		CardNumber:   card.CardNumber,
+		CardNumber:   cardNumber,
 	}
 
 	reply := messages.DeleteCardResponse{}
