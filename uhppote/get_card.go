@@ -52,51 +52,7 @@ func GetCardByIndex(u iuhppote, deviceID, index uint32) (*types.Card, error) {
 	}, nil
 }
 
-func (u *UHPPOTE) GetCardByID(serialNumber, cardNumber uint32) (*types.Card, error) {
-	request := messages.GetCardByIDRequest{
-		SerialNumber: types.SerialNumber(serialNumber),
-		CardNumber:   cardNumber,
-	}
-
-	reply, err := u.Send(serialNumber, request)
-	if err != nil {
-		return nil, err
-	}
-
-	response, ok := reply.(*messages.GetCardByIDResponse)
-	if !ok {
-		return nil, fmt.Errorf("Invalid response to GetCardById")
-	}
-
-	if uint32(response.SerialNumber) != serialNumber {
-		return nil, fmt.Errorf("Incorrect serial number in response - expected '%v', received '%v'", serialNumber, response.SerialNumber)
-	}
-
-	if response.CardNumber == 0 {
-		return nil, nil
-	}
-
-	if response.CardNumber != cardNumber {
-		return nil, fmt.Errorf("Incorrect card number in response - expected '%v', received '%v'", cardNumber, response.CardNumber)
-	}
-
-	if response.From == nil {
-		return nil, fmt.Errorf("Invalid 'from' date in response")
-	}
-
-	if response.To == nil {
-		return nil, fmt.Errorf("Invalid 'to' date in response")
-	}
-
-	return &types.Card{
-		CardNumber: response.CardNumber,
-		From:       response.From,
-		To:         response.To,
-		Doors:      map[uint8]bool{1: response.Door1, 2: response.Door2, 3: response.Door3, 4: response.Door4},
-	}, nil
-}
-
-func (u *UHPPOTE) GetCardByIdN(deviceID, cardNumber uint32) (*types.Card, error) {
+func (u *UHPPOTE) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) {
 	request := messages.GetCardByIDRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   cardNumber,
