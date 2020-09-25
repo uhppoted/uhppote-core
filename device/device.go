@@ -10,4 +10,5 @@ type IDevice interface {
 	GetCardByID(deviceID, cardNumber uint32) (*types.Card, error)
 	PutCard(deviceID uint32, card types.Card) (bool, error)
 	DeleteCard(deviceID uint32, cardNumber uint32) (bool, error)
+	DeleteCards(deviceID uint32) (bool, error)
 }
