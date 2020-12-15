@@ -2,6 +2,9 @@
 
 ### IN PROGRESS
 
+- [x] Implement RecordSpecialEvents to enable/disable door and pushbutton events
+- [ ] Add RecordSpecialEvents to IDevice interface
+
 ## TODO
 
 - [ ] Add https://odi.ch/weblog/posting.php?posting=731 to cookbook

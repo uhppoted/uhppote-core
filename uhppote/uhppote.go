@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-var VERSION string = "v0.7.x"
+var VERSION string = "v0.6.x"
 
 type iuhppote interface {
 	Execute(serialNumber uint32, request, reply interface{}) error

@@ -9,6 +9,7 @@ Supported operating systems:
 - Linux
 - MacOS
 - Windows
+- RaspberryPi (ARM7)
 
 ## Releases
 
@@ -52,6 +53,7 @@ Supported operating systems:
 - GetEvent
 - GetEventIndex
 - SetEventIndex
+- RecordSpecialEvents
 - OpenDoor
 - Listen
 
