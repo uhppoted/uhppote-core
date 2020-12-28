@@ -43,6 +43,22 @@ func NewDevice(deviceID uint32, address *net.UDPAddr, rollover uint32, doors []s
 	}
 }
 
+func (d *Device) ID() uint32 {
+	if d == nil {
+		return 0
+	}
+
+	return d.DeviceID
+}
+
+func (d *Device) RolloverAt() uint32 {
+	if d == nil {
+		return 100000
+	}
+
+	return d.Rollover
+}
+
 func (u *UHPPOTE) DeviceList() map[uint32]*Device {
 	if u == nil {
 		return map[uint32]*Device{}
