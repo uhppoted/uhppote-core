@@ -4,6 +4,7 @@
 
 - [ ] Remove IDevice interface
 - [ ] Make UHPPOTE.Devices a private field
+- [ ] godoc for RecordSpecialEvents
 - [x] Implement RecordSpecialEvents to enable/disable door and pushbutton events
 
 ## TODO
