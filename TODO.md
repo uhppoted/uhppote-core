@@ -2,8 +2,9 @@
 
 ### IN PROGRESS
 
+- [ ] Remove IDevice interface
+- [ ] Make UHPPOTE.Devices a private field
 - [x] Implement RecordSpecialEvents to enable/disable door and pushbutton events
-- [ ] Add RecordSpecialEvents to IDevice interface
 
 ## TODO
 
