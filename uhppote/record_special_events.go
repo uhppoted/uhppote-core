@@ -6,10 +6,18 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
+// Sends a RecordSpecialEvents request to the designated controller, to enable or 
+// disable door open, door closed and door button pressed events. 
+//
+// Returns true if the controller 'record special events' flag was updated, false 
+// if the request failed for any reason. Returns an error if the request could not
+// be sent or the response is invalid.
 func (u *UHPPOTE) RecordSpecialEvents(deviceID uint32, enable bool) (bool, error) {
 	return recordSpecialEvents(u, deviceID, enable)
 }
 
+// Internal implementation of RecordSpecialEvents for test mocks/stubs and facades for
+// external interfaces.
 func recordSpecialEvents(u iuhppote, deviceID uint32, enable bool) (bool, error) {
 	request := messages.RecordSpecialEventsRequest{
 		SerialNumber: types.SerialNumber(deviceID),

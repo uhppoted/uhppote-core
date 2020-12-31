@@ -1,11 +1,14 @@
-## v0.6.5
+## v0.6.x
 
 ### IN PROGRESS
 
-- [ ] Remove IDevice interface
-- [ ] Make UHPPOTE.Devices a private field
-- [ ] godoc for RecordSpecialEvents
+- [ ] Refactor IDevice functions for future rearchitecture
+- [x] godoc for RecordSpecialEvents
 - [x] Implement RecordSpecialEvents to enable/disable door and pushbutton events
+
+- [ ] Remove IDevice interface
+- [ ] Rearchitecture as factory/device
+- [ ] Make UHPPOTE.Devices a private field
 
 ## TODO
 

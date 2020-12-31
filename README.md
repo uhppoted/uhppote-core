@@ -2,8 +2,8 @@
 
 # uhppote-core
 
-Go API for low-level access to the UT0311-L0x* TCP/IP Wiegand access control boards. This module provides the device level
-access for the *uhppote-cli*, *uhppoted-rest* and *uhppoted-mqtt* modules. 
+Go API for low-level access to the UT0311-L0x* TCP/IP Wiegand access control boards. This module implements the
+device level interface used by *uhppote-cli*, *uhppoted-api*, *uhppoted-rest*, etc. 
 
 Supported operating systems:
 - Linux
@@ -50,6 +50,7 @@ Supported operating systems:
 - GetCardById
 - PutCard
 - DeleteCard
+- RecordSpecialEvents
 - GetEvent
 - GetEventIndex
 - SetEventIndex
