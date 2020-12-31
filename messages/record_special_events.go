@@ -5,7 +5,7 @@ import (
 )
 
 // Request message layout for 'record special events' (function code 0x8e).
-// Enables or disables events for door open, door closed and door button 
+// Enables or disables events for door open, door closed and door button
 // pressed.
 type RecordSpecialEventsRequest struct {
 	MsgType      types.MsgType      `uhppote:"value:0x8e"`

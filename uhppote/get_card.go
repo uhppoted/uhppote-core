@@ -7,10 +7,10 @@ import (
 )
 
 func (u *UHPPOTE) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
-	return GetCardByIndex(u, deviceID, index)
+	return getCardByIndex(u, deviceID, index)
 }
 
-func GetCardByIndex(u iuhppote, deviceID, index uint32) (*types.Card, error) {
+func getCardByIndex(u iuhppote, deviceID, index uint32) (*types.Card, error) {
 	request := messages.GetCardByIndexRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		Index:        index,

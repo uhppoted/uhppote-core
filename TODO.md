@@ -2,12 +2,12 @@
 
 ### IN PROGRESS
 
-- [ ] Refactor IDevice functions for future rearchitecture
+- [x] Remove deprecated GetCardByIndex implementation
 - [x] godoc for RecordSpecialEvents
 - [x] Implement RecordSpecialEvents to enable/disable door and pushbutton events
 
+- [ ] Rearchitecture as factory/device/driver
 - [ ] Remove IDevice interface
-- [ ] Rearchitecture as factory/device
 - [ ] Make UHPPOTE.Devices a private field
 
 ## TODO

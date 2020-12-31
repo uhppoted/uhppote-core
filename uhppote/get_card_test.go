@@ -32,7 +32,7 @@ func TestGetCardByIndex(t *testing.T) {
 		},
 	}
 
-	card, err := GetCardByIndex(&u, 423187757, 6129876)
+	card, err := getCardByIndex(&u, 423187757, 6129876)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetCardByIndex (%v)", err)
 	}
@@ -62,7 +62,7 @@ func TestGetCardByIndexWithCardNotFound(t *testing.T) {
 		},
 	}
 
-	card, err := GetCardByIndex(&u, 423187757, 6129876)
+	card, err := getCardByIndex(&u, 423187757, 6129876)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetCardByIndex (%v)", err)
 	}
@@ -88,7 +88,7 @@ func TestGetCardByIndexWithCardDeleted(t *testing.T) {
 		},
 	}
 
-	card, err := GetCardByIndex(&u, 423187757, 6129876)
+	card, err := getCardByIndex(&u, 423187757, 6129876)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetCardByIndex (%v)", err)
 	}
