@@ -30,7 +30,7 @@ func (v *Version) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
 }
 
 func (v Version) MarshalJSON() ([]byte, error) {
-	return json.Marshal(fmt.Sprintf("%04x", v))
+	return json.Marshal(fmt.Sprintf("%04x", uint16(v)))
 }
 
 func (v *Version) UnmarshalJSON(bytes []byte) error {
