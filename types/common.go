@@ -2,6 +2,7 @@ package types
 
 import "fmt"
 
+type SOM uint8
 type MsgType uint8
 
 type Result struct {

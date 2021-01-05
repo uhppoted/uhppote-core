@@ -47,7 +47,7 @@ release: test vet
 bump:
 
 debug: build
-	go test ./... -run TestGetCard*
+	go test ./... -run TestUnmarshalEventV6_62
 
 godoc:
 	godoc -http=:80	-index_interval=60s
