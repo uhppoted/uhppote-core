@@ -9,6 +9,13 @@ import (
 
 type Version uint16
 
+func (v Version) String() string {
+	major := uint16(v) >> 8
+	minor := uint16(v) & 0x00ff
+
+	return fmt.Sprintf("%x.%x", major, minor)
+}
+
 func (v Version) MarshalUT0311L0x() ([]byte, error) {
 	bytes := make([]byte, 2)
 	binary.BigEndian.PutUint16(bytes, uint16(v))
