@@ -2,17 +2,14 @@
 
 ### IN PROGRESS
 
-- [x] Remove deprecated GetCardByIndex implementation
-- [x] godoc for RecordSpecialEvents
-- [x] Implement RecordSpecialEvents to enable/disable door and pushbutton events
-
-- [ ] Rearchitecture as factory/device/driver
-- [ ] Remove IDevice interface
-- [ ] Make UHPPOTE.Devices a private field
+- [x] Add v6.62 listen event message to encoder
 
 ## TODO
 
 - [ ] Add https://odi.ch/weblog/posting.php?posting=731 to cookbook
+- [ ] Rearchitecture as factory/device/driver
+- [ ] Remove IDevice interface
+- [ ] Make UHPPOTE.Devices a private field
 
 ### uhppote
 - [ ] concurrent requests

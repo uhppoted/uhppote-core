@@ -15,6 +15,7 @@ Supported operating systems:
 
 | *Version* | *Description*                                                                             |
 | --------- | ----------------------------------------------------------------------------------------- |
+| v0.6.8    | Improved internal support for UHPPOTE v6.62 firmware                                      |
 | v0.6.7    | Implements `record-special-events` for enabling and disabling door events                 |
 | v0.6.5    | Maintenance release for version compatibility with NodeRED module                         |
 | v0.6.4    | Added support for uhppoted-app-sheets                                                     |
