@@ -1,8 +1,6 @@
-## v0.6.x
+## v0.6.10
 
 ### IN PROGRESS
-
-- [x] Add v6.62 listen event message to encoder
 
 ## TODO
 
