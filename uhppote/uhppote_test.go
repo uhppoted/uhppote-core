@@ -223,11 +223,11 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 		defer wg.Done()
 
 		if reply, err := u.Send(423187757, request); err != nil {
-			t.Fatalf("%v", err)
+			t.Errorf("%v", err)
 		} else if reply == nil {
-			t.Fatalf("Invalid reply: %v", reply)
+			t.Errorf("Invalid reply: %v", reply)
 		} else if !reflect.DeepEqual(reply, expected[0]) {
-			t.Fatalf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected[0], reply)
+			t.Errorf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected[0], reply)
 		}
 	}()
 
@@ -237,11 +237,11 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 		time.Sleep(500 * time.Millisecond)
 
 		if reply, err := u.Send(757781324, request); err != nil {
-			t.Fatalf("%v", err)
+			t.Errorf("%v", err)
 		} else if reply == nil {
-			t.Fatalf("Invalid reply: %v", reply)
+			t.Errorf("Invalid reply: %v", reply)
 		} else if !reflect.DeepEqual(reply, expected[1]) {
-			t.Fatalf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected[1], reply)
+			t.Errorf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected[1], reply)
 		}
 	}()
 
@@ -316,11 +316,11 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 		defer wg.Done()
 
 		if reply, err := u.Send(423187757, request); err != nil {
-			t.Fatalf("%v", err)
+			t.Errorf("%v", err)
 		} else if reply == nil {
-			t.Fatalf("Invalid reply: %v", reply)
+			t.Errorf("Invalid reply: %v", reply)
 		} else if !reflect.DeepEqual(reply, expected[0]) {
-			t.Fatalf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected, reply)
+			t.Errorf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected, reply)
 		}
 	}()
 
@@ -330,11 +330,11 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 		time.Sleep(500 * time.Millisecond)
 
 		if reply, err := u.Send(757781324, request); err != nil {
-			t.Fatalf("%v", err)
+			t.Errorf("%v", err)
 		} else if reply == nil {
-			t.Fatalf("Invalid reply: %v", reply)
+			t.Errorf("Invalid reply: %v", reply)
 		} else if !reflect.DeepEqual(reply, expected[1]) {
-			t.Fatalf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected[1], reply)
+			t.Errorf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected[1], reply)
 		}
 	}()
 
