@@ -28,10 +28,12 @@ type UHPPOTE struct {
 }
 
 type Device struct {
+	Name     string
 	DeviceID uint32
 	Address  *net.UDPAddr
 	Rollover uint32
 	Doors    []string
+	TimeZone *time.Location
 }
 
 func NewDevice(deviceID uint32, address *net.UDPAddr, rollover uint32, doors []string) *Device {
