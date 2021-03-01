@@ -4,12 +4,13 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
-	"github.com/uhppoted/uhppote-core/messages"
 	"net"
 	"os"
 	"regexp"
 	"time"
+
+	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
+	"github.com/uhppoted/uhppote-core/messages"
 )
 
 var VERSION string = "v0.6.x"
@@ -42,6 +43,7 @@ func NewDevice(deviceID uint32, address *net.UDPAddr, rollover uint32, doors []s
 		Address:  address,
 		Rollover: rollover,
 		Doors:    doors,
+		TimeZone: time.Local,
 	}
 }
 

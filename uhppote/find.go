@@ -1,6 +1,8 @@
 package uhppote
 
 import (
+	"time"
+
 	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
 )
@@ -23,6 +25,7 @@ func (u *UHPPOTE) FindDevices() ([]types.Device, error) {
 			MacAddress:   reply.MacAddress,
 			Version:      reply.Version,
 			Date:         reply.Date,
+			TimeZone:     time.Local,
 		})
 	}
 
@@ -49,6 +52,7 @@ func (u *UHPPOTE) FindDevice(serialNumber uint32) (*types.Device, error) {
 				MacAddress:   reply.MacAddress,
 				Version:      reply.Version,
 				Date:         reply.Date,
+				TimeZone:     time.Local,
 			}, nil
 		}
 	}

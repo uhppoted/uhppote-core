@@ -3,6 +3,7 @@ package types
 import (
 	"fmt"
 	"net"
+	"time"
 )
 
 type Device struct {
@@ -13,6 +14,7 @@ type Device struct {
 	MacAddress   MacAddress
 	Version      Version
 	Date         Date
+	TimeZone     *time.Location
 }
 
 func (device *Device) String() string {
