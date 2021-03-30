@@ -47,7 +47,6 @@ func TestGetEvent(t *testing.T) {
 
 	if !reflect.DeepEqual(*response, expected) {
 		t.Errorf("Invalid response:\nexpected:%#v\ngot:     %#v", expected, *response)
-		return
 	}
 }
 

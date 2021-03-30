@@ -18,6 +18,11 @@ var VERSION string = "v0.6.x"
 type iuhppote interface {
 	Execute(serialNumber uint32, request, reply interface{}) error
 	Send(serialNumber uint32, request interface{}) (messages.Response, error)
+	Broadcast(request, replies interface{}) error
+	DirectedBroadcast(serialNumber uint32, request, replies interface{}) error
+
+	BroadcastAddr() *net.UDPAddr
+	DeviceList() map[uint32]*Device
 }
 
 type UHPPOTE struct {
@@ -48,27 +53,35 @@ func NewDevice(deviceID uint32, address *net.UDPAddr, rollover uint32, doors []s
 }
 
 func (d *Device) ID() uint32 {
-	if d == nil {
-		return 0
+	if d != nil {
+		return d.DeviceID
 	}
 
-	return d.DeviceID
+	return 0
 }
 
 func (d *Device) RolloverAt() uint32 {
-	if d == nil {
-		return 100000
+	if d != nil {
+		return d.Rollover
 	}
 
-	return d.Rollover
+	return 100000
 }
 
 func (u *UHPPOTE) DeviceList() map[uint32]*Device {
-	if u == nil {
-		return map[uint32]*Device{}
+	if u != nil {
+		return u.Devices
 	}
 
-	return u.Devices
+	return map[uint32]*Device{}
+}
+
+func (u *UHPPOTE) BroadcastAddr() *net.UDPAddr {
+	if u != nil {
+		return u.BroadcastAddress
+	}
+
+	return nil
 }
 
 func (u *UHPPOTE) Send(serialNumber uint32, request interface{}) (messages.Response, error) {

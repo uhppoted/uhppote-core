@@ -12,8 +12,13 @@ import (
 )
 
 type mock struct {
-	execute func(uint32, interface{}, interface{}) error
-	send    func(uint32, interface{}) (messages.Response, error)
+	execute     func(uint32, interface{}, interface{}) error
+	send        func(uint32, interface{}) (messages.Response, error)
+	broadcast   func(interface{}, interface{}) error
+	broadcastTo func(uint32, interface{}, interface{}) error
+
+	devices       func() map[uint32]*Device
+	broadcastAddr func() *net.UDPAddr
 }
 
 func (m *mock) Execute(deviceID uint32, request, reply interface{}) error {
@@ -22,6 +27,22 @@ func (m *mock) Execute(deviceID uint32, request, reply interface{}) error {
 
 func (m *mock) Send(deviceID uint32, request interface{}) (messages.Response, error) {
 	return m.send(deviceID, request)
+}
+
+func (m *mock) BroadcastAddr() *net.UDPAddr {
+	return m.broadcastAddr()
+}
+
+func (m *mock) DeviceList() map[uint32]*Device {
+	return m.devices()
+}
+
+func (m *mock) Broadcast(request interface{}, replies interface{}) error {
+	return m.broadcast(request, replies)
+}
+
+func (m *mock) DirectedBroadcast(deviceID uint32, request interface{}, replies interface{}) error {
+	return m.broadcastTo(deviceID, request, replies)
 }
 
 var date = func(s string) *types.Date {

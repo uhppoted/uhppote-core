@@ -14,6 +14,7 @@ type Device struct {
 	MacAddress   MacAddress
 	Version      Version
 	Date         Date
+	Address      net.UDPAddr
 	TimeZone     *time.Location
 }
 

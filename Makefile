@@ -47,7 +47,7 @@ release: test vet
 bump:
 
 debug: build
-	go test ./... -run TestUnmarshalEventV6_62
+	go test ./... -run TestGetDevice
 
 godoc:
 	godoc -http=:80	-index_interval=60s
