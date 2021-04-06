@@ -19,7 +19,7 @@ func TestDeviceString(t *testing.T) {
 		Date:         *released,
 	}
 
-	expected := "405419896  10.0.0.100      255.255.255.0   10.0.0.1        00:66:19:39:55:2d 8.92 2020-12-05"
+	expected := "405419896  10.0.0.100      255.255.255.0   10.0.0.1        00:66:19:39:55:2d v8.92 2020-12-05"
 	s := device.String()
 
 	if s != expected {
