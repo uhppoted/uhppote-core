@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 	"regexp"
+	"sync"
 	"time"
 
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
@@ -14,6 +15,7 @@ import (
 )
 
 var VERSION string = "v0.6.x"
+var guard sync.Mutex
 
 type iuhppote interface {
 	Execute(serialNumber uint32, request, reply interface{}) error
@@ -94,6 +96,11 @@ func (u *UHPPOTE) Send(serialNumber uint32, request interface{}) (messages.Respo
 		}
 	}
 
+	if bind.Port != 0 {
+		guard.Lock()
+		defer guard.Unlock()
+	}
+
 	c, err := u.open(bind)
 	if err != nil {
 		return nil, err
@@ -138,6 +145,11 @@ func (u *UHPPOTE) Execute(serialNumber uint32, request, reply interface{}) error
 		if device.Address != nil {
 			dest = device.Address
 		}
+	}
+
+	if bind.Port != 0 {
+		guard.Lock()
+		defer guard.Unlock()
 	}
 
 	c, err := u.open(bind)
@@ -227,6 +239,12 @@ func (u *UHPPOTE) broadcast(request interface{}, addr *net.UDPAddr) ([][]byte, e
 	}
 
 	bind := u.bindAddress()
+
+	if bind.Port != 0 {
+		guard.Lock()
+		defer guard.Unlock()
+	}
+
 	connection, err := net.ListenUDP("udp", bind)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to open UDP socket [%v]", err)
