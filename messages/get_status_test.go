@@ -326,3 +326,127 @@ func TestUnmarshalGetStatusResponseWithInvalidMsgType(t *testing.T) {
 		return
 	}
 }
+
+func TestUnmarshalGetStatusResponseWithNoEvent(t *testing.T) {
+	message := []byte{
+		0x17, 0x20, 0x00, 0x00, 0xe5, 0xd8, 0x4f, 0x0d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x16, 0x03, 0x34, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x21, 0x04, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	}
+
+	response, err := UnmarshalResponse(message)
+	if err != nil {
+		t.Fatalf("Unexpected error: %v\n", err)
+	} else if response == nil {
+		t.Fatalf("Unexpected response: %v\n", response)
+	}
+
+	reply, ok := response.(*GetStatusResponse)
+	if !ok {
+		t.Fatalf("Invalid response type - expected:%T, got: %T\n", &GetStatusResponse{}, response)
+	}
+
+	if reply.MsgType != 0x20 {
+		t.Errorf("Incorrect 'message type' - expected:%02X, got:%02x", 0x32, reply.MsgType)
+	}
+
+	if reply.SerialNumber != 223336677 {
+		t.Errorf("Incorrect 'serial number' - expected:%v, got:%v", 223336677, reply.SerialNumber)
+	}
+
+	if reply.EventIndex != 0 {
+		t.Errorf("Incorrect 'last index' - expected:%v, got:%v", 0, reply.EventIndex)
+	}
+
+	if reply.EventType != 0 {
+		t.Errorf("Incorrect 'event type' - expected:%v, got:%v", 0, reply.EventType)
+	}
+
+	if reply.Granted {
+		t.Errorf("Incorrect 'access granted' - expected:%v, got:%v", false, reply.Granted)
+	}
+
+	if reply.Door != 0 {
+		t.Errorf("Incorrect 'door' - expected:%v, got:%v", 0, reply.Door)
+	}
+
+	if reply.Direction != 0x00 {
+		t.Errorf("Incorrect 'direction' - expected:%v, got:%v", 0x00, reply.Direction)
+	}
+
+	if reply.CardNumber != 0 {
+		t.Errorf("Incorrect 'card number' - expected:%v, got:%v", 0, reply.CardNumber)
+	}
+
+	swiped, _ := time.ParseInLocation("2006-01-02 15:04:05", "0000-00-00 00:00:00", time.Local)
+	if reply.Timestamp != types.DateTime(swiped) {
+		t.Errorf("Incorrect 'event timestamp' - expected:%s, got:%s", swiped.Format("2006-01-02 15:04:05"), reply.Timestamp)
+	}
+
+	if reply.Reason != 0 {
+		t.Errorf("Incorrect 'event reason' - expected:%v, got:%v", 0, reply.Reason)
+	}
+
+	if !reply.Door1State {
+		t.Errorf("Incorrect 'door 1 state' - expected:%v, got:%v", true, reply.Door1State)
+	}
+
+	if !reply.Door2State {
+		t.Errorf("Incorrect 'door 2 state' - expected:%v, got:%v", true, reply.Door2State)
+	}
+
+	if reply.Door3State {
+		t.Errorf("Incorrect 'door 3 state' - expected:%v, got:%v", false, reply.Door3State)
+	}
+
+	if reply.Door4State {
+		t.Errorf("Incorrect 'door 4 state' - expected:%v, got:%v", false, reply.Door4State)
+	}
+
+	if reply.Door1Button {
+		t.Errorf("Incorrect 'door 1 button' - expected:%v, got:%v", false, reply.Door1Button)
+	}
+
+	if reply.Door2Button {
+		t.Errorf("Incorrect 'door 2 button' - expected:%v, got:%v", false, reply.Door2Button)
+	}
+
+	if reply.Door3Button {
+		t.Errorf("Incorrect 'door 3 button' - expected:%v, got:%v", false, reply.Door3Button)
+	}
+
+	if reply.Door4Button {
+		t.Errorf("Incorrect 'door 4 button' - expected:%v, got:%v", false, reply.Door4Button)
+	}
+
+	if reply.SystemError != 0 {
+		t.Errorf("Incorrect 'system error' - expected:%v, got:%v", 0, reply.SystemError)
+	}
+
+	sysdate, _ := time.ParseInLocation("2006-01-02", "2021-04-08", time.Local)
+	if reply.SystemDate != types.SystemDate(sysdate) {
+		t.Errorf("Incorrect 'system date' - expected:%s, got:%s", sysdate.Format("2006-01-02"), reply.SystemDate.String())
+	}
+
+	systime, _ := time.ParseInLocation("15:04:05", "16:03:34", time.Local)
+	if reply.SystemTime != types.SystemTime(systime) {
+		t.Errorf("Incorrect 'system time' - expected:%s, got:%s", systime.Format("15:04:05"), reply.SystemTime.String())
+	}
+
+	if reply.SequenceId != 0 {
+		t.Errorf("Incorrect 'sequence ID' - expected:%v, got:%v", 0, reply.SequenceId)
+	}
+
+	if reply.SpecialInfo != 0 {
+		t.Errorf("Incorrect 'special info' - expected:%v, got:%v", 0, reply.SpecialInfo)
+	}
+
+	if reply.RelayState != 0x00 {
+		t.Errorf("Incorrect 'relay state' - expected:%v, got:%v", 0x00, reply.RelayState)
+	}
+
+	if reply.InputState != 0x00 {
+		t.Errorf("Incorrect 'input state' - expected:%v, got:%v", 0x00, reply.InputState)
+	}
+}
