@@ -6,11 +6,25 @@ import (
 )
 
 func TestVersionStringer(t *testing.T) {
-	v := Version(0x0662)
-	s := fmt.Sprintf("%v", v)
+	tests := []struct {
+		version Version
+		s       string
+	}{
+		{Version(0x0662), "v6.62"},
+		{Version(0x0892), "v8.92"},
+		{Version(0x0898), "v8.98"},
+		{Version(0x0800), "v8.00"},
+		{Version(0x0801), "v8.01"},
+		{Version(0x0810), "v8.10"},
+		{Version(0x1234), "v12.34"},
+	}
 
-	if s != "v6.62" {
-		t.Errorf("Invalid string value - expected:%s, got:%s", "v6.62", s)
+	for _, v := range tests {
+		s := fmt.Sprintf("%v", v.version)
+
+		if s != v.s {
+			t.Errorf("%#v: Invalid string value - expected:%s, got:%s", v.version, v.s, s)
+		}
 	}
 }
 

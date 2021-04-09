@@ -13,7 +13,7 @@ func (v Version) String() string {
 	major := uint16(v) >> 8
 	minor := uint16(v) & 0x00ff
 
-	return fmt.Sprintf("v%x.%x", major, minor)
+	return fmt.Sprintf("v%x.%02x", major, minor)
 }
 
 func (v Version) MarshalUT0311L0x() ([]byte, error) {
