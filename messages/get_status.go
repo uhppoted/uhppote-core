@@ -18,7 +18,7 @@ type GetStatusResponse struct {
 	Door         byte               `uhppote:"offset:14"`
 	Direction    uint8              `uhppote:"offset:15"`
 	CardNumber   uint32             `uhppote:"offset:16"`
-	Timestamp    types.DateTime     `uhppote:"offset:20"`
+	Timestamp    *types.DateTime    `uhppote:"offset:20"`
 	Reason       uint8              `uhppote:"offset:27"`
 	Door1State   bool               `uhppote:"offset:28"`
 	Door2State   bool               `uhppote:"offset:29"`

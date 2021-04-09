@@ -435,6 +435,70 @@ func TestUnmarshalWithInvalidMsgType(t *testing.T) {
 	}
 }
 
+func TestUnmarshalDateTimel(t *testing.T) {
+	message := []byte{
+		0x17, 0x88, 0x6e, 0x00, 0x2d, 0x55, 0x39, 0x19, 0x20, 0x18, 0x12, 0x31, 0x12, 0x23, 0x34, 0x00,
+		0x20, 0x19, 0x12, 0x31, 0x12, 0x23, 0x34, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	}
+
+	reply := struct {
+		MsgType   types.MsgType   `uhppote:"value:0x88"`
+		DateTime  types.DateTime  `uhppote:"offset:8"`
+		DateTimeP *types.DateTime `uhppote:"offset:16"`
+		//		ZeroDateTime types.DateTime  `uhppote:"offset:24"`
+		NilDateTime *types.DateTime `uhppote:"offset:32"`
+	}{}
+
+	err := Unmarshal(message, &reply)
+
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+		return
+	}
+
+	datetime, _ := time.ParseInLocation("2006-01-02 15:04:05", "2018-12-31 12:23:34", time.Local)
+	if reply.DateTime != types.DateTime(datetime) {
+		t.Errorf("Expected date/time '%v', got: '%v'\n", datetime, reply.DateTime)
+	}
+
+	datetime, _ = time.ParseInLocation("2006-01-02 15:04:05", "2019-12-31 12:23:34", time.Local)
+	if *reply.DateTimeP != types.DateTime(datetime) {
+		t.Errorf("Expected date/time '%v', got: '%v'\n", datetime, reply.DateTimeP)
+	}
+
+	//	datetime = time.Time{}
+	//	if reply.ZeroDateTime != types.DateTime(datetime) {
+	//		t.Errorf("Expected '%v' date/time, got: '%v'\n", datetime, reply.ZeroDateTime)
+	//	}
+
+	if reply.NilDateTime != nil {
+		t.Errorf("Expected %v date/time, got: '%v'\n", nil, reply.NilDateTime)
+	}
+}
+
+func TestUnmarshalZeroDateTimel(t *testing.T) {
+	message := []byte{
+		0x17, 0x88, 0x6e, 0x00, 0x2d, 0x55, 0x39, 0x19, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	}
+
+	reply := struct {
+		MsgType      types.MsgType  `uhppote:"value:0x88"`
+		ZeroDateTime types.DateTime `uhppote:"offset:8"`
+	}{}
+
+	expected := fmt.Errorf(`parsing time "00000000000000": month out of range`)
+
+	err := Unmarshal(message, &reply)
+	if err == nil || err.Error() != expected.Error() {
+		t.Errorf("Expected error: %v, got:%v", expected, err)
+	}
+}
+
 func print(m []byte) string {
 	regex := regexp.MustCompile("(?m)^(.*)")
 

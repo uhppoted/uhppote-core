@@ -90,7 +90,7 @@ func TestUnmarshalSetTimeResponse(t *testing.T) {
 
 	datetime, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-12-29 12:34:56", time.Local)
 	if reply.DateTime != types.DateTime(datetime) {
-		t.Errorf("Incorrect 'date/time' - expected:%s, got:%s\n", datetime.Format("2006-01-02 15:04:05"), reply.DateTime)
+		t.Errorf("Incorrect 'date/time' - expected:%v, got:%v\n", datetime.Format("2006-01-02 15:04:05"), reply.DateTime)
 	}
 }
 
@@ -127,7 +127,7 @@ func TestFactoryUnmarshalSetTimeResponse(t *testing.T) {
 
 	datetime, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-12-29 12:34:56", time.Local)
 	if reply.DateTime != types.DateTime(datetime) {
-		t.Errorf("Incorrect 'date/time' - expected:%s, got:%s\n", datetime.Format("2006-01-02 15:04:05"), reply.DateTime)
+		t.Errorf("Incorrect 'date/time' - expected:%v, got:%v\n", datetime.Format("2006-01-02 15:04:05"), reply.DateTime)
 	}
 }
 

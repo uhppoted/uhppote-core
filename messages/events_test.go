@@ -108,7 +108,7 @@ func TestUnmarshalEvent(t *testing.T) {
 
 	swiped, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-04-19 17:00:09", time.Local)
 	if reply.Timestamp != types.DateTime(swiped) {
-		t.Errorf("Incorrect 'event timestamp' - expected:%s, got:%s", swiped.Format("2006-01-02 15:04:05"), reply.Timestamp)
+		t.Errorf("Incorrect 'event timestamp' - expected:%v, got:%v", swiped.Format("2006-01-02 15:04:05"), reply.Timestamp)
 	}
 
 	if reply.Reason != 6 {
@@ -296,7 +296,7 @@ func TestUnmarshalEventV6_62(t *testing.T) {
 
 	swiped, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-04-19 17:00:09", time.Local)
 	if reply.Timestamp != types.DateTime(swiped) {
-		t.Errorf("Incorrect 'event timestamp' - expected:%s, got:%s", swiped.Format("2006-01-02 15:04:05"), reply.Timestamp)
+		t.Errorf("Incorrect 'event timestamp' - expected:%v, got:%v", swiped.Format("2006-01-02 15:04:05"), reply.Timestamp)
 	}
 
 	if reply.Reason != 6 {

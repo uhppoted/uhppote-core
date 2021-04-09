@@ -47,7 +47,9 @@ release: test vet
 bump:
 
 debug: build
-	go test ./... -run TestUnmarshalGetStatusResponse_v8_98
+	go test ./... -run TestUnmarshalGetStatusResponseWithNoEvent
+	go test ./... -run TestUnmarshalDateTime
+	go test ./... -run TestUnmarshalZeroDateTime
 
 godoc:
 	godoc -http=:80	-index_interval=60s

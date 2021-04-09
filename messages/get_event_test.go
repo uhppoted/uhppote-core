@@ -136,10 +136,6 @@ func TestUnmarshalGetEventResponseWithNoEvents(t *testing.T) {
 		Timestamp:    nil,
 	}
 
-	// TODO REMOVE - patch for interim fix for https://github.com/uhppoted/uhppoted-rest/issues/3
-	expected.Timestamp = (*types.DateTime)(&time.Time{})
-	// END TODO
-
 	response := GetEventResponse{}
 
 	err := codec.Unmarshal(message, &response)

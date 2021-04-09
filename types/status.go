@@ -13,7 +13,7 @@ type Status struct {
 	Door           byte
 	Direction      uint8
 	CardNumber     uint32
-	Timestamp      DateTime
+	Timestamp      *DateTime
 	Reason         uint8
 	DoorState      map[uint8]bool
 	DoorButton     map[uint8]bool

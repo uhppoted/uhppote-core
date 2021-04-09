@@ -10,8 +10,12 @@ import (
 
 type DateTime time.Time
 
-func (d DateTime) String() string {
-	return time.Time(d).Format("2006-01-02 15:04:05")
+func (d *DateTime) String() string {
+	if d != nil {
+		return time.Time(*d).Format("2006-01-02 15:04:05")
+	}
+
+	return ""
 }
 
 func DateTimeFromString(s string) (*DateTime, error) {
@@ -43,13 +47,6 @@ func (d *DateTime) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// TODO REMOVE - interim fix for https://github.com/uhppoted/uhppoted-rest/issues/3
-	if string(decoded) == "00000000000000" {
-		v := DateTime(time.Time{})
-		return &v, nil
-	}
-	// END TODO
 
 	datetime, err := time.ParseInLocation("20060102150405", decoded, time.Local)
 	if err != nil {
