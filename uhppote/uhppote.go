@@ -114,7 +114,7 @@ func (u *UHPPOTE) Send(serialNumber uint32, request interface{}) (messages.Respo
 		return nil, err
 	}
 
-	err = c.SetDeadline(time.Now().Add(5000 * time.Millisecond))
+	err = c.SetWriteDeadline(time.Now().Add(5000 * time.Millisecond))
 	if err != nil {
 		return nil, fmt.Errorf("Failed to set UDP timeout [%v]", err)
 	}
@@ -157,17 +157,35 @@ func (u *UHPPOTE) Execute(serialNumber uint32, request, reply interface{}) error
 		return err
 	}
 
-	defer func() {
-		c.Close()
-	}()
+	defer c.Close()
 
-	if err = u.send(c, dest, request); err == nil {
-		if reply != nil {
-			return u.receive(c, reply)
-		}
+	if err := u.send(c, dest, request); err != nil {
+		return err
+	} else if reply == nil {
+		return nil
 	}
 
-	return err
+	received := make(chan error)
+	timer := time.NewTimer(5 * time.Second)
+	defer timer.Stop()
+
+	go func() {
+		received <- u.receive(c, reply)
+	}()
+
+	for {
+		select {
+		case err := <-received:
+			if err != nil {
+				fmt.Printf(" ... receive error: %v\n", err)
+				continue
+			}
+			return nil
+
+		case <-timer.C:
+			return fmt.Errorf("Timeout waiting for reply from %v", serialNumber)
+		}
+	}
 }
 
 func (u *UHPPOTE) Broadcast(request, replies interface{}) error {
@@ -293,7 +311,7 @@ func (u *UHPPOTE) broadcast(request interface{}, addr *net.UDPAddr) ([][]byte, e
 func (u *UHPPOTE) receive(c *net.UDPConn, reply interface{}) error {
 	m := make([]byte, 2048)
 
-	err := c.SetDeadline(time.Now().Add(5000 * time.Millisecond))
+	err := c.SetReadDeadline(time.Now().Add(15000 * time.Millisecond))
 	if err != nil {
 		return fmt.Errorf("Failed to set UDP timeout [%v]", err)
 	}

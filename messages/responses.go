@@ -38,7 +38,7 @@ func UnmarshalResponse(bytes []byte) (Response, error) {
 
 	f := responses[bytes[1]]
 	if f == nil {
-		return nil, fmt.Errorf("Unknown message type 0x%02x", bytes[1])
+		return nil, fmt.Errorf("Unknown message type H%02x", bytes[1])
 	}
 
 	response := f()
