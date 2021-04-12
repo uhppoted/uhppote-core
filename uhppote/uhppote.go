@@ -20,7 +20,7 @@ var guard sync.Mutex
 type iuhppote interface {
 	Execute(serialNumber uint32, request, reply interface{}) error
 	Send(serialNumber uint32, request interface{}) (messages.Response, error)
-	Broadcast(request, replies interface{}) error
+	Broadcast(request, reply interface{}) ([]interface{}, error)
 	DirectedBroadcast(serialNumber uint32, request, reply interface{}) error
 
 	BroadcastAddr() *net.UDPAddr
@@ -189,12 +189,32 @@ func (u *UHPPOTE) Execute(serialNumber uint32, request, reply interface{}) error
 	}
 }
 
-func (u *UHPPOTE) Broadcast(request, replies interface{}) error {
-	if m, err := u.broadcast(request, u.broadcastAddress()); err != nil {
-		return err
-	} else {
-		return codec.UnmarshalArray(m, replies)
+// func (u *UHPPOTE) Broadcast(request, replies interface{}) error {
+// 	m, err := u.broadcast(request, u.broadcastAddress())
+// 	if err != nil {
+// 		return err
+// 	}
+//
+// 	return codec.UnmarshalArray(m, replies)
+// }
+
+func (u *UHPPOTE) Broadcast(request, reply interface{}) ([]interface{}, error) {
+	replies := []interface{}{}
+
+	m, err := u.broadcast(request, u.broadcastAddress())
+	if err != nil {
+		return replies, err
 	}
+
+	for _, bytes := range m {
+		if v, err := codec.UnmarshalAs(bytes, reply); err != nil {
+			fmt.Printf(" ... receive error: %v\n", err)
+		} else {
+			replies = append(replies, v)
+		}
+	}
+
+	return replies, nil
 }
 
 // Sends a UDP message to a specific device but anticipates replies from more than one device because
@@ -214,10 +234,10 @@ func (u *UHPPOTE) DirectedBroadcast(serialNumber uint32, request, reply interfac
 	}
 
 	for _, bytes := range m {
-		if err := codec.Unmarshal(bytes, reply); err != nil {
-			fmt.Printf(" ... receive error: %v\n", err)
-		} else {
+		if err := codec.Unmarshal(bytes, reply); err == nil {
 			break
+		} else if u.Debug {
+			fmt.Printf(" ... receive error: %v\n", err)
 		}
 	}
 

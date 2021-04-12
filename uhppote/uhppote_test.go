@@ -14,7 +14,7 @@ import (
 type mock struct {
 	execute     func(uint32, interface{}, interface{}) error
 	send        func(uint32, interface{}) (messages.Response, error)
-	broadcast   func(interface{}, interface{}) error
+	broadcast   func(interface{}, interface{}) ([]interface{}, error)
 	broadcastTo func(uint32, interface{}, interface{}) error
 
 	devices       func() map[uint32]*Device
@@ -37,8 +37,8 @@ func (m *mock) DeviceList() map[uint32]*Device {
 	return m.devices()
 }
 
-func (m *mock) Broadcast(request interface{}, replies interface{}) error {
-	return m.broadcast(request, replies)
+func (m *mock) Broadcast(request interface{}, reply interface{}) ([]interface{}, error) {
+	return m.broadcast(request, reply)
 }
 
 func (m *mock) DirectedBroadcast(deviceID uint32, request interface{}, reply interface{}) error {

@@ -19,8 +19,10 @@ func TestGetDevices(t *testing.T) {
 	}
 
 	u := mock{
-		broadcast: func(request interface{}, replies interface{}) error {
-			return codec.UnmarshalArray([][]byte{message}, replies)
+		broadcast: func(request interface{}, reply interface{}) ([]interface{}, error) {
+			v, err := codec.UnmarshalAs(message, reply)
+
+			return []interface{}{v}, err
 		},
 
 		broadcastAddr: func() *net.UDPAddr {
@@ -109,8 +111,10 @@ func TestGetDevicesWithAltPort(t *testing.T) {
 	}
 
 	u := mock{
-		broadcast: func(request interface{}, replies interface{}) error {
-			return codec.UnmarshalArray([][]byte{message}, replies)
+		broadcast: func(request interface{}, reply interface{}) ([]interface{}, error) {
+			v, err := codec.UnmarshalAs(message, reply)
+
+			return []interface{}{v}, err
 		},
 
 		broadcastAddr: func() *net.UDPAddr {
