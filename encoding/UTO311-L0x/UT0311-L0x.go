@@ -162,8 +162,8 @@ func Unmarshal(bytes []byte, m interface{}) error {
 	return fmt.Errorf("Cannot unmarshal value with kind '%s'", v.Type())
 }
 
-func UnmarshalArray(bytes [][]byte, m interface{}) error {
-	v := reflect.ValueOf(m)
+func UnmarshalArray(bytes [][]byte, array interface{}) error {
+	v := reflect.ValueOf(array)
 
 	if v.Kind() == reflect.Ptr && v.Elem().Kind() == reflect.Slice {
 		t := v.Elem().Type().Elem()
@@ -184,6 +184,22 @@ func UnmarshalArray(bytes [][]byte, m interface{}) error {
 	}
 
 	return fmt.Errorf("Cannot unmarshal array to value with kind '%s'", v.Type())
+}
+
+func UnmarshalArrayElement(bytes []byte, array interface{}) (interface{}, error) {
+	v := reflect.ValueOf(array)
+
+	if v.Kind() == reflect.Ptr && v.Elem().Kind() == reflect.Slice {
+		t := v.Elem().Type().Elem()
+		s := reflect.New(t).Elem()
+		if err := unmarshal(bytes, s); err != nil {
+			return nil, err
+		}
+
+		return s.Interface(), nil
+	}
+
+	return nil, fmt.Errorf("Cannot unmarshal array to value with kind '%s'", v.Type())
 }
 
 func unmarshal(bytes []byte, s reflect.Value) error {

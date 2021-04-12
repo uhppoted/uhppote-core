@@ -41,8 +41,8 @@ func (m *mock) Broadcast(request interface{}, replies interface{}) error {
 	return m.broadcast(request, replies)
 }
 
-func (m *mock) DirectedBroadcast(deviceID uint32, request interface{}, replies interface{}) error {
-	return m.broadcastTo(deviceID, request, replies)
+func (m *mock) DirectedBroadcast(deviceID uint32, request interface{}, reply interface{}) error {
+	return m.broadcastTo(deviceID, request, reply)
 }
 
 var date = func(s string) *types.Date {

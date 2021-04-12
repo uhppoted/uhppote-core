@@ -21,7 +21,7 @@ type iuhppote interface {
 	Execute(serialNumber uint32, request, reply interface{}) error
 	Send(serialNumber uint32, request interface{}) (messages.Response, error)
 	Broadcast(request, replies interface{}) error
-	DirectedBroadcast(serialNumber uint32, request, replies interface{}) error
+	DirectedBroadcast(serialNumber uint32, request, reply interface{}) error
 
 	BroadcastAddr() *net.UDPAddr
 	DeviceList() map[uint32]*Device
@@ -116,7 +116,7 @@ func (u *UHPPOTE) Send(serialNumber uint32, request interface{}) (messages.Respo
 
 	err = c.SetWriteDeadline(time.Now().Add(5000 * time.Millisecond))
 	if err != nil {
-		return nil, fmt.Errorf("Failed to set UDP timeout [%v]", err)
+		return nil, fmt.Errorf("Failed to set UDP write timeout [%v]", err)
 	}
 
 	m := make([]byte, 2048)
@@ -176,11 +176,12 @@ func (u *UHPPOTE) Execute(serialNumber uint32, request, reply interface{}) error
 	for {
 		select {
 		case err := <-received:
-			if err != nil {
+			if err == nil {
+				return nil
+			} else if u.Debug {
 				fmt.Printf(" ... receive error: %v\n", err)
-				continue
 			}
-			return nil
+			continue
 
 		case <-timer.C:
 			return fmt.Errorf("Timeout waiting for reply from %v", serialNumber)
@@ -198,7 +199,7 @@ func (u *UHPPOTE) Broadcast(request, replies interface{}) error {
 
 // Sends a UDP message to a specific device but anticipates replies from more than one device because
 // it may fall back to the broadcast address if the device ID has no configured IP address.
-func (u *UHPPOTE) DirectedBroadcast(serialNumber uint32, request, replies interface{}) error {
+func (u *UHPPOTE) DirectedBroadcast(serialNumber uint32, request, reply interface{}) error {
 	dest := u.broadcastAddress()
 
 	if device, ok := u.Devices[serialNumber]; ok {
@@ -207,11 +208,20 @@ func (u *UHPPOTE) DirectedBroadcast(serialNumber uint32, request, replies interf
 		}
 	}
 
-	if m, err := u.broadcast(request, dest); err != nil {
+	m, err := u.broadcast(request, dest)
+	if err != nil {
 		return err
-	} else {
-		return codec.UnmarshalArray(m, replies)
 	}
+
+	for _, bytes := range m {
+		if err := codec.Unmarshal(bytes, reply); err != nil {
+			fmt.Printf(" ... receive error: %v\n", err)
+		} else {
+			break
+		}
+	}
+
+	return nil
 }
 
 func (u *UHPPOTE) open(addr *net.UDPAddr) (*net.UDPConn, error) {
@@ -268,12 +278,14 @@ func (u *UHPPOTE) broadcast(request interface{}, addr *net.UDPAddr) ([][]byte, e
 		return nil, fmt.Errorf("Failed to open UDP socket [%v]", err)
 	}
 
-	defer func() {
-		connection.Close()
-	}()
+	defer connection.Close()
+
+	err = connection.SetWriteDeadline(time.Now().Add(5000 * time.Millisecond))
+	if err != nil {
+		return nil, fmt.Errorf("Failed to set UDP write timeout [%v]", err)
+	}
 
 	N, err := connection.WriteTo(m, addr)
-
 	if err != nil {
 		return nil, fmt.Errorf("Failed to write to UDP socket [%v]", err)
 	}

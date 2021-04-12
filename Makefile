@@ -47,9 +47,7 @@ release: test vet
 bump:
 
 debug: build
-	go test ./... -run TestUnmarshalGetStatusResponseWithNoEvent
-	go test ./... -run TestUnmarshalDateTime
-	go test ./... -run TestUnmarshalZeroDateTime
+	go test ./... -run TestGetDevice
 
 godoc:
 	godoc -http=:80	-index_interval=60s

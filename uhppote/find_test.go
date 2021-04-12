@@ -205,8 +205,8 @@ func TestGetDevice(t *testing.T) {
 	}
 
 	u := mock{
-		broadcastTo: func(deviceID uint32, request interface{}, replies interface{}) error {
-			return codec.UnmarshalArray([][]byte{message}, replies)
+		broadcastTo: func(deviceID uint32, request interface{}, reply interface{}) error {
+			return codec.Unmarshal(message, reply)
 		},
 
 		devices: func() map[uint32]*Device {
@@ -305,8 +305,8 @@ func TestGetDeviceWithAlternatePort(t *testing.T) {
 	}
 
 	u := mock{
-		broadcastTo: func(deviceID uint32, request interface{}, replies interface{}) error {
-			return codec.UnmarshalArray([][]byte{message}, replies)
+		broadcastTo: func(deviceID uint32, request interface{}, reply interface{}) error {
+			return codec.Unmarshal(message, reply)
 		},
 
 		devices: func() map[uint32]*Device {
