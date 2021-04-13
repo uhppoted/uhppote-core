@@ -1,6 +1,7 @@
 package uhppote
 
 import (
+	"encoding/binary"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -207,18 +208,38 @@ func (u *UHPPOTE) Broadcast(request, reply interface{}) ([]interface{}, error) {
 	}
 
 	for _, bytes := range m {
-		if v, err := codec.UnmarshalAs(bytes, reply); err != nil {
-			fmt.Printf(" ... receive error: %v\n", err)
-		} else {
-			replies = append(replies, v)
+		// ... discard invalid replies
+		if len(bytes) != 64 {
+			if u.Debug {
+				fmt.Printf(" ... receive error: %v\n", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
+			}
+			continue
 		}
+
+		// ... discard replies without a device ID
+		if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); deviceID == 0 {
+			if u.Debug {
+				fmt.Printf(" ... receive error: %v\n", fmt.Errorf("invalid device ID (%v)", deviceID))
+			}
+			continue
+		}
+
+		// .. discard unparseable replies
+		v, err := codec.UnmarshalAs(bytes, reply)
+		if err != nil {
+			fmt.Printf(" ... receive error: %v\n", err)
+			continue
+		}
+
+		replies = append(replies, v)
 	}
 
 	return replies, nil
 }
 
-// Sends a UDP message to a specific device but anticipates replies from more than one device because
-// it may fall back to the broadcast address if the device ID has no configured IP address.
+// Sends a UDP message to a specific device but anticipates replies from more than one device
+// because it may fall back to the broadcast address if the device ID has no configured IP
+// address.
 func (u *UHPPOTE) DirectedBroadcast(serialNumber uint32, request, reply interface{}) error {
 	dest := u.broadcastAddress()
 
@@ -234,11 +255,31 @@ func (u *UHPPOTE) DirectedBroadcast(serialNumber uint32, request, reply interfac
 	}
 
 	for _, bytes := range m {
-		if err := codec.Unmarshal(bytes, reply); err == nil {
-			break
-		} else if u.Debug {
-			fmt.Printf(" ... receive error: %v\n", err)
+		// ... discard invalid replies
+		if len(bytes) != 64 {
+			if u.Debug {
+				fmt.Printf(" ... receive error: %v\n", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
+			}
+			continue
 		}
+
+		// ... discard replies without a device ID
+		if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); deviceID != serialNumber {
+			if u.Debug {
+				fmt.Printf(" ... receive error: %v\n", fmt.Errorf("invalid device ID - expected:%v, got:%v", serialNumber, deviceID))
+			}
+			continue
+		}
+
+		// ... parse message
+		if err := codec.Unmarshal(bytes, reply); err != nil {
+			if u.Debug {
+				fmt.Printf(" ... receive error: %v\n", err)
+			}
+			continue
+		}
+
+		break
 	}
 
 	return nil
