@@ -171,22 +171,20 @@ func (u *UHPPOTE) Execute(serialNumber uint32, request, reply interface{}) error
 	defer timer.Stop()
 
 	go func() {
-		received <- u.receive(c, reply)
+		received <- u.receive(c, serialNumber, reply)
 	}()
 
-	for {
-		select {
-		case err := <-received:
-			if err == nil {
-				return nil
-			} else if u.Debug {
+	select {
+	case err := <-received:
+		if err != nil {
+			if u.Debug {
 				fmt.Printf(" ... receive error: %v\n", err)
 			}
-			continue
-
-		case <-timer.C:
-			return fmt.Errorf("Timeout waiting for reply from %v", serialNumber)
 		}
+		return err
+
+	case <-timer.C:
+		return fmt.Errorf("Timeout waiting for reply from %v", serialNumber)
 	}
 }
 
@@ -263,7 +261,7 @@ func (u *UHPPOTE) DirectedBroadcast(serialNumber uint32, request, reply interfac
 			continue
 		}
 
-		// ... discard replies without a device ID
+		// ... discard replies without a valid device ID
 		if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); deviceID != serialNumber {
 			if u.Debug {
 				fmt.Printf(" ... receive error: %v\n", fmt.Errorf("invalid device ID - expected:%v, got:%v", serialNumber, deviceID))
@@ -381,24 +379,51 @@ func (u *UHPPOTE) broadcast(request interface{}, addr *net.UDPAddr) ([][]byte, e
 	return replies, err
 }
 
-func (u *UHPPOTE) receive(c *net.UDPConn, reply interface{}) error {
+func (u *UHPPOTE) receive(c *net.UDPConn, serialNumber uint32, reply interface{}) error {
 	m := make([]byte, 2048)
 
-	err := c.SetReadDeadline(time.Now().Add(15000 * time.Millisecond))
-	if err != nil {
+	if err := c.SetReadDeadline(time.Now().Add(15000 * time.Millisecond)); err != nil {
 		return fmt.Errorf("Failed to set UDP timeout [%v]", err)
 	}
 
-	N, remote, err := c.ReadFromUDP(m)
-	if err != nil {
-		return err
-	}
+	for {
+		N, remote, err := c.ReadFromUDP(m)
+		if err != nil {
+			return err
+		}
 
-	if u.Debug {
-		fmt.Printf(" ... received %v bytes from %v\n ... response\n%s\n", N, remote, dump(m[:N], " ...          "))
-	}
+		if u.Debug {
+			fmt.Printf(" ... received %v bytes from %v\n ... response\n%s\n", N, remote, dump(m[:N], " ...          "))
+		}
 
-	return codec.Unmarshal(m[:N], reply)
+		bytes := m[:N]
+
+		// ... discard invalid replies
+		if len(bytes) != 64 {
+			if u.Debug {
+				fmt.Printf(" ... receive error: %v\n", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
+			}
+			continue
+		}
+
+		// ... discard replies without a valid device ID
+		if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); deviceID != serialNumber {
+			if u.Debug {
+				fmt.Printf(" ... receive error: %v\n", fmt.Errorf("invalid device ID - expected:%v, got:%v", serialNumber, deviceID))
+			}
+			continue
+		}
+
+		// .. discard unparseable messages
+		if err := codec.Unmarshal(bytes, reply); err != nil {
+			if u.Debug {
+				fmt.Printf(" ... receive error: %v\n", err)
+			}
+			continue
+		}
+
+		return nil
+	}
 }
 
 func (u *UHPPOTE) listen(p chan *event, q chan os.Signal, listener Listener) error {
