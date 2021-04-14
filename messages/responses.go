@@ -21,7 +21,7 @@ var responses = map[byte]func() Response{
 	0x8e: func() Response { return new(RecordSpecialEventsResponse) },
 	0x90: func() Response { return new(SetListenerResponse) },
 	0x92: func() Response { return new(GetListenerResponse) },
-	0x94: func() Response { return new(FindDevicesResponse) },
+	0x94: func() Response { return new(GetDeviceResponse) },
 	0xb0: func() Response { return new(GetEventResponse) },
 	0xb2: func() Response { return new(SetEventIndexResponse) },
 	0xb4: func() Response { return new(GetEventIndexResponse) },

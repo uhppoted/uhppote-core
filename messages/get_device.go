@@ -5,12 +5,12 @@ import (
 	"net"
 )
 
-type FindDevicesRequest struct {
+type GetDeviceRequest struct {
 	MsgType      types.MsgType      `uhppote:"value:0x94"`
 	SerialNumber types.SerialNumber `uhppote:"offset:4"`
 }
 
-type FindDevicesResponse struct {
+type GetDeviceResponse struct {
 	MsgType      types.MsgType      `uhppote:"value:0x94"`
 	SerialNumber types.SerialNumber `uhppote:"offset:4"`
 	IpAddress    net.IP             `uhppote:"offset:8"`

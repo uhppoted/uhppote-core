@@ -25,7 +25,7 @@ var requests = map[byte]func() Request{
 	0x8e: func() Request { return new(RecordSpecialEventsRequest) },
 	0x90: func() Request { return new(SetListenerRequest) },
 	0x92: func() Request { return new(GetListenerRequest) },
-	0x94: func() Request { return new(FindDevicesRequest) },
+	0x94: func() Request { return new(GetDeviceRequest) },
 	0x96: func() Request { return new(SetAddressRequest) },
 	0xb0: func() Request { return new(GetEventRequest) },
 	0xb2: func() Request { return new(SetEventIndexRequest) },

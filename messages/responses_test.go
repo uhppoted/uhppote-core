@@ -22,8 +22,8 @@ func TestUnmarshalResponse(t *testing.T) {
 		t.Fatalf("Unexpected response: %v\n", response)
 	}
 
-	_, ok := response.(*FindDevicesResponse)
+	_, ok := response.(*GetDeviceResponse)
 	if !ok {
-		t.Fatalf("Invalid response type - expected:%T, got: %T\n", &FindDevicesResponse{}, response)
+		t.Fatalf("Invalid response type - expected:%T, got: %T\n", &GetDeviceResponse{}, response)
 	}
 }
