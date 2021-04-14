@@ -8,11 +8,11 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) GetDevice() ([]types.Device, error) {
+func (u *UHPPOTE) GetDevices() ([]types.Device, error) {
 	return getDevices(u)
 }
 
-func (u *UHPPOTE) FindDevice(serialNumber uint32) (*types.Device, error) {
+func (u *UHPPOTE) GetDevice(serialNumber uint32) (*types.Device, error) {
 	return getDevice(u, serialNumber)
 }
 

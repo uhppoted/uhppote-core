@@ -22,16 +22,8 @@ func (u *UHPPOTE) GetStatus(serialNumber uint32) (*types.Status, error) {
 	t := time.Time(reply.SystemTime).Format("15:04:05")
 	datetime, _ := time.ParseInLocation("2006-01-02 15:04:05", d+" "+t, time.Local)
 
-	return &types.Status{
+	status := types.Status{
 		SerialNumber:   reply.SerialNumber,
-		EventIndex:     reply.EventIndex,
-		EventType:      reply.EventType,
-		Granted:        reply.Granted,
-		Door:           reply.Door,
-		Direction:      reply.Direction,
-		CardNumber:     reply.CardNumber,
-		Timestamp:      reply.Timestamp,
-		Reason:         reply.Reason,
 		DoorState:      map[uint8]bool{1: reply.Door1State, 2: reply.Door2State, 3: reply.Door3State, 4: reply.Door4State},
 		DoorButton:     map[uint8]bool{1: reply.Door1Button, 2: reply.Door2Button, 3: reply.Door3Button, 4: reply.Door4Button},
 		SystemError:    reply.SystemError,
@@ -40,5 +32,20 @@ func (u *UHPPOTE) GetStatus(serialNumber uint32) (*types.Status, error) {
 		SpecialInfo:    reply.SpecialInfo,
 		RelayState:     reply.RelayState,
 		InputState:     reply.InputState,
-	}, nil
+	}
+
+	if reply.EventIndex != 0 {
+		status.Event = &types.StatusEvent{
+			Index:      reply.EventIndex,
+			Type:       reply.EventType,
+			Granted:    reply.Granted,
+			Door:       reply.Door,
+			Direction:  reply.Direction,
+			CardNumber: reply.CardNumber,
+			Timestamp:  reply.Timestamp,
+			Reason:     reply.Reason,
+		}
+	}
+
+	return &status, nil
 }

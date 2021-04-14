@@ -24,6 +24,7 @@ func TestGetEvent(t *testing.T) {
 	}
 
 	timestamp, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-02-10 07:12:01", time.Local)
+	datetime := types.DateTime(timestamp)
 	expected := types.Event{
 		SerialNumber: 423187757,
 		Index:        8,
@@ -32,7 +33,7 @@ func TestGetEvent(t *testing.T) {
 		Door:         3,
 		Direction:    1,
 		CardNumber:   6154413,
-		Timestamp:    types.DateTime(timestamp),
+		Timestamp:    datetime,
 		Reason:       0x06,
 	}
 

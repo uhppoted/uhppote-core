@@ -29,16 +29,8 @@ func (u *UHPPOTE) Listen(listener Listener, q chan os.Signal) error {
 				t := time.Time(e.SystemTime).Format("15:04:05")
 				datetime, _ := time.ParseInLocation("2006-01-02 15:04:05", d+" "+t, time.Local)
 
-				status := &types.Status{
+				status := types.Status{
 					SerialNumber:   e.SerialNumber,
-					EventIndex:     e.EventIndex,
-					EventType:      e.EventType,
-					Granted:        e.Granted,
-					Door:           e.Door,
-					Direction:      e.Direction,
-					CardNumber:     e.CardNumber,
-					Timestamp:      e.Timestamp,
-					Reason:         e.Reason,
 					DoorState:      map[uint8]bool{1: e.Door1State, 2: e.Door2State, 3: e.Door3State, 4: e.Door4State},
 					DoorButton:     map[uint8]bool{1: e.Door1Button, 2: e.Door2Button, 3: e.Door3Button, 4: e.Door4Button},
 					SystemError:    e.SystemError,
@@ -48,7 +40,21 @@ func (u *UHPPOTE) Listen(listener Listener, q chan os.Signal) error {
 					RelayState:     e.RelayState,
 					InputState:     e.InputState,
 				}
-				listener.OnEvent(status)
+
+				if e.EventIndex != 0 {
+					status.Event = &types.StatusEvent{
+						Index:      e.EventIndex,
+						Type:       e.EventType,
+						Granted:    e.Granted,
+						Door:       e.Door,
+						Direction:  e.Direction,
+						CardNumber: e.CardNumber,
+						Timestamp:  e.Timestamp,
+						Reason:     e.Reason,
+					}
+				}
+
+				listener.OnEvent(&status)
 			}
 		}
 	}()
