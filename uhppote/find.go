@@ -17,9 +17,9 @@ func (u *UHPPOTE) FindDevice(serialNumber uint32) (*types.Device, error) {
 }
 
 func getDevices(u iuhppote) ([]types.Device, error) {
-	request := messages.FindDevicesRequest{}
+	request := messages.GetDeviceRequest{}
 
-	replies, err := u.Broadcast(request, messages.FindDevicesResponse{})
+	replies, err := u.Broadcast(request, messages.GetDeviceResponse{})
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +31,7 @@ func getDevices(u iuhppote) ([]types.Device, error) {
 
 	devices := []types.Device{}
 	for _, v := range replies {
-		reply := v.(messages.FindDevicesResponse)
+		reply := v.(messages.GetDeviceResponse)
 		devices = append(devices, types.Device{
 			SerialNumber: reply.SerialNumber,
 			IpAddress:    reply.IpAddress,
@@ -53,11 +53,11 @@ func getDevices(u iuhppote) ([]types.Device, error) {
 }
 
 func getDevice(u iuhppote, serialNumber uint32) (*types.Device, error) {
-	request := messages.FindDevicesRequest{
+	request := messages.GetDeviceRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 	}
 
-	reply := messages.FindDevicesResponse{}
+	reply := messages.GetDeviceResponse{}
 	if err := u.DirectedBroadcast(serialNumber, request, &reply); err != nil {
 		return nil, err
 	}
