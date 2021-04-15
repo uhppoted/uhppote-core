@@ -189,41 +189,7 @@ func (u *UHPPOTE) Execute(serialNumber uint32, request, reply interface{}) error
 }
 
 func (u *UHPPOTE) Broadcast(request, reply interface{}) ([]interface{}, error) {
-	replies := []interface{}{}
-
-	m, err := u.broadcast(request, u.broadcastAddress())
-	if err != nil {
-		return replies, err
-	}
-
-	for _, bytes := range m {
-		// ... discard invalid replies
-		if len(bytes) != 64 {
-			if u.Debug {
-				fmt.Printf(" ... receive error: %v\n", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
-			}
-			continue
-		}
-
-		// ... discard replies without a device ID
-		if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); deviceID == 0 {
-			if u.Debug {
-				fmt.Printf(" ... receive error: %v\n", fmt.Errorf("invalid device ID (%v)", deviceID))
-			}
-			continue
-		}
-
-		// .. discard unparseable replies
-		v, err := codec.UnmarshalAs(bytes, reply)
-		if err != nil {
-			fmt.Printf(" ... receive error: %v\n", err)
-			continue
-		}
-
-		replies = append(replies, v)
-	}
-
-	return replies, nil
+	return u.BroadcastTo(0, request, reply)
 }
 
 // Sends a UDP message to a specific device but anticipates replies from more than one device
@@ -271,7 +237,6 @@ func (u *UHPPOTE) BroadcastTo(serialNumber uint32, request, reply interface{}) (
 		}
 
 		replies = append(replies, v)
-		break
 	}
 
 	return replies, nil
