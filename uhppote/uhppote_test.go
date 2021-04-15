@@ -15,7 +15,7 @@ type mock struct {
 	execute     func(uint32, interface{}, interface{}) error
 	send        func(uint32, interface{}) (messages.Response, error)
 	broadcast   func(interface{}, interface{}) ([]interface{}, error)
-	broadcastTo func(uint32, interface{}, interface{}) error
+	broadcastTo func(uint32, interface{}, interface{}) ([]interface{}, error)
 
 	devices       func() map[uint32]*Device
 	broadcastAddr func() *net.UDPAddr
@@ -37,11 +37,11 @@ func (m *mock) DeviceList() map[uint32]*Device {
 	return m.devices()
 }
 
-func (m *mock) Broadcast(request interface{}, reply interface{}) ([]interface{}, error) {
+func (m *mock) Broadcast(request, reply interface{}) ([]interface{}, error) {
 	return m.broadcast(request, reply)
 }
 
-func (m *mock) DirectedBroadcast(deviceID uint32, request interface{}, reply interface{}) error {
+func (m *mock) BroadcastTo(deviceID uint32, request, reply interface{}) ([]interface{}, error) {
 	return m.broadcastTo(deviceID, request, reply)
 }
 

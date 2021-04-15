@@ -22,7 +22,7 @@ type iuhppote interface {
 	Execute(serialNumber uint32, request, reply interface{}) error
 	Send(serialNumber uint32, request interface{}) (messages.Response, error)
 	Broadcast(request, reply interface{}) ([]interface{}, error)
-	DirectedBroadcast(serialNumber uint32, request, reply interface{}) error
+	BroadcastTo(serialNumber uint32, request, reply interface{}) ([]interface{}, error)
 
 	BroadcastAddr() *net.UDPAddr
 	DeviceList() map[uint32]*Device
@@ -188,15 +188,6 @@ func (u *UHPPOTE) Execute(serialNumber uint32, request, reply interface{}) error
 	}
 }
 
-// func (u *UHPPOTE) Broadcast(request, replies interface{}) error {
-// 	m, err := u.broadcast(request, u.broadcastAddress())
-// 	if err != nil {
-// 		return err
-// 	}
-//
-// 	return codec.UnmarshalArray(m, replies)
-// }
-
 func (u *UHPPOTE) Broadcast(request, reply interface{}) ([]interface{}, error) {
 	replies := []interface{}{}
 
@@ -238,7 +229,8 @@ func (u *UHPPOTE) Broadcast(request, reply interface{}) ([]interface{}, error) {
 // Sends a UDP message to a specific device but anticipates replies from more than one device
 // because it may fall back to the broadcast address if the device ID has no configured IP
 // address.
-func (u *UHPPOTE) DirectedBroadcast(serialNumber uint32, request, reply interface{}) error {
+func (u *UHPPOTE) BroadcastTo(serialNumber uint32, request, reply interface{}) ([]interface{}, error) {
+	replies := []interface{}{}
 	dest := u.broadcastAddress()
 
 	if device, ok := u.Devices[serialNumber]; ok {
@@ -249,7 +241,7 @@ func (u *UHPPOTE) DirectedBroadcast(serialNumber uint32, request, reply interfac
 
 	m, err := u.broadcast(request, dest)
 	if err != nil {
-		return err
+		return replies, err
 	}
 
 	for _, bytes := range m {
@@ -262,25 +254,27 @@ func (u *UHPPOTE) DirectedBroadcast(serialNumber uint32, request, reply interfac
 		}
 
 		// ... discard replies without a valid device ID
-		if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); deviceID != serialNumber {
+		if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); serialNumber != 0 && deviceID != serialNumber {
 			if u.Debug {
 				fmt.Printf(" ... receive error: %v\n", fmt.Errorf("invalid device ID - expected:%v, got:%v", serialNumber, deviceID))
 			}
 			continue
 		}
 
-		// ... parse message
-		if err := codec.Unmarshal(bytes, reply); err != nil {
+		// ... discard unparseable replies
+		v, err := codec.UnmarshalAs(bytes, reply)
+		if err != nil {
 			if u.Debug {
 				fmt.Printf(" ... receive error: %v\n", err)
 			}
 			continue
 		}
 
+		replies = append(replies, v)
 		break
 	}
 
-	return nil
+	return replies, nil
 }
 
 func (u *UHPPOTE) open(addr *net.UDPAddr) (*net.UDPConn, error) {

@@ -57,8 +57,8 @@ func getDevice(u iuhppote, serialNumber uint32) (*types.Device, error) {
 		SerialNumber: types.SerialNumber(serialNumber),
 	}
 
-	reply := messages.GetDeviceResponse{}
-	if err := u.DirectedBroadcast(serialNumber, request, &reply); err != nil {
+	replies, err := u.BroadcastTo(serialNumber, request, messages.GetDeviceResponse{})
+	if err != nil {
 		return nil, err
 	}
 
@@ -73,22 +73,25 @@ func getDevice(u iuhppote, serialNumber uint32) (*types.Device, error) {
 		}
 	}
 
-	if uint32(reply.SerialNumber) == serialNumber {
-		return &types.Device{
-			SerialNumber: reply.SerialNumber,
-			IpAddress:    reply.IpAddress,
-			SubnetMask:   reply.SubnetMask,
-			Gateway:      reply.Gateway,
-			MacAddress:   reply.MacAddress,
-			Version:      reply.Version,
-			Date:         reply.Date,
-			Address: net.UDPAddr{
-				IP:   reply.IpAddress,
-				Port: port,
-				Zone: "",
-			},
-			TimeZone: time.Local,
-		}, nil
+	for _, v := range replies {
+		reply := v.(messages.GetDeviceResponse)
+		if uint32(reply.SerialNumber) == serialNumber {
+			return &types.Device{
+				SerialNumber: reply.SerialNumber,
+				IpAddress:    reply.IpAddress,
+				SubnetMask:   reply.SubnetMask,
+				Gateway:      reply.Gateway,
+				MacAddress:   reply.MacAddress,
+				Version:      reply.Version,
+				Date:         reply.Date,
+				Address: net.UDPAddr{
+					IP:   reply.IpAddress,
+					Port: port,
+					Zone: "",
+				},
+				TimeZone: time.Local,
+			}, nil
+		}
 	}
 
 	return nil, nil
