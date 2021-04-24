@@ -27,6 +27,7 @@ var requests = map[byte]func() Request{
 	0x92: func() Request { return new(GetListenerRequest) },
 	0x94: func() Request { return new(GetDeviceRequest) },
 	0x96: func() Request { return new(SetAddressRequest) },
+	0xa0: func() Request { return new(SetPCControlRequest) },
 	0xb0: func() Request { return new(GetEventRequest) },
 	0xb2: func() Request { return new(SetEventIndexRequest) },
 	0xb4: func() Request { return new(GetEventIndexRequest) },
@@ -38,12 +39,12 @@ func UnmarshalRequest(bytes []byte) (Request, error) {
 	}
 
 	if bytes[0] != 0x17 {
-		return nil, fmt.Errorf("Invalid message type 0x%02x", bytes[0])
+		return nil, fmt.Errorf("Invalid message type %02X", bytes[0])
 	}
 
 	f := requests[bytes[1]]
 	if f == nil {
-		return nil, fmt.Errorf("Unknown message type 0x%02x", bytes[1])
+		return nil, fmt.Errorf("Unknown message type %02X", bytes[1])
 	}
 
 	response := f()
