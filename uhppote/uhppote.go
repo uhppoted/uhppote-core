@@ -111,13 +111,18 @@ func (u *UHPPOTE) Send(serialNumber uint32, request interface{}) (messages.Respo
 		c.Close()
 	}()
 
+	err = c.SetWriteDeadline(time.Now().Add(1000 * time.Millisecond))
+	if err != nil {
+		return nil, fmt.Errorf("Failed to set UDP write timeout [%v]", err)
+	}
+
 	if err = u.send(c, dest, request); err != nil {
 		return nil, err
 	}
 
-	err = c.SetWriteDeadline(time.Now().Add(5000 * time.Millisecond))
+	err = c.SetReadDeadline(time.Now().Add(5000 * time.Millisecond))
 	if err != nil {
-		return nil, fmt.Errorf("Failed to set UDP write timeout [%v]", err)
+		return nil, fmt.Errorf("Failed to set UDP read timeout [%v]", err)
 	}
 
 	m := make([]byte, 2048)
