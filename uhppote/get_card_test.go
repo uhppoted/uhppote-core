@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
-	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
 )
 
@@ -25,10 +24,8 @@ func TestGetCardByIndex(t *testing.T) {
 	}
 
 	u := mock{
-		send: func(deviceID uint32, request interface{}) (messages.Response, error) {
-			reply := messages.GetCardByIndexResponse{}
-			err := codec.Unmarshal(message, &reply)
-			return &reply, err
+		execute: func(deviceID uint32, request, response interface{}) error {
+			return codec.Unmarshal(message, response)
 		},
 	}
 
@@ -55,10 +52,8 @@ func TestGetCardByIndexWithCardNotFound(t *testing.T) {
 	}
 
 	u := mock{
-		send: func(deviceID uint32, request interface{}) (messages.Response, error) {
-			reply := messages.GetCardByIndexResponse{}
-			err := codec.Unmarshal(message, &reply)
-			return &reply, err
+		execute: func(deviceID uint32, request, response interface{}) error {
+			return codec.Unmarshal(message, response)
 		},
 	}
 
@@ -81,10 +76,8 @@ func TestGetCardByIndexWithCardDeleted(t *testing.T) {
 	}
 
 	u := mock{
-		send: func(deviceID uint32, request interface{}) (messages.Response, error) {
-			reply := messages.GetCardByIndexResponse{}
-			err := codec.Unmarshal(message, &reply)
-			return &reply, err
+		execute: func(deviceID uint32, request, response interface{}) error {
+			return codec.Unmarshal(message, response)
 		},
 	}
 

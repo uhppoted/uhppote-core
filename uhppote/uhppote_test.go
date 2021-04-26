@@ -13,7 +13,6 @@ import (
 
 type mock struct {
 	execute     func(uint32, interface{}, interface{}) error
-	send        func(uint32, interface{}) (messages.Response, error)
 	broadcast   func(interface{}, interface{}) ([]interface{}, error)
 	broadcastTo func(uint32, interface{}, interface{}) ([]interface{}, error)
 
@@ -23,10 +22,6 @@ type mock struct {
 
 func (m *mock) Execute(deviceID uint32, request, reply interface{}) error {
 	return m.execute(deviceID, request, reply)
-}
-
-func (m *mock) Send(deviceID uint32, request interface{}) (messages.Response, error) {
-	return m.send(deviceID, request)
 }
 
 func (m *mock) BroadcastAddr() *net.UDPAddr {
@@ -52,12 +47,11 @@ var date = func(s string) *types.Date {
 }
 
 func TestBroadcastAddressRequest(t *testing.T) {
-	expected, _ := messages.UnmarshalResponse([]byte{
-		0x17, 0x52, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	})
+	expected := messages.DeleteCardResponse{
+		MsgType:      0x52,
+		SerialNumber: 423187757,
+		Succeeded:    true,
+	}
 
 	request := messages.DeleteCardRequest{
 		SerialNumber: 423187757,
@@ -80,20 +74,15 @@ func TestBroadcastAddressRequest(t *testing.T) {
 		}()
 	}
 
-	reply, err := u.Send(423187757, request)
+	response := messages.DeleteCardResponse{}
 
+	err := u.Execute(423187757, request, &response)
 	if err != nil {
 		t.Fatalf("%v", err)
 	}
 
-	if reply == nil {
-		t.Fatalf("Invalid reply: %v", reply)
-	}
-
-	if response, ok := reply.(*messages.DeleteCardResponse); !ok {
-		t.Fatalf("Incorrect reply type - expected:%T, got:%T", expected, reply)
-	} else if !reflect.DeepEqual(response, expected) {
-		t.Fatalf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected, reply)
+	if !reflect.DeepEqual(response, expected) {
+		t.Fatalf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected, response)
 	}
 
 	c.Close()
@@ -102,19 +91,10 @@ func TestBroadcastAddressRequest(t *testing.T) {
 }
 
 func TestSequentialRequests(t *testing.T) {
-	expected := make([]messages.Response, 2)
-	expected[0], _ = messages.UnmarshalResponse([]byte{
-		0x17, 0x52, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	})
-
-	expected[1], _ = messages.UnmarshalResponse([]byte{0x17, 0x52, 0x00, 0x00, 0x4c, 0xd3, 0x2a, 0x2d, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	})
+	expected := []messages.DeleteCardResponse{
+		{MsgType: 0x52, SerialNumber: 423187757, Succeeded: true},
+		{MsgType: 0x52, SerialNumber: 757781324, Succeeded: true},
+	}
 
 	request := messages.DeleteCardRequest{
 		SerialNumber: 1000002,
@@ -154,24 +134,19 @@ func TestSequentialRequests(t *testing.T) {
 		}
 	}()
 
-	if reply, err := u.Send(423187757, request); err != nil {
+	response := messages.DeleteCardResponse{}
+
+	if err := u.Execute(423187757, request, &response); err != nil {
 		t.Fatalf("%v", err)
-	} else if reply == nil {
-		t.Fatalf("Invalid reply: %v", reply)
-	} else if response, ok := reply.(*messages.DeleteCardResponse); !ok {
-		t.Fatalf("Incorrect reply type - expected:%T, got:%T", expected, reply)
 	} else if !reflect.DeepEqual(response, expected[0]) {
-		t.Fatalf("Incorrect reply - expected:%v, got:%v", expected[0], reply)
+		t.Fatalf("Incorrect reply - expected:%v, got:%v", expected[0], response)
 	}
 
-	if reply, err := u.Send(757781324, request); err != nil {
+	response = messages.DeleteCardResponse{}
+	if err := u.Execute(757781324, request, &response); err != nil {
 		t.Fatalf("%v", err)
-	} else if reply == nil {
-		t.Fatalf("Invalid reply: %v", reply)
-	} else if response, ok := reply.(*messages.DeleteCardResponse); !ok {
-		t.Fatalf("Incorrect reply type - expected:%T, got:%T", expected, reply)
 	} else if !reflect.DeepEqual(response, expected[1]) {
-		t.Fatalf("Incorrect reply - expected:%v, got:%v", expected[1], reply)
+		t.Fatalf("Incorrect reply - expected:%v, got:%v", expected[1], response)
 	}
 
 	for _, c := range listening {
@@ -183,21 +158,10 @@ func TestSequentialRequests(t *testing.T) {
 }
 
 func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
-	expected := make([]messages.Response, 2)
-
-	expected[0], _ = messages.UnmarshalResponse([]byte{
-		0x17, 0x52, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	})
-
-	expected[1], _ = messages.UnmarshalResponse([]byte{
-		0x17, 0x52, 0x00, 0x00, 0x4c, 0xd3, 0x2a, 0x2d, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	})
+	expected := []messages.DeleteCardResponse{
+		{MsgType: 0x52, SerialNumber: 423187757, Succeeded: true},
+		{MsgType: 0x52, SerialNumber: 757781324, Succeeded: true},
+	}
 
 	request := messages.DeleteCardRequest{
 		SerialNumber: 1000002,
@@ -243,12 +207,12 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 	go func() {
 		defer wg.Done()
 
-		if reply, err := u.Send(423187757, request); err != nil {
+		response := messages.DeleteCardResponse{}
+
+		if err := u.Execute(423187757, request, &response); err != nil {
 			t.Errorf("%v", err)
-		} else if reply == nil {
-			t.Errorf("Invalid reply: %v", reply)
-		} else if !reflect.DeepEqual(reply, expected[0]) {
-			t.Errorf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected[0], reply)
+		} else if !reflect.DeepEqual(response, expected[0]) {
+			t.Errorf("Incorrect response:\nexpected:\n%v\ngot:\n%v", expected[0], response)
 		}
 	}()
 
@@ -257,12 +221,12 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 
 		time.Sleep(500 * time.Millisecond)
 
-		if reply, err := u.Send(757781324, request); err != nil {
+		response := messages.DeleteCardResponse{}
+
+		if err := u.Execute(757781324, request, &response); err != nil {
 			t.Errorf("%v", err)
-		} else if reply == nil {
-			t.Errorf("Invalid reply: %v", reply)
-		} else if !reflect.DeepEqual(reply, expected[1]) {
-			t.Errorf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected[1], reply)
+		} else if !reflect.DeepEqual(response, expected[1]) {
+			t.Errorf("Incorrect reply:\nexpected:\n%v\ngot:     \n%v", expected[1], response)
 		}
 	}()
 
@@ -277,19 +241,9 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 }
 
 func TestConcurrentRequestsWithBoundPort(t *testing.T) {
-	t.Skip("SKIP - uhppote concurrency implementation is a work in progress")
-
-	expected := [][]byte{
-		{0x17, 0x52, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		},
-		{0x17, 0x52, 0x00, 0x00, 0x4c, 0xd3, 0x2a, 0x2d, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		},
+	expected := []messages.DeleteCardResponse{
+		{MsgType: 0x52, SerialNumber: 423187757, Succeeded: true},
+		{MsgType: 0x52, SerialNumber: 757781324, Succeeded: true},
 	}
 
 	request := messages.DeleteCardRequest{
@@ -336,12 +290,12 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 	go func() {
 		defer wg.Done()
 
-		if reply, err := u.Send(423187757, request); err != nil {
+		response := messages.DeleteCardResponse{}
+
+		if err := u.Execute(423187757, request, &response); err != nil {
 			t.Errorf("%v", err)
-		} else if reply == nil {
-			t.Errorf("Invalid reply: %v", reply)
-		} else if !reflect.DeepEqual(reply, expected[0]) {
-			t.Errorf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected, reply)
+		} else if !reflect.DeepEqual(response, expected[0]) {
+			t.Errorf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected, response)
 		}
 	}()
 
@@ -350,12 +304,12 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 
 		time.Sleep(500 * time.Millisecond)
 
-		if reply, err := u.Send(757781324, request); err != nil {
+		response := messages.DeleteCardResponse{}
+
+		if err := u.Execute(757781324, request, &response); err != nil {
 			t.Errorf("%v", err)
-		} else if reply == nil {
-			t.Errorf("Invalid reply: %v", reply)
-		} else if !reflect.DeepEqual(reply, expected[1]) {
-			t.Errorf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected[1], reply)
+		} else if !reflect.DeepEqual(response, expected[1]) {
+			t.Errorf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected[1], response)
 		}
 	}()
 

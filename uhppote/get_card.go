@@ -16,14 +16,10 @@ func getCardByIndex(u iuhppote, deviceID, index uint32) (*types.Card, error) {
 		Index:        index,
 	}
 
-	reply, err := u.Send(deviceID, request)
+	response := messages.GetCardByIndexResponse{}
+	err := u.Execute(deviceID, request, &response)
 	if err != nil {
 		return nil, err
-	}
-
-	response, ok := reply.(*messages.GetCardByIndexResponse)
-	if !ok {
-		return nil, fmt.Errorf("Invalid response to GetCardByIndex")
 	}
 
 	if uint32(response.SerialNumber) != deviceID {
@@ -58,14 +54,11 @@ func (u *UHPPOTE) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) 
 		CardNumber:   cardNumber,
 	}
 
-	reply, err := u.Send(deviceID, request)
+	response := messages.GetCardByIDResponse{}
+
+	err := u.Execute(deviceID, request, &response)
 	if err != nil {
 		return nil, err
-	}
-
-	response, ok := reply.(*messages.GetCardByIDResponse)
-	if !ok {
-		return nil, fmt.Errorf("Invalid response to GetCardById")
 	}
 
 	if uint32(response.SerialNumber) != deviceID {

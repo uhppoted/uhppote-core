@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
-	"github.com/uhppoted/uhppote-core/messages"
 )
 
 func TestRecordSpecialEvents(t *testing.T) {
@@ -18,10 +17,8 @@ func TestRecordSpecialEvents(t *testing.T) {
 	expected := true
 
 	u := mock{
-		send: func(deviceID uint32, request interface{}) (messages.Response, error) {
-			reply := messages.RecordSpecialEventsResponse{}
-			err := codec.Unmarshal(message, &reply)
-			return &reply, err
+		execute: func(deviceID uint32, request, response interface{}) error {
+			return codec.Unmarshal(message, response)
 		},
 	}
 

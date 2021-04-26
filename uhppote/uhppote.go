@@ -12,7 +12,6 @@ import (
 	"time"
 
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
-	"github.com/uhppoted/uhppote-core/messages"
 )
 
 var VERSION string = "v0.6.x"
@@ -20,7 +19,6 @@ var guard sync.Mutex
 
 type iuhppote interface {
 	Execute(serialNumber uint32, request, reply interface{}) error
-	Send(serialNumber uint32, request interface{}) (messages.Response, error)
 	Broadcast(request, reply interface{}) ([]interface{}, error)
 	BroadcastTo(serialNumber uint32, request, reply interface{}) ([]interface{}, error)
 
@@ -85,62 +83,6 @@ func (u *UHPPOTE) BroadcastAddr() *net.UDPAddr {
 	}
 
 	return nil
-}
-
-func (u *UHPPOTE) Send(serialNumber uint32, request interface{}) (messages.Response, error) {
-	bind := u.bindAddress()
-	dest := u.broadcastAddress()
-
-	if device, ok := u.Devices[serialNumber]; ok {
-		if device.Address != nil {
-			dest = device.Address
-		}
-	}
-
-	if bind.Port != 0 {
-		guard.Lock()
-		defer guard.Unlock()
-	}
-
-	c, err := u.open(bind)
-	if err != nil {
-		return nil, err
-	}
-
-	defer func() {
-		c.Close()
-	}()
-
-	err = c.SetWriteDeadline(time.Now().Add(1000 * time.Millisecond))
-	if err != nil {
-		return nil, fmt.Errorf("Failed to set UDP write timeout [%v]", err)
-	}
-
-	if err = u.send(c, dest, request); err != nil {
-		return nil, err
-	}
-
-	err = c.SetReadDeadline(time.Now().Add(5000 * time.Millisecond))
-	if err != nil {
-		return nil, fmt.Errorf("Failed to set UDP read timeout [%v]", err)
-	}
-
-	m := make([]byte, 2048)
-	N, remote, err := c.ReadFromUDP(m)
-	if err != nil {
-		return nil, fmt.Errorf("Failed to read from UDP socket [%v]", err)
-	}
-
-	if u.Debug {
-		fmt.Printf(" ... received %v bytes from %v\n ... response\n%s\n", N, remote, dump(m[:N], " ...          "))
-	}
-
-	response, err := messages.UnmarshalResponse(m[:N])
-	if err != nil {
-		return nil, err
-	}
-
-	return response, nil
 }
 
 func (u *UHPPOTE) Execute(serialNumber uint32, request, reply interface{}) error {

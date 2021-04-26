@@ -24,14 +24,11 @@ func recordSpecialEvents(u iuhppote, deviceID uint32, enable bool) (bool, error)
 		Enable:       enable,
 	}
 
-	reply, err := u.Send(deviceID, request)
+	response := messages.RecordSpecialEventsResponse{}
+
+	err := u.Execute(deviceID, request, &response)
 	if err != nil {
 		return false, err
-	}
-
-	response, ok := reply.(*messages.RecordSpecialEventsResponse)
-	if !ok {
-		return false, fmt.Errorf("Invalid response to RecordSpecialEvents")
 	}
 
 	if uint32(response.SerialNumber) != deviceID {
