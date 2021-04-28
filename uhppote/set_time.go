@@ -14,7 +14,7 @@ func (u *UHPPOTE) SetTime(serialNumber uint32, datetime time.Time) (*types.Time,
 
 	reply := messages.SetTimeResponse{}
 
-	err := u.Execute(serialNumber, request, &reply)
+	err := u.Send(serialNumber, request, &reply)
 	if err != nil {
 		return nil, err
 	}

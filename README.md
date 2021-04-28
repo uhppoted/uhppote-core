@@ -15,6 +15,7 @@ Supported operating systems:
 
 | *Version* | *Description*                                                                             |
 | --------- | ----------------------------------------------------------------------------------------- |
+| v0.6.11   | Improved handling of concurrent requests and invalid responses                            |
 | v0.6.10   | Bumped version to 0.6.10 for initial `uhppoted-app-wild-apricot` release                  |
 | v0.6.8    | Improved internal support for UHPPOTE v6.62 firmware                                      |
 | v0.6.7    | Implements `record-special-events` for enabling and disabling door events                 |

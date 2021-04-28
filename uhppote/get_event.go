@@ -18,7 +18,7 @@ func getEvent(u iuhppote, serialNumber, index uint32) (*types.Event, error) {
 
 	reply := messages.GetEventResponse{}
 
-	err := u.Execute(serialNumber, request, &reply)
+	err := u.Send(serialNumber, request, &reply)
 	if err != nil {
 		return nil, err
 	}

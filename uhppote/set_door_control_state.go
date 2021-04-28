@@ -15,7 +15,7 @@ func (u *UHPPOTE) SetDoorControlState(serialNumber uint32, door uint8, state uin
 
 	reply := messages.SetDoorControlStateResponse{}
 
-	err := u.Execute(serialNumber, request, &reply)
+	err := u.Send(serialNumber, request, &reply)
 	if err != nil {
 		return nil, err
 	}

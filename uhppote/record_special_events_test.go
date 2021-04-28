@@ -17,7 +17,7 @@ func TestRecordSpecialEvents(t *testing.T) {
 	expected := true
 
 	u := mock{
-		execute: func(deviceID uint32, request, response interface{}) error {
+		send: func(deviceID uint32, request, response interface{}) error {
 			return codec.Unmarshal(message, response)
 		},
 	}

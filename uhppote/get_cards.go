@@ -12,7 +12,7 @@ func (u *UHPPOTE) GetCards(deviceID uint32) (uint32, error) {
 
 	reply := messages.GetCardsResponse{}
 
-	err := u.Execute(deviceID, request, &reply)
+	err := u.Send(deviceID, request, &reply)
 	if err != nil {
 		return 0, err
 	}

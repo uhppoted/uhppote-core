@@ -12,7 +12,7 @@ import (
 )
 
 type mock struct {
-	execute     func(uint32, interface{}, interface{}) error
+	send        func(uint32, interface{}, interface{}) error
 	broadcast   func(interface{}, interface{}) ([]interface{}, error)
 	broadcastTo func(uint32, interface{}, interface{}) ([]interface{}, error)
 
@@ -20,8 +20,8 @@ type mock struct {
 	broadcastAddr func() *net.UDPAddr
 }
 
-func (m *mock) Execute(deviceID uint32, request, reply interface{}) error {
-	return m.execute(deviceID, request, reply)
+func (m *mock) Send(deviceID uint32, request, reply interface{}) error {
+	return m.send(deviceID, request, reply)
 }
 
 func (m *mock) BroadcastAddr() *net.UDPAddr {
@@ -76,7 +76,7 @@ func TestBroadcastAddressRequest(t *testing.T) {
 
 	response := messages.DeleteCardResponse{}
 
-	err := u.Execute(423187757, request, &response)
+	err := u.Send(423187757, request, &response)
 	if err != nil {
 		t.Fatalf("%v", err)
 	}
@@ -136,14 +136,14 @@ func TestSequentialRequests(t *testing.T) {
 
 	response := messages.DeleteCardResponse{}
 
-	if err := u.Execute(423187757, request, &response); err != nil {
+	if err := u.Send(423187757, request, &response); err != nil {
 		t.Fatalf("%v", err)
 	} else if !reflect.DeepEqual(response, expected[0]) {
 		t.Fatalf("Incorrect reply - expected:%v, got:%v", expected[0], response)
 	}
 
 	response = messages.DeleteCardResponse{}
-	if err := u.Execute(757781324, request, &response); err != nil {
+	if err := u.Send(757781324, request, &response); err != nil {
 		t.Fatalf("%v", err)
 	} else if !reflect.DeepEqual(response, expected[1]) {
 		t.Fatalf("Incorrect reply - expected:%v, got:%v", expected[1], response)
@@ -209,7 +209,7 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 
 		response := messages.DeleteCardResponse{}
 
-		if err := u.Execute(423187757, request, &response); err != nil {
+		if err := u.Send(423187757, request, &response); err != nil {
 			t.Errorf("%v", err)
 		} else if !reflect.DeepEqual(response, expected[0]) {
 			t.Errorf("Incorrect response:\nexpected:\n%v\ngot:\n%v", expected[0], response)
@@ -223,7 +223,7 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 
 		response := messages.DeleteCardResponse{}
 
-		if err := u.Execute(757781324, request, &response); err != nil {
+		if err := u.Send(757781324, request, &response); err != nil {
 			t.Errorf("%v", err)
 		} else if !reflect.DeepEqual(response, expected[1]) {
 			t.Errorf("Incorrect reply:\nexpected:\n%v\ngot:     \n%v", expected[1], response)
@@ -292,7 +292,7 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 
 		response := messages.DeleteCardResponse{}
 
-		if err := u.Execute(423187757, request, &response); err != nil {
+		if err := u.Send(423187757, request, &response); err != nil {
 			t.Errorf("%v", err)
 		} else if !reflect.DeepEqual(response, expected[0]) {
 			t.Errorf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected, response)
@@ -306,7 +306,7 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 
 		response := messages.DeleteCardResponse{}
 
-		if err := u.Execute(757781324, request, &response); err != nil {
+		if err := u.Send(757781324, request, &response); err != nil {
 			t.Errorf("%v", err)
 		} else if !reflect.DeepEqual(response, expected[1]) {
 			t.Errorf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected[1], response)

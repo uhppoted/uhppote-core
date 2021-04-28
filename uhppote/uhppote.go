@@ -18,7 +18,7 @@ var VERSION string = "v0.6.x"
 var guard sync.Mutex
 
 type iuhppote interface {
-	Execute(serialNumber uint32, request, reply interface{}) error
+	Send(serialNumber uint32, request, reply interface{}) error
 	Broadcast(request, reply interface{}) ([]interface{}, error)
 	BroadcastTo(serialNumber uint32, request, reply interface{}) ([]interface{}, error)
 
@@ -85,7 +85,7 @@ func (u *UHPPOTE) BroadcastAddr() *net.UDPAddr {
 	return nil
 }
 
-func (u *UHPPOTE) Execute(serialNumber uint32, request, reply interface{}) error {
+func (u *UHPPOTE) Send(serialNumber uint32, request, reply interface{}) error {
 	bind := u.bindAddress()
 	dest := u.broadcastAddress()
 

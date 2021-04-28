@@ -12,7 +12,7 @@ func (u *UHPPOTE) GetTime(serialNumber uint32) (*types.Time, error) {
 
 	reply := messages.GetTimeResponse{}
 
-	err := u.Execute(serialNumber, request, &reply)
+	err := u.Send(serialNumber, request, &reply)
 	if err != nil {
 		return nil, err
 	}

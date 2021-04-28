@@ -17,7 +17,7 @@ func getCardByIndex(u iuhppote, deviceID, index uint32) (*types.Card, error) {
 	}
 
 	response := messages.GetCardByIndexResponse{}
-	err := u.Execute(deviceID, request, &response)
+	err := u.Send(deviceID, request, &response)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (u *UHPPOTE) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) 
 
 	response := messages.GetCardByIDResponse{}
 
-	err := u.Execute(deviceID, request, &response)
+	err := u.Send(deviceID, request, &response)
 	if err != nil {
 		return nil, err
 	}

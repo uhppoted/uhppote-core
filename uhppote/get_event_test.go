@@ -18,7 +18,7 @@ func TestGetEvent(t *testing.T) {
 	}
 
 	u := mock{
-		execute: func(deviceID uint32, request, reply interface{}) error {
+		send: func(deviceID uint32, request, reply interface{}) error {
 			return codec.Unmarshal(message, reply)
 		},
 	}
@@ -60,7 +60,7 @@ func TestGetEventWithNoEvents(t *testing.T) {
 	}
 
 	u := mock{
-		execute: func(deviceID uint32, request, reply interface{}) error {
+		send: func(deviceID uint32, request, reply interface{}) error {
 			return codec.Unmarshal(message, reply)
 		},
 	}
@@ -77,7 +77,7 @@ func TestGetEventWithNoEvents(t *testing.T) {
 
 func TestGetEventWithError(t *testing.T) {
 	u := mock{
-		execute: func(deviceID uint32, request, reply interface{}) error {
+		send: func(deviceID uint32, request, reply interface{}) error {
 			return fmt.Errorf("EXPECTED")
 		},
 	}

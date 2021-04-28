@@ -1,6 +1,6 @@
 DIST  ?= development
 DEBUG ?= --debug
-VERSION = v0.6.x
+VERSION = v0.6.11
 LDFLAGS = -ldflags "-X uhppote.VERSION=$(VERSION)" 
 
 .PHONY: bump
