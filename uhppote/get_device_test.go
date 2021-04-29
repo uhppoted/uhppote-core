@@ -18,15 +18,13 @@ func TestGetDevices(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	u := mock{
-		broadcast: func(request interface{}, reply interface{}) ([]interface{}, error) {
-			v, err := codec.UnmarshalAs(message, reply)
+	u := UHPPOTE{
+		driver: &mock{
+			broadcast: func(request interface{}, reply interface{}) ([]interface{}, error) {
+				v, err := codec.UnmarshalAs(message, reply)
 
-			return []interface{}{v}, err
-		},
-
-		broadcastAddr: func() *net.UDPAddr {
-			return nil
+				return []interface{}{v}, err
+			},
 		},
 	}
 
@@ -48,7 +46,7 @@ func TestGetDevices(t *testing.T) {
 		TimeZone: time.Local,
 	}
 
-	response, err := getDevices(&u)
+	response, err := u.GetDevices()
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetDevices (%v)", err)
 	}
@@ -110,21 +108,18 @@ func TestGetDevicesWithAltPort(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	u := mock{
-		broadcast: func(request interface{}, reply interface{}) ([]interface{}, error) {
-			v, err := codec.UnmarshalAs(message, reply)
-
-			return []interface{}{v}, err
+	u := UHPPOTE{
+		BroadcastAddress: &net.UDPAddr{
+			IP:   net.IPv4(192, 168, 1, 255),
+			Port: 54321,
 		},
 
-		broadcastAddr: func() *net.UDPAddr {
-			addr := net.UDPAddr{
-				IP:   net.IPv4(192, 168, 1, 255),
-				Port: 54321,
-				Zone: "",
-			}
+		driver: &mock{
+			broadcast: func(request interface{}, reply interface{}) ([]interface{}, error) {
+				v, err := codec.UnmarshalAs(message, reply)
 
-			return &addr
+				return []interface{}{v}, err
+			},
 		},
 	}
 
@@ -146,7 +141,7 @@ func TestGetDevicesWithAltPort(t *testing.T) {
 		TimeZone: time.Local,
 	}
 
-	response, err := getDevices(&u)
+	response, err := u.GetDevices()
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetDevices (%v)", err)
 	}
@@ -208,19 +203,13 @@ func TestGetDevice(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	u := mock{
-		broadcastTo: func(deviceID uint32, request, reply interface{}) ([]interface{}, error) {
-			reply, err := codec.UnmarshalAs(message, reply)
+	u := UHPPOTE{
+		driver: &mock{
+			broadcastTo: func(deviceID uint32, request, reply interface{}) ([]interface{}, error) {
+				reply, err := codec.UnmarshalAs(message, reply)
 
-			return []interface{}{reply}, err
-		},
-
-		devices: func() map[uint32]*Device {
-			return map[uint32]*Device{}
-		},
-
-		broadcastAddr: func() *net.UDPAddr {
-			return nil
+				return []interface{}{reply}, err
+			},
 		},
 	}
 
@@ -242,7 +231,7 @@ func TestGetDevice(t *testing.T) {
 		TimeZone: time.Local,
 	}
 
-	response, err := getDevice(&u, 423187757)
+	response, err := u.GetDevice(423187757)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetDevice (%v)", err)
 	}
@@ -310,21 +299,17 @@ func TestGetDeviceWithAlternatePort(t *testing.T) {
 		Address: &addr,
 	}
 
-	u := mock{
-		broadcastTo: func(deviceID uint32, request, reply interface{}) ([]interface{}, error) {
-			reply, err := codec.UnmarshalAs(message, reply)
-
-			return []interface{}{reply}, err
+	u := UHPPOTE{
+		Devices: map[uint32]*Device{
+			423187757: &device,
 		},
 
-		devices: func() map[uint32]*Device {
-			return map[uint32]*Device{
-				423187757: &device,
-			}
-		},
+		driver: &mock{
+			broadcastTo: func(deviceID uint32, request, reply interface{}) ([]interface{}, error) {
+				reply, err := codec.UnmarshalAs(message, reply)
 
-		broadcastAddr: func() *net.UDPAddr {
-			return nil
+				return []interface{}{reply}, err
+			},
 		},
 	}
 
@@ -346,7 +331,7 @@ func TestGetDeviceWithAlternatePort(t *testing.T) {
 		TimeZone: time.Local,
 	}
 
-	response, err := getDevice(&u, 423187757)
+	response, err := u.GetDevice(423187757)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetDevice (%v)", err)
 	}

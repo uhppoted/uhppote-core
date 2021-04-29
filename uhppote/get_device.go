@@ -9,17 +9,14 @@ import (
 )
 
 func (u *UHPPOTE) GetDevices() ([]types.Device, error) {
-	return getDevices(u)
-}
-
-func (u *UHPPOTE) GetDevice(serialNumber uint32) (*types.Device, error) {
-	return getDevice(u, serialNumber)
-}
-
-func getDevices(u iuhppote) ([]types.Device, error) {
 	request := messages.GetDeviceRequest{}
 
-	replies, err := u.Broadcast(request, messages.GetDeviceResponse{})
+	driver := iuhppote(u)
+	if u.driver != nil {
+		driver = u.driver
+	}
+
+	replies, err := driver.Broadcast(request, messages.GetDeviceResponse{})
 	if err != nil {
 		return nil, err
 	}
@@ -52,12 +49,17 @@ func getDevices(u iuhppote) ([]types.Device, error) {
 	return devices, nil
 }
 
-func getDevice(u iuhppote, serialNumber uint32) (*types.Device, error) {
+func (u *UHPPOTE) GetDevice(serialNumber uint32) (*types.Device, error) {
 	request := messages.GetDeviceRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 	}
 
-	replies, err := u.BroadcastTo(serialNumber, request, messages.GetDeviceResponse{})
+	driver := iuhppote(u)
+	if u.driver != nil {
+		driver = u.driver
+	}
+
+	replies, err := driver.BroadcastTo(serialNumber, request, messages.GetDeviceResponse{})
 	if err != nil {
 		return nil, err
 	}
