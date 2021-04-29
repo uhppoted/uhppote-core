@@ -21,16 +21,10 @@ func TestMarshalGetCardByIndexRequest(t *testing.T) {
 		Index:        4,
 	}
 
-	m, err := codec.Marshal(request)
-
-	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
-	}
-
-	if !reflect.DeepEqual(m, expected) {
+	if m, err := codec.Marshal(request); err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	} else if !reflect.DeepEqual(m, expected) {
 		t.Errorf("Invalid byte array:\nExpected:\n%s\nReturned:\n%s", dump(expected, ""), dump(m, ""))
-		return
 	}
 }
 
@@ -47,16 +41,10 @@ func TestMarshalGetCardByIdRequest(t *testing.T) {
 		CardNumber:   6154412,
 	}
 
-	m, err := codec.Marshal(request)
-
-	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
-	}
-
-	if !reflect.DeepEqual(m, expected) {
+	if m, err := codec.Marshal(request); err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	} else if !reflect.DeepEqual(m, expected) {
 		t.Errorf("Invalid byte array:\nExpected:\n%s\nReturned:\n%s", dump(expected, ""), dump(m, ""))
-		return
 	}
 }
 
@@ -70,10 +58,8 @@ func TestUnmarshalGetCardByIndexResponse(t *testing.T) {
 
 	reply := GetCardByIndexResponse{}
 
-	err := codec.Unmarshal(message, &reply)
-
-	if err != nil {
-		t.Errorf("Unexpected error: %v\n", err)
+	if err := codec.Unmarshal(message, &reply); err != nil {
+		t.Fatalf("Unexpected error: %v\n", err)
 	}
 
 	if reply.MsgType != 0x5C {
@@ -125,10 +111,8 @@ func TestUnmarshalGetCardByIndexNotFoundResponse(t *testing.T) {
 
 	reply := GetCardByIndexResponse{}
 
-	err := codec.Unmarshal(message, &reply)
-
-	if err != nil {
-		t.Errorf("Unexpected error: %v\n", err)
+	if err := codec.Unmarshal(message, &reply); err != nil {
+		t.Fatalf("Unexpected error: %v\n", err)
 	}
 
 	if reply.MsgType != 0x5C {
@@ -178,10 +162,8 @@ func TestUnmarshalGetCardByIdResponse(t *testing.T) {
 
 	reply := GetCardByIDResponse{}
 
-	err := codec.Unmarshal(message, &reply)
-
-	if err != nil {
-		t.Errorf("Unexpected error: %v\n", err)
+	if err := codec.Unmarshal(message, &reply); err != nil {
+		t.Fatalf("Unexpected error: %v\n", err)
 	}
 
 	if reply.MsgType != 0x5a {
@@ -233,10 +215,8 @@ func TestUnmarshalGetCardByIdNotFoundResponse(t *testing.T) {
 
 	reply := GetCardByIDResponse{}
 
-	err := codec.Unmarshal(message, &reply)
-
-	if err != nil {
-		t.Errorf("Unexpected error: %v\n", err)
+	if err := codec.Unmarshal(message, &reply); err != nil {
+		t.Fatalf("Unexpected error: %v\n", err)
 	}
 
 	if reply.MsgType != 0x5a {
@@ -286,11 +266,8 @@ func TestUnmarshalGetCardByIndexResponseWithInvalidMsgType(t *testing.T) {
 
 	reply := GetCardByIndexResponse{}
 
-	err := codec.Unmarshal(message, &reply)
-
-	if err == nil {
-		t.Errorf("Expected error: '%v'", "Invalid value in message - expected 0x5c, received 0x94")
-		return
+	if err := codec.Unmarshal(message, &reply); err == nil {
+		t.Fatalf("Expected error: '%v'", "Invalid value in message - expected 0x5c, received 0x94")
 	}
 }
 
@@ -304,10 +281,7 @@ func TestUnmarshalGetCardByIdResponseWithInvalidMsgType(t *testing.T) {
 
 	reply := GetCardByIDResponse{}
 
-	err := codec.Unmarshal(message, &reply)
-
-	if err == nil {
-		t.Errorf("Expected error: '%v'", "Invalid value in message - expected 0x5a, received 0x94")
-		return
+	if err := codec.Unmarshal(message, &reply); err == nil {
+		t.Fatalf("Expected error: '%v'", "Invalid value in message - expected 0x5a, received 0x94")
 	}
 }

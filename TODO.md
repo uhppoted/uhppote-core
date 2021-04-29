@@ -1,12 +1,19 @@
-## v0.6.12
+## v0.6.x
 
 ### IN PROGRESS
 
 ## TODO
 
-- [ ] Add https://odi.ch/weblog/posting.php?posting=731 to cookbook
+- [ ] get-time-profile
+- [ ] set-time-profile
+- [ ] clear-time-profile
+- [ ] put-card with time profile
+- [ ] Rename types.Time to types.DeviceTime
+- [ ] Rename types.SystemTime to types.Time
+- [ ] Replace types.SystemDate with types.Date
 - [ ] Rearchitecture as factory/device/driver
 - [ ] Remove IDevice interface
+- [ ] Add https://odi.ch/weblog/posting.php?posting=731 to cookbook
 - [ ] Make UHPPOTE.Devices a private field
 
 ### uhppote

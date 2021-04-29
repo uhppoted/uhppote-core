@@ -14,7 +14,7 @@ import (
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
 )
 
-var VERSION string = "v0.6.12"
+var VERSION string = "v0.6.x"
 var guard sync.Mutex
 
 type iuhppote interface {
@@ -32,6 +32,7 @@ type UHPPOTE struct {
 	ListenAddress    *net.UDPAddr
 	Devices          map[uint32]*Device
 	Debug            bool
+	driver           iuhppote
 }
 
 type Device struct {

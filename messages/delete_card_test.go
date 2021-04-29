@@ -20,7 +20,6 @@ func TestMarshalDeleteCardRequest(t *testing.T) {
 	}
 
 	m, err := codec.Marshal(request)
-
 	if err != nil {
 		t.Fatalf("Unexpected error: %v", err)
 	}
@@ -40,11 +39,8 @@ func TestFactoryUnmarshalDeleteCardRequest(t *testing.T) {
 
 	request, err := UnmarshalRequest(message)
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
-	}
-
-	if request == nil {
+		t.Fatalf("Unexpected error: %v", err)
+	} else if request == nil {
 		t.Fatalf("Unexpected request: %v\n", request)
 	}
 
@@ -68,10 +64,8 @@ func TestUnmarshalDeleteCardResponse(t *testing.T) {
 
 	reply := DeleteCardResponse{}
 
-	err := codec.Unmarshal(message, &reply)
-
-	if err != nil {
-		t.Errorf("Unexpected error: %v\n", err)
+	if err := codec.Unmarshal(message, &reply); err != nil {
+		t.Fatalf("Unexpected error: %v\n", err)
 	}
 
 	if reply.MsgType != 0x52 {
@@ -96,7 +90,6 @@ func TestFactoryUnmarshalDeleteCardResponse(t *testing.T) {
 	}
 
 	response, err := UnmarshalResponse(message)
-
 	if err != nil {
 		t.Fatalf("Unexpected error: %v\n", err)
 	}
@@ -133,9 +126,7 @@ func TestUnmarshalDeleteCardResponseWithInvalidMsgType(t *testing.T) {
 
 	reply := DeleteCardResponse{}
 
-	err := codec.Unmarshal(message, &reply)
-
-	if err == nil {
+	if err := codec.Unmarshal(message, &reply); err == nil {
 		t.Fatalf("Expected error: '%v'", "Invalid value in message - expected 0x52, received 0x94")
 	}
 }

@@ -2,10 +2,10 @@ package types
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
-	"github.com/uhppoted/uhppote-core/encoding/bcd"
 	"time"
+
+	"github.com/uhppoted/uhppote-core/encoding/bcd"
 )
 
 type Date time.Time
@@ -36,11 +36,11 @@ func (d Date) MarshalUT0311L0x() ([]byte, error) {
 	encoded, err := bcd.Encode(time.Time(d).Format("20060102"))
 
 	if err != nil {
-		return []byte{}, errors.New(fmt.Sprintf("Error encoding date %v to BCD: [%v]", d, err))
+		return []byte{}, fmt.Errorf("Error encoding date %v to BCD: [%v]", d, err)
 	}
 
 	if encoded == nil {
-		return []byte{}, errors.New(fmt.Sprintf("Unknown error encoding date %v to BCD", d))
+		return []byte{}, fmt.Errorf("Unknown error encoding date %v to BCD", d)
 	}
 
 	return *encoded, nil

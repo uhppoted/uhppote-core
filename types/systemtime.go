@@ -9,6 +9,16 @@ import (
 
 type SystemTime time.Time
 
+func TimeFromString(s string) (*SystemTime, error) {
+	hhmmss, err := time.ParseInLocation("15:04:05", s, time.Local)
+	if err != nil {
+		return nil, err
+	}
+
+	t := SystemTime(hhmmss)
+	return &t, nil
+}
+
 func (t SystemTime) String() string {
 	return time.Time(t).Format("15:04:05")
 }
