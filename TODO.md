@@ -5,9 +5,10 @@
 ## TODO
 
 - [ ] Rearchitecture as factory/device/driver
-      - rework awkward Get/get implementations to explicitly invoke driver
+      - NewUHPPOTE(...)
       - move Broadcast/Send/etc to UDP driver
       - invoke driver from Broadcast/Send/etc
+      - IUHPPOTE
 
 - [ ] get-time-profile
 - [ ] set-time-profile

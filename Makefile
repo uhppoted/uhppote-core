@@ -47,7 +47,7 @@ release: test vet
 bump:
 
 debug: build
-	go test ./... -run TestGetTimeProfile
+	go test ./... -run TestSetTimeProfile
 
 godoc:
 	godoc -http=:80	-index_interval=60s
