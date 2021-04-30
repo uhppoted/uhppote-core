@@ -23,13 +23,15 @@ func TestGetCardByIndex(t *testing.T) {
 		Doors:      map[uint8]bool{1: true, 2: false, 3: false, 4: true},
 	}
 
-	u := mock{
-		send: func(deviceID uint32, request, response interface{}) error {
-			return codec.Unmarshal(message, response)
+	u := UHPPOTE{
+		driver: &mock{
+			send: func(deviceID uint32, request, response interface{}) error {
+				return codec.Unmarshal(message, response)
+			},
 		},
 	}
 
-	card, err := getCardByIndex(&u, 423187757, 6129876)
+	card, err := u.GetCardByIndex(423187757, 6129876)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetCardByIndex (%v)", err)
 	}
@@ -51,13 +53,15 @@ func TestGetCardByIndexWithCardNotFound(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	u := mock{
-		send: func(deviceID uint32, request, response interface{}) error {
-			return codec.Unmarshal(message, response)
+	u := UHPPOTE{
+		driver: &mock{
+			send: func(deviceID uint32, request, response interface{}) error {
+				return codec.Unmarshal(message, response)
+			},
 		},
 	}
 
-	card, err := getCardByIndex(&u, 423187757, 6129876)
+	card, err := u.GetCardByIndex(423187757, 6129876)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetCardByIndex (%v)", err)
 	}
@@ -75,13 +79,15 @@ func TestGetCardByIndexWithCardDeleted(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	u := mock{
-		send: func(deviceID uint32, request, response interface{}) error {
-			return codec.Unmarshal(message, response)
+	u := UHPPOTE{
+		driver: &mock{
+			send: func(deviceID uint32, request, response interface{}) error {
+				return codec.Unmarshal(message, response)
+			},
 		},
 	}
 
-	card, err := getCardByIndex(&u, 423187757, 6129876)
+	card, err := u.GetCardByIndex(423187757, 6129876)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetCardByIndex (%v)", err)
 	}

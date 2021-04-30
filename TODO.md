@@ -1,30 +1,34 @@
-## v0.6.x
+## v0.7.x
 
 ### IN PROGRESS
 
 ## TODO
 
+- [ ] Rearchitecture as factory/device/driver
+      - rework awkward Get/get implementations to explicitly invoke driver
+      - move Broadcast/Send/etc to UDP driver
+      - invoke driver from Broadcast/Send/etc
+
 - [ ] get-time-profile
 - [ ] set-time-profile
 - [ ] clear-time-profile
 - [ ] put-card with time profile
-- [ ] Rename types.Time to types.DeviceTime
-- [ ] Rename types.SystemTime to types.Time
-- [ ] Replace types.SystemDate with types.Date
-- [ ] Rearchitecture as factory/device/driver
-- [ ] Remove IDevice interface
+
+- [ ] Remove IDevice interface (make UHPPOTE the interface type and use internal uhhpote struct for implementation)
 - [ ] Add https://odi.ch/weblog/posting.php?posting=731 to cookbook
 - [ ] Make UHPPOTE.Devices a private field
+- [ ] Make UHPPOTE.BindAddress a private field and types.BindAddr
+- [ ] Make UHPPOTE.BroadcastAddress a private field and types.BroadcastAddr
+- [ ] Make UHPPOTE.ListenAddress a private field and types.ListenAddr
+- [ ] (?) Rename types.Time to types.DeviceTime
+- [ ] (?) Rename types.SystemTime to types.Time
+- [ ] (?) Replace types.SystemDate with types.Date
+- [ ] update remaining tests with Errorf + return to Fatalf
 
 ### uhppote
-- [x] concurrent requests
-- [x] update tests with Errorf + return to Fatalf
-- [x] commonalise ACL
-- [x] commonalise configuration
 - [ ] make types consistent across API
 - [ ] Genericize message unit tests
 - [ ] Convert to 1.13 error handling
-- [x] Rework UHPPOTE response messages to use factory
 - [ ] Fix golint errors
 - [ ] Invert conf Unmarshal so that it iterates struct rather than file (simplifies e.g. DeviceMap)
 - [ ] Rework plist encoder/decoder to be only for launchd (and remove 'parse' from daemonize/undaemonize)

@@ -13,12 +13,11 @@ import (
 // if the request failed for any reason. Returns an error if the request could not
 // be sent or the response is invalid.
 func (u *UHPPOTE) RecordSpecialEvents(deviceID uint32, enable bool) (bool, error) {
-	return recordSpecialEvents(u, deviceID, enable)
-}
+	driver := iuhppote(u)
+	if u.driver != nil {
+		driver = u.driver
+	}
 
-// Internal implementation of RecordSpecialEvents for test mocks/stubs and facades for
-// external interfaces.
-func recordSpecialEvents(u iuhppote, deviceID uint32, enable bool) (bool, error) {
 	request := messages.RecordSpecialEventsRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		Enable:       enable,
@@ -26,7 +25,7 @@ func recordSpecialEvents(u iuhppote, deviceID uint32, enable bool) (bool, error)
 
 	response := messages.RecordSpecialEventsResponse{}
 
-	err := u.Send(deviceID, request, &response)
+	err := driver.Send(deviceID, request, &response)
 	if err != nil {
 		return false, err
 	}

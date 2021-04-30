@@ -14,7 +14,7 @@ import (
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
 )
 
-var VERSION string = "v0.6.x"
+var VERSION string = "v0.7.x"
 var guard sync.Mutex
 
 type iuhppote interface {

@@ -7,10 +7,11 @@ import (
 )
 
 func (u *UHPPOTE) GetEvent(serialNumber, index uint32) (*types.Event, error) {
-	return getEvent(u, serialNumber, index)
-}
+	driver := iuhppote(u)
+	if u.driver != nil {
+		driver = u.driver
+	}
 
-func getEvent(u iuhppote, serialNumber, index uint32) (*types.Event, error) {
 	request := messages.GetEventRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 		Index:        index,
@@ -18,7 +19,7 @@ func getEvent(u iuhppote, serialNumber, index uint32) (*types.Event, error) {
 
 	reply := messages.GetEventResponse{}
 
-	err := u.Send(serialNumber, request, &reply)
+	err := driver.Send(serialNumber, request, &reply)
 	if err != nil {
 		return nil, err
 	}

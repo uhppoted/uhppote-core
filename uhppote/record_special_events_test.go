@@ -16,13 +16,15 @@ func TestRecordSpecialEvents(t *testing.T) {
 
 	expected := true
 
-	u := mock{
-		send: func(deviceID uint32, request, response interface{}) error {
-			return codec.Unmarshal(message, response)
+	u := UHPPOTE{
+		driver: &mock{
+			send: func(deviceID uint32, request, response interface{}) error {
+				return codec.Unmarshal(message, response)
+			},
 		},
 	}
 
-	enabled, err := recordSpecialEvents(&u, 423187757, true)
+	enabled, err := u.RecordSpecialEvents(423187757, true)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from RecordSpecialEvents (%v)", err)
 	}

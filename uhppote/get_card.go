@@ -7,17 +7,19 @@ import (
 )
 
 func (u *UHPPOTE) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
-	return getCardByIndex(u, deviceID, index)
-}
+	driver := iuhppote(u)
+	if u.driver != nil {
+		driver = u.driver
+	}
 
-func getCardByIndex(u iuhppote, deviceID, index uint32) (*types.Card, error) {
 	request := messages.GetCardByIndexRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		Index:        index,
 	}
 
 	response := messages.GetCardByIndexResponse{}
-	err := u.Send(deviceID, request, &response)
+
+	err := driver.Send(deviceID, request, &response)
 	if err != nil {
 		return nil, err
 	}
@@ -49,6 +51,11 @@ func getCardByIndex(u iuhppote, deviceID, index uint32) (*types.Card, error) {
 }
 
 func (u *UHPPOTE) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) {
+	driver := iuhppote(u)
+	if u.driver != nil {
+		driver = u.driver
+	}
+
 	request := messages.GetCardByIDRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   cardNumber,
@@ -56,7 +63,7 @@ func (u *UHPPOTE) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) 
 
 	response := messages.GetCardByIDResponse{}
 
-	err := u.Send(deviceID, request, &response)
+	err := driver.Send(deviceID, request, &response)
 	if err != nil {
 		return nil, err
 	}

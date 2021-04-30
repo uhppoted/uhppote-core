@@ -17,9 +17,11 @@ func TestGetEvent(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4a, 0x26, 0x80, 0x39, 0x08, 0x92, 0x00, 0x00,
 	}
 
-	u := mock{
-		send: func(deviceID uint32, request, reply interface{}) error {
-			return codec.Unmarshal(message, reply)
+	u := UHPPOTE{
+		driver: &mock{
+			send: func(deviceID uint32, request, response interface{}) error {
+				return codec.Unmarshal(message, response)
+			},
 		},
 	}
 
@@ -37,7 +39,7 @@ func TestGetEvent(t *testing.T) {
 		Reason:       0x06,
 	}
 
-	response, err := getEvent(&u, 423187757, 37)
+	response, err := u.GetEvent(423187757, 37)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetEvent (%v)", err)
 	}
@@ -59,13 +61,15 @@ func TestGetEventWithNoEvents(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	u := mock{
-		send: func(deviceID uint32, request, reply interface{}) error {
-			return codec.Unmarshal(message, reply)
+	u := UHPPOTE{
+		driver: &mock{
+			send: func(deviceID uint32, request, response interface{}) error {
+				return codec.Unmarshal(message, response)
+			},
 		},
 	}
 
-	response, err := getEvent(&u, 423187757, 37)
+	response, err := u.GetEvent(423187757, 37)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetEvent (%v)", err)
 	}
@@ -76,13 +80,15 @@ func TestGetEventWithNoEvents(t *testing.T) {
 }
 
 func TestGetEventWithError(t *testing.T) {
-	u := mock{
-		send: func(deviceID uint32, request, reply interface{}) error {
-			return fmt.Errorf("EXPECTED")
+	u := UHPPOTE{
+		driver: &mock{
+			send: func(deviceID uint32, request, reply interface{}) error {
+				return fmt.Errorf("EXPECTED")
+			},
 		},
 	}
 
-	_, err := getEvent(&u, 423187757, 37)
+	_, err := u.GetEvent(423187757, 37)
 	if err == nil {
 		t.Fatalf("Expected error return from GetEvent")
 	}
