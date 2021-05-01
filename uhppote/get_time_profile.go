@@ -45,55 +45,36 @@ func (u *UHPPOTE) GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeP
 		return nil, fmt.Errorf("Invalid 'to' date in response")
 	}
 
-	return &types.TimeProfile{
+	profile := types.TimeProfile{
 		ProfileID:       response.ProfileID,
 		LinkedProfileID: response.LinkedProfileID,
 		From:            response.From,
 		To:              response.To,
-
-		Weekdays: struct {
-			Monday    bool `json:"monday"`
-			Tuesday   bool `json:"tuesday"`
-			Wednesday bool `json:"wednesday"`
-			Thursday  bool `json:"thursday"`
-			Friday    bool `json:"friday"`
-			Saturday  bool `json:"saturday"`
-			Sunday    bool `json:"sunday"`
-		}{
-			Monday:    response.Monday,
-			Tuesday:   response.Tuesday,
-			Wednesday: response.Wednesday,
-			Thursday:  response.Thursday,
-			Friday:    response.Friday,
-			Saturday:  response.Saturday,
-			Sunday:    response.Sunday,
+		Weekdays: types.Weekdays{
+			types.Monday:    response.Monday,
+			types.Tuesday:   response.Tuesday,
+			types.Wednesday: response.Wednesday,
+			types.Thursday:  response.Thursday,
+			types.Friday:    response.Friday,
+			types.Saturday:  response.Saturday,
+			types.Sunday:    response.Sunday,
 		},
 
-		Segments: map[uint8]struct {
-			Start *types.HHmm `json:"start"`
-			End   *types.HHmm `json:"end"`
-		}{
-			1: struct {
-				Start *types.HHmm `json:"start"`
-				End   *types.HHmm `json:"end"`
-			}{
+		Segments: types.Segments{
+			1: types.Segment{
 				Start: response.Segment1Start,
 				End:   response.Segment1End,
 			},
-			2: struct {
-				Start *types.HHmm `json:"start"`
-				End   *types.HHmm `json:"end"`
-			}{
+			2: types.Segment{
 				Start: response.Segment2Start,
 				End:   response.Segment2End,
 			},
-			3: struct {
-				Start *types.HHmm `json:"start"`
-				End   *types.HHmm `json:"end"`
-			}{
+			3: types.Segment{
 				Start: response.Segment3Start,
 				End:   response.Segment3End,
 			},
 		},
-	}, nil
+	}
+
+	return &profile, nil
 }

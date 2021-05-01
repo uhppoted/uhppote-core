@@ -21,47 +21,26 @@ func TestGetTimeProfile(t *testing.T) {
 		LinkedProfileID: 19,
 		From:            date("2021-04-01"),
 		To:              date("2021-12-29"),
-
-		Weekdays: struct {
-			Monday    bool `json:"monday"`
-			Tuesday   bool `json:"tuesday"`
-			Wednesday bool `json:"wednesday"`
-			Thursday  bool `json:"thursday"`
-			Friday    bool `json:"friday"`
-			Saturday  bool `json:"saturday"`
-			Sunday    bool `json:"sunday"`
-		}{
-			Monday:    true,
-			Tuesday:   true,
-			Wednesday: false,
-			Thursday:  true,
-			Friday:    false,
-			Saturday:  true,
-			Sunday:    true,
+		Weekdays: types.Weekdays{
+			types.Monday:    true,
+			types.Tuesday:   true,
+			types.Wednesday: false,
+			types.Thursday:  true,
+			types.Friday:    false,
+			types.Saturday:  true,
+			types.Sunday:    true,
 		},
 
-		Segments: map[uint8]struct {
-			Start *types.HHmm `json:"start"`
-			End   *types.HHmm `json:"end"`
-		}{
-			1: struct {
-				Start *types.HHmm `json:"start"`
-				End   *types.HHmm `json:"end"`
-			}{
+		Segments: types.Segments{
+			1: types.Segment{
 				Start: hhmm("08:30"),
 				End:   hhmm("09:45"),
 			},
-			2: struct {
-				Start *types.HHmm `json:"start"`
-				End   *types.HHmm `json:"end"`
-			}{
+			2: types.Segment{
 				Start: hhmm("11:35"),
 				End:   hhmm("13:15"),
 			},
-			3: struct {
-				Start *types.HHmm `json:"start"`
-				End   *types.HHmm `json:"end"`
-			}{
+			3: types.Segment{
 				Start: hhmm("14:01"),
 				End:   hhmm("17:59"),
 			},

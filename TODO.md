@@ -11,7 +11,10 @@
       - IUHPPOTE
 
 - [ ] get-time-profile
+      - discard 00:00-00:00 segments
+      - Stringer() implementation for TimeProfile should match `uhppote-cli` args format
 - [ ] set-time-profile
+      - automatically provide missing segments with 00:00-00:00
 - [ ] clear-time-profile
 - [ ] put-card with time profile
 
