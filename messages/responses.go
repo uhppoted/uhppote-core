@@ -19,6 +19,7 @@ var responses = map[byte]func() Response{
 	0x80: func() Response { return new(SetDoorControlStateResponse) },
 	0x82: func() Response { return new(GetDoorControlStateResponse) },
 	0x88: func() Response { return new(SetTimeProfileResponse) },
+	0x8a: func() Response { return new(ClearTimeProfilesResponse) },
 	0x8e: func() Response { return new(RecordSpecialEventsResponse) },
 	0x90: func() Response { return new(SetListenerResponse) },
 	0x92: func() Response { return new(GetListenerResponse) },
@@ -35,12 +36,12 @@ func UnmarshalResponse(bytes []byte) (Response, error) {
 	}
 
 	if bytes[0] != 0x17 {
-		return nil, fmt.Errorf("Invalid protocol ID 0x%02x", bytes[0])
+		return nil, fmt.Errorf("Invalid protocol ID 0x%02X", bytes[0])
 	}
 
 	f := responses[bytes[1]]
 	if f == nil {
-		return nil, fmt.Errorf("Unknown message type H%02x", bytes[1])
+		return nil, fmt.Errorf("Unknown message type %02X", bytes[1])
 	}
 
 	response := f()

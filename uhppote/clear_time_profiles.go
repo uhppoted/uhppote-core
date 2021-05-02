@@ -5,18 +5,18 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) DeleteCards(serialNumber uint32) (bool, error) {
+func (u *UHPPOTE) ClearTimeProfiles(serialNumber uint32) (bool, error) {
 	driver := iuhppote(u)
 	if u.driver != nil {
 		driver = u.driver
 	}
 
-	request := messages.DeleteCardsRequest{
+	request := messages.ClearTimeProfilesRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 		MagicWord:    0x55aaaa55,
 	}
 
-	reply := messages.DeleteCardsResponse{}
+	reply := messages.ClearTimeProfilesResponse{}
 
 	err := driver.Send(serialNumber, request, &reply)
 	if err != nil {

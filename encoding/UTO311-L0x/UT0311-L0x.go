@@ -266,7 +266,7 @@ func unmarshal(bytes []byte, s reflect.Value) error {
 				}
 
 				if bytes[1] != b {
-					return errors.New(fmt.Sprintf("Invalid MsgType in message - expected H%02x, received H%02x", b, bytes[1]))
+					return errors.New(fmt.Sprintf("Invalid MsgType in message - expected %02X, received %02X", b, bytes[1]))
 				}
 
 				f.SetUint(uint64(bytes[1]))
