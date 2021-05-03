@@ -51,7 +51,7 @@ func TestMarshalGetCardByIdRequest(t *testing.T) {
 func TestUnmarshalGetCardByIndexResponse(t *testing.T) {
 	message := []byte{
 		0x17, 0x5c, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0xac, 0xe8, 0x5d, 0x00, 0x20, 0x19, 0x02, 0x03,
-		0x20, 0x19, 0x12, 0x29, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x20, 0x19, 0x12, 0x29, 0x00, 0x00, 29, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
@@ -84,19 +84,19 @@ func TestUnmarshalGetCardByIndexResponse(t *testing.T) {
 		t.Errorf("Incorrect 'to date' - expected:%s, got:%s", to.Format("2006-01-02"), reply.To)
 	}
 
-	if reply.Door1 != false {
+	if reply.Door1 != 0 {
 		t.Errorf("Incorrect 'door 1' - expected:%v, got:%v", false, reply.Door1)
 	}
 
-	if reply.Door2 != false {
+	if reply.Door2 != 0 {
 		t.Errorf("Incorrect 'door 2' - expected:%v, got:%v", false, reply.Door2)
 	}
 
-	if reply.Door3 != true {
+	if reply.Door3 != 29 {
 		t.Errorf("Incorrect 'door 3' - expected:%v, got:%v", true, reply.Door3)
 	}
 
-	if reply.Door4 != true {
+	if reply.Door4 != 1 {
 		t.Errorf("Incorrect 'door 4' - expected:%v, got:%v", true, reply.Door4)
 	}
 }
@@ -135,19 +135,19 @@ func TestUnmarshalGetCardByIndexNotFoundResponse(t *testing.T) {
 		t.Errorf("Incorrect 'to date' - expected:%v, got:%v", nil, reply.To)
 	}
 
-	if reply.Door1 != false {
+	if reply.Door1 != 0 {
 		t.Errorf("Incorrect 'door 1' - expected:%v, got:%v", false, reply.Door1)
 	}
 
-	if reply.Door2 != false {
+	if reply.Door2 != 0 {
 		t.Errorf("Incorrect 'door 2' - expected:%v, got:%v", false, reply.Door2)
 	}
 
-	if reply.Door3 != false {
+	if reply.Door3 != 0 {
 		t.Errorf("Incorrect 'door 3' - expected:%v, got:%v", true, reply.Door3)
 	}
 
-	if reply.Door4 != false {
+	if reply.Door4 != 0 {
 		t.Errorf("Incorrect 'door 4' - expected:%v, got:%v", true, reply.Door4)
 	}
 }
@@ -155,7 +155,7 @@ func TestUnmarshalGetCardByIndexNotFoundResponse(t *testing.T) {
 func TestUnmarshalGetCardByIdResponse(t *testing.T) {
 	message := []byte{
 		0x17, 0x5a, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0xac, 0xe8, 0x5d, 0x00, 0x20, 0x19, 0x02, 0x03,
-		0x20, 0x19, 0x12, 0x29, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x20, 0x19, 0x12, 0x29, 0x00, 0x00, 29, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
@@ -188,19 +188,19 @@ func TestUnmarshalGetCardByIdResponse(t *testing.T) {
 		t.Errorf("Incorrect 'to date' - expected:%s, got:%s", to.Format("2006-01-02"), reply.To)
 	}
 
-	if reply.Door1 != false {
+	if reply.Door1 != 0 {
 		t.Errorf("Incorrect 'door 1' - expected:%v, got:%v", false, reply.Door1)
 	}
 
-	if reply.Door2 != false {
+	if reply.Door2 != 0 {
 		t.Errorf("Incorrect 'door 2' - expected:%v, got:%v", false, reply.Door2)
 	}
 
-	if reply.Door3 != true {
+	if reply.Door3 != 29 {
 		t.Errorf("Incorrect 'door 3' - expected:%v, got:%v", true, reply.Door3)
 	}
 
-	if reply.Door4 != true {
+	if reply.Door4 != 1 {
 		t.Errorf("Incorrect 'door 4' - expected:%v, got:%v", true, reply.Door4)
 	}
 }
@@ -239,19 +239,19 @@ func TestUnmarshalGetCardByIdNotFoundResponse(t *testing.T) {
 		t.Errorf("Incorrect 'to date' - expected:%v, got:%v", nil, reply.To)
 	}
 
-	if reply.Door1 != false {
+	if reply.Door1 != 0 {
 		t.Errorf("Incorrect 'door 1' - expected:%v, got:%v", false, reply.Door1)
 	}
 
-	if reply.Door2 != false {
+	if reply.Door2 != 0 {
 		t.Errorf("Incorrect 'door 2' - expected:%v, got:%v", false, reply.Door2)
 	}
 
-	if reply.Door3 != false {
+	if reply.Door3 != 0 {
 		t.Errorf("Incorrect 'door 3' - expected:%v, got:%v", true, reply.Door3)
 	}
 
-	if reply.Door4 != false {
+	if reply.Door4 != 0 {
 		t.Errorf("Incorrect 'door 4' - expected:%v, got:%v", true, reply.Door4)
 	}
 }

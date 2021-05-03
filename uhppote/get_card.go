@@ -42,17 +42,30 @@ func (u *UHPPOTE) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
 		return nil, fmt.Errorf("Invalid 'to' date in response")
 	}
 
-	return &types.Card{
+	f := func(v uint8) types.Permission {
+		if v == 0 {
+			return false
+		} else if v == 1 {
+			return true
+		} else if v > 1 && v < 255 {
+			return v
+		}
+		return false
+	}
+
+	card := types.Card{
 		CardNumber: response.CardNumber,
 		From:       response.From,
 		To:         response.To,
 		Doors: map[uint8]types.Permission{
-			1: response.Door1,
-			2: response.Door2,
-			3: response.Door3,
-			4: response.Door4,
+			1: f(response.Door1),
+			2: f(response.Door2),
+			3: f(response.Door3),
+			4: f(response.Door4),
 		},
-	}, nil
+	}
+
+	return &card, nil
 }
 
 func (u *UHPPOTE) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) {
@@ -93,15 +106,28 @@ func (u *UHPPOTE) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) 
 		return nil, fmt.Errorf("Invalid 'to' date in response")
 	}
 
-	return &types.Card{
+	f := func(v uint8) types.Permission {
+		if v == 0 {
+			return false
+		} else if v == 1 {
+			return true
+		} else if v > 1 && v < 255 {
+			return v
+		}
+		return false
+	}
+
+	card := types.Card{
 		CardNumber: response.CardNumber,
 		From:       response.From,
 		To:         response.To,
 		Doors: map[uint8]types.Permission{
-			1: response.Door1,
-			2: response.Door2,
-			3: response.Door3,
-			4: response.Door4,
+			1: f(response.Door1),
+			2: f(response.Door2),
+			3: f(response.Door3),
+			4: f(response.Door4),
 		},
-	}, nil
+	}
+
+	return &card, nil
 }
