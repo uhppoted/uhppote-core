@@ -14,7 +14,7 @@ var date = func(s string) Date {
 }
 
 func TestCardToString(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N N Y"
+	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y"
 
 	from := date("2020-01-01")
 	to := date("2020-12-31")
@@ -22,7 +22,12 @@ func TestCardToString(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors:      map[uint8]bool{1: true, 2: false, 3: false, 4: true},
+		Doors: map[uint8]Permission{
+			1: true,
+			2: false,
+			3: 29,
+			4: true,
+		},
 	}
 
 	s := fmt.Sprintf("%v", card)
@@ -39,7 +44,12 @@ func TestCardToStringWithMissingFromDate(t *testing.T) {
 	card := Card{
 		CardNumber: 12345,
 		To:         &to,
-		Doors:      map[uint8]bool{1: true, 2: false, 3: false, 4: true},
+		Doors: map[uint8]Permission{
+			1: true,
+			2: false,
+			3: false,
+			4: true,
+		},
 	}
 
 	s := fmt.Sprintf("%v", card)
@@ -56,7 +66,12 @@ func TestCardToStringWithMissingToDate(t *testing.T) {
 	card := Card{
 		CardNumber: 12345,
 		From:       &from,
-		Doors:      map[uint8]bool{1: true, 2: false, 3: false, 4: true},
+		Doors: map[uint8]Permission{
+			1: true,
+			2: false,
+			3: false,
+			4: true,
+		},
 	}
 
 	s := fmt.Sprintf("%v", card)
@@ -75,7 +90,10 @@ func TestCardToStringWithMissingDoors(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors:      map[uint8]bool{1: true, 2: false},
+		Doors: map[uint8]Permission{
+			1: true,
+			2: false,
+		},
 	}
 
 	s := fmt.Sprintf("%v", card)
@@ -94,13 +112,59 @@ func TestCardToStringWithExtraDoors(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors:      map[uint8]bool{1: true, 2: false, 3: false, 4: true, 5: true, 6: false},
+		Doors: map[uint8]Permission{
+			1: true,
+			2: false,
+			3: false,
+			4: true,
+			5: true,
+			6: false,
+		},
 	}
 
 	s := fmt.Sprintf("%v", card)
 
 	if s != expected {
 		t.Errorf("Card incorrectly stringified\n   expected:%+v\n   got:     %+v", expected, s)
+	}
+}
+
+func TestMarshalCard(t *testing.T) {
+	from := date("2020-01-01")
+	to := date("2020-12-31")
+
+	card := Card{
+		CardNumber: 12345,
+		From:       &from,
+		To:         &to,
+		Doors: map[uint8]Permission{
+			1: true,
+			2: false,
+			3: 29,
+			4: true,
+		},
+	}
+
+	expected := `{
+  "card-number": 12345,
+  "start-date": "2020-01-01",
+  "end-date": "2020-12-31",
+  "doors": {
+    "1": true,
+    "2": false,
+    "3": 29,
+    "4": true
+  }
+}`
+
+	blob, err := json.MarshalIndent(card, "", "  ")
+	if err != nil {
+		t.Errorf("Unexpected error unmarshalling card (%v)", err)
+	}
+
+	if !reflect.DeepEqual(string(blob), expected) {
+		t.Errorf("Card incorrectly unmarshalled\n   expected:%v\n   got:     %v", expected, string(blob))
+
 	}
 }
 
@@ -112,7 +176,12 @@ func TestUnmarshalCard(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors:      map[uint8]bool{1: true, 2: false, 3: false, 4: true},
+		Doors: map[uint8]Permission{
+			1: true,
+			2: false,
+			3: 29,
+			4: true,
+		},
 	}
 
 	blob := `{
@@ -122,7 +191,7 @@ func TestUnmarshalCard(t *testing.T) {
   "doors": {
     "1": true,
     "2": false,
-    "3": false,
+    "3": 29,
     "4": true
   }
 } `
@@ -135,7 +204,7 @@ func TestUnmarshalCard(t *testing.T) {
 	}
 
 	if !reflect.DeepEqual(card, expected) {
-		t.Errorf("Card incorrectly unmarshalled\n   expected:%+v\n   got:     %+v", expected, card)
+		t.Errorf("Card incorrectly unmarshalled\n   expected:%#v\n   got:     %#v", expected, card)
 	}
 }
 
@@ -147,7 +216,12 @@ func TestUnmarshalCardWithMissingCardNumber(t *testing.T) {
 		CardNumber: 0,
 		From:       &from,
 		To:         &to,
-		Doors:      map[uint8]bool{1: true, 2: false, 3: false, 4: true},
+		Doors: map[uint8]Permission{
+			1: true,
+			2: false,
+			3: false,
+			4: true,
+		},
 	}
 
 	blob := `{
@@ -219,7 +293,12 @@ func TestUnmarshalCardWithMissingDoors(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors:      map[uint8]bool{1: false, 2: true, 3: false, 4: false},
+		Doors: map[uint8]Permission{
+			1: false,
+			2: true,
+			3: false,
+			4: false,
+		},
 	}
 
 	blob := `{
@@ -251,7 +330,12 @@ func TestUnmarshalCardWithInvalidDoors(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors:      map[uint8]bool{1: true, 2: false, 3: false, 4: false},
+		Doors: map[uint8]Permission{
+			1: true,
+			2: false,
+			3: false,
+			4: false,
+		},
 	}
 
 	blob := `{

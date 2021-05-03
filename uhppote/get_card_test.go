@@ -20,7 +20,12 @@ func TestGetCardByIndex(t *testing.T) {
 		CardNumber: 6129876,
 		From:       date("2020-01-01"),
 		To:         date("2020-12-31"),
-		Doors:      map[uint8]bool{1: true, 2: false, 3: false, 4: true},
+		Doors: map[uint8]types.Permission{
+			1: true,
+			2: false,
+			3: false,
+			4: true,
+		},
 	}
 
 	u := UHPPOTE{

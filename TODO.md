@@ -10,13 +10,12 @@
       - invoke driver from Broadcast/Send/etc
       - IUHPPOTE
 
+- [ ] put-card with time profile
 - [ ] get-time-profile
       - discard 00:00-00:00 segments
-      - Stringer() implementation for TimeProfile should match `uhppote-cli` args format
 - [ ] set-time-profile
       - automatically provide missing segments with 00:00-00:00
-- [ ] clear-time-profile
-- [ ] put-card with time profile
+- [x] clear-time-profile
 
 - [ ] Remove IDevice interface (make UHPPOTE the interface type and use internal uhhpote struct for implementation)
 - [ ] Add https://odi.ch/weblog/posting.php?posting=731 to cookbook

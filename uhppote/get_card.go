@@ -46,7 +46,12 @@ func (u *UHPPOTE) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
 		CardNumber: response.CardNumber,
 		From:       response.From,
 		To:         response.To,
-		Doors:      map[uint8]bool{1: response.Door1, 2: response.Door2, 3: response.Door3, 4: response.Door4},
+		Doors: map[uint8]types.Permission{
+			1: response.Door1,
+			2: response.Door2,
+			3: response.Door3,
+			4: response.Door4,
+		},
 	}, nil
 }
 
@@ -92,6 +97,11 @@ func (u *UHPPOTE) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) 
 		CardNumber: response.CardNumber,
 		From:       response.From,
 		To:         response.To,
-		Doors:      map[uint8]bool{1: response.Door1, 2: response.Door2, 3: response.Door3, 4: response.Door4},
+		Doors: map[uint8]types.Permission{
+			1: response.Door1,
+			2: response.Door2,
+			3: response.Door3,
+			4: response.Door4,
+		},
 	}, nil
 }

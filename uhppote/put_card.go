@@ -12,10 +12,10 @@ func (u *UHPPOTE) PutCard(deviceID uint32, card types.Card) (bool, error) {
 		CardNumber:   card.CardNumber,
 		From:         *card.From,
 		To:           *card.To,
-		Door1:        card.Doors[1],
-		Door2:        card.Doors[2],
-		Door3:        card.Doors[3],
-		Door4:        card.Doors[4],
+		Door1:        card.Doors[1].(bool),
+		Door2:        card.Doors[2].(bool),
+		Door3:        card.Doors[3].(bool),
+		Door4:        card.Doors[4].(bool),
 	}
 
 	reply := messages.PutCardResponse{}

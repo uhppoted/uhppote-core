@@ -47,7 +47,7 @@ release: test vet
 bump:
 
 debug: build
-	go test -v ./... -run TestClearTimeProfiles
+	go test -v ./... -run TestUnmarshalCard
 
 godoc:
 	godoc -http=:80	-index_interval=60s
