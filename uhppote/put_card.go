@@ -2,6 +2,7 @@ package uhppote
 
 import (
 	"fmt"
+
 	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
 )
@@ -15,12 +16,7 @@ func (u *UHPPOTE) PutCard(deviceID uint32, card types.Card) (bool, error) {
 					return 1
 				}
 
-			case int:
-				if v > 1 && v < 255 {
-					return uint8(v)
-				}
-
-			case uint:
+			case uint8:
 				if v > 1 && v < 255 {
 					return uint8(v)
 				}

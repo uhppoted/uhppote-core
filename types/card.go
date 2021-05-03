@@ -23,10 +23,7 @@ func (c Card) String() string {
 					return "Y"
 				}
 
-			case int:
-				return fmt.Sprintf("%v", v)
-
-			case uint:
+			case uint8:
 				return fmt.Sprintf("%v", v)
 			}
 		}
@@ -81,14 +78,35 @@ func (c *Card) UnmarshalJSON(bytes []byte) error {
 		case bool:
 			c.Doors[i] = v
 
-		case int:
-			c.Doors[i] = v
+		case int8:
+			c.Doors[i] = uint8(v)
 
-		case uint:
-			c.Doors[i] = v
+		case int16:
+			c.Doors[i] = uint8(v)
+
+		case int32:
+			c.Doors[i] = uint8(v)
+
+		case int64:
+			c.Doors[i] = uint8(v)
+
+		case uint8:
+			c.Doors[i] = uint8(v)
+
+		case uint16:
+			c.Doors[i] = uint8(v)
+
+		case uint32:
+			c.Doors[i] = uint8(v)
+
+		case uint64:
+			c.Doors[i] = uint8(v)
+
+		case float32:
+			c.Doors[i] = uint8(v)
 
 		case float64:
-			c.Doors[i] = int(v)
+			c.Doors[i] = uint8(v)
 
 		default:
 			c.Doors[i] = false

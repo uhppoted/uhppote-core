@@ -25,7 +25,7 @@ func TestCardToString(t *testing.T) {
 		Doors: map[uint8]Permission{
 			1: true,
 			2: false,
-			3: 29,
+			3: uint8(29),
 			4: true,
 		},
 	}
@@ -179,7 +179,7 @@ func TestUnmarshalCard(t *testing.T) {
 		Doors: map[uint8]Permission{
 			1: true,
 			2: false,
-			3: 29,
+			3: uint8(29),
 			4: true,
 		},
 	}
