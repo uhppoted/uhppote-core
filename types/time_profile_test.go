@@ -13,7 +13,7 @@ func TestTimeProfileToString(t *testing.T) {
 	from := date("2021-04-01")
 	to := date("2021-12-29")
 	profile := TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		From:            &from,
 		To:              &to,
@@ -42,8 +42,8 @@ func TestTimeProfileToString(t *testing.T) {
 
 func TestTimeProfileJSONMarshal(t *testing.T) {
 	expected := `{
-  "profile-id": 4,
-  "linked-profile-id": 19,
+  "id": 4,
+  "linked-profile": 19,
   "start-date": "2021-04-01",
   "end-date": "2021-12-29",
   "weekdays": "Monday,Tuesday,Thursday,Saturday,Sunday",
@@ -65,7 +65,7 @@ func TestTimeProfileJSONMarshal(t *testing.T) {
 	to := date("2021-12-29")
 
 	profile := TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		From:            &from,
 		To:              &to,
@@ -100,7 +100,7 @@ func TestTimeProfileJSONUnmarshal(t *testing.T) {
 	to := date("2021-12-29")
 
 	expected := TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		From:            &from,
 		To:              &to,
@@ -121,8 +121,8 @@ func TestTimeProfileJSONUnmarshal(t *testing.T) {
 	}
 
 	bytes := []byte(`{
-  "profile-id": 4,
-  "linked-profile-id": 19,
+  "id": 4,
+  "linked-profile": 19,
   "start-date": "2021-04-01",
   "end-date": "2021-12-29",
   "weekdays": "Monday,Tuesday,Thursday,Saturday,Sunday",

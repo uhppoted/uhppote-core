@@ -17,7 +17,7 @@ func TestGetTimeProfile(t *testing.T) {
 	}
 
 	expected := types.TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		From:            date("2021-04-01"),
 		To:              date("2021-12-29"),

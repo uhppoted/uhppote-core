@@ -16,7 +16,7 @@ func TestSetTimeProfile(t *testing.T) {
 	}
 
 	profile := types.TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		From:            date("2021-04-01"),
 		To:              date("2021-12-29"),
@@ -63,7 +63,7 @@ func TestSetTimeProfileWithInvalidFromDate(t *testing.T) {
 	}
 
 	profile := types.TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		To:              date("2021-12-29"),
 		Weekdays: types.Weekdays{
@@ -109,7 +109,7 @@ func TestSetTimeProfileWithInvalidToDate(t *testing.T) {
 	}
 
 	profile := types.TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		From:            date("2021-04-01"),
 		Weekdays: types.Weekdays{
@@ -155,7 +155,7 @@ func TestSetTimeProfileWithMissingSegment1(t *testing.T) {
 	}
 
 	profile := types.TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		From:            date("2021-04-01"),
 		To:              date("2021-12-29"),
@@ -201,7 +201,7 @@ func TestSetTimeProfileWithMissingSegment2(t *testing.T) {
 	}
 
 	profile := types.TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		From:            date("2021-04-01"),
 		To:              date("2021-12-29"),
@@ -247,7 +247,7 @@ func TestSetTimeProfileWithMissingSegment3(t *testing.T) {
 	}
 
 	profile := types.TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		From:            date("2021-04-01"),
 		To:              date("2021-12-29"),
@@ -293,7 +293,7 @@ func TestSetTimeProfileWithInvalidSegment1Start(t *testing.T) {
 	}
 
 	profile := types.TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		From:            date("2021-04-01"),
 		To:              date("2021-12-29"),
@@ -340,7 +340,7 @@ func TestSetTimeProfileWithInvalidSegment1End(t *testing.T) {
 	}
 
 	profile := types.TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		From:            date("2021-04-01"),
 		To:              date("2021-12-29"),
@@ -387,7 +387,7 @@ func TestSetTimeProfileWithInvalidSegment2Start(t *testing.T) {
 	}
 
 	profile := types.TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		From:            date("2021-04-01"),
 		To:              date("2021-12-29"),
@@ -434,7 +434,7 @@ func TestSetTimeProfileWithInvalidSegment2End(t *testing.T) {
 	}
 
 	profile := types.TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		From:            date("2021-04-01"),
 		To:              date("2021-12-29"),
@@ -481,7 +481,7 @@ func TestSetTimeProfileWithInvalidSegment3Start(t *testing.T) {
 	}
 
 	profile := types.TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		From:            date("2021-04-01"),
 		To:              date("2021-12-29"),
@@ -528,7 +528,7 @@ func TestSetTimeProfileWithInvalidSegment3End(t *testing.T) {
 	}
 
 	profile := types.TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		From:            date("2021-04-01"),
 		To:              date("2021-12-29"),
@@ -575,7 +575,7 @@ func TestSetTimeProfileWithInvalidResponse(t *testing.T) {
 	}
 
 	profile := types.TimeProfile{
-		ProfileID:       4,
+		ID:              4,
 		LinkedProfileID: 19,
 		From:            date("2021-04-01"),
 		To:              date("2021-12-29"),

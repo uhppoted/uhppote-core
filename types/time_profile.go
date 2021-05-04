@@ -8,12 +8,12 @@ import (
 )
 
 type TimeProfile struct {
-	ProfileID       uint8    `json:"profile-id"`
-	LinkedProfileID uint8    `json:"linked-profile-id"`
-	From            *Date    `json:"start-date"`
-	To              *Date    `json:"end-date"`
-	Weekdays        Weekdays `json:"weekdays"`
-	Segments        Segments `json:"segments"`
+	ID              uint8    `json:"id"`
+	LinkedProfileID uint8    `json:"linked-profile,omitempty"`
+	From            *Date    `json:"start-date,omitempty"`
+	To              *Date    `json:"end-date,omitempty"`
+	Weekdays        Weekdays `json:"weekdays,omitempty"`
+	Segments        Segments `json:"segments,omitempty"`
 }
 
 type Weekdays map[Weekday]bool
@@ -38,7 +38,7 @@ const (
 )
 
 func (t TimeProfile) String() string {
-	profile := fmt.Sprintf("%v", t.ProfileID)
+	profile := fmt.Sprintf("%v", t.ID)
 	linked := fmt.Sprintf("%v", t.LinkedProfileID)
 
 	from := fmt.Sprintf("%v", t.From)
@@ -68,8 +68,8 @@ func (t TimeProfile) String() string {
 
 func (t *TimeProfile) UnmarshalJSON(bytes []byte) error {
 	profile := struct {
-		ProfileID       uint8    `json:"profile-id"`
-		LinkedProfileID uint8    `json:"linked-profile-id"`
+		ID              uint8    `json:"id"`
+		LinkedProfileID uint8    `json:"linked-profile"`
 		From            *Date    `json:"start-date"`
 		To              *Date    `json:"end-date"`
 		Weekdays        Weekdays `json:"weekdays"`
@@ -83,7 +83,7 @@ func (t *TimeProfile) UnmarshalJSON(bytes []byte) error {
 		return err
 	}
 
-	t.ProfileID = profile.ProfileID
+	t.ID = profile.ID
 	t.LinkedProfileID = profile.LinkedProfileID
 	t.From = profile.From
 	t.To = profile.To

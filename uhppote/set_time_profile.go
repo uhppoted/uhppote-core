@@ -32,7 +32,7 @@ func (u *UHPPOTE) SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bo
 
 	request := messages.SetTimeProfileRequest{
 		SerialNumber:    types.SerialNumber(deviceID),
-		ProfileID:       profile.ProfileID,
+		ProfileID:       profile.ID,
 		From:            *profile.From,
 		To:              *profile.To,
 		Monday:          profile.Weekdays[types.Monday],

@@ -46,7 +46,7 @@ func (u *UHPPOTE) GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeP
 	}
 
 	profile := types.TimeProfile{
-		ProfileID:       response.ProfileID,
+		ID:              response.ProfileID,
 		LinkedProfileID: response.LinkedProfileID,
 		From:            response.From,
 		To:              response.To,
