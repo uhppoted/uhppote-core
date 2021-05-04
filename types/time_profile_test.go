@@ -95,6 +95,62 @@ func TestTimeProfileJSONMarshal(t *testing.T) {
 	}
 }
 
+func TestTimeProfileJSONUnmarshal(t *testing.T) {
+	from := date("2021-04-01")
+	to := date("2021-12-29")
+
+	expected := TimeProfile{
+		ProfileID:       4,
+		LinkedProfileID: 19,
+		From:            &from,
+		To:              &to,
+		Weekdays: Weekdays{
+			Monday:    true,
+			Tuesday:   true,
+			Wednesday: false,
+			Thursday:  true,
+			Friday:    false,
+			Saturday:  true,
+			Sunday:    true,
+		},
+		Segments: Segments{
+			1: Segment{Start: hhmm("08:30"), End: hhmm("09:45")},
+			2: Segment{Start: hhmm("11:35")},
+			3: Segment{End: hhmm("17:59")},
+		},
+	}
+
+	bytes := []byte(`{
+  "profile-id": 4,
+  "linked-profile-id": 19,
+  "start-date": "2021-04-01",
+  "end-date": "2021-12-29",
+  "weekdays": "Monday,Tuesday,Thursday,Saturday,Sunday",
+  "segments": {
+    "1": {
+      "start": "08:30",
+      "end": "09:45"
+    },
+    "2": {
+      "start": "11:35"
+    },
+    "3": {
+      "end": "17:59"
+    }
+  }
+}`)
+
+	var profile TimeProfile
+
+	if err := json.Unmarshal(bytes, &profile); err != nil {
+		t.Fatalf("Error unmarshalling TimeProfile (%v)", err)
+	}
+
+	if !reflect.DeepEqual(profile, expected) {
+		t.Errorf("TimeProfile incorrectly unmarshalled\n   expected:%+v\n   got:     %+v", expected, profile)
+	}
+}
+
 func TestWeekdaysMarshalJSON(t *testing.T) {
 	expected := `"Monday,Wednesday,Thursday,Saturday,Sunday"`
 	weekdays := Weekdays{

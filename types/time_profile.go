@@ -66,6 +66,33 @@ func (t TimeProfile) String() string {
 	return strings.Join(list, " ")
 }
 
+func (t *TimeProfile) UnmarshalJSON(bytes []byte) error {
+	profile := struct {
+		ProfileID       uint8    `json:"profile-id"`
+		LinkedProfileID uint8    `json:"linked-profile-id"`
+		From            *Date    `json:"start-date"`
+		To              *Date    `json:"end-date"`
+		Weekdays        Weekdays `json:"weekdays"`
+		Segments        Segments `json:"segments"`
+	}{
+		Weekdays: Weekdays{},
+		Segments: Segments{},
+	}
+
+	if err := json.Unmarshal(bytes, &profile); err != nil {
+		return err
+	}
+
+	t.ProfileID = profile.ProfileID
+	t.LinkedProfileID = profile.LinkedProfileID
+	t.From = profile.From
+	t.To = profile.To
+	t.Weekdays = profile.Weekdays
+	t.Segments = profile.Segments
+
+	return nil
+}
+
 func (w Weekdays) String() string {
 	days := []string{}
 	if w != nil {

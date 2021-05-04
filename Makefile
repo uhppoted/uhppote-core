@@ -47,7 +47,7 @@ release: test vet
 bump:
 
 debug: build
-	go test ./... -run TestWeekday
+	go test ./... -run TestTimeProfileJSON
 
 godoc:
 	godoc -http=:80	-index_interval=60s
