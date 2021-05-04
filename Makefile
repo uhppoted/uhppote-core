@@ -47,7 +47,7 @@ release: test vet
 bump:
 
 debug: build
-	go test -v ./... -run TestGetCardByID
+	go test ./... -run TestWeekday
 
 godoc:
 	godoc -http=:80	-index_interval=60s

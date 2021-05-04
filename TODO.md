@@ -10,11 +10,12 @@
       - invoke driver from Broadcast/Send/etc
       - IUHPPOTE
 
-- [ ] put-card with time profile
 - [ ] get-time-profile
       - discard 00:00-00:00 segments
 - [ ] set-time-profile
       - automatically provide missing segments with 00:00-00:00
+- [x] put-card with time profile
+- [x] get-card with time profile
 - [x] clear-time-profile
 
 - [ ] Remove IDevice interface (make UHPPOTE the interface type and use internal uhhpote struct for implementation)

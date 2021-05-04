@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -22,8 +23,8 @@ type Weekday int
 type Segments map[uint8]Segment
 
 type Segment struct {
-	Start *HHmm `json:"start"`
-	End   *HHmm `json:"end"`
+	Start *HHmm `json:"start,omitempty"`
+	End   *HHmm `json:"end,omitempty"`
 }
 
 const (
@@ -70,7 +71,7 @@ func (w Weekdays) String() string {
 	if w != nil {
 		for _, d := range []Weekday{Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday} {
 			if w[d] {
-				days = append(days, d.String())
+				days = append(days, d.Abbreviation())
 			}
 		}
 	}
@@ -78,8 +79,99 @@ func (w Weekdays) String() string {
 	return strings.Join(days, ",")
 }
 
+func (w Weekdays) MarshalJSON() ([]byte, error) {
+	s := []string{}
+
+	for _, d := range [...]Weekday{Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday} {
+		if w[d] {
+			s = append(s, fmt.Sprintf("%v", d))
+		}
+	}
+
+	return json.Marshal(strings.Join(s, ","))
+}
+
+func (w *Weekdays) UnmarshalJSON(bytes []byte) error {
+	var s string
+
+	err := json.Unmarshal(bytes, &s)
+	if err != nil {
+		return err
+	}
+
+	(*w)[Monday] = false
+	(*w)[Tuesday] = false
+	(*w)[Wednesday] = false
+	(*w)[Thursday] = false
+	(*w)[Friday] = false
+	(*w)[Saturday] = false
+	(*w)[Sunday] = false
+
+	tokens := strings.Split(s, ",")
+	for _, t := range tokens {
+		switch strings.ToLower(t) {
+		case "monday":
+			(*w)[Monday] = true
+		case "tuesday":
+			(*w)[Tuesday] = true
+		case "wednesday":
+			(*w)[Wednesday] = true
+		case "thursday":
+			(*w)[Thursday] = true
+		case "friday":
+			(*w)[Friday] = true
+		case "saturday":
+			(*w)[Saturday] = true
+		case "sunday":
+			(*w)[Sunday] = true
+		}
+	}
+
+	return nil
+}
+
 func (d Weekday) String() string {
+	return [...]string{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}[d]
+}
+
+func (d Weekday) Abbreviation() string {
 	return [...]string{"Mon", "Tue", "Wed", "Thurs", "Fri", "Sat", "Sun"}[d]
+}
+
+func (d Weekday) MarshalJSON() ([]byte, error) {
+	s := [...]string{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}[d]
+
+	return json.Marshal(s)
+}
+
+func (d *Weekday) UnmarshalJSON(bytes []byte) error {
+	var s string
+
+	err := json.Unmarshal(bytes, &s)
+	if err != nil {
+		return err
+	}
+
+	switch strings.ToLower(s) {
+	case "monday":
+		*d = Monday
+	case "tuesday":
+		*d = Tuesday
+	case "wednesday":
+		*d = Wednesday
+	case "thursday":
+		*d = Thursday
+	case "friday":
+		*d = Friday
+	case "saturday":
+		*d = Saturday
+	case "sunday":
+		*d = Sunday
+	default:
+		return fmt.Errorf("Invalid weekday (%v)", string(bytes))
+	}
+
+	return nil
 }
 
 func (ss Segments) String() string {

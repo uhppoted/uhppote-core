@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -17,6 +18,10 @@ func (t Time) String() string {
 }
 
 type HHmm time.Time
+
+func NewHHmm(hours, minutes int) HHmm {
+	return HHmm(time.Date(0, time.January, 1, hours, minutes, 0, 0, time.Local))
+}
 
 func HHmmFromString(s string) (*HHmm, error) {
 	hhmmss, err := time.ParseInLocation("15:04", s, time.Local)
@@ -61,4 +66,26 @@ func (t *HHmm) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
 	v := HHmm(time)
 
 	return &v, nil
+}
+
+func (t HHmm) MarshalJSON() ([]byte, error) {
+	return json.Marshal(time.Time(t).Format("15:04"))
+}
+
+func (t *HHmm) UnmarshalJSON(bytes []byte) error {
+	var s string
+
+	err := json.Unmarshal(bytes, &s)
+	if err != nil {
+		return err
+	}
+
+	tt, err := time.ParseInLocation("15:04", s, time.Local)
+	if err != nil {
+		return err
+	}
+
+	*t = HHmm(tt)
+
+	return nil
 }
