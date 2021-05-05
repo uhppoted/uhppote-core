@@ -45,8 +45,10 @@ func (h HHmm) Before(t time.Time) bool {
 		return true
 	}
 
-	if p.Minute() < t.Minute() {
-		return true
+	if p.Hour() == t.Hour() {
+		if p.Minute() < t.Minute() {
+			return true
+		}
 	}
 
 	return false
@@ -59,8 +61,10 @@ func (h HHmm) After(t time.Time) bool {
 		return true
 	}
 
-	if p.Minute() > t.Minute() {
-		return true
+	if p.Hour() == t.Hour() {
+		if p.Minute() > t.Minute() {
+			return true
+		}
 	}
 
 	return false

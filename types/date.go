@@ -18,12 +18,16 @@ func (d Date) Before(date Date) bool {
 		return true
 	}
 
-	if p.Month() < q.Month() {
-		return true
-	}
+	if p.Year() == q.Year() {
+		if p.Month() < q.Month() {
+			return true
+		}
 
-	if p.Day() < q.Day() {
-		return true
+		if p.Month() == q.Month() {
+			if p.Day() < q.Day() {
+				return true
+			}
+		}
 	}
 
 	return false
@@ -37,12 +41,16 @@ func (d Date) After(date Date) bool {
 		return true
 	}
 
-	if p.Month() > q.Month() {
-		return true
-	}
+	if p.Year() == q.Year() {
+		if p.Month() > q.Month() {
+			return true
+		}
 
-	if p.Day() > q.Day() {
-		return true
+		if p.Month() == q.Month() {
+			if p.Day() > q.Day() {
+				return true
+			}
+		}
 	}
 
 	return false
