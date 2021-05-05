@@ -10,12 +10,42 @@ import (
 
 type Date time.Time
 
-func (d Date) Before(p Date) bool {
-	return time.Time(d).Before(time.Time(p))
+func (d Date) Before(date Date) bool {
+	p := time.Time(d)
+	q := time.Time(date)
+
+	if p.Year() < q.Year() {
+		return true
+	}
+
+	if p.Month() < q.Month() {
+		return true
+	}
+
+	if p.Day() < q.Day() {
+		return true
+	}
+
+	return false
 }
 
-func (d Date) After(p Date) bool {
-	return time.Time(d).After(time.Time(p))
+func (d Date) After(date Date) bool {
+	p := time.Time(d)
+	q := time.Time(date)
+
+	if p.Year() > q.Year() {
+		return true
+	}
+
+	if p.Month() > q.Month() {
+		return true
+	}
+
+	if p.Day() > q.Day() {
+		return true
+	}
+
+	return false
 }
 
 func (d Date) String() string {
