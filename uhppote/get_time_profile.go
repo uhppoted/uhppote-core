@@ -2,6 +2,8 @@ package uhppote
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
 )
@@ -51,13 +53,13 @@ func (u *UHPPOTE) GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeP
 		From:            response.From,
 		To:              response.To,
 		Weekdays: types.Weekdays{
-			types.Monday:    response.Monday,
-			types.Tuesday:   response.Tuesday,
-			types.Wednesday: response.Wednesday,
-			types.Thursday:  response.Thursday,
-			types.Friday:    response.Friday,
-			types.Saturday:  response.Saturday,
-			types.Sunday:    response.Sunday,
+			time.Monday:    response.Monday,
+			time.Tuesday:   response.Tuesday,
+			time.Wednesday: response.Wednesday,
+			time.Thursday:  response.Thursday,
+			time.Friday:    response.Friday,
+			time.Saturday:  response.Saturday,
+			time.Sunday:    response.Sunday,
 		},
 
 		Segments: types.Segments{

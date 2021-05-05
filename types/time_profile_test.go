@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+	"time"
 )
 
 func TestTimeProfileToString(t *testing.T) {
@@ -18,13 +19,13 @@ func TestTimeProfileToString(t *testing.T) {
 		From:            &from,
 		To:              &to,
 		Weekdays: Weekdays{
-			Monday:    true,
-			Tuesday:   true,
-			Wednesday: false,
-			Thursday:  true,
-			Friday:    false,
-			Saturday:  true,
-			Sunday:    true,
+			time.Monday:    true,
+			time.Tuesday:   true,
+			time.Wednesday: false,
+			time.Thursday:  true,
+			time.Friday:    false,
+			time.Saturday:  true,
+			time.Sunday:    true,
 		},
 		Segments: Segments{
 			1: Segment{Start: hhmm("08:30"), End: hhmm("09:45")},
@@ -70,13 +71,13 @@ func TestTimeProfileJSONMarshal(t *testing.T) {
 		From:            &from,
 		To:              &to,
 		Weekdays: Weekdays{
-			Monday:    true,
-			Tuesday:   true,
-			Wednesday: false,
-			Thursday:  true,
-			Friday:    false,
-			Saturday:  true,
-			Sunday:    true,
+			time.Monday:    true,
+			time.Tuesday:   true,
+			time.Wednesday: false,
+			time.Thursday:  true,
+			time.Friday:    false,
+			time.Saturday:  true,
+			time.Sunday:    true,
 		},
 		Segments: Segments{
 			1: Segment{Start: hhmm("08:30"), End: hhmm("09:45")},
@@ -105,13 +106,13 @@ func TestTimeProfileJSONUnmarshal(t *testing.T) {
 		From:            &from,
 		To:              &to,
 		Weekdays: Weekdays{
-			Monday:    true,
-			Tuesday:   true,
-			Wednesday: false,
-			Thursday:  true,
-			Friday:    false,
-			Saturday:  true,
-			Sunday:    true,
+			time.Monday:    true,
+			time.Tuesday:   true,
+			time.Wednesday: false,
+			time.Thursday:  true,
+			time.Friday:    false,
+			time.Saturday:  true,
+			time.Sunday:    true,
 		},
 		Segments: Segments{
 			1: Segment{Start: hhmm("08:30"), End: hhmm("09:45")},
@@ -154,13 +155,13 @@ func TestTimeProfileJSONUnmarshal(t *testing.T) {
 func TestWeekdaysMarshalJSON(t *testing.T) {
 	expected := `"Monday,Wednesday,Thursday,Saturday,Sunday"`
 	weekdays := Weekdays{
-		Monday:    true,
-		Tuesday:   false,
-		Wednesday: true,
-		Thursday:  true,
-		Friday:    false,
-		Saturday:  true,
-		Sunday:    true,
+		time.Monday:    true,
+		time.Tuesday:   false,
+		time.Wednesday: true,
+		time.Thursday:  true,
+		time.Friday:    false,
+		time.Saturday:  true,
+		time.Sunday:    true,
 	}
 
 	bytes, err := json.Marshal(weekdays)
@@ -175,13 +176,13 @@ func TestWeekdaysMarshalJSON(t *testing.T) {
 
 func TestWeekdaysUnmarshalJSON(t *testing.T) {
 	expected := Weekdays{
-		Monday:    true,
-		Tuesday:   false,
-		Wednesday: true,
-		Thursday:  true,
-		Friday:    false,
-		Saturday:  true,
-		Sunday:    true,
+		time.Monday:    true,
+		time.Tuesday:   false,
+		time.Wednesday: true,
+		time.Thursday:  true,
+		time.Friday:    false,
+		time.Saturday:  true,
+		time.Sunday:    true,
 	}
 
 	weekdays := Weekdays{}
@@ -192,73 +193,6 @@ func TestWeekdaysUnmarshalJSON(t *testing.T) {
 
 	if !reflect.DeepEqual(weekdays, expected) {
 		t.Errorf("Incorrectly unmarshalled weekdays - expected:%v, got:%v", expected, weekdays)
-	}
-}
-
-func TestWeekdayMarshalJSON(t *testing.T) {
-	tests := []struct {
-		weekday  Weekday
-		expected string
-	}{
-		{weekday: Monday, expected: `"Monday"`},
-		{weekday: Tuesday, expected: `"Tuesday"`},
-		{weekday: Wednesday, expected: `"Wednesday"`},
-		{weekday: Thursday, expected: `"Thursday"`},
-		{weekday: Friday, expected: `"Friday"`},
-		{weekday: Saturday, expected: `"Saturday"`},
-		{weekday: Sunday, expected: `"Sunday"`},
-	}
-
-	for _, v := range tests {
-		bytes, err := json.Marshal(v.weekday)
-		if err != nil {
-			t.Fatalf("Error marshalling weekday (%v)", err)
-		}
-
-		if string(bytes) != v.expected {
-			t.Errorf("Incorrectly marshalled weekday - expected:%v, got:%v", v.expected, string(bytes))
-		}
-	}
-}
-
-func TestWeekdayUnmarshalJSON(t *testing.T) {
-	tests := []struct {
-		bytes    []byte
-		expected Weekday
-	}{
-		{bytes: []byte(`"Monday"`), expected: Monday},
-		{bytes: []byte(`"Tuesday"`), expected: Tuesday},
-		{bytes: []byte(`"Wednesday"`), expected: Wednesday},
-		{bytes: []byte(`"Thursday"`), expected: Thursday},
-		{bytes: []byte(`"Friday"`), expected: Friday},
-		{bytes: []byte(`"Saturday"`), expected: Saturday},
-		{bytes: []byte(`"Sunday"`), expected: Sunday},
-
-		{bytes: []byte(`"monday"`), expected: Monday},
-		{bytes: []byte(`"tuesday"`), expected: Tuesday},
-		{bytes: []byte(`"wednesday"`), expected: Wednesday},
-		{bytes: []byte(`"thursday"`), expected: Thursday},
-		{bytes: []byte(`"friday"`), expected: Friday},
-		{bytes: []byte(`"saturday"`), expected: Saturday},
-		{bytes: []byte(`"sunday"`), expected: Sunday},
-	}
-
-	for _, v := range tests {
-		var weekday Weekday
-		if err := json.Unmarshal(v.bytes, &weekday); err != nil {
-			t.Fatalf("Error unmarshalling weekday (%v)", err)
-		}
-
-		if weekday != v.expected {
-			t.Errorf("Incorrectly unmarshalled weekday - expected:%v, got:%v", v.expected, weekday)
-		}
-	}
-}
-
-func TestWeekdayUnmarshalJSONWithInvalidValue(t *testing.T) {
-	var weekday Weekday
-	if err := json.Unmarshal([]byte(`"adfasdf"`), &weekday); err == nil {
-		t.Errorf("Expected error unmarshalling 'asdfasdf', got:%v", err)
 	}
 }
 

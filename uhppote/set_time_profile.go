@@ -2,6 +2,8 @@ package uhppote
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
 )
@@ -35,13 +37,13 @@ func (u *UHPPOTE) SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bo
 		ProfileID:       profile.ID,
 		From:            *profile.From,
 		To:              *profile.To,
-		Monday:          profile.Weekdays[types.Monday],
-		Tuesday:         profile.Weekdays[types.Tuesday],
-		Wednesday:       profile.Weekdays[types.Wednesday],
-		Thursday:        profile.Weekdays[types.Thursday],
-		Friday:          profile.Weekdays[types.Friday],
-		Saturday:        profile.Weekdays[types.Saturday],
-		Sunday:          profile.Weekdays[types.Sunday],
+		Monday:          profile.Weekdays[time.Monday],
+		Tuesday:         profile.Weekdays[time.Tuesday],
+		Wednesday:       profile.Weekdays[time.Wednesday],
+		Thursday:        profile.Weekdays[time.Thursday],
+		Friday:          profile.Weekdays[time.Friday],
+		Saturday:        profile.Weekdays[time.Saturday],
+		Sunday:          profile.Weekdays[time.Sunday],
 		Segment1Start:   *profile.Segments[1].Start,
 		Segment1End:     *profile.Segments[1].End,
 		Segment2Start:   *profile.Segments[2].Start,

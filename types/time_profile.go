@@ -16,9 +16,7 @@ type TimeProfile struct {
 	Segments        Segments `json:"segments,omitempty"`
 }
 
-type Weekdays map[Weekday]bool
-
-type Weekday int
+type Weekdays map[time.Weekday]bool
 
 type Segments map[uint8]Segment
 
@@ -26,16 +24,6 @@ type Segment struct {
 	Start *HHmm `json:"start,omitempty"`
 	End   *HHmm `json:"end,omitempty"`
 }
-
-const (
-	Monday Weekday = iota
-	Tuesday
-	Wednesday
-	Thursday
-	Friday
-	Saturday
-	Sunday
-)
 
 func (t TimeProfile) String() string {
 	profile := fmt.Sprintf("%v", t.ID)
@@ -96,9 +84,9 @@ func (t *TimeProfile) UnmarshalJSON(bytes []byte) error {
 func (w Weekdays) String() string {
 	days := []string{}
 	if w != nil {
-		for _, d := range []Weekday{Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday} {
+		for _, d := range []time.Weekday{time.Monday, time.Tuesday, time.Wednesday, time.Thursday, time.Friday, time.Saturday, time.Sunday} {
 			if w[d] {
-				days = append(days, d.Abbreviation())
+				days = append(days, abbreviation(d))
 			}
 		}
 	}
@@ -109,7 +97,7 @@ func (w Weekdays) String() string {
 func (w Weekdays) MarshalJSON() ([]byte, error) {
 	s := []string{}
 
-	for _, d := range [...]Weekday{Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday} {
+	for _, d := range [...]time.Weekday{time.Monday, time.Tuesday, time.Wednesday, time.Thursday, time.Friday, time.Saturday, time.Sunday} {
 		if w[d] {
 			s = append(s, fmt.Sprintf("%v", d))
 		}
@@ -126,79 +114,39 @@ func (w *Weekdays) UnmarshalJSON(bytes []byte) error {
 		return err
 	}
 
-	(*w)[Monday] = false
-	(*w)[Tuesday] = false
-	(*w)[Wednesday] = false
-	(*w)[Thursday] = false
-	(*w)[Friday] = false
-	(*w)[Saturday] = false
-	(*w)[Sunday] = false
+	(*w)[time.Monday] = false
+	(*w)[time.Tuesday] = false
+	(*w)[time.Wednesday] = false
+	(*w)[time.Thursday] = false
+	(*w)[time.Friday] = false
+	(*w)[time.Saturday] = false
+	(*w)[time.Sunday] = false
 
 	tokens := strings.Split(s, ",")
 	for _, t := range tokens {
 		switch strings.ToLower(t) {
 		case "monday":
-			(*w)[Monday] = true
+			(*w)[time.Monday] = true
 		case "tuesday":
-			(*w)[Tuesday] = true
+			(*w)[time.Tuesday] = true
 		case "wednesday":
-			(*w)[Wednesday] = true
+			(*w)[time.Wednesday] = true
 		case "thursday":
-			(*w)[Thursday] = true
+			(*w)[time.Thursday] = true
 		case "friday":
-			(*w)[Friday] = true
+			(*w)[time.Friday] = true
 		case "saturday":
-			(*w)[Saturday] = true
+			(*w)[time.Saturday] = true
 		case "sunday":
-			(*w)[Sunday] = true
+			(*w)[time.Sunday] = true
 		}
 	}
 
 	return nil
 }
 
-func (d Weekday) String() string {
-	return [...]string{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}[d]
-}
-
-func (d Weekday) Abbreviation() string {
-	return [...]string{"Mon", "Tue", "Wed", "Thurs", "Fri", "Sat", "Sun"}[d]
-}
-
-func (d Weekday) MarshalJSON() ([]byte, error) {
-	s := [...]string{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}[d]
-
-	return json.Marshal(s)
-}
-
-func (d *Weekday) UnmarshalJSON(bytes []byte) error {
-	var s string
-
-	err := json.Unmarshal(bytes, &s)
-	if err != nil {
-		return err
-	}
-
-	switch strings.ToLower(s) {
-	case "monday":
-		*d = Monday
-	case "tuesday":
-		*d = Tuesday
-	case "wednesday":
-		*d = Wednesday
-	case "thursday":
-		*d = Thursday
-	case "friday":
-		*d = Friday
-	case "saturday":
-		*d = Saturday
-	case "sunday":
-		*d = Sunday
-	default:
-		return fmt.Errorf("Invalid weekday (%v)", string(bytes))
-	}
-
-	return nil
+func abbreviation(d time.Weekday) string {
+	return [...]string{"Sun", "Mon", "Tue", "Wed", "Thurs", "Fri", "Sat"}[d]
 }
 
 func (ss Segments) String() string {

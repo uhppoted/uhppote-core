@@ -17,6 +17,7 @@
 - [x] put-card with time profile
 - [x] get-card with time profile
 - [x] clear-time-profile
+- [x] date.Before not behaving quite right (should be inclusive?)
 
 - [ ] Remove IDevice interface (make UHPPOTE the interface type and use internal uhhpote struct for implementation)
 - [ ] Add https://odi.ch/weblog/posting.php?posting=731 to cookbook

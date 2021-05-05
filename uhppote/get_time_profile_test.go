@@ -3,6 +3,7 @@ package uhppote
 import (
 	"reflect"
 	"testing"
+	"time"
 
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
 	"github.com/uhppoted/uhppote-core/types"
@@ -22,13 +23,13 @@ func TestGetTimeProfile(t *testing.T) {
 		From:            date("2021-04-01"),
 		To:              date("2021-12-29"),
 		Weekdays: types.Weekdays{
-			types.Monday:    true,
-			types.Tuesday:   true,
-			types.Wednesday: false,
-			types.Thursday:  true,
-			types.Friday:    false,
-			types.Saturday:  true,
-			types.Sunday:    true,
+			time.Monday:    true,
+			time.Tuesday:   true,
+			time.Wednesday: false,
+			time.Thursday:  true,
+			time.Friday:    false,
+			time.Saturday:  true,
+			time.Sunday:    true,
 		},
 
 		Segments: types.Segments{
