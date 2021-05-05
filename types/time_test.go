@@ -3,6 +3,7 @@ package types
 import (
 	"encoding/json"
 	"testing"
+	"time"
 )
 
 func TestHHmmMarshalJSON(t *testing.T) {
@@ -30,5 +31,23 @@ func TestHHmmUnmarshalJSON(t *testing.T) {
 
 	if hhmm != expected {
 		t.Errorf("Incorrectly unmarshalled HHmm - expected:%v, got:%v", expected, hhmm)
+	}
+}
+
+func TestHHmmBeforeNow(t *testing.T) {
+	now := time.Now()
+	hhmm, _ := HHmmFromString(now.Format("15:04"))
+
+	if hhmm.Before(now) {
+		t.Errorf("HHmm '%v' should not be before now (%v)", hhmm, now)
+	}
+}
+
+func TestHHmmAfterNow(t *testing.T) {
+	now := time.Now()
+	hhmm, _ := HHmmFromString(now.Format("15:04"))
+
+	if hhmm.After(now) {
+		t.Errorf("HHmm '%v' should not be after now (%v)", hhmm, now)
 	}
 }

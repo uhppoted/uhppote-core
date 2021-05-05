@@ -34,25 +34,53 @@ func HHmmFromString(s string) (*HHmm, error) {
 	return &t, nil
 }
 
-func (t HHmm) String() string {
-	return time.Time(t).Format("15:04")
+func (h HHmm) String() string {
+	return time.Time(h).Format("15:04")
 }
 
-func (t HHmm) MarshalUT0311L0x() ([]byte, error) {
-	encoded, err := bcd.Encode(time.Time(t).Format("1504"))
+func (h HHmm) Before(t time.Time) bool {
+	p := time.Time(h)
+
+	if p.Hour() < t.Hour() {
+		return true
+	}
+
+	if p.Minute() < t.Minute() {
+		return true
+	}
+
+	return false
+}
+
+func (h HHmm) After(t time.Time) bool {
+	p := time.Time(h)
+
+	if p.Hour() > t.Hour() {
+		return true
+	}
+
+	if p.Minute() > t.Minute() {
+		return true
+	}
+
+	return false
+}
+
+func (h HHmm) MarshalUT0311L0x() ([]byte, error) {
+	encoded, err := bcd.Encode(time.Time(h).Format("1504"))
 
 	if err != nil {
-		return []byte{}, fmt.Errorf("Error encoding HHmm time %v to BCD: [%v]", t, err)
+		return []byte{}, fmt.Errorf("Error encoding HHmm time %v to BCD: [%v]", h, err)
 	}
 
 	if encoded == nil {
-		return []byte{}, fmt.Errorf("Unknown error encoding HHmm time %v to BCD", t)
+		return []byte{}, fmt.Errorf("Unknown error encoding HHmm time %v to BCD", h)
 	}
 
 	return *encoded, nil
 }
 
-func (t *HHmm) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
+func (h *HHmm) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
 	decoded, err := bcd.Decode(bytes[0:2])
 	if err != nil {
 		return nil, err
@@ -68,11 +96,11 @@ func (t *HHmm) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
 	return &v, nil
 }
 
-func (t HHmm) MarshalJSON() ([]byte, error) {
-	return json.Marshal(time.Time(t).Format("15:04"))
+func (h HHmm) MarshalJSON() ([]byte, error) {
+	return json.Marshal(time.Time(h).Format("15:04"))
 }
 
-func (t *HHmm) UnmarshalJSON(bytes []byte) error {
+func (h *HHmm) UnmarshalJSON(bytes []byte) error {
 	var s string
 
 	err := json.Unmarshal(bytes, &s)
@@ -80,12 +108,12 @@ func (t *HHmm) UnmarshalJSON(bytes []byte) error {
 		return err
 	}
 
-	tt, err := time.ParseInLocation("15:04", s, time.Local)
+	t, err := time.ParseInLocation("15:04", s, time.Local)
 	if err != nil {
 		return err
 	}
 
-	*t = HHmm(tt)
+	*h = HHmm(t)
 
 	return nil
 }
