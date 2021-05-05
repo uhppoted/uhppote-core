@@ -10,6 +10,22 @@ import (
 
 type Date time.Time
 
+func ToDate(year int, month time.Month, day int) Date {
+	date := time.Date(year, month, day, 0, 0, 0, 0, time.Local)
+
+	return Date(date)
+}
+
+func DateFromString(s string) (*Date, error) {
+	date, err := time.ParseInLocation("2006-01-02", s, time.Local)
+	if err != nil {
+		return nil, err
+	}
+
+	x := Date(date)
+	return &x, nil
+}
+
 func (d Date) Before(date Date) bool {
 	p := time.Time(d)
 	q := time.Time(date)
@@ -62,16 +78,6 @@ func (d Date) Weekday() time.Weekday {
 
 func (d Date) String() string {
 	return time.Time(d).Format("2006-01-02")
-}
-
-func DateFromString(s string) (*Date, error) {
-	date, err := time.ParseInLocation("2006-01-02", s, time.Local)
-	if err != nil {
-		return nil, err
-	}
-
-	x := Date(date)
-	return &x, nil
 }
 
 func (d Date) MarshalUT0311L0x() ([]byte, error) {
