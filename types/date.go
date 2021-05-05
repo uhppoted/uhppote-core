@@ -48,6 +48,10 @@ func (d Date) After(date Date) bool {
 	return false
 }
 
+func (d Date) Weekday() time.Weekday {
+	return time.Time(d).Weekday()
+}
+
 func (d Date) String() string {
 	return time.Time(d).Format("2006-01-02")
 }
