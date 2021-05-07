@@ -22,11 +22,11 @@ func TestCardToString(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors: map[uint8]Permission{
-			1: true,
-			2: false,
-			3: uint8(29),
-			4: true,
+		Doors: map[uint8]int{
+			1: 1,
+			2: 0,
+			3: 29,
+			4: 1,
 		},
 	}
 
@@ -44,11 +44,11 @@ func TestCardToStringWithMissingFromDate(t *testing.T) {
 	card := Card{
 		CardNumber: 12345,
 		To:         &to,
-		Doors: map[uint8]Permission{
-			1: true,
-			2: false,
-			3: false,
-			4: true,
+		Doors: map[uint8]int{
+			1: 1,
+			2: 0,
+			3: 0,
+			4: 1,
 		},
 	}
 
@@ -66,11 +66,11 @@ func TestCardToStringWithMissingToDate(t *testing.T) {
 	card := Card{
 		CardNumber: 12345,
 		From:       &from,
-		Doors: map[uint8]Permission{
-			1: true,
-			2: false,
-			3: false,
-			4: true,
+		Doors: map[uint8]int{
+			1: 1,
+			2: 0,
+			3: 0,
+			4: 1,
 		},
 	}
 
@@ -90,9 +90,9 @@ func TestCardToStringWithMissingDoors(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors: map[uint8]Permission{
-			1: true,
-			2: false,
+		Doors: map[uint8]int{
+			1: 1,
+			2: 0,
 		},
 	}
 
@@ -112,13 +112,13 @@ func TestCardToStringWithExtraDoors(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors: map[uint8]Permission{
-			1: true,
-			2: false,
-			3: false,
-			4: true,
-			5: true,
-			6: false,
+		Doors: map[uint8]int{
+			1: 1,
+			2: 0,
+			3: 0,
+			4: 1,
+			5: 1,
+			6: 0,
 		},
 	}
 
@@ -137,11 +137,11 @@ func TestMarshalCard(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors: map[uint8]Permission{
-			1: true,
-			2: false,
+		Doors: map[uint8]int{
+			1: 1,
+			2: 0,
 			3: 29,
-			4: true,
+			4: 1,
 		},
 	}
 
@@ -150,10 +150,10 @@ func TestMarshalCard(t *testing.T) {
   "start-date": "2020-01-01",
   "end-date": "2020-12-31",
   "doors": {
-    "1": true,
-    "2": false,
+    "1": 1,
+    "2": 0,
     "3": 29,
-    "4": true
+    "4": 1
   }
 }`
 
@@ -176,11 +176,11 @@ func TestUnmarshalCard(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors: map[uint8]Permission{
-			1: true,
-			2: false,
-			3: uint8(29),
-			4: true,
+		Doors: map[uint8]int{
+			1: 1,
+			2: 0,
+			3: 29,
+			4: 1,
 		},
 	}
 
@@ -189,10 +189,10 @@ func TestUnmarshalCard(t *testing.T) {
   "start-date": "2020-01-01",
   "end-date": "2020-12-31",
   "doors": {
-    "1": true,
-    "2": false,
+    "1": 1,
+    "2": 0,
     "3": 29,
-    "4": true
+    "4": 1
   }
 } `
 
@@ -216,11 +216,11 @@ func TestUnmarshalCardWithMissingCardNumber(t *testing.T) {
 		CardNumber: 0,
 		From:       &from,
 		To:         &to,
-		Doors: map[uint8]Permission{
-			1: true,
-			2: false,
-			3: false,
-			4: true,
+		Doors: map[uint8]int{
+			1: 1,
+			2: 0,
+			3: 0,
+			4: 1,
 		},
 	}
 
@@ -228,10 +228,10 @@ func TestUnmarshalCardWithMissingCardNumber(t *testing.T) {
   "start-date": "2020-01-01",
   "end-date": "2020-12-31",
   "doors": {
-    "1":true,
-    "2":false,
-    "3":false,
-    "4":true
+    "1":1,
+    "2":0,
+    "3":0,
+    "4":1
   }
 } `
 
@@ -293,11 +293,11 @@ func TestUnmarshalCardWithMissingDoors(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors: map[uint8]Permission{
-			1: false,
-			2: true,
-			3: false,
-			4: false,
+		Doors: map[uint8]int{
+			1: 0,
+			2: 1,
+			3: 0,
+			4: 0,
 		},
 	}
 
@@ -306,7 +306,7 @@ func TestUnmarshalCardWithMissingDoors(t *testing.T) {
   "start-date": "2020-01-01",
   "end-date": "2020-12-31",
   "doors": {
-    "2": true
+    "2": 1
   }
 } `
 
@@ -330,11 +330,11 @@ func TestUnmarshalCardWithInvalidDoors(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors: map[uint8]Permission{
-			1: true,
-			2: false,
-			3: false,
-			4: false,
+		Doors: map[uint8]int{
+			1: 1,
+			2: 0,
+			3: 0,
+			4: 0,
 		},
 	}
 
@@ -343,8 +343,8 @@ func TestUnmarshalCardWithInvalidDoors(t *testing.T) {
   "start-date": "2020-01-01",
   "end-date": "2020-12-31",
   "doors": {
-    "1": true,
-    "5": false
+    "1": 1,
+    "5": 0
   }
 } `
 	card := Card{}

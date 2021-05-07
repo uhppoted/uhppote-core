@@ -6,29 +6,27 @@ import (
 )
 
 type Card struct {
-	CardNumber uint32               `json:"card-number"`
-	From       *Date                `json:"start-date"`
-	To         *Date                `json:"end-date"`
-	Doors      map[uint8]Permission `json:"doors"`
+	CardNumber uint32        `json:"card-number"`
+	From       *Date         `json:"start-date"`
+	To         *Date         `json:"end-date"`
+	Doors      map[uint8]int `json:"doors"`
 }
 
-type Permission interface{}
-
 func (c Card) String() string {
-	f := func(p Permission) string {
-		if p != nil {
-			switch v := p.(type) {
-			case bool:
-				if v {
-					return "Y"
-				}
+	f := func(p int) string {
+		switch {
+		case p == 0:
+			return "N"
 
-			case uint8:
-				return fmt.Sprintf("%v", v)
-			}
+		case p == 1:
+			return "Y"
+
+		case p >= 2 && p <= 254:
+			return fmt.Sprintf("%v", p)
+
+		default:
+			return "N"
 		}
-
-		return "N"
 	}
 
 	from := "-         "
@@ -46,12 +44,12 @@ func (c Card) String() string {
 
 func (c *Card) UnmarshalJSON(bytes []byte) error {
 	card := struct {
-		CardNumber uint32               `json:"card-number"`
-		From       string               `json:"start-date"`
-		To         string               `json:"end-date"`
-		Doors      map[uint8]Permission `json:"doors"`
+		CardNumber uint32        `json:"card-number"`
+		From       string        `json:"start-date"`
+		To         string        `json:"end-date"`
+		Doors      map[uint8]int `json:"doors"`
 	}{
-		Doors: map[uint8]Permission{1: false, 2: false, 3: false, 4: false},
+		Doors: map[uint8]int{1: 0, 2: 0, 3: 0, 4: 0},
 	}
 
 	if err := json.Unmarshal(bytes, &card); err != nil {
@@ -71,46 +69,10 @@ func (c *Card) UnmarshalJSON(bytes []byte) error {
 	c.CardNumber = card.CardNumber
 	c.From = from
 	c.To = to
-	c.Doors = map[uint8]Permission{}
+	c.Doors = map[uint8]int{}
 
 	for _, i := range []uint8{1, 2, 3, 4} {
-		switch v := card.Doors[i].(type) {
-		case bool:
-			c.Doors[i] = v
-
-		case int8:
-			c.Doors[i] = uint8(v)
-
-		case int16:
-			c.Doors[i] = uint8(v)
-
-		case int32:
-			c.Doors[i] = uint8(v)
-
-		case int64:
-			c.Doors[i] = uint8(v)
-
-		case uint8:
-			c.Doors[i] = uint8(v)
-
-		case uint16:
-			c.Doors[i] = uint8(v)
-
-		case uint32:
-			c.Doors[i] = uint8(v)
-
-		case uint64:
-			c.Doors[i] = uint8(v)
-
-		case float32:
-			c.Doors[i] = uint8(v)
-
-		case float64:
-			c.Doors[i] = uint8(v)
-
-		default:
-			c.Doors[i] = false
-		}
+		c.Doors[i] = card.Doors[i]
 	}
 
 	return nil
@@ -121,7 +83,7 @@ func (c *Card) Clone() Card {
 		CardNumber: c.CardNumber,
 		From:       c.From,
 		To:         c.To,
-		Doors: map[uint8]Permission{
+		Doors: map[uint8]int{
 			1: c.Doors[1],
 			2: c.Doors[2],
 			3: c.Doors[3],
