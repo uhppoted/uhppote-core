@@ -11,4 +11,6 @@ type IDevice interface {
 	PutCard(deviceID uint32, card types.Card) (bool, error)
 	DeleteCard(deviceID uint32, cardNumber uint32) (bool, error)
 	DeleteCards(deviceID uint32) (bool, error)
+
+	GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeProfile, error)
 }
