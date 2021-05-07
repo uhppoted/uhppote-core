@@ -2,13 +2,16 @@
 
 ### IN PROGRESS
 
-## TODO
+- [ ] Replace types.Permission with int
+- [ ] Retype UHPPOTE.BindAddress as types.BindAddr
+- [ ] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
+- [ ] Retype UHPPOTE.ListenAddress as types.ListenAddr
 
 - [ ] Rearchitecture as factory/device/driver
-      - NewUHPPOTE(...)
       - move Broadcast/Send/etc to UDP driver
       - invoke driver from Broadcast/Send/etc
       - IUHPPOTE
+      - Replace IDevice interface with IUHPPOTE
 
 - [ ] get-time-profile
       - discard 00:00-00:00 segments
@@ -18,13 +21,14 @@
 - [x] get-card with time profile
 - [x] clear-time-profile
 - [x] date.Before not behaving quite right (should be inclusive?)
+- [x] Make UHPPOTE.BindAddress a private field
+- [x] Make UHPPOTE.BroadcastAddress a private field
+- [x] Make UHPPOTE.ListenAddress a private field
 
-- [ ] Remove IDevice interface (make UHPPOTE the interface type and use internal uhhpote struct for implementation)
+## TODO
+
 - [ ] Add https://odi.ch/weblog/posting.php?posting=731 to cookbook
 - [ ] Make UHPPOTE.Devices a private field
-- [ ] Make UHPPOTE.BindAddress a private field and types.BindAddr
-- [ ] Make UHPPOTE.BroadcastAddress a private field and types.BroadcastAddr
-- [ ] Make UHPPOTE.ListenAddress a private field and types.ListenAddr
 - [ ] (?) Rename types.Time to types.DeviceTime
 - [ ] (?) Rename types.SystemTime to types.Time
 - [ ] (?) Replace types.SystemDate with types.Date

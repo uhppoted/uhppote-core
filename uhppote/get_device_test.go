@@ -109,7 +109,7 @@ func TestGetDevicesWithAltPort(t *testing.T) {
 	}
 
 	u := UHPPOTE{
-		BroadcastAddress: &net.UDPAddr{
+		broadcastAddr: &net.UDPAddr{
 			IP:   net.IPv4(192, 168, 1, 255),
 			Port: 54321,
 		},

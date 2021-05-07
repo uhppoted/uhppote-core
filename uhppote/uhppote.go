@@ -27,12 +27,12 @@ type iuhppote interface {
 }
 
 type UHPPOTE struct {
-	BindAddress      *net.UDPAddr
-	BroadcastAddress *net.UDPAddr
-	ListenAddress    *net.UDPAddr
-	Devices          map[uint32]*Device
-	Debug            bool
-	driver           iuhppote
+	bindAddr      *net.UDPAddr
+	broadcastAddr *net.UDPAddr
+	listenAddr    *net.UDPAddr
+	Devices       map[uint32]*Device
+	Debug         bool
+	driver        iuhppote
 }
 
 type Device struct {
@@ -42,6 +42,24 @@ type Device struct {
 	Rollover uint32
 	Doors    []string
 	TimeZone *time.Location
+}
+
+func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug bool) UHPPOTE {
+	uhppote := UHPPOTE{
+		bindAddr:      &bind,
+		broadcastAddr: &broadcast,
+		listenAddr:    &listen,
+		Devices:       map[uint32]*Device{},
+		Debug:         debug,
+	}
+
+	uhppote.driver = &uhppote
+
+	for _, device := range devices {
+		uhppote.Devices[device.DeviceID] = &device
+	}
+
+	return uhppote
 }
 
 func NewDevice(deviceID uint32, address *net.UDPAddr, rollover uint32, doors []string) *Device {
@@ -80,7 +98,15 @@ func (u *UHPPOTE) DeviceList() map[uint32]*Device {
 
 func (u *UHPPOTE) BroadcastAddr() *net.UDPAddr {
 	if u != nil {
-		return u.BroadcastAddress
+		return u.broadcastAddr
+	}
+
+	return nil
+}
+
+func (u *UHPPOTE) ListenAddr() *net.UDPAddr {
+	if u != nil {
+		return u.listenAddr
 	}
 
 	return nil
@@ -391,8 +417,8 @@ func (u *UHPPOTE) listen(p chan *event, q chan os.Signal, listener Listener) err
 }
 
 func (u *UHPPOTE) bindAddress() *net.UDPAddr {
-	if u.BindAddress != nil {
-		return u.BindAddress
+	if u.bindAddr != nil {
+		return u.bindAddr
 	}
 
 	addr := net.UDPAddr{
@@ -407,8 +433,8 @@ func (u *UHPPOTE) bindAddress() *net.UDPAddr {
 }
 
 func (u *UHPPOTE) broadcastAddress() *net.UDPAddr {
-	if u.BroadcastAddress != nil {
-		return u.BroadcastAddress
+	if u.broadcastAddr != nil {
+		return u.broadcastAddr
 	}
 
 	addr := net.UDPAddr{
@@ -423,8 +449,8 @@ func (u *UHPPOTE) broadcastAddress() *net.UDPAddr {
 }
 
 func (u *UHPPOTE) listenAddress() *net.UDPAddr {
-	if u.ListenAddress != nil {
-		return u.ListenAddress
+	if u.listenAddr != nil {
+		return u.listenAddr
 	}
 
 	addr := net.UDPAddr{
