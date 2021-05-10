@@ -17,6 +17,15 @@ import (
 var VERSION string = "v0.7.x"
 var guard sync.Mutex
 
+type Device struct {
+	Name     string
+	DeviceID uint32
+	Address  *net.UDPAddr
+	Rollover uint32
+	Doors    []string
+	TimeZone *time.Location
+}
+
 type iuhppote interface {
 	Send(serialNumber uint32, request, reply interface{}) error
 	Broadcast(request, reply interface{}) ([]interface{}, error)
@@ -33,15 +42,6 @@ type UHPPOTE struct {
 	Devices       map[uint32]*Device
 	Debug         bool
 	driver        iuhppote
-}
-
-type Device struct {
-	Name     string
-	DeviceID uint32
-	Address  *net.UDPAddr
-	Rollover uint32
-	Doors    []string
-	TimeZone *time.Location
 }
 
 func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug bool) UHPPOTE {

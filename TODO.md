@@ -7,10 +7,9 @@
 - [ ] Retype UHPPOTE.ListenAddress as types.ListenAddr
 
 - [ ] Rearchitecture as factory/device/driver
+      - make UHPPOTE struct private
       - move Broadcast/Send/etc to UDP driver
       - invoke driver from Broadcast/Send/etc
-      - IUHPPOTE
-      - Replace IDevice interface with IUHPPOTE
 
 - [ ] get-time-profile
       - discard 00:00-00:00 segments

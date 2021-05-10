@@ -1,10 +1,10 @@
-package device
+package uhppote
 
 import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-type IDevice interface {
+type IUHPPOTE interface {
 	GetCards(deviceID uint32) (uint32, error)
 	GetCardByIndex(deviceID, index uint32) (*types.Card, error)
 	GetCardByID(deviceID, cardNumber uint32) (*types.Card, error)
