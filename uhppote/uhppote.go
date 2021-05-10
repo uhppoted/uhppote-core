@@ -39,7 +39,7 @@ type UHPPOTE struct {
 	bindAddr      *net.UDPAddr
 	broadcastAddr *net.UDPAddr
 	listenAddr    *net.UDPAddr
-	Devices       map[uint32]*Device
+	devices       map[uint32]*Device
 	Debug         bool
 	driver        iuhppote
 }
@@ -49,14 +49,14 @@ func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug boo
 		bindAddr:      &bind,
 		broadcastAddr: &broadcast,
 		listenAddr:    &listen,
-		Devices:       map[uint32]*Device{},
+		devices:       map[uint32]*Device{},
 		Debug:         debug,
 	}
 
 	uhppote.driver = &uhppote
 
 	for _, device := range devices {
-		uhppote.Devices[device.DeviceID] = &device
+		uhppote.devices[device.DeviceID] = &device
 	}
 
 	return uhppote
@@ -90,7 +90,7 @@ func (d *Device) RolloverAt() uint32 {
 
 func (u *UHPPOTE) DeviceList() map[uint32]*Device {
 	if u != nil {
-		return u.Devices
+		return u.devices
 	}
 
 	return map[uint32]*Device{}
@@ -116,7 +116,7 @@ func (u *UHPPOTE) Send(serialNumber uint32, request, reply interface{}) error {
 	bind := u.bindAddress()
 	dest := u.broadcastAddress()
 
-	if device, ok := u.Devices[serialNumber]; ok {
+	if device, ok := u.devices[serialNumber]; ok {
 		if device.Address != nil {
 			dest = device.Address
 		}
@@ -173,7 +173,7 @@ func (u *UHPPOTE) BroadcastTo(serialNumber uint32, request, reply interface{}) (
 	replies := []interface{}{}
 	dest := u.broadcastAddress()
 
-	if device, ok := u.Devices[serialNumber]; ok {
+	if device, ok := u.devices[serialNumber]; ok {
 		if device.Address != nil {
 			dest = device.Address
 		}

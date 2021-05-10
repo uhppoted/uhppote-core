@@ -59,7 +59,7 @@ func TestBroadcastAddressRequest(t *testing.T) {
 	}
 
 	u := UHPPOTE{
-		Devices:       make(map[uint32]*Device),
+		devices:       make(map[uint32]*Device),
 		Debug:         true,
 		bindAddr:      resolve("127.0.0.1:12345", t),
 		broadcastAddr: resolve("127.0.0.1:60000", t),
@@ -105,7 +105,7 @@ func TestSequentialRequests(t *testing.T) {
 		Debug:         true,
 		bindAddr:      resolve("127.0.0.1:12345", t),
 		broadcastAddr: resolve("127.0.0.1:60000", t),
-		Devices: map[uint32]*Device{
+		devices: map[uint32]*Device{
 			423187757: &Device{
 				Address:  resolve("127.0.0.1:65001", t),
 				Rollover: 100000,
@@ -172,7 +172,7 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 		Debug:         true,
 		bindAddr:      resolve("127.0.0.1:0", t),
 		broadcastAddr: resolve("127.0.0.1:60000", t),
-		Devices: map[uint32]*Device{
+		devices: map[uint32]*Device{
 			423187757: &Device{
 				Address:  resolve("127.0.0.1:65001", t),
 				Rollover: 100000,
@@ -255,7 +255,7 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 		Debug:         true,
 		bindAddr:      resolve("127.0.0.1:12345", t),
 		broadcastAddr: resolve("127.0.0.1:60000", t),
-		Devices: map[uint32]*Device{
+		devices: map[uint32]*Device{
 			423187757: &Device{
 				Address:  resolve("127.0.0.1:65001", t),
 				Rollover: 100000,

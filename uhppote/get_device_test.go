@@ -300,7 +300,7 @@ func TestGetDeviceWithAlternatePort(t *testing.T) {
 	}
 
 	u := UHPPOTE{
-		Devices: map[uint32]*Device{
+		devices: map[uint32]*Device{
 			423187757: &device,
 		},
 
