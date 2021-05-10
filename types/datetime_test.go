@@ -12,14 +12,14 @@ func TestDateTimeStringer(t *testing.T) {
 	var nilDateTime *DateTime
 
 	if datetime.String() != expected {
-		t.Errorf("Invalid date/time string - expected:%v, got:%v", expected, datetime.String())
+		t.Errorf("Invalid date/time string - expected:%v, got:%v", expected, datetime)
 	}
 
 	if datetimePtr.String() != expected {
-		t.Errorf("Invalid date/time string - expected:%v, got:%v", expected, datetimePtr.String())
+		t.Errorf("Invalid date/time string - expected:%v, got:%v", expected, datetimePtr)
 	}
 
 	if nilDateTime.String() != "" {
-		t.Errorf("Invalid date/time string - expected:'%v', got:%v", "", nilDateTime.String())
+		t.Errorf("Invalid date/time string - expected:'%v', got:%v", "", nilDateTime)
 	}
 }
