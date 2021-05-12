@@ -3,7 +3,6 @@ package uhppote
 import (
 	"encoding/binary"
 	"encoding/hex"
-	"errors"
 	"fmt"
 	"net"
 	"os"
@@ -16,15 +15,6 @@ import (
 
 var VERSION string = "v0.7.x"
 var guard sync.Mutex
-
-type Device struct {
-	Name     string
-	DeviceID uint32
-	Address  *net.UDPAddr
-	Rollover uint32
-	Doors    []string
-	TimeZone *time.Location
-}
 
 type iuhppote interface {
 	Send(serialNumber uint32, request, reply interface{}) error
@@ -40,7 +30,7 @@ type UHPPOTE struct {
 	broadcastAddr *net.UDPAddr
 	listenAddr    *net.UDPAddr
 	devices       map[uint32]*Device
-	Debug         bool
+	debug         bool
 	driver        iuhppote
 }
 
@@ -50,7 +40,7 @@ func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug boo
 		broadcastAddr: &broadcast,
 		listenAddr:    &listen,
 		devices:       map[uint32]*Device{},
-		Debug:         debug,
+		debug:         debug,
 	}
 
 	uhppote.driver = &uhppote
@@ -60,32 +50,6 @@ func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug boo
 	}
 
 	return uhppote
-}
-
-func NewDevice(deviceID uint32, address *net.UDPAddr, rollover uint32, doors []string) *Device {
-	return &Device{
-		DeviceID: deviceID,
-		Address:  address,
-		Rollover: rollover,
-		Doors:    doors,
-		TimeZone: time.Local,
-	}
-}
-
-func (d *Device) ID() uint32 {
-	if d != nil {
-		return d.DeviceID
-	}
-
-	return 0
-}
-
-func (d *Device) RolloverAt() uint32 {
-	if d != nil {
-		return d.Rollover
-	}
-
-	return 100000
 }
 
 func (u *UHPPOTE) DeviceList() map[uint32]*Device {
@@ -151,9 +115,7 @@ func (u *UHPPOTE) Send(serialNumber uint32, request, reply interface{}) error {
 	select {
 	case err := <-received:
 		if err != nil {
-			if u.Debug {
-				fmt.Printf(" ... receive error: %v\n", err)
-			}
+			u.debugf(" ... receive error", err)
 		}
 		return err
 
@@ -187,26 +149,20 @@ func (u *UHPPOTE) BroadcastTo(serialNumber uint32, request, reply interface{}) (
 	for _, bytes := range m {
 		// ... discard invalid replies
 		if len(bytes) != 64 {
-			if u.Debug {
-				fmt.Printf(" ... receive error: %v\n", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
-			}
+			u.debugf(" ... receive error", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
 			continue
 		}
 
 		// ... discard replies without a valid device ID
 		if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); serialNumber != 0 && deviceID != serialNumber {
-			if u.Debug {
-				fmt.Printf(" ... receive error: %v\n", fmt.Errorf("invalid device ID - expected:%v, got:%v", serialNumber, deviceID))
-			}
+			u.debugf(" ... receive error", fmt.Errorf("invalid device ID - expected:%v, got:%v", serialNumber, deviceID))
 			continue
 		}
 
 		// ... discard unparseable replies
 		v, err := codec.UnmarshalAs(bytes, reply)
 		if err != nil {
-			if u.Debug {
-				fmt.Printf(" ... receive error: %v\n", err)
-			}
+			u.debugf(" ... receive error", err)
 			continue
 		}
 
@@ -231,9 +187,7 @@ func (u *UHPPOTE) send(connection *net.UDPConn, addr *net.UDPAddr, request inter
 		return err
 	}
 
-	if u.Debug {
-		fmt.Printf(" ... request\n%s\n", dump(m, " ...          "))
-	}
+	u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(m, " ...          ")), nil)
 
 	N, err := connection.WriteTo(m, addr)
 
@@ -241,9 +195,7 @@ func (u *UHPPOTE) send(connection *net.UDPConn, addr *net.UDPAddr, request inter
 		return fmt.Errorf("Failed to write to UDP socket [%v]", err)
 	}
 
-	if u.Debug {
-		fmt.Printf(" ... sent %v bytes to %v\n", N, addr)
-	}
+	u.debugf(fmt.Sprintf(" ... sent %v bytes to %v\n", N, addr), nil)
 
 	return nil
 }
@@ -254,9 +206,7 @@ func (u *UHPPOTE) broadcast(request interface{}, addr *net.UDPAddr) ([][]byte, e
 		return nil, err
 	}
 
-	if u.Debug {
-		fmt.Printf(" ... request\n%s\n", dump(m, " ...          "))
-	}
+	u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(m, " ...          ")), nil)
 
 	bind := u.bindAddress()
 
@@ -282,9 +232,7 @@ func (u *UHPPOTE) broadcast(request interface{}, addr *net.UDPAddr) ([][]byte, e
 		return nil, fmt.Errorf("Failed to write to UDP socket [%v]", err)
 	}
 
-	if u.Debug {
-		fmt.Printf(" ... sent %v bytes to %v\n", N, addr)
-	}
+	u.debugf(fmt.Sprintf(" ... sent %v bytes to %v\n", N, addr), nil)
 
 	replies := make([][]byte, 0)
 	go func() {
@@ -297,12 +245,7 @@ func (u *UHPPOTE) broadcast(request interface{}, addr *net.UDPAddr) ([][]byte, e
 			} else {
 				replies = append(replies, reply[:N])
 
-				if u.Debug {
-					regex := regexp.MustCompile("(?m)^(.*)")
-
-					fmt.Printf(" ... received %v bytes from %v\n", N, remote)
-					fmt.Printf("%s\n", regex.ReplaceAllString(hex.Dump(reply[:N]), " ...          $1"))
-				}
+				u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n%s", N, remote, dump(reply[:N], " ...          ")), nil)
 			}
 		}
 	}()
@@ -325,33 +268,25 @@ func (u *UHPPOTE) receive(c *net.UDPConn, serialNumber uint32, reply interface{}
 			return err
 		}
 
-		if u.Debug {
-			fmt.Printf(" ... received %v bytes from %v\n ... response\n%s\n", N, remote, dump(m[:N], " ...          "))
-		}
+		u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n ... response\n%s", N, remote, dump(m[:N], " ...          ")), nil)
 
 		bytes := m[:N]
 
 		// ... discard invalid replies
 		if len(bytes) != 64 {
-			if u.Debug {
-				fmt.Printf(" ... receive error: %v\n", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
-			}
+			u.debugf(" ... receive error", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
 			continue
 		}
 
 		// ... discard replies without a valid device ID
 		if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); deviceID != serialNumber {
-			if u.Debug {
-				fmt.Printf(" ... receive error: %v\n", fmt.Errorf("invalid device ID - expected:%v, got:%v", serialNumber, deviceID))
-			}
+			u.debugf(" ... receive error", fmt.Errorf("invalid device ID - expected:%v, got:%v", serialNumber, deviceID))
 			continue
 		}
 
 		// .. discard unparseable messages
 		if err := codec.Unmarshal(bytes, reply); err != nil {
-			if u.Debug {
-				fmt.Printf(" ... receive error: %v\n", err)
-			}
+			u.debugf(" ... receive error", err)
 			continue
 		}
 
@@ -362,7 +297,7 @@ func (u *UHPPOTE) receive(c *net.UDPConn, serialNumber uint32, reply interface{}
 func (u *UHPPOTE) listen(p chan *event, q chan os.Signal, listener Listener) error {
 	bind := u.listenAddress()
 	if bind.Port == 0 {
-		return errors.New("Listen requires a non-zero UDP port")
+		return fmt.Errorf("Listen requires a non-zero UDP port")
 	}
 
 	c, err := u.open(bind)
@@ -386,9 +321,7 @@ func (u *UHPPOTE) listen(p chan *event, q chan os.Signal, listener Listener) err
 	m := make([]byte, 2048)
 
 	for {
-		if u.Debug {
-			fmt.Printf(" ... listening\n")
-		}
+		u.debugf(" ... listening", nil)
 
 		N, remote, err := c.ReadFromUDP(m)
 		if err != nil {
@@ -399,9 +332,7 @@ func (u *UHPPOTE) listen(p chan *event, q chan os.Signal, listener Listener) err
 			return fmt.Errorf("Failed to read from UDP socket [%v]", err)
 		}
 
-		if u.Debug {
-			fmt.Printf(" ... received %v bytes from %v\n ... response\n%s\n", N, remote, dump(m[:N], " ...          "))
-		}
+		u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n ... response\n%s\n", N, remote, dump(m[:N], " ...          ")), nil)
 
 		e := event{}
 		if err := codec.Unmarshal(m[:N], &e); err != nil {
@@ -462,6 +393,16 @@ func (u *UHPPOTE) listenAddress() *net.UDPAddr {
 	copy(addr.IP, net.IPv4zero)
 
 	return &addr
+}
+
+func (u *UHPPOTE) debugf(msg string, err error) {
+	if u.debug {
+		if err != nil {
+			fmt.Printf("%v: %v\n", msg, err)
+		} else {
+			fmt.Printf("%v\n", msg)
+		}
+	}
 }
 
 func dump(m []byte, prefix string) string {

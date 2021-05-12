@@ -2,7 +2,6 @@ package UTO311_L0x
 
 import (
 	"encoding/binary"
-	"errors"
 	"fmt"
 	"net"
 	"reflect"
@@ -141,7 +140,7 @@ func marshal(s reflect.Value, bytes []byte) error {
 							copy(bytes[offset:offset+6], f.Bytes())
 
 						default:
-							panic(errors.New(fmt.Sprintf("Cannot marshal field with type '%v'", t.Type)))
+							panic(fmt.Errorf("Cannot marshal field with type '%v'", t.Type))
 						}
 					}
 				}
@@ -229,12 +228,12 @@ func UnmarshalArrayElement(bytes []byte, array interface{}) (interface{}, error)
 func unmarshal(bytes []byte, s reflect.Value) error {
 	// Validate message format
 	if len(bytes) != 64 {
-		return errors.New(fmt.Sprintf("Invalid message length - expected 64 bytes, received %v", len(bytes)))
+		return fmt.Errorf("Invalid message length - expected 64 bytes, received %v", len(bytes))
 	}
 
 	// PATCH: v6.62 firmware sends 'listen' events with SOM 0x19
 	if (bytes[0] != 0x17) && (bytes[0] != 0x19 || bytes[1] != 0x20) {
-		return errors.New(fmt.Sprintf("Invalid start of message - expected 0x17, received 0x%02x", bytes[0]))
+		return fmt.Errorf("Invalid start of message - expected 0x17, received 0x%02x", bytes[0])
 	}
 
 	// Unmarshal fields tagged with `uhppote:"..."`
@@ -266,7 +265,7 @@ func unmarshal(bytes []byte, s reflect.Value) error {
 				}
 
 				if bytes[1] != b {
-					return errors.New(fmt.Sprintf("Invalid MsgType in message - expected %02X, received %02X", b, bytes[1]))
+					return fmt.Errorf("Invalid MsgType in message - expected %02X, received %02X", b, bytes[1])
 				}
 
 				f.SetUint(uint64(bytes[1]))
@@ -306,7 +305,7 @@ func unmarshal(bytes []byte, s reflect.Value) error {
 					} else if bytes[offset] == 0x00 {
 						f.SetBool(false)
 					} else {
-						return errors.New(fmt.Sprintf("Invalid boolean value in message: %02x:", bytes[offset]))
+						return fmt.Errorf("Invalid boolean value in message: %02x:", bytes[offset])
 					}
 
 				case tByte:
@@ -317,7 +316,7 @@ func unmarshal(bytes []byte, s reflect.Value) error {
 							return err
 						}
 						if bytes[offset] != byte(v) {
-							return errors.New(fmt.Sprintf("Invalid value in message - expected %02x, received 0x%02x", v, bytes[offset]))
+							return fmt.Errorf("Invalid value in message - expected %02x, received 0x%02x", v, bytes[offset])
 						}
 					}
 
@@ -336,7 +335,7 @@ func unmarshal(bytes []byte, s reflect.Value) error {
 					f.SetBytes(bytes[offset : offset+6])
 
 				default:
-					panic(errors.New(fmt.Sprintf("Cannot unmarshal field with type '%v'", t.Type)))
+					panic(fmt.Errorf("Cannot unmarshal field with type '%v'", t.Type))
 				}
 			}
 		}
