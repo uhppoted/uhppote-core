@@ -16,7 +16,7 @@ type mock struct {
 	broadcast   func(interface{}, interface{}) ([]interface{}, error)
 	broadcastTo func(uint32, interface{}, interface{}) ([]interface{}, error)
 
-	devices       func() map[uint32]*Device
+	devices       func() map[uint32]Device
 	broadcastAddr func() *net.UDPAddr
 }
 
@@ -28,7 +28,7 @@ func (m *mock) BroadcastAddr() *net.UDPAddr {
 	return m.broadcastAddr()
 }
 
-func (m *mock) DeviceList() map[uint32]*Device {
+func (m *mock) DeviceList() map[uint32]Device {
 	return m.devices()
 }
 
@@ -59,7 +59,7 @@ func TestBroadcastAddressRequest(t *testing.T) {
 	}
 
 	u := UHPPOTE{
-		devices:       make(map[uint32]*Device),
+		devices:       make(map[uint32]Device),
 		debug:         true,
 		bindAddr:      resolve("127.0.0.1:12345", t),
 		broadcastAddr: resolve("127.0.0.1:60000", t),
@@ -105,14 +105,14 @@ func TestSequentialRequests(t *testing.T) {
 		debug:         true,
 		bindAddr:      resolve("127.0.0.1:12345", t),
 		broadcastAddr: resolve("127.0.0.1:60000", t),
-		devices: map[uint32]*Device{
-			423187757: &Device{
+		devices: map[uint32]Device{
+			423187757: Device{
 				Address:  resolve("127.0.0.1:65001", t),
 				Rollover: 100000,
 				Doors:    []string{},
 			},
 
-			757781324: &Device{
+			757781324: Device{
 				Address:  resolve("127.0.0.1:65002", t),
 				Rollover: 100000,
 				Doors:    []string{},
@@ -172,14 +172,14 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 		debug:         true,
 		bindAddr:      resolve("127.0.0.1:0", t),
 		broadcastAddr: resolve("127.0.0.1:60000", t),
-		devices: map[uint32]*Device{
-			423187757: &Device{
+		devices: map[uint32]Device{
+			423187757: Device{
 				Address:  resolve("127.0.0.1:65001", t),
 				Rollover: 100000,
 				Doors:    []string{},
 			},
 
-			757781324: &Device{
+			757781324: Device{
 				Address:  resolve("127.0.0.1:65002", t),
 				Rollover: 100000,
 				Doors:    []string{},
@@ -255,14 +255,14 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 		debug:         true,
 		bindAddr:      resolve("127.0.0.1:12345", t),
 		broadcastAddr: resolve("127.0.0.1:60000", t),
-		devices: map[uint32]*Device{
-			423187757: &Device{
+		devices: map[uint32]Device{
+			423187757: Device{
 				Address:  resolve("127.0.0.1:65001", t),
 				Rollover: 100000,
 				Doors:    []string{},
 			},
 
-			757781324: &Device{
+			757781324: Device{
 				Address:  resolve("127.0.0.1:65002", t),
 				Rollover: 100000,
 				Doors:    []string{},

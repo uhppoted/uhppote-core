@@ -25,6 +25,29 @@ func NewDevice(name string, serialNumber uint32, address *net.UDPAddr, rollover 
 	}
 }
 
+func (d Device) Clone() Device {
+	device := Device{
+		Name:     d.Name,
+		DeviceID: d.DeviceID,
+		Address:  nil,
+		Rollover: d.Rollover,
+		Doors:    make([]string, len(d.Doors)),
+		TimeZone: d.TimeZone,
+	}
+
+	if d.Address != nil {
+		device.Address = &net.UDPAddr{
+			IP:   d.Address.IP.To4(),
+			Port: d.Address.Port,
+			Zone: "",
+		}
+	}
+
+	copy(device.Doors, d.Doors)
+
+	return device
+}
+
 func (d *Device) ID() uint32 {
 	if d != nil {
 		return d.DeviceID

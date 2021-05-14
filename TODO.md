@@ -16,6 +16,7 @@
 - [ ] set-time-profile
       - automatically provide missing segments with 00:00-00:00
 
+- [x] Change *Device to Device in UHPPOTE.devices to prevent copy-from-range-of-map mistakes
 - [x] Replace types.Permission with int
 - [x] put-card with time profile
 - [x] get-card with time profile

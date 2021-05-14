@@ -22,14 +22,14 @@ type iuhppote interface {
 	BroadcastTo(serialNumber uint32, request, reply interface{}) ([]interface{}, error)
 
 	BroadcastAddr() *net.UDPAddr
-	DeviceList() map[uint32]*Device
+	DeviceList() map[uint32]Device
 }
 
 type UHPPOTE struct {
 	bindAddr      *net.UDPAddr
 	broadcastAddr *net.UDPAddr
 	listenAddr    *net.UDPAddr
-	devices       map[uint32]*Device
+	devices       map[uint32]Device
 	debug         bool
 	driver        iuhppote
 }
@@ -39,25 +39,28 @@ func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug boo
 		bindAddr:      &bind,
 		broadcastAddr: &broadcast,
 		listenAddr:    &listen,
-		devices:       map[uint32]*Device{},
+		devices:       map[uint32]Device{},
 		debug:         debug,
 	}
 
 	uhppote.driver = &uhppote
 
 	for _, device := range devices {
-		uhppote.devices[device.DeviceID] = &device
+		uhppote.devices[device.DeviceID] = device.Clone()
 	}
 
 	return uhppote
 }
 
-func (u *UHPPOTE) DeviceList() map[uint32]*Device {
+func (u *UHPPOTE) DeviceList() map[uint32]Device {
+	list := map[uint32]Device{}
 	if u != nil {
-		return u.devices
+		for k, v := range u.devices {
+			list[k] = v
+		}
 	}
 
-	return map[uint32]*Device{}
+	return list
 }
 
 func (u *UHPPOTE) BroadcastAddr() *net.UDPAddr {

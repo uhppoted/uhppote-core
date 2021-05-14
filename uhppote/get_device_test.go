@@ -300,8 +300,8 @@ func TestGetDeviceWithAlternatePort(t *testing.T) {
 	}
 
 	u := UHPPOTE{
-		devices: map[uint32]*Device{
-			423187757: &device,
+		devices: map[uint32]Device{
+			423187757: device,
 		},
 
 		driver: &mock{
