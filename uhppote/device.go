@@ -14,9 +14,10 @@ type Device struct {
 	TimeZone *time.Location
 }
 
-func NewDevice(deviceID uint32, address *net.UDPAddr, rollover uint32, doors []string) *Device {
+func NewDevice(name string, serialNumber uint32, address *net.UDPAddr, rollover uint32, doors []string) *Device {
 	return &Device{
-		DeviceID: deviceID,
+		Name:     name,
+		DeviceID: serialNumber,
 		Address:  address,
 		Rollover: rollover,
 		Doors:    doors,

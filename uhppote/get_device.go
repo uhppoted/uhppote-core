@@ -29,7 +29,14 @@ func (u *UHPPOTE) GetDevices() ([]types.Device, error) {
 	devices := []types.Device{}
 	for _, v := range replies {
 		reply := v.(messages.GetDeviceResponse)
+
+		name := ""
+		if device, ok := u.devices[uint32(reply.SerialNumber)]; ok {
+			name = device.Name
+		}
+
 		devices = append(devices, types.Device{
+			Name:         name,
 			SerialNumber: reply.SerialNumber,
 			IpAddress:    reply.IpAddress,
 			SubnetMask:   reply.SubnetMask,
@@ -78,7 +85,13 @@ func (u *UHPPOTE) GetDevice(serialNumber uint32) (*types.Device, error) {
 	for _, v := range replies {
 		reply := v.(messages.GetDeviceResponse)
 		if uint32(reply.SerialNumber) == serialNumber {
+			name := ""
+			if device, ok := u.devices[serialNumber]; ok {
+				name = device.Name
+			}
+
 			return &types.Device{
+				Name:         name,
 				SerialNumber: reply.SerialNumber,
 				IpAddress:    reply.IpAddress,
 				SubnetMask:   reply.SubnetMask,
