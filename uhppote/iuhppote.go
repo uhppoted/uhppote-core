@@ -1,10 +1,27 @@
 package uhppote
 
 import (
+	"net"
+	"os"
+	"time"
+
 	"github.com/uhppoted/uhppote-core/types"
 )
 
 type IUHPPOTE interface {
+	GetDevices() ([]types.Device, error)
+	GetDevice(deviceID uint32) (*types.Device, error)
+
+	SetAddress(deviceID uint32, address, mask, gateway net.IP) (*types.Result, error)
+	GetTime(deviceID uint32) (*types.Time, error)
+	SetTime(deviceID uint32, datetime time.Time) (*types.Time, error)
+	GetDoorControlState(deviceID uint32, door byte) (*types.DoorControlState, error)
+	SetDoorControlState(deviceID uint32, door uint8, state uint8, delay uint8) (*types.DoorControlState, error)
+	GetListener(deviceID uint32) (*types.Listener, error)
+	SetListener(deviceID uint32, address net.UDPAddr) (*types.Result, error)
+
+	GetStatus(deviceID uint32) (*types.Status, error)
+
 	GetCards(deviceID uint32) (uint32, error)
 	GetCardByIndex(deviceID, index uint32) (*types.Card, error)
 	GetCardByID(deviceID, cardNumber uint32) (*types.Card, error)
@@ -13,4 +30,14 @@ type IUHPPOTE interface {
 	DeleteCards(deviceID uint32) (bool, error)
 
 	GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeProfile, error)
+	SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bool, error)
+	ClearTimeProfiles(deviceID uint32) (bool, error)
+
+	RecordSpecialEvents(deviceID uint32, enable bool) (bool, error)
+	GetEvent(deviceID, index uint32) (*types.Event, error)
+	GetEventIndex(deviceID uint32) (*types.EventIndex, error)
+	SetEventIndex(deviceID, index uint32) (*types.EventIndexResult, error)
+	Listen(listener Listener, q chan os.Signal) error
+
+	OpenDoor(deviceID uint32, door uint8) (*types.Result, error)
 }

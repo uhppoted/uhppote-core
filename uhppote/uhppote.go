@@ -34,7 +34,7 @@ type UHPPOTE struct {
 	driver        iuhppote
 }
 
-func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug bool) UHPPOTE {
+func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug bool) IUHPPOTE {
 	uhppote := UHPPOTE{
 		bindAddr:      &bind,
 		broadcastAddr: &broadcast,
@@ -49,7 +49,7 @@ func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug boo
 		uhppote.devices[device.DeviceID] = device.Clone()
 	}
 
-	return uhppote
+	return &uhppote
 }
 
 func (u *UHPPOTE) DeviceList() map[uint32]Device {

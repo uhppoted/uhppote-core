@@ -2,14 +2,15 @@
 
 ### IN PROGRESS
 
-- [ ] Retype UHPPOTE.BindAddress as types.BindAddr
-- [ ] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
-- [ ] Retype UHPPOTE.ListenAddress as types.ListenAddr
-
 - [ ] Rearchitecture as factory/device/driver
+      - remove DeviceList from IUHPPOTE
       - make UHPPOTE struct private
       - move Broadcast/Send/etc to UDP driver
       - invoke driver from Broadcast/Send/etc
+
+- [ ] Retype UHPPOTE.BindAddress as types.BindAddr
+- [ ] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
+- [ ] Retype UHPPOTE.ListenAddress as types.ListenAddr
 
 - [ ] get-time-profile
       - discard 00:00-00:00 segments
