@@ -2,8 +2,11 @@
 
 ### IN PROGRESS
 
+- [ ] Add check for deviceID != 0 in IUHPPOTE functions 
+      - or return array ??
+      - implement separate Get..All functions ??
+
 - [ ] Rearchitecture as factory/device/driver
-      - remove DeviceList from IUHPPOTE
       - make UHPPOTE struct private
       - move Broadcast/Send/etc to UDP driver
       - invoke driver from Broadcast/Send/etc

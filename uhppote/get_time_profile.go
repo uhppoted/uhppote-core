@@ -9,11 +9,6 @@ import (
 )
 
 func (u *UHPPOTE) GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeProfile, error) {
-	driver := iuhppote(u)
-	if u.driver != nil {
-		driver = u.driver
-	}
-
 	request := messages.GetTimeProfileRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		ProfileID:    profileID,
@@ -21,7 +16,7 @@ func (u *UHPPOTE) GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeP
 
 	response := messages.GetTimeProfileResponse{}
 
-	err := driver.Send(deviceID, request, &response)
+	err := u.driver.Send(deviceID, request, &response)
 	if err != nil {
 		return nil, err
 	}

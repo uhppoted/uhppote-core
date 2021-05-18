@@ -9,11 +9,6 @@ import (
 )
 
 func (u *UHPPOTE) SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bool, error) {
-	driver := iuhppote(u)
-	if u.driver != nil {
-		driver = u.driver
-	}
-
 	if profile.From == nil {
 		return false, fmt.Errorf("Time profile requires a valid 'from' date")
 	}
@@ -55,7 +50,7 @@ func (u *UHPPOTE) SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bo
 
 	response := messages.SetTimeProfileResponse{}
 
-	err := driver.Send(deviceID, request, &response)
+	err := u.driver.Send(deviceID, request, &response)
 	if err != nil {
 		return false, err
 	}
