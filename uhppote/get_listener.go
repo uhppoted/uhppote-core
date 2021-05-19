@@ -13,7 +13,7 @@ type GetListenerResponse struct {
 	Port         uint16             `uhppote:"offset:12"`
 }
 
-func (u *UHPPOTE) GetListener(serialNumber uint32) (*types.Listener, error) {
+func (u *uhppote) GetListener(serialNumber uint32) (*types.Listener, error) {
 	request := messages.GetListenerRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 	}

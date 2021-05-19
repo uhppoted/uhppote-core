@@ -5,7 +5,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) OpenDoor(serialNumber uint32, door uint8) (*types.Result, error) {
+func (u *uhppote) OpenDoor(serialNumber uint32, door uint8) (*types.Result, error) {
 	request := messages.OpenDoorRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 		Door:         door,

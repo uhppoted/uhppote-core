@@ -8,7 +8,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeProfile, error) {
+func (u *uhppote) GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeProfile, error) {
 	request := messages.GetTimeProfileRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		ProfileID:    profileID,

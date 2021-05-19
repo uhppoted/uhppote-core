@@ -6,7 +6,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
+func (u *uhppote) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
 	request := messages.GetCardByIndexRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		Index:        index,
@@ -52,7 +52,7 @@ func (u *UHPPOTE) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
 	return &card, nil
 }
 
-func (u *UHPPOTE) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) {
+func (u *uhppote) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) {
 	request := messages.GetCardByIDRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   cardNumber,

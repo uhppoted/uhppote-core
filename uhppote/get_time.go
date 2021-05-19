@@ -5,7 +5,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) GetTime(serialNumber uint32) (*types.Time, error) {
+func (u *uhppote) GetTime(serialNumber uint32) (*types.Time, error) {
 	request := messages.GetTimeRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 	}

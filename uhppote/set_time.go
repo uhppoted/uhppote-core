@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func (u *UHPPOTE) SetTime(serialNumber uint32, datetime time.Time) (*types.Time, error) {
+func (u *uhppote) SetTime(serialNumber uint32, datetime time.Time) (*types.Time, error) {
 	request := messages.SetTimeRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 		DateTime:     types.DateTime(datetime),

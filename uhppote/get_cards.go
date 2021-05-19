@@ -5,7 +5,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) GetCards(deviceID uint32) (uint32, error) {
+func (u *uhppote) GetCards(deviceID uint32) (uint32, error) {
 	request := messages.GetCardsRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 	}

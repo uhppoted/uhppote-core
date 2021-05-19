@@ -5,7 +5,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) SetDoorControlState(serialNumber uint32, door uint8, state uint8, delay uint8) (*types.DoorControlState, error) {
+func (u *uhppote) SetDoorControlState(serialNumber uint32, door uint8, state uint8, delay uint8) (*types.DoorControlState, error) {
 	request := messages.SetDoorControlStateRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 		Door:         door,

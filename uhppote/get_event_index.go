@@ -5,7 +5,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) GetEventIndex(serialNumber uint32) (*types.EventIndex, error) {
+func (u *uhppote) GetEventIndex(serialNumber uint32) (*types.EventIndex, error) {
 	request := messages.GetEventIndexRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 	}

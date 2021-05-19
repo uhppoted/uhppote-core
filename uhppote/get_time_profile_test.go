@@ -48,7 +48,7 @@ func TestGetTimeProfile(t *testing.T) {
 		},
 	}
 
-	u := UHPPOTE{
+	u := uhppote{
 		driver: &mock{
 			send: func(deviceID uint32, request, response interface{}) error {
 				return codec.Unmarshal(message, response)
@@ -76,7 +76,7 @@ func TestGetTimeProfileWithInactiveProfile(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	u := UHPPOTE{
+	u := uhppote{
 		driver: &mock{
 			send: func(deviceID uint32, request, response interface{}) error {
 				return codec.Unmarshal(message, response)
@@ -100,7 +100,7 @@ func TestGetTimeProfileWithInvalidResponse(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	u := UHPPOTE{
+	u := uhppote{
 		driver: &mock{
 			send: func(deviceID uint32, request, response interface{}) error {
 				return codec.Unmarshal(message, response)

@@ -8,7 +8,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) GetDevices() ([]types.Device, error) {
+func (u *uhppote) GetDevices() ([]types.Device, error) {
 	request := messages.GetDeviceRequest{}
 
 	replies, err := u.driver.Broadcast(request, messages.GetDeviceResponse{})
@@ -51,7 +51,7 @@ func (u *UHPPOTE) GetDevices() ([]types.Device, error) {
 	return devices, nil
 }
 
-func (u *UHPPOTE) GetDevice(serialNumber uint32) (*types.Device, error) {
+func (u *uhppote) GetDevice(serialNumber uint32) (*types.Device, error) {
 	request := messages.GetDeviceRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 	}

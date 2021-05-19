@@ -8,7 +8,7 @@ import (
 	"net"
 )
 
-func (u *UHPPOTE) SetAddress(serialNumber uint32, address, mask, gateway net.IP) (*types.Result, error) {
+func (u *uhppote) SetAddress(serialNumber uint32, address, mask, gateway net.IP) (*types.Result, error) {
 	if address.To4() == nil {
 		return nil, errors.New(fmt.Sprintf("Invalid IP address: %v", address))
 	}

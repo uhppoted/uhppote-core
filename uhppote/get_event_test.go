@@ -17,7 +17,7 @@ func TestGetEvent(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4a, 0x26, 0x80, 0x39, 0x08, 0x92, 0x00, 0x00,
 	}
 
-	u := UHPPOTE{
+	u := uhppote{
 		driver: &mock{
 			send: func(deviceID uint32, request, response interface{}) error {
 				return codec.Unmarshal(message, response)
@@ -61,7 +61,7 @@ func TestGetEventWithNoEvents(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	u := UHPPOTE{
+	u := uhppote{
 		driver: &mock{
 			send: func(deviceID uint32, request, response interface{}) error {
 				return codec.Unmarshal(message, response)
@@ -80,7 +80,7 @@ func TestGetEventWithNoEvents(t *testing.T) {
 }
 
 func TestGetEventWithError(t *testing.T) {
-	u := UHPPOTE{
+	u := uhppote{
 		driver: &mock{
 			send: func(deviceID uint32, request, reply interface{}) error {
 				return fmt.Errorf("EXPECTED")

@@ -25,7 +25,7 @@ type driver interface {
 	DeviceList() map[uint32]Device
 }
 
-type UHPPOTE struct {
+type uhppote struct {
 	bindAddr      *net.UDPAddr
 	broadcastAddr *net.UDPAddr
 	listenAddr    *net.UDPAddr
@@ -34,8 +34,8 @@ type UHPPOTE struct {
 	driver        driver
 }
 
-func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug bool) IUHPPOTE {
-	uhppote := UHPPOTE{
+func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug bool) *uhppote {
+	uhppote := uhppote{
 		bindAddr:      &bind,
 		broadcastAddr: &broadcast,
 		listenAddr:    &listen,
@@ -52,7 +52,7 @@ func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug boo
 	return &uhppote
 }
 
-func (u *UHPPOTE) DeviceList() map[uint32]Device {
+func (u *uhppote) DeviceList() map[uint32]Device {
 	list := map[uint32]Device{}
 	if u != nil {
 		for k, v := range u.devices {
@@ -63,7 +63,7 @@ func (u *UHPPOTE) DeviceList() map[uint32]Device {
 	return list
 }
 
-func (u *UHPPOTE) BroadcastAddr() *net.UDPAddr {
+func (u *uhppote) BroadcastAddr() *net.UDPAddr {
 	if u != nil {
 		return u.broadcastAddr
 	}
@@ -71,7 +71,7 @@ func (u *UHPPOTE) BroadcastAddr() *net.UDPAddr {
 	return nil
 }
 
-func (u *UHPPOTE) ListenAddr() *net.UDPAddr {
+func (u *uhppote) ListenAddr() *net.UDPAddr {
 	if u != nil {
 		return u.listenAddr
 	}
@@ -79,7 +79,7 @@ func (u *UHPPOTE) ListenAddr() *net.UDPAddr {
 	return nil
 }
 
-func (u *UHPPOTE) Send(serialNumber uint32, request, reply interface{}) error {
+func (u *uhppote) Send(serialNumber uint32, request, reply interface{}) error {
 	bind := u.bindAddress()
 	dest := u.broadcastAddress()
 
@@ -127,14 +127,14 @@ func (u *UHPPOTE) Send(serialNumber uint32, request, reply interface{}) error {
 	}
 }
 
-func (u *UHPPOTE) Broadcast(request, reply interface{}) ([]interface{}, error) {
+func (u *uhppote) Broadcast(request, reply interface{}) ([]interface{}, error) {
 	return u.BroadcastTo(0, request, reply)
 }
 
 // Sends a UDP message to a specific device but anticipates replies from more than one device
 // because it may fall back to the broadcast address if the device ID has no configured IP
 // address.
-func (u *UHPPOTE) BroadcastTo(serialNumber uint32, request, reply interface{}) ([]interface{}, error) {
+func (u *uhppote) BroadcastTo(serialNumber uint32, request, reply interface{}) ([]interface{}, error) {
 	replies := []interface{}{}
 	dest := u.broadcastAddress()
 
@@ -175,7 +175,7 @@ func (u *UHPPOTE) BroadcastTo(serialNumber uint32, request, reply interface{}) (
 	return replies, nil
 }
 
-func (u *UHPPOTE) open(addr *net.UDPAddr) (*net.UDPConn, error) {
+func (u *uhppote) open(addr *net.UDPAddr) (*net.UDPConn, error) {
 	connection, err := net.ListenUDP("udp", addr)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to open UDP socket [%v]", err)
@@ -184,7 +184,7 @@ func (u *UHPPOTE) open(addr *net.UDPAddr) (*net.UDPConn, error) {
 	return connection, nil
 }
 
-func (u *UHPPOTE) send(connection *net.UDPConn, addr *net.UDPAddr, request interface{}) error {
+func (u *uhppote) send(connection *net.UDPConn, addr *net.UDPAddr, request interface{}) error {
 	m, err := codec.Marshal(request)
 	if err != nil {
 		return err
@@ -203,7 +203,7 @@ func (u *UHPPOTE) send(connection *net.UDPConn, addr *net.UDPAddr, request inter
 	return nil
 }
 
-func (u *UHPPOTE) broadcast(request interface{}, addr *net.UDPAddr) ([][]byte, error) {
+func (u *uhppote) broadcast(request interface{}, addr *net.UDPAddr) ([][]byte, error) {
 	m, err := codec.Marshal(request)
 	if err != nil {
 		return nil, err
@@ -258,7 +258,7 @@ func (u *UHPPOTE) broadcast(request interface{}, addr *net.UDPAddr) ([][]byte, e
 	return replies, err
 }
 
-func (u *UHPPOTE) receive(c *net.UDPConn, serialNumber uint32, reply interface{}) error {
+func (u *uhppote) receive(c *net.UDPConn, serialNumber uint32, reply interface{}) error {
 	m := make([]byte, 2048)
 
 	if err := c.SetReadDeadline(time.Now().Add(15000 * time.Millisecond)); err != nil {
@@ -297,7 +297,7 @@ func (u *UHPPOTE) receive(c *net.UDPConn, serialNumber uint32, reply interface{}
 	}
 }
 
-func (u *UHPPOTE) listen(p chan *event, q chan os.Signal, listener Listener) error {
+func (u *uhppote) listen(p chan *event, q chan os.Signal, listener Listener) error {
 	bind := u.listenAddress()
 	if bind.Port == 0 {
 		return fmt.Errorf("Listen requires a non-zero UDP port")
@@ -350,7 +350,7 @@ func (u *UHPPOTE) listen(p chan *event, q chan os.Signal, listener Listener) err
 	}
 }
 
-func (u *UHPPOTE) bindAddress() *net.UDPAddr {
+func (u *uhppote) bindAddress() *net.UDPAddr {
 	if u.bindAddr != nil {
 		return u.bindAddr
 	}
@@ -366,7 +366,7 @@ func (u *UHPPOTE) bindAddress() *net.UDPAddr {
 	return &addr
 }
 
-func (u *UHPPOTE) broadcastAddress() *net.UDPAddr {
+func (u *uhppote) broadcastAddress() *net.UDPAddr {
 	if u.broadcastAddr != nil {
 		return u.broadcastAddr
 	}
@@ -382,7 +382,7 @@ func (u *UHPPOTE) broadcastAddress() *net.UDPAddr {
 	return &addr
 }
 
-func (u *UHPPOTE) listenAddress() *net.UDPAddr {
+func (u *uhppote) listenAddress() *net.UDPAddr {
 	if u.listenAddr != nil {
 		return u.listenAddr
 	}
@@ -398,7 +398,7 @@ func (u *UHPPOTE) listenAddress() *net.UDPAddr {
 	return &addr
 }
 
-func (u *UHPPOTE) debugf(msg string, err error) {
+func (u *uhppote) debugf(msg string, err error) {
 	if u.debug {
 		if err != nil {
 			fmt.Printf("%v: %v\n", msg, err)

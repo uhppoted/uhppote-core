@@ -8,7 +8,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bool, error) {
+func (u *uhppote) SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bool, error) {
 	if profile.From == nil {
 		return false, fmt.Errorf("Time profile requires a valid 'from' date")
 	}

@@ -8,7 +8,7 @@ import (
 	"net"
 )
 
-func (u *UHPPOTE) SetListener(serialNumber uint32, address net.UDPAddr) (*types.Result, error) {
+func (u *uhppote) SetListener(serialNumber uint32, address net.UDPAddr) (*types.Result, error) {
 	if address.IP.To4() == nil {
 		return nil, errors.New(fmt.Sprintf("Invalid IP address: %v", address))
 	}

@@ -15,7 +15,7 @@ type Listener interface {
 	OnError(error) bool
 }
 
-func (u *UHPPOTE) Listen(listener Listener, q chan os.Signal) error {
+func (u *uhppote) Listen(listener Listener, q chan os.Signal) error {
 	pipe := make(chan *event)
 
 	defer close(pipe)

@@ -5,7 +5,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) DeleteCards(serialNumber uint32) (bool, error) {
+func (u *uhppote) DeleteCards(serialNumber uint32) (bool, error) {
 	request := messages.DeleteCardsRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 		MagicWord:    0x55aaaa55,

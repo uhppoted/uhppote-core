@@ -7,7 +7,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) DeleteCard(deviceID uint32, cardNumber uint32) (bool, error) {
+func (u *uhppote) DeleteCard(deviceID uint32, cardNumber uint32) (bool, error) {
 	request := messages.DeleteCardRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   cardNumber,

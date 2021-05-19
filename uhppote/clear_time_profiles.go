@@ -5,7 +5,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) ClearTimeProfiles(serialNumber uint32) (bool, error) {
+func (u *uhppote) ClearTimeProfiles(serialNumber uint32) (bool, error) {
 	request := messages.ClearTimeProfilesRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 		MagicWord:    0x55aaaa55,

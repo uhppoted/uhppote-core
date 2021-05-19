@@ -18,7 +18,7 @@ func TestGetDevices(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	u := UHPPOTE{
+	u := uhppote{
 		driver: &mock{
 			broadcast: func(request interface{}, reply interface{}) ([]interface{}, error) {
 				v, err := codec.UnmarshalAs(message, reply)
@@ -108,7 +108,7 @@ func TestGetDevicesWithAltPort(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	u := UHPPOTE{
+	u := uhppote{
 		broadcastAddr: &net.UDPAddr{
 			IP:   net.IPv4(192, 168, 1, 255),
 			Port: 54321,
@@ -203,7 +203,7 @@ func TestGetDevice(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	u := UHPPOTE{
+	u := uhppote{
 		driver: &mock{
 			broadcastTo: func(deviceID uint32, request, reply interface{}) ([]interface{}, error) {
 				reply, err := codec.UnmarshalAs(message, reply)
@@ -299,7 +299,7 @@ func TestGetDeviceWithAlternatePort(t *testing.T) {
 		Address: &addr,
 	}
 
-	u := UHPPOTE{
+	u := uhppote{
 		devices: map[uint32]Device{
 			423187757: device,
 		},

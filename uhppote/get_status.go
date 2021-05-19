@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func (u *UHPPOTE) GetStatus(serialNumber uint32) (*types.Status, error) {
+func (u *uhppote) GetStatus(serialNumber uint32) (*types.Status, error) {
 	request := messages.GetStatusRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 	}

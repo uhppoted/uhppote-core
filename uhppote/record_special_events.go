@@ -12,7 +12,7 @@ import (
 // Returns true if the controller 'record special events' flag was updated, false
 // if the request failed for any reason. Returns an error if the request could not
 // be sent or the response is invalid.
-func (u *UHPPOTE) RecordSpecialEvents(deviceID uint32, enable bool) (bool, error) {
+func (u *uhppote) RecordSpecialEvents(deviceID uint32, enable bool) (bool, error) {
 	request := messages.RecordSpecialEventsRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		Enable:       enable,

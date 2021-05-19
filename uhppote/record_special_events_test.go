@@ -16,7 +16,7 @@ func TestRecordSpecialEvents(t *testing.T) {
 
 	expected := true
 
-	u := UHPPOTE{
+	u := uhppote{
 		driver: &mock{
 			send: func(deviceID uint32, request, response interface{}) error {
 				return codec.Unmarshal(message, response)

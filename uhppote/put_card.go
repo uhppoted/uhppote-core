@@ -7,7 +7,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *UHPPOTE) PutCard(deviceID uint32, card types.Card) (bool, error) {
+func (u *uhppote) PutCard(deviceID uint32, card types.Card) (bool, error) {
 	request := messages.PutCardRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   card.CardNumber,
