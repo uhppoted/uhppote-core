@@ -67,6 +67,10 @@ func (t *TimeProfile) UnmarshalJSON(bytes []byte) error {
 		Segments: Segments{},
 	}
 
+	profile.Segments[1] = Segment{Start: &HHmm{}, End: &HHmm{}}
+	profile.Segments[2] = Segment{Start: &HHmm{}, End: &HHmm{}}
+	profile.Segments[3] = Segment{Start: &HHmm{}, End: &HHmm{}}
+
 	if err := json.Unmarshal(bytes, &profile); err != nil {
 		return err
 	}
