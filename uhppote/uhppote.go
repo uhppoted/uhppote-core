@@ -25,6 +25,10 @@ type iuhppote interface {
 	DeviceList() map[uint32]Device
 }
 
+type driver interface {
+	broadcast([]byte, *net.UDPAddr) ([][]byte, error)
+}
+
 type uhppote struct {
 	bindAddr      *net.UDPAddr
 	broadcastAddr *net.UDPAddr
@@ -32,6 +36,7 @@ type uhppote struct {
 	devices       map[uint32]Device
 	debug         bool
 	impl          iuhppote
+	driver        driver
 }
 
 func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug bool) IUHPPOTE {
@@ -40,7 +45,11 @@ func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug boo
 		broadcastAddr: &broadcast,
 		listenAddr:    &listen,
 		devices:       map[uint32]Device{},
-		debug:         debug,
+		driver: &udp{
+			bindAddr: bind,
+			debug:    debug,
+		},
+		debug: debug,
 	}
 
 	uhppote.impl = &uhppote
@@ -209,53 +218,7 @@ func (u *uhppote) broadcast(request interface{}, addr *net.UDPAddr) ([][]byte, e
 		return nil, err
 	}
 
-	u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(m, " ...          ")), nil)
-
-	bind := u.bindAddress()
-
-	if bind.Port != 0 {
-		guard.Lock()
-		defer guard.Unlock()
-	}
-
-	connection, err := net.ListenUDP("udp", bind)
-	if err != nil {
-		return nil, fmt.Errorf("Failed to open UDP socket [%v]", err)
-	}
-
-	defer connection.Close()
-
-	err = connection.SetWriteDeadline(time.Now().Add(5000 * time.Millisecond))
-	if err != nil {
-		return nil, fmt.Errorf("Failed to set UDP write timeout [%v]", err)
-	}
-
-	N, err := connection.WriteTo(m, addr)
-	if err != nil {
-		return nil, fmt.Errorf("Failed to write to UDP socket [%v]", err)
-	}
-
-	u.debugf(fmt.Sprintf(" ... sent %v bytes to %v\n", N, addr), nil)
-
-	replies := make([][]byte, 0)
-	go func() {
-		for {
-			reply := make([]byte, 2048)
-			N, remote, err := connection.ReadFromUDP(reply)
-
-			if err != nil {
-				break
-			} else {
-				replies = append(replies, reply[:N])
-
-				u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n%s", N, remote, dump(reply[:N], " ...          ")), nil)
-			}
-		}
-	}()
-
-	time.Sleep(2500 * time.Millisecond)
-
-	return replies, err
+	return u.driver.broadcast(m, addr)
 }
 
 func (u *uhppote) receive(c *net.UDPConn, serialNumber uint32, reply interface{}) error {
