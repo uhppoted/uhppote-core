@@ -19,7 +19,7 @@ func TestGetDevices(t *testing.T) {
 	}
 
 	u := uhppote{
-		driver: &mock{
+		impl: &mock{
 			broadcast: func(request interface{}, reply interface{}) ([]interface{}, error) {
 				v, err := codec.UnmarshalAs(message, reply)
 
@@ -114,7 +114,7 @@ func TestGetDevicesWithAltPort(t *testing.T) {
 			Port: 54321,
 		},
 
-		driver: &mock{
+		impl: &mock{
 			broadcast: func(request interface{}, reply interface{}) ([]interface{}, error) {
 				v, err := codec.UnmarshalAs(message, reply)
 
@@ -204,7 +204,7 @@ func TestGetDevice(t *testing.T) {
 	}
 
 	u := uhppote{
-		driver: &mock{
+		impl: &mock{
 			broadcastTo: func(deviceID uint32, request, reply interface{}) ([]interface{}, error) {
 				reply, err := codec.UnmarshalAs(message, reply)
 
@@ -304,7 +304,7 @@ func TestGetDeviceWithAlternatePort(t *testing.T) {
 			423187757: device,
 		},
 
-		driver: &mock{
+		impl: &mock{
 			broadcastTo: func(deviceID uint32, request, reply interface{}) ([]interface{}, error) {
 				reply, err := codec.UnmarshalAs(message, reply)
 

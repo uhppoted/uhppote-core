@@ -29,7 +29,7 @@ func TestGetCardByID(t *testing.T) {
 	}
 
 	u := uhppote{
-		driver: &mock{
+		impl: &mock{
 			send: func(deviceID uint32, request, response interface{}) error {
 				return codec.Unmarshal(message, response)
 			},
@@ -71,7 +71,7 @@ func TestGetCardByIndex(t *testing.T) {
 	}
 
 	u := uhppote{
-		driver: &mock{
+		impl: &mock{
 			send: func(deviceID uint32, request, response interface{}) error {
 				return codec.Unmarshal(message, response)
 			},
@@ -101,7 +101,7 @@ func TestGetCardByIndexWithCardNotFound(t *testing.T) {
 	}
 
 	u := uhppote{
-		driver: &mock{
+		impl: &mock{
 			send: func(deviceID uint32, request, response interface{}) error {
 				return codec.Unmarshal(message, response)
 			},
@@ -127,7 +127,7 @@ func TestGetCardByIndexWithCardDeleted(t *testing.T) {
 	}
 
 	u := uhppote{
-		driver: &mock{
+		impl: &mock{
 			send: func(deviceID uint32, request, response interface{}) error {
 				return codec.Unmarshal(message, response)
 			},

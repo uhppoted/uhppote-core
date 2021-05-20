@@ -50,7 +50,7 @@ func (u *uhppote) SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bo
 
 	response := messages.SetTimeProfileResponse{}
 
-	err := u.driver.Send(deviceID, request, &response)
+	err := u.impl.Send(deviceID, request, &response)
 	if err != nil {
 		return false, err
 	}

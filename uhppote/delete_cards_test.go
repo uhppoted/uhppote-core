@@ -17,7 +17,7 @@ func TestDeleteCards(t *testing.T) {
 	expected := true
 
 	u := uhppote{
-		driver: &mock{
+		impl: &mock{
 			send: func(deviceID uint32, request, response interface{}) error {
 				return codec.Unmarshal(message, response)
 			},

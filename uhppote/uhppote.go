@@ -16,7 +16,7 @@ import (
 var VERSION string = "v0.7.x"
 var guard sync.Mutex
 
-type driver interface {
+type iuhppote interface {
 	Send(serialNumber uint32, request, reply interface{}) error
 	Broadcast(request, reply interface{}) ([]interface{}, error)
 	BroadcastTo(serialNumber uint32, request, reply interface{}) ([]interface{}, error)
@@ -31,10 +31,10 @@ type uhppote struct {
 	listenAddr    *net.UDPAddr
 	devices       map[uint32]Device
 	debug         bool
-	driver        driver
+	impl          iuhppote
 }
 
-func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug bool) *uhppote {
+func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug bool) IUHPPOTE {
 	uhppote := uhppote{
 		bindAddr:      &bind,
 		broadcastAddr: &broadcast,
@@ -43,7 +43,7 @@ func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug boo
 		debug:         debug,
 	}
 
-	uhppote.driver = &uhppote
+	uhppote.impl = &uhppote
 
 	for _, device := range devices {
 		uhppote.devices[device.DeviceID] = device.Clone()
