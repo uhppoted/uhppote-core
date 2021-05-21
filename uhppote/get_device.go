@@ -11,7 +11,7 @@ import (
 func (u *uhppote) GetDevices() ([]types.Device, error) {
 	request := messages.GetDeviceRequest{}
 
-	replies, err := u.impl.Broadcast(request, messages.GetDeviceResponse{})
+	replies, err := u.Broadcast(request, messages.GetDeviceResponse{})
 	if err != nil {
 		return nil, err
 	}

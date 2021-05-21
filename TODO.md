@@ -2,15 +2,14 @@
 
 ### IN PROGRESS
 
-- [ ] Add check for deviceID != 0 in IUHPPOTE functions 
-      - implement separate Get..All functions ??
-
 - [ ] Rearchitecture as factory/device/driver
       - move Broadcast/Send/etc to UDP driver
       - invoke driver from Broadcast/Send/etc
       - rework uhppoted-api::healthcheck to remove need for IUHPPOTE::DeviceList
       - rework uhppoted-api::healthcheck to remove need for IUHPPOTE::ListenAddr
 
+- [ ] Add check for deviceID != 0 in IUHPPOTE functions 
+- [ ] Implement separate Get..All functions (??)
 - [ ] Retype UHPPOTE.BindAddress as types.BindAddr
 - [ ] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
 - [ ] Retype UHPPOTE.ListenAddress as types.ListenAddr

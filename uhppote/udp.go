@@ -11,7 +11,7 @@ type udp struct {
 	debug    bool
 }
 
-func (u *udp) broadcast(m []byte, addr *net.UDPAddr) ([][]byte, error) {
+func (u *udp) Broadcast(m []byte, addr *net.UDPAddr) ([][]byte, error) {
 	u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(m, " ...          ")), nil)
 
 	bind := u.bindAddr

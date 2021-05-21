@@ -18,7 +18,6 @@ var guard sync.Mutex
 
 type iuhppote interface {
 	Send(serialNumber uint32, request, reply interface{}) error
-	Broadcast(request, reply interface{}) ([]interface{}, error)
 	BroadcastTo(serialNumber uint32, request, reply interface{}) ([]interface{}, error)
 
 	BroadcastAddr() *net.UDPAddr
@@ -26,7 +25,7 @@ type iuhppote interface {
 }
 
 type driver interface {
-	broadcast([]byte, *net.UDPAddr) ([][]byte, error)
+	Broadcast([]byte, *net.UDPAddr) ([][]byte, error)
 }
 
 type uhppote struct {
@@ -218,7 +217,7 @@ func (u *uhppote) broadcast(request interface{}, addr *net.UDPAddr) ([][]byte, e
 		return nil, err
 	}
 
-	return u.driver.broadcast(m, addr)
+	return u.driver.Broadcast(m, addr)
 }
 
 func (u *uhppote) receive(c *net.UDPConn, serialNumber uint32, reply interface{}) error {
