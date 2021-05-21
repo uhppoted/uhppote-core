@@ -3,11 +3,13 @@
 ### IN PROGRESS
 
 - [ ] Rearchitecture as factory/device/driver
-      - move Broadcast/Send/etc to UDP driver
-      - invoke driver from Broadcast/Send/etc
+      - move Send/etc to UDP driver
+      - invoke driver from Send/etc
       - rework uhppoted-api::healthcheck to remove need for IUHPPOTE::DeviceList
       - rework uhppoted-api::healthcheck to remove need for IUHPPOTE::ListenAddr
 
+- [ ] Rework JSON segments marshalling/unmarshalling to be array (?) 
+- [ ] Unit test for unmarshalling missing time profile segments
 - [ ] Add check for deviceID != 0 in IUHPPOTE functions 
 - [ ] Implement separate Get..All functions (??)
 - [ ] Retype UHPPOTE.BindAddress as types.BindAddr

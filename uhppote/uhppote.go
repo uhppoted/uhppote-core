@@ -18,8 +18,6 @@ var guard sync.Mutex
 
 type iuhppote interface {
 	Send(serialNumber uint32, request, reply interface{}) error
-	BroadcastTo(serialNumber uint32, request, reply interface{}) ([]interface{}, error)
-
 	BroadcastAddr() *net.UDPAddr
 	DeviceList() map[uint32]Device
 }

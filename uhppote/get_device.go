@@ -56,7 +56,7 @@ func (u *uhppote) GetDevice(serialNumber uint32) (*types.Device, error) {
 		SerialNumber: types.SerialNumber(serialNumber),
 	}
 
-	replies, err := u.impl.BroadcastTo(serialNumber, request, messages.GetDeviceResponse{})
+	replies, err := u.BroadcastTo(serialNumber, request, messages.GetDeviceResponse{})
 	if err != nil {
 		return nil, err
 	}
