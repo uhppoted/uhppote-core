@@ -14,10 +14,15 @@ import (
 
 type stub struct {
 	broadcast func([]byte, *net.UDPAddr) ([][]byte, error)
+	send      func([]byte, *net.UDPAddr, func([]byte) bool) error
 }
 
 func (d *stub) Broadcast(m []byte, addr *net.UDPAddr) ([][]byte, error) {
 	return d.broadcast(m, addr)
+}
+
+func (d *stub) Send(m []byte, addr *net.UDPAddr, handler func(bytes []byte) bool) error {
+	return d.send(m, addr, handler)
 }
 
 type mock struct {
@@ -57,11 +62,16 @@ func TestBroadcastAddressRequest(t *testing.T) {
 		CardNumber:   6154412,
 	}
 
+	bind := resolve("127.0.0.1:12345", t)
 	u := uhppote{
 		devices:       make(map[uint32]Device),
-		debug:         true,
-		bindAddr:      resolve("127.0.0.1:12345", t),
+		debug:         false,
+		bindAddr:      bind,
 		broadcastAddr: resolve("127.0.0.1:60000", t),
+		driver: &udp{
+			bindAddr: *bind,
+			debug:    false,
+		},
 	}
 
 	closed := make(chan int)
@@ -100,9 +110,10 @@ func TestSequentialRequests(t *testing.T) {
 		CardNumber:   6154412,
 	}
 
+	bind := resolve("127.0.0.1:12345", t)
 	u := uhppote{
-		debug:         true,
-		bindAddr:      resolve("127.0.0.1:12345", t),
+		debug:         false,
+		bindAddr:      bind,
 		broadcastAddr: resolve("127.0.0.1:60000", t),
 		devices: map[uint32]Device{
 			423187757: Device{
@@ -116,6 +127,10 @@ func TestSequentialRequests(t *testing.T) {
 				Rollover: 100000,
 				Doors:    []string{},
 			},
+		},
+		driver: &udp{
+			bindAddr: *bind,
+			debug:    false,
 		},
 	}
 
@@ -167,10 +182,10 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 		CardNumber:   6154412,
 	}
 
+	bind := resolve("127.0.0.1:0", t)
 	u := uhppote{
-		debug:         true,
-		bindAddr:      resolve("127.0.0.1:0", t),
-		broadcastAddr: resolve("127.0.0.1:60000", t),
+		debug:         false,
+		broadcastAddr: bind,
 		devices: map[uint32]Device{
 			423187757: Device{
 				Address:  resolve("127.0.0.1:65001", t),
@@ -183,6 +198,10 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 				Rollover: 100000,
 				Doors:    []string{},
 			},
+		},
+		driver: &udp{
+			bindAddr: *bind,
+			debug:    false,
 		},
 	}
 
@@ -250,9 +269,10 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 		CardNumber:   6154412,
 	}
 
+	bind := resolve("127.0.0.1:12345", t)
 	u := uhppote{
-		debug:         true,
-		bindAddr:      resolve("127.0.0.1:12345", t),
+		debug:         false,
+		bindAddr:      bind,
 		broadcastAddr: resolve("127.0.0.1:60000", t),
 		devices: map[uint32]Device{
 			423187757: Device{
@@ -266,6 +286,10 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 				Rollover: 100000,
 				Doors:    []string{},
 			},
+		},
+		driver: &udp{
+			bindAddr: *bind,
+			debug:    false,
 		},
 	}
 

@@ -3,8 +3,11 @@
 ### IN PROGRESS
 
 - [ ] Rearchitecture as factory/device/driver
-      - move Send/etc to UDP driver
-      - invoke driver from Send/etc
+      - move 'listen' to UDP driver
+      - update unit tests for reworked send/receive
+      - implement timeout value in UDP
+      - move guard to UDP
+      - (maybe) make timeout for entire function (or just use setDeadline)
       - rework uhppoted-api::healthcheck to remove need for IUHPPOTE::DeviceList
       - rework uhppoted-api::healthcheck to remove need for IUHPPOTE::ListenAddr
 

@@ -8,7 +8,6 @@ import (
 	"os"
 	"regexp"
 	"sync"
-	"time"
 
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
 )
@@ -24,6 +23,7 @@ type iuhppote interface {
 
 type driver interface {
 	Broadcast([]byte, *net.UDPAddr) ([][]byte, error)
+	Send([]byte, *net.UDPAddr, func([]byte) bool) error
 }
 
 type uhppote struct {
@@ -85,54 +85,6 @@ func (u *uhppote) ListenAddr() *net.UDPAddr {
 	return nil
 }
 
-func (u *uhppote) Send(serialNumber uint32, request, reply interface{}) error {
-	bind := u.bindAddress()
-	dest := u.broadcastAddress()
-
-	if device, ok := u.devices[serialNumber]; ok {
-		if device.Address != nil {
-			dest = device.Address
-		}
-	}
-
-	if bind.Port != 0 {
-		guard.Lock()
-		defer guard.Unlock()
-	}
-
-	c, err := u.open(bind)
-	if err != nil {
-		return err
-	}
-
-	defer c.Close()
-
-	if err := u.send(c, dest, request); err != nil {
-		return err
-	} else if reply == nil {
-		return nil
-	}
-
-	received := make(chan error)
-	timer := time.NewTimer(5 * time.Second)
-	defer timer.Stop()
-
-	go func() {
-		received <- u.receive(c, serialNumber, reply)
-	}()
-
-	select {
-	case err := <-received:
-		if err != nil {
-			u.debugf(" ... receive error", err)
-		}
-		return err
-
-	case <-timer.C:
-		return fmt.Errorf("Timeout waiting for reply from %v", serialNumber)
-	}
-}
-
 func (u *uhppote) Broadcast(request, reply interface{}) ([]interface{}, error) {
 	return u.BroadcastTo(0, request, reply)
 }
@@ -150,12 +102,17 @@ func (u *uhppote) BroadcastTo(serialNumber uint32, request, reply interface{}) (
 		}
 	}
 
-	m, err := u.broadcast(request, dest)
+	m, err := codec.Marshal(request)
+	if err != nil {
+		return nil, err
+	}
+
+	responses, err := u.driver.Broadcast(m, dest)
 	if err != nil {
 		return replies, err
 	}
 
-	for _, bytes := range m {
+	for _, bytes := range responses {
 		// ... discard invalid replies
 		if len(bytes) != 64 {
 			u.debugf(" ... receive error", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
@@ -181,80 +138,50 @@ func (u *uhppote) BroadcastTo(serialNumber uint32, request, reply interface{}) (
 	return replies, nil
 }
 
-func (u *uhppote) open(addr *net.UDPAddr) (*net.UDPConn, error) {
-	connection, err := net.ListenUDP("udp", addr)
-	if err != nil {
-		return nil, fmt.Errorf("Failed to open UDP socket [%v]", err)
+func (u *uhppote) Send(serialNumber uint32, request, reply interface{}) error {
+	dest := u.broadcastAddress()
+	if device, ok := u.devices[serialNumber]; ok {
+		if device.Address != nil {
+			dest = device.Address
+		}
 	}
 
-	return connection, nil
-}
-
-func (u *uhppote) send(connection *net.UDPConn, addr *net.UDPAddr, request interface{}) error {
 	m, err := codec.Marshal(request)
 	if err != nil {
 		return err
 	}
 
-	u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(m, " ...          ")), nil)
+	var handler func([]byte) bool
 
-	N, err := connection.WriteTo(m, addr)
+	if reply != nil {
+		handler = func(bytes []byte) bool {
+			// ... discard invalid replies
+			if len(bytes) != 64 {
+				u.debugf(" ... receive error", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
+				return false
+			}
 
-	if err != nil {
-		return fmt.Errorf("Failed to write to UDP socket [%v]", err)
+			// ... discard replies without a valid device ID
+			if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); deviceID != serialNumber {
+				u.debugf(" ... receive error", fmt.Errorf("invalid device ID - expected:%v, got:%v", serialNumber, deviceID))
+				return false
+			}
+
+			// .. discard unparseable messages
+			if err := codec.Unmarshal(bytes, reply); err != nil {
+				u.debugf(" ... receive error", err)
+				return false
+			}
+
+			return true
+		}
 	}
 
-	u.debugf(fmt.Sprintf(" ... sent %v bytes to %v\n", N, addr), nil)
+	if err := u.driver.Send(m, dest, handler); err != nil {
+		return err
+	}
 
 	return nil
-}
-
-func (u *uhppote) broadcast(request interface{}, addr *net.UDPAddr) ([][]byte, error) {
-	m, err := codec.Marshal(request)
-	if err != nil {
-		return nil, err
-	}
-
-	return u.driver.Broadcast(m, addr)
-}
-
-func (u *uhppote) receive(c *net.UDPConn, serialNumber uint32, reply interface{}) error {
-	m := make([]byte, 2048)
-
-	if err := c.SetReadDeadline(time.Now().Add(15000 * time.Millisecond)); err != nil {
-		return fmt.Errorf("Failed to set UDP timeout [%v]", err)
-	}
-
-	for {
-		N, remote, err := c.ReadFromUDP(m)
-		if err != nil {
-			return err
-		}
-
-		u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n ... response\n%s", N, remote, dump(m[:N], " ...          ")), nil)
-
-		bytes := m[:N]
-
-		// ... discard invalid replies
-		if len(bytes) != 64 {
-			u.debugf(" ... receive error", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
-			continue
-		}
-
-		// ... discard replies without a valid device ID
-		if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); deviceID != serialNumber {
-			u.debugf(" ... receive error", fmt.Errorf("invalid device ID - expected:%v, got:%v", serialNumber, deviceID))
-			continue
-		}
-
-		// .. discard unparseable messages
-		if err := codec.Unmarshal(bytes, reply); err != nil {
-			u.debugf(" ... receive error", err)
-			continue
-		}
-
-		return nil
-	}
 }
 
 func (u *uhppote) listen(p chan *event, q chan os.Signal, listener Listener) error {
@@ -308,6 +235,15 @@ func (u *uhppote) listen(p chan *event, q chan os.Signal, listener Listener) err
 
 		p <- &e
 	}
+}
+
+func (u *uhppote) open(addr *net.UDPAddr) (*net.UDPConn, error) {
+	connection, err := net.ListenUDP("udp", addr)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to open UDP socket [%v]", err)
+	}
+
+	return connection, nil
 }
 
 func (u *uhppote) bindAddress() *net.UDPAddr {
