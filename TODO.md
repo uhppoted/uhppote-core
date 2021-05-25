@@ -4,16 +4,14 @@
 
 - [ ] Rearchitecture as factory/device/driver
       - move 'listen' to UDP driver
-      - update unit tests for reworked send/receive
       - implement timeout value in UDP
-      - move guard to UDP
       - (maybe) make timeout for entire function (or just use setDeadline)
       - rework uhppoted-api::healthcheck to remove need for IUHPPOTE::DeviceList
       - rework uhppoted-api::healthcheck to remove need for IUHPPOTE::ListenAddr
 
+- [ ] Add check for deviceID != 0 in IUHPPOTE functions 
 - [ ] Rework JSON segments marshalling/unmarshalling to be array (?) 
 - [ ] Unit test for unmarshalling missing time profile segments
-- [ ] Add check for deviceID != 0 in IUHPPOTE functions 
 - [ ] Implement separate Get..All functions (??)
 - [ ] Retype UHPPOTE.BindAddress as types.BindAddr
 - [ ] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr

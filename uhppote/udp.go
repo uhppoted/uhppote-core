@@ -3,6 +3,7 @@ package uhppote
 import (
 	"fmt"
 	"net"
+	"sync"
 	"time"
 )
 
@@ -10,6 +11,8 @@ type udp struct {
 	bindAddr net.UDPAddr
 	debug    bool
 }
+
+var guard sync.Mutex
 
 func (u *udp) Broadcast(request []byte, addr *net.UDPAddr) ([][]byte, error) {
 	u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
