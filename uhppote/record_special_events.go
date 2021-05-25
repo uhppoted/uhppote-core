@@ -20,7 +20,7 @@ func (u *uhppote) RecordSpecialEvents(deviceID uint32, enable bool) (bool, error
 
 	response := messages.RecordSpecialEventsResponse{}
 
-	err := u.impl.Send(deviceID, request, &response)
+	err := u.Send(deviceID, request, &response)
 	if err != nil {
 		return false, err
 	}

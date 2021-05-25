@@ -1,9 +1,8 @@
 package uhppote
 
 import (
+	"net"
 	"testing"
-
-	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
 )
 
 func TestDeleteCards(t *testing.T) {
@@ -17,9 +16,10 @@ func TestDeleteCards(t *testing.T) {
 	expected := true
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}

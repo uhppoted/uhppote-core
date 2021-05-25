@@ -1,10 +1,10 @@
 package uhppote
 
 import (
+	"net"
 	"reflect"
 	"testing"
 
-	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
 	"github.com/uhppoted/uhppote-core/types"
 )
 
@@ -29,9 +29,10 @@ func TestGetCardByID(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -71,9 +72,10 @@ func TestGetCardByIndex(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -101,9 +103,10 @@ func TestGetCardByIndexWithCardNotFound(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -127,9 +130,10 @@ func TestGetCardByIndexWithCardDeleted(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}

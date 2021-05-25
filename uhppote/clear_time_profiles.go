@@ -13,7 +13,7 @@ func (u *uhppote) ClearTimeProfiles(serialNumber uint32) (bool, error) {
 
 	reply := messages.ClearTimeProfilesResponse{}
 
-	err := u.impl.Send(serialNumber, request, &reply)
+	err := u.Send(serialNumber, request, &reply)
 	if err != nil {
 		return false, err
 	}

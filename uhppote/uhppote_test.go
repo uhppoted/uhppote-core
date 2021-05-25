@@ -26,14 +26,8 @@ func (d *stub) Send(m []byte, addr *net.UDPAddr, handler func(bytes []byte) bool
 }
 
 type mock struct {
-	send func(uint32, interface{}, interface{}) error
-
 	devices       func() map[uint32]Device
 	broadcastAddr func() *net.UDPAddr
-}
-
-func (m *mock) Send(deviceID uint32, request, reply interface{}) error {
-	return m.send(deviceID, request, reply)
 }
 
 func (m *mock) BroadcastAddr() *net.UDPAddr {

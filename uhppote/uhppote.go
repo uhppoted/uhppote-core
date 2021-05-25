@@ -16,7 +16,6 @@ var VERSION string = "v0.7.x"
 var guard sync.Mutex
 
 type iuhppote interface {
-	Send(serialNumber uint32, request, reply interface{}) error
 	BroadcastAddr() *net.UDPAddr
 	DeviceList() map[uint32]Device
 }

@@ -2,11 +2,12 @@ package uhppote
 
 import (
 	"fmt"
-	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
-	"github.com/uhppoted/uhppote-core/types"
+	"net"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/uhppoted/uhppote-core/types"
 )
 
 func TestGetEvent(t *testing.T) {
@@ -18,9 +19,10 @@ func TestGetEvent(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -62,9 +64,10 @@ func TestGetEventWithNoEvents(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -81,8 +84,8 @@ func TestGetEventWithNoEvents(t *testing.T) {
 
 func TestGetEventWithError(t *testing.T) {
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, reply interface{}) error {
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
 				return fmt.Errorf("EXPECTED")
 			},
 		},

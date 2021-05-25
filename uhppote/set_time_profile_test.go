@@ -1,10 +1,10 @@
 package uhppote
 
 import (
+	"net"
 	"testing"
 	"time"
 
-	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
 	"github.com/uhppoted/uhppote-core/types"
 )
 
@@ -38,9 +38,10 @@ func TestSetTimeProfile(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -84,9 +85,10 @@ func TestSetTimeProfileWithInvalidFromDate(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -130,9 +132,10 @@ func TestSetTimeProfileWithInvalidToDate(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -176,9 +179,10 @@ func TestSetTimeProfileWithMissingSegment1(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -222,9 +226,10 @@ func TestSetTimeProfileWithMissingSegment2(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -268,9 +273,10 @@ func TestSetTimeProfileWithMissingSegment3(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -315,9 +321,10 @@ func TestSetTimeProfileWithInvalidSegment1Start(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -362,9 +369,10 @@ func TestSetTimeProfileWithInvalidSegment1End(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -409,9 +417,10 @@ func TestSetTimeProfileWithInvalidSegment2Start(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -456,9 +465,10 @@ func TestSetTimeProfileWithInvalidSegment2End(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -503,9 +513,10 @@ func TestSetTimeProfileWithInvalidSegment3Start(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -550,9 +561,10 @@ func TestSetTimeProfileWithInvalidSegment3End(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
@@ -597,9 +609,10 @@ func TestSetTimeProfileWithInvalidResponse(t *testing.T) {
 	}
 
 	u := uhppote{
-		impl: &mock{
-			send: func(deviceID uint32, request, response interface{}) error {
-				return codec.Unmarshal(message, response)
+		driver: &stub{
+			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+				handler(message)
+				return nil
 			},
 		},
 	}
