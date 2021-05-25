@@ -25,19 +25,6 @@ func (d *stub) Send(m []byte, addr *net.UDPAddr, handler func(bytes []byte) bool
 	return d.send(m, addr, handler)
 }
 
-type mock struct {
-	devices       func() map[uint32]Device
-	broadcastAddr func() *net.UDPAddr
-}
-
-func (m *mock) BroadcastAddr() *net.UDPAddr {
-	return m.broadcastAddr()
-}
-
-func (m *mock) DeviceList() map[uint32]Device {
-	return m.devices()
-}
-
 var date = func(s string) *types.Date {
 	d, _ := time.ParseInLocation("2006-01-02", s, time.Local)
 	p := types.Date(d)
