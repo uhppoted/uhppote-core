@@ -174,7 +174,7 @@ func (u *udp) Listen(callback func([]byte)) (*socket, error) {
 			N, remote, err := c.ReadFromUDP(m)
 			if err != nil {
 				if sock.closed {
-					u.debugf("listen: UDP socket closed", nil)
+					u.debugf(" ... listen socket closed", nil)
 					break
 				}
 
