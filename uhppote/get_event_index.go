@@ -12,7 +12,7 @@ func (u *uhppote) GetEventIndex(serialNumber uint32) (*types.EventIndex, error) 
 
 	reply := messages.GetEventIndexResponse{}
 
-	err := u.Send(serialNumber, request, &reply)
+	err := u.send(serialNumber, request, &reply)
 	if err != nil {
 		return nil, err
 	}

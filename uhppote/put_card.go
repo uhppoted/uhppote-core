@@ -21,7 +21,7 @@ func (u *uhppote) PutCard(deviceID uint32, card types.Card) (bool, error) {
 
 	reply := messages.PutCardResponse{}
 
-	err := u.Send(deviceID, request, &reply)
+	err := u.send(deviceID, request, &reply)
 	if err != nil {
 		return false, err
 	}

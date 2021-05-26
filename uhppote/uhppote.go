@@ -74,14 +74,14 @@ func (u *uhppote) ListenAddr() *net.UDPAddr {
 	return nil
 }
 
-func (u *uhppote) Broadcast(request, reply interface{}) ([]interface{}, error) {
-	return u.BroadcastTo(0, request, reply)
+func (u *uhppote) broadcast(request, reply interface{}) ([]interface{}, error) {
+	return u.broadcastTo(0, request, reply)
 }
 
 // Sends a UDP message to a specific device but anticipates replies from more than one device
 // because it may fall back to the broadcast address if the device ID has no configured IP
 // address.
-func (u *uhppote) BroadcastTo(serialNumber uint32, request, reply interface{}) ([]interface{}, error) {
+func (u *uhppote) broadcastTo(serialNumber uint32, request, reply interface{}) ([]interface{}, error) {
 	replies := []interface{}{}
 	dest := u.broadcastAddress()
 
@@ -127,7 +127,7 @@ func (u *uhppote) BroadcastTo(serialNumber uint32, request, reply interface{}) (
 	return replies, nil
 }
 
-func (u *uhppote) Send(serialNumber uint32, request, reply interface{}) error {
+func (u *uhppote) send(serialNumber uint32, request, reply interface{}) error {
 	dest := u.broadcastAddress()
 	if device, ok := u.devices[serialNumber]; ok {
 		if device.Address != nil {

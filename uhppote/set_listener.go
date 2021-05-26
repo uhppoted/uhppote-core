@@ -21,7 +21,7 @@ func (u *uhppote) SetListener(serialNumber uint32, address net.UDPAddr) (*types.
 
 	reply := messages.SetListenerResponse{}
 
-	err := u.Send(serialNumber, request, &reply)
+	err := u.send(serialNumber, request, &reply)
 	if err != nil {
 		return nil, err
 	}

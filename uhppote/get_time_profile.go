@@ -16,7 +16,7 @@ func (u *uhppote) GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeP
 
 	response := messages.GetTimeProfileResponse{}
 
-	err := u.Send(deviceID, request, &response)
+	err := u.send(deviceID, request, &response)
 	if err != nil {
 		return nil, err
 	}

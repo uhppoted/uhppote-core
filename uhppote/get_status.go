@@ -13,7 +13,7 @@ func (u *uhppote) GetStatus(serialNumber uint32) (*types.Status, error) {
 
 	reply := messages.GetStatusResponse{}
 
-	err := u.Send(serialNumber, request, &reply)
+	err := u.send(serialNumber, request, &reply)
 	if err != nil {
 		return nil, err
 	}

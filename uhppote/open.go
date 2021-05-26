@@ -13,7 +13,7 @@ func (u *uhppote) OpenDoor(serialNumber uint32, door uint8) (*types.Result, erro
 
 	reply := messages.OpenDoorResponse{}
 
-	err := u.Send(serialNumber, request, &reply)
+	err := u.send(serialNumber, request, &reply)
 	if err != nil {
 		return nil, err
 	}

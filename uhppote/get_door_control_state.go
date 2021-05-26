@@ -13,7 +13,7 @@ func (u *uhppote) GetDoorControlState(serialNumber uint32, door byte) (*types.Do
 
 	reply := messages.GetDoorControlStateResponse{}
 
-	err := u.Send(serialNumber, request, &reply)
+	err := u.send(serialNumber, request, &reply)
 	if err != nil {
 		return nil, err
 	}

@@ -15,7 +15,7 @@ func (u *uhppote) DeleteCard(deviceID uint32, cardNumber uint32) (bool, error) {
 
 	reply := messages.DeleteCardResponse{}
 
-	err := u.Send(deviceID, request, &reply)
+	err := u.send(deviceID, request, &reply)
 	if err != nil {
 		return false, err
 	}

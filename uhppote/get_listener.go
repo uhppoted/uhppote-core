@@ -20,7 +20,7 @@ func (u *uhppote) GetListener(serialNumber uint32) (*types.Listener, error) {
 
 	reply := messages.GetListenerResponse{}
 
-	err := u.Send(serialNumber, request, &reply)
+	err := u.send(serialNumber, request, &reply)
 	if err != nil {
 		return nil, err
 	}
