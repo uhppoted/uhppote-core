@@ -1,6 +1,7 @@
 package uhppote
 
 import (
+	"fmt"
 	"net"
 	"reflect"
 	"sync"
@@ -23,6 +24,10 @@ func (d *stub) Broadcast(m []byte, addr *net.UDPAddr) ([][]byte, error) {
 
 func (d *stub) Send(m []byte, addr *net.UDPAddr, handler func(bytes []byte) bool) error {
 	return d.send(m, addr, handler)
+}
+
+func (d *stub) Listen(handler func(bytes []byte)) (*socket, error) {
+	return nil, fmt.Errorf("NOT IMPLEMENTED")
 }
 
 var date = func(s string) *types.Date {

@@ -3,7 +3,6 @@
 ### IN PROGRESS
 
 - [ ] Rearchitecture as factory/device/driver
-      - move 'listen' to UDP driver
       - implement timeout value in UDP
       - implement timeout for entire function not just individual reads/writes
       - rework uhppoted-api::healthcheck to remove need for IUHPPOTE::DeviceList

@@ -1,15 +1,18 @@
 package uhppote
 
 import (
+	"encoding/hex"
 	"fmt"
 	"net"
+	"regexp"
 	"sync"
 	"time"
 )
 
 type udp struct {
-	bindAddr net.UDPAddr
-	debug    bool
+	bindAddr   net.UDPAddr
+	listenAddr net.UDPAddr
+	debug      bool
 }
 
 var guard sync.Mutex
@@ -67,7 +70,7 @@ func (u *udp) Broadcast(request []byte, addr *net.UDPAddr) ([][]byte, error) {
 	return replies, err
 }
 
-func (u *udp) Send(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+func (u *udp) Send(request []byte, addr *net.UDPAddr, callback func([]byte) bool) error {
 	bind := u.bindAddr
 	if bind.Port != 0 {
 		guard.Lock()
@@ -97,7 +100,7 @@ func (u *udp) Send(request []byte, addr *net.UDPAddr, handler func([]byte) bool)
 
 	u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
 
-	if handler == nil {
+	if callback == nil {
 		return nil
 	}
 
@@ -106,7 +109,7 @@ func (u *udp) Send(request []byte, addr *net.UDPAddr, handler func([]byte) bool)
 	defer timer.Stop()
 
 	go func() {
-		received <- u.receive(connection, handler)
+		received <- u.receive(connection, callback)
 	}()
 
 	select {
@@ -121,7 +124,7 @@ func (u *udp) Send(request []byte, addr *net.UDPAddr, handler func([]byte) bool)
 	}
 }
 
-func (u *udp) receive(c *net.UDPConn, handler func([]byte) bool) error {
+func (u *udp) receive(c *net.UDPConn, callback func([]byte) bool) error {
 	m := make([]byte, 2048)
 
 	if err := c.SetReadDeadline(time.Now().Add(15000 * time.Millisecond)); err != nil {
@@ -138,10 +141,54 @@ func (u *udp) receive(c *net.UDPConn, handler func([]byte) bool) error {
 
 		bytes := m[:N]
 
-		if handler(bytes) {
+		if callback(bytes) {
 			return nil
 		}
 	}
+}
+
+func (u *udp) Listen(callback func([]byte)) (*socket, error) {
+	bind := u.listenAddr
+	if bind.Port == 0 {
+		return nil, fmt.Errorf("Listen requires a non-zero UDP port")
+	}
+
+	c, err := net.ListenUDP("udp", &bind)
+	if err != nil {
+		return nil, fmt.Errorf("Error opening UDP listen socket (%v)", err)
+	} else if c == nil {
+		return nil, fmt.Errorf("Failed to open UDP socket (%v)", c)
+	}
+
+	sock := socket{
+		connection: c,
+		closed:     false,
+	}
+
+	go func() {
+		m := make([]byte, 2048)
+
+		for {
+			u.debugf(" ... listening", nil)
+
+			N, remote, err := c.ReadFromUDP(m)
+			if err != nil {
+				if sock.closed {
+					u.debugf("listen: UDP socket closed", nil)
+					break
+				}
+
+				u.debugf("Error reading from UDP socket", err)
+				continue
+			}
+
+			u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n ... response\n%s\n", N, remote, dump(m[:N], " ...          ")), nil)
+
+			callback(m[:N])
+		}
+	}()
+
+	return &sock, nil
 }
 
 func (u *udp) debugf(msg string, err error) {
@@ -152,4 +199,10 @@ func (u *udp) debugf(msg string, err error) {
 			fmt.Printf("%v\n", msg)
 		}
 	}
+}
+
+func dump(m []byte, prefix string) string {
+	regex := regexp.MustCompile("(?m)^(.*)")
+
+	return fmt.Sprintf("%s", regex.ReplaceAllString(hex.Dump(m), prefix+"$1"))
 }

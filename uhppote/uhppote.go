@@ -2,20 +2,24 @@ package uhppote
 
 import (
 	"encoding/binary"
-	"encoding/hex"
 	"fmt"
 	"net"
 	"os"
-	"regexp"
 
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
 )
 
 var VERSION string = "v0.7.x"
 
+type socket struct {
+	connection *net.UDPConn
+	closed     bool
+}
+
 type driver interface {
 	Broadcast([]byte, *net.UDPAddr) ([][]byte, error)
 	Send([]byte, *net.UDPAddr, func([]byte) bool) error
+	Listen(func([]byte)) (*socket, error)
 }
 
 type uhppote struct {
@@ -34,8 +38,9 @@ func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug boo
 		listenAddr:    &listen,
 		devices:       map[uint32]Device{},
 		driver: &udp{
-			bindAddr: bind,
-			debug:    debug,
+			bindAddr:   bind,
+			listenAddr: listen,
+			debug:      debug,
 		},
 		debug: debug,
 	}
@@ -174,81 +179,46 @@ func (u *uhppote) send(serialNumber uint32, request, reply interface{}) error {
 }
 
 func (u *uhppote) listen(p chan *event, q chan os.Signal, listener Listener) error {
-	bind := u.listenAddress()
-	if bind.Port == 0 {
-		return fmt.Errorf("Listen requires a non-zero UDP port")
-	}
-
-	c, err := u.open(bind)
-	if err != nil {
-		return err
-	}
-
-	defer func() {
-		c.Close()
-	}()
-
-	closed := false
-	go func() {
-		<-q
-		closed = true
-		c.Close()
-	}()
-
-	listener.OnConnected()
-
-	m := make([]byte, 2048)
-
-	for {
-		u.debugf(" ... listening", nil)
-
-		N, remote, err := c.ReadFromUDP(m)
-		if err != nil {
-			if closed {
-				return nil
-			}
-
-			return fmt.Errorf("Failed to read from UDP socket [%v]", err)
+	handler := func(bytes []byte) {
+		// ... discard invalid replies
+		if len(bytes) != 64 {
+			listener.OnError(fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
+			return
 		}
 
-		u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n ... response\n%s\n", N, remote, dump(m[:N], " ...          ")), nil)
+		// ... discard replies without a valid device ID
+		if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); deviceID == 0 {
+			listener.OnError(fmt.Errorf("invalid device ID (%v)", deviceID))
+			return
+		}
 
+		// .. discard unparseable messages
 		e := event{}
-		if err := codec.Unmarshal(m[:N], &e); err != nil {
-			if !listener.OnError(err) {
-				return fmt.Errorf("FATAL ERROR: unable to unmarshal event [%v]", err)
-			}
-
-			continue
+		if err := codec.Unmarshal(bytes, &e); err != nil {
+			listener.OnError(err)
+			return
 		}
 
 		p <- &e
 	}
-}
 
-func (u *uhppote) open(addr *net.UDPAddr) (*net.UDPConn, error) {
-	connection, err := net.ListenUDP("udp", addr)
+	sock, err := u.driver.Listen(handler)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to open UDP socket [%v]", err)
+		return err
+	} else if sock == nil {
+		return fmt.Errorf("drive.Listen returned invalid socket (%v)", sock)
 	}
 
-	return connection, nil
-}
+	defer func() {
+		sock.closed = true
+		sock.connection.Close()
+	}()
 
-func (u *uhppote) bindAddress() *net.UDPAddr {
-	if u.bindAddr != nil {
-		return u.bindAddr
-	}
+	listener.OnConnected()
 
-	addr := net.UDPAddr{
-		IP:   make(net.IP, net.IPv4len),
-		Port: 0,
-		Zone: "",
-	}
+	<-q
 
-	copy(addr.IP, net.IPv4zero)
-
-	return &addr
+	return nil
 }
 
 func (u *uhppote) broadcastAddress() *net.UDPAddr {
@@ -267,22 +237,6 @@ func (u *uhppote) broadcastAddress() *net.UDPAddr {
 	return &addr
 }
 
-func (u *uhppote) listenAddress() *net.UDPAddr {
-	if u.listenAddr != nil {
-		return u.listenAddr
-	}
-
-	addr := net.UDPAddr{
-		IP:   make(net.IP, net.IPv4len),
-		Port: 60001,
-		Zone: "",
-	}
-
-	copy(addr.IP, net.IPv4zero)
-
-	return &addr
-}
-
 func (u *uhppote) debugf(msg string, err error) {
 	if u.debug {
 		if err != nil {
@@ -291,10 +245,4 @@ func (u *uhppote) debugf(msg string, err error) {
 			fmt.Printf("%v\n", msg)
 		}
 	}
-}
-
-func dump(m []byte, prefix string) string {
-	regex := regexp.MustCompile("(?m)^(.*)")
-
-	return fmt.Sprintf("%s", regex.ReplaceAllString(hex.Dump(m), prefix+"$1"))
 }
