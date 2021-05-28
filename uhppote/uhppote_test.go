@@ -56,6 +56,7 @@ func TestBroadcastAddressRequest(t *testing.T) {
 		broadcastAddr: resolve("127.0.0.1:60000", t),
 		driver: &udp{
 			bindAddr: *bind,
+			timeout:  5000 * time.Millisecond,
 			debug:    false,
 		},
 	}
@@ -116,6 +117,7 @@ func TestSequentialRequests(t *testing.T) {
 		},
 		driver: &udp{
 			bindAddr: *bind,
+			timeout:  5000 * time.Millisecond,
 			debug:    false,
 		},
 	}
@@ -187,6 +189,7 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 		},
 		driver: &udp{
 			bindAddr: *bind,
+			timeout:  5000 * time.Millisecond,
 			debug:    false,
 		},
 	}
@@ -275,6 +278,7 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 		},
 		driver: &udp{
 			bindAddr: *bind,
+			timeout:  5000 * time.Millisecond,
 			debug:    false,
 		},
 	}

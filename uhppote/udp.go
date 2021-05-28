@@ -12,10 +12,12 @@ import (
 type udp struct {
 	bindAddr   net.UDPAddr
 	listenAddr net.UDPAddr
+	timeout    time.Duration
 	debug      bool
 }
 
 var guard sync.Mutex
+var NONE = time.Time{}
 
 func (u *udp) Broadcast(request []byte, addr *net.UDPAddr) ([][]byte, error) {
 	u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
@@ -37,8 +39,12 @@ func (u *udp) Broadcast(request []byte, addr *net.UDPAddr) ([][]byte, error) {
 
 	defer connection.Close()
 
-	if err := connection.SetWriteDeadline(time.Now().Add(5000 * time.Millisecond)); err != nil {
+	if err := connection.SetWriteDeadline(time.Now().Add(1000 * time.Millisecond)); err != nil {
 		return nil, fmt.Errorf("Failed to set UDP write timeout [%v]", err)
+	}
+
+	if err := connection.SetReadDeadline(NONE); err != nil {
+		return nil, fmt.Errorf("Failed to set UDP read timeout [%v]", err)
 	}
 
 	if N, err := connection.WriteToUDP(request, addr); err != nil {
@@ -65,7 +71,7 @@ func (u *udp) Broadcast(request []byte, addr *net.UDPAddr) ([][]byte, error) {
 		}
 	}()
 
-	time.Sleep(2500 * time.Millisecond)
+	time.Sleep(u.timeout)
 
 	return replies, err
 }
@@ -88,8 +94,12 @@ func (u *udp) Send(request []byte, addr *net.UDPAddr, callback func([]byte) bool
 
 	defer connection.Close()
 
-	if err := connection.SetWriteDeadline(time.Now().Add(5000 * time.Millisecond)); err != nil {
+	if err := connection.SetWriteDeadline(time.Now().Add(1000 * time.Millisecond)); err != nil {
 		return fmt.Errorf("Failed to set UDP write timeout [%v]", err)
+	}
+
+	if err := connection.SetReadDeadline(NONE); err != nil {
+		return fmt.Errorf("Failed to set UDP read timeout [%v]", err)
 	}
 
 	if N, err := connection.WriteToUDP(request, addr); err != nil {
@@ -100,36 +110,33 @@ func (u *udp) Send(request []byte, addr *net.UDPAddr, callback func([]byte) bool
 
 	u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
 
-	if callback == nil {
-		return nil
-	}
+	if callback != nil {
+		received := make(chan error)
+		timer := time.NewTimer(u.timeout)
 
-	received := make(chan error)
-	timer := time.NewTimer(5 * time.Second)
-	defer timer.Stop()
+		defer timer.Stop()
 
-	go func() {
-		received <- u.receive(connection, callback)
-	}()
+		go func() {
+			received <- u.receive(connection, callback)
+		}()
 
-	select {
-	case err := <-received:
-		if err != nil {
-			u.debugf(" ... receive error", err)
+		select {
+		case err := <-received:
+			if err != nil {
+				u.debugf(" ... receive error", err)
+			}
+			return err
+
+		case <-timer.C:
+			return fmt.Errorf("Timeout waiting for reply")
 		}
-		return err
-
-	case <-timer.C:
-		return fmt.Errorf("Timeout waiting for reply")
 	}
+
+	return nil
 }
 
 func (u *udp) receive(c *net.UDPConn, callback func([]byte) bool) error {
 	m := make([]byte, 2048)
-
-	if err := c.SetReadDeadline(time.Now().Add(15000 * time.Millisecond)); err != nil {
-		return fmt.Errorf("Failed to set UDP timeout [%v]", err)
-	}
 
 	for {
 		N, remote, err := c.ReadFromUDP(m)

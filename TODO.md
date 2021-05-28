@@ -3,8 +3,7 @@
 ### IN PROGRESS
 
 - [ ] Rearchitecture as factory/device/driver
-      - implement timeout value in UDP
-      - implement timeout for entire function not just individual reads/writes
+      - add timeout to NewUHPPOTE
       - rework uhppoted-api::healthcheck to remove need for IUHPPOTE::DeviceList
       - rework uhppoted-api::healthcheck to remove need for IUHPPOTE::ListenAddr
 

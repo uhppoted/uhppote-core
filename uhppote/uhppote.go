@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"time"
 
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
 )
@@ -35,6 +36,7 @@ func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug boo
 		driver: &udp{
 			bindAddr:   bind,
 			listenAddr: listen,
+			timeout:    2500 * time.Millisecond,
 			debug:      debug,
 		},
 		debug: debug,
