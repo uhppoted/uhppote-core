@@ -147,23 +147,26 @@ func (u *udp) receive(c *net.UDPConn, callback func([]byte) bool) error {
 	}
 }
 
-func (u *udp) Listen(callback func([]byte)) (*socket, error) {
+func (u *udp) Listen(signal chan interface{}, done chan interface{}, callback func([]byte)) error {
 	bind := u.listenAddr
 	if bind.Port == 0 {
-		return nil, fmt.Errorf("Listen requires a non-zero UDP port")
+		return fmt.Errorf("Listen requires a non-zero UDP port")
 	}
 
 	c, err := net.ListenUDP("udp", &bind)
 	if err != nil {
-		return nil, fmt.Errorf("Error opening UDP listen socket (%v)", err)
+		return fmt.Errorf("Error opening UDP listen socket (%v)", err)
 	} else if c == nil {
-		return nil, fmt.Errorf("Failed to open UDP socket (%v)", c)
+		return fmt.Errorf("Failed to open UDP socket (%v)", c)
 	}
 
-	sock := socket{
-		connection: c,
-		closed:     false,
-	}
+	closed := false
+
+	go func() {
+		<-signal
+		closed = true
+		c.Close()
+	}()
 
 	go func() {
 		m := make([]byte, 2048)
@@ -173,7 +176,7 @@ func (u *udp) Listen(callback func([]byte)) (*socket, error) {
 
 			N, remote, err := c.ReadFromUDP(m)
 			if err != nil {
-				if sock.closed {
+				if closed {
 					u.debugf(" ... listen socket closed", nil)
 					break
 				}
@@ -186,9 +189,11 @@ func (u *udp) Listen(callback func([]byte)) (*socket, error) {
 
 			callback(m[:N])
 		}
+
+		close(done)
 	}()
 
-	return &sock, nil
+	return nil
 }
 
 func (u *udp) debugf(msg string, err error) {

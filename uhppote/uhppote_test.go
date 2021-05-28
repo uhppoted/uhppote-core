@@ -26,8 +26,8 @@ func (d *stub) Send(m []byte, addr *net.UDPAddr, handler func(bytes []byte) bool
 	return d.send(m, addr, handler)
 }
 
-func (d *stub) Listen(handler func(bytes []byte)) (*socket, error) {
-	return nil, fmt.Errorf("NOT IMPLEMENTED")
+func (d *stub) Listen(signal chan interface{}, done chan interface{}, handler func(bytes []byte)) error {
+	return fmt.Errorf("NOT IMPLEMENTED")
 }
 
 var date = func(s string) *types.Date {

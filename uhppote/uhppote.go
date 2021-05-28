@@ -11,15 +11,10 @@ import (
 
 var VERSION string = "v0.7.x"
 
-type socket struct {
-	connection *net.UDPConn
-	closed     bool
-}
-
 type driver interface {
 	Broadcast([]byte, *net.UDPAddr) ([][]byte, error)
 	Send([]byte, *net.UDPAddr, func([]byte) bool) error
-	Listen(func([]byte)) (*socket, error)
+	Listen(chan interface{}, chan interface{}, func([]byte)) error
 }
 
 type uhppote struct {
@@ -202,21 +197,19 @@ func (u *uhppote) listen(p chan *event, q chan os.Signal, listener Listener) err
 		p <- &e
 	}
 
-	sock, err := u.driver.Listen(handler)
+	signal := make(chan interface{})
+	closed := make(chan interface{})
+
+	err := u.driver.Listen(signal, closed, handler)
 	if err != nil {
 		return err
-	} else if sock == nil {
-		return fmt.Errorf("drive.Listen returned invalid socket (%v)", sock)
 	}
-
-	defer func() {
-		sock.closed = true
-		sock.connection.Close()
-	}()
 
 	listener.OnConnected()
 
 	<-q
+	close(signal)
+	<-closed
 
 	return nil
 }
