@@ -27,7 +27,7 @@ type uhppote struct {
 	driver        driver
 }
 
-func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug bool) IUHPPOTE {
+func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, timeout time.Duration, devices []Device, debug bool) IUHPPOTE {
 	uhppote := uhppote{
 		bindAddr:      &bind,
 		broadcastAddr: &broadcast,
@@ -36,7 +36,7 @@ func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, devices []Device, debug boo
 		driver: &udp{
 			bindAddr:   bind,
 			listenAddr: listen,
-			timeout:    2500 * time.Millisecond,
+			timeout:    timeout,
 			debug:      debug,
 		},
 		debug: debug,
