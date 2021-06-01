@@ -48,18 +48,18 @@ func TestTimeProfileJSONMarshal(t *testing.T) {
   "start-date": "2021-04-01",
   "end-date": "2021-12-29",
   "weekdays": "Monday,Tuesday,Thursday,Saturday,Sunday",
-  "segments": {
-    "1": {
+  "segments": [
+    {
       "start": "08:30",
       "end": "09:45"
     },
-    "2": {
+    {
       "start": "11:35"
     },
-    "3": {
+    {
       "end": "17:59"
     }
-  }
+  ]
 }`
 
 	from := date("2021-04-01")
@@ -127,18 +127,18 @@ func TestTimeProfileJSONUnmarshal(t *testing.T) {
   "start-date": "2021-04-01",
   "end-date": "2021-12-29",
   "weekdays": "Monday,Tuesday,Thursday,Saturday,Sunday",
-  "segments": {
-    "1": {
+  "segments": [
+    {
       "start": "08:30",
       "end": "09:45"
     },
-    "2": {
+    {
       "start": "11:35"
     },
-    "3": {
+    {
       "end": "17:59"
     }
-  }
+  ]
 }`)
 
 	var profile TimeProfile
@@ -149,50 +149,6 @@ func TestTimeProfileJSONUnmarshal(t *testing.T) {
 
 	if !reflect.DeepEqual(profile, expected) {
 		t.Errorf("TimeProfile incorrectly unmarshalled\n   expected:%+v\n   got:     %+v", expected, profile)
-	}
-}
-
-func TestWeekdaysMarshalJSON(t *testing.T) {
-	expected := `"Monday,Wednesday,Thursday,Saturday,Sunday"`
-	weekdays := Weekdays{
-		time.Monday:    true,
-		time.Tuesday:   false,
-		time.Wednesday: true,
-		time.Thursday:  true,
-		time.Friday:    false,
-		time.Saturday:  true,
-		time.Sunday:    true,
-	}
-
-	bytes, err := json.Marshal(weekdays)
-	if err != nil {
-		t.Fatalf("Error marshalling weekdays (%v)", err)
-	}
-
-	if string(bytes) != expected {
-		t.Errorf("Incorrectly marshalled weekdays - expected:%v, got:%v", expected, string(bytes))
-	}
-}
-
-func TestWeekdaysUnmarshalJSON(t *testing.T) {
-	expected := Weekdays{
-		time.Monday:    true,
-		time.Tuesday:   false,
-		time.Wednesday: true,
-		time.Thursday:  true,
-		time.Friday:    false,
-		time.Saturday:  true,
-		time.Sunday:    true,
-	}
-
-	weekdays := Weekdays{}
-
-	if err := json.Unmarshal([]byte(`"Monday,Wednesday,Thursday,Saturday,Sunday"`), &weekdays); err != nil {
-		t.Fatalf("Error unmarshalling weekdays (%v)", err)
-	}
-
-	if !reflect.DeepEqual(weekdays, expected) {
-		t.Errorf("Incorrectly unmarshalled weekdays - expected:%v, got:%v", expected, weekdays)
 	}
 }
 

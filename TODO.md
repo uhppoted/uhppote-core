@@ -2,24 +2,20 @@
 
 ### IN PROGRESS
 
-- [ ] Rearchitecture as factory/device/driver
-      - add timeout to NewUHPPOTE
-      - rework uhppoted-api::healthcheck to remove need for IUHPPOTE::DeviceList
-      - rework uhppoted-api::healthcheck to remove need for IUHPPOTE::ListenAddr
+- [ ] get-time-profile
+      - discard 00:00-00:00 segments
+- [ ] set-time-profile
+      - automatically provide missing segments with 00:00-00:00
 
 - [ ] Add check for deviceID != 0 in IUHPPOTE functions 
-- [ ] Rework JSON segments marshalling/unmarshalling to be array (?) 
 - [ ] Unit test for unmarshalling missing time profile segments
 - [ ] Implement separate Get..All functions (??)
 - [ ] Retype UHPPOTE.BindAddress as types.BindAddr
 - [ ] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
 - [ ] Retype UHPPOTE.ListenAddress as types.ListenAddr
 
-- [ ] get-time-profile
-      - discard 00:00-00:00 segments
-- [ ] set-time-profile
-      - automatically provide missing segments with 00:00-00:00
-
+- [x] Rework JSON segments marshalling to be array 
+- [x] Rearchitecture as factory/device/driver
 - [x] Change *Device to Device in UHPPOTE.devices to prevent copy-from-range-of-map mistakes
 - [x] Replace types.Permission with int
 - [x] put-card with time profile
