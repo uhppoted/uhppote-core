@@ -20,15 +20,12 @@ func TestMarshalOpenDoorRequest(t *testing.T) {
 	}
 
 	m, err := codec.Marshal(request)
-
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
+		t.Fatalf("Unexpected error: %v", err)
 	}
 
 	if !reflect.DeepEqual(m, expected) {
 		t.Errorf("Invalid byte array:\nExpected:\n%s\nReturned:\n%s", dump(expected, ""), dump(m, ""))
-		return
 	}
 }
 
@@ -41,10 +38,8 @@ func TestFactoryUnmarshalOpenDoorRequest(t *testing.T) {
 	}
 
 	request, err := UnmarshalRequest(message)
-
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
+		t.Fatalf("Unexpected error: %v", err)
 	}
 
 	if request == nil {
@@ -72,9 +67,8 @@ func TestUnmarshalOpenDoorResponse(t *testing.T) {
 	reply := OpenDoorResponse{}
 
 	err := codec.Unmarshal(message, &reply)
-
 	if err != nil {
-		t.Errorf("Unexpected error: %v\n", err)
+		t.Fatalf("Unexpected error: %v\n", err)
 	}
 
 	if reply.MsgType != 0x40 {
@@ -99,7 +93,6 @@ func TestFactoryUnmarshalOpenDoorResponse(t *testing.T) {
 	}
 
 	response, err := UnmarshalResponse(message)
-
 	if err != nil {
 		t.Fatalf("Unexpected error: %v\n", err)
 	}
@@ -137,9 +130,7 @@ func TestUnmarshalOpenDoorResponseWithInvalidMsgType(t *testing.T) {
 	reply := OpenDoorResponse{}
 
 	err := codec.Unmarshal(message, &reply)
-
 	if err == nil {
-		t.Errorf("Expected error: '%v'", "Invalid value in message - expected 0x40, received 0x94")
-		return
+		t.Fatalf("Expected error: '%v'", "Invalid value in message - expected 0x40, received 0x94")
 	}
 }

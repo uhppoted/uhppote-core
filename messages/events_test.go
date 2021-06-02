@@ -189,10 +189,8 @@ func TestUnmarshalEventWithInvalidMsgType(t *testing.T) {
 	reply := Event{}
 
 	err := codec.Unmarshal(message, &reply)
-
 	if err == nil {
-		t.Errorf("Expected error: '%v'", "Invalid value in message - expected 0x20, received 0x94")
-		return
+		t.Fatalf("Expected error: '%v'", "Invalid value in message - expected 0x20, received 0x94")
 	}
 }
 
@@ -379,7 +377,6 @@ func TestUnmarshalEventV6_62WithInvalidMsgType(t *testing.T) {
 	err := codec.Unmarshal(message, &reply)
 
 	if err == nil {
-		t.Errorf("Expected error: '%v'", "Invalid value in message - expected 0x20, received 0x94")
-		return
+		t.Fatalf("Expected error: '%v'", "Invalid value in message - expected 0x20, received 0x94")
 	}
 }

@@ -20,7 +20,6 @@ func TestMarshalRecordSpecialEventsRequest(t *testing.T) {
 	}
 
 	m, err := codec.Marshal(request)
-
 	if err != nil {
 		t.Fatalf("Unexpected error: %v", err)
 	}
@@ -40,11 +39,8 @@ func TestFactoryUnmarshalRecordSpecialEventsRequest(t *testing.T) {
 
 	request, err := UnmarshalRequest(message)
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
-	}
-
-	if request == nil {
+		t.Fatalf("Unexpected error: %v", err)
+	} else if request == nil {
 		t.Fatalf("Unexpected request: %v\n", request)
 	}
 
@@ -69,9 +65,8 @@ func TestUnmarshalRecordSpecialEventsResponse(t *testing.T) {
 	reply := RecordSpecialEventsResponse{}
 
 	err := codec.Unmarshal(message, &reply)
-
 	if err != nil {
-		t.Errorf("Unexpected error: %v\n", err)
+		t.Fatalf("Unexpected error: %v\n", err)
 	}
 
 	if reply.MsgType != 0x8e {
@@ -96,12 +91,9 @@ func TestFactoryUnmarshalRecordSpecialEventsResponse(t *testing.T) {
 	}
 
 	response, err := UnmarshalResponse(message)
-
 	if err != nil {
 		t.Fatalf("Unexpected error: %v\n", err)
-	}
-
-	if response == nil {
+	} else if response == nil {
 		t.Fatalf("Unexpected response: %v\n", response)
 	}
 
@@ -134,7 +126,6 @@ func TestUnmarshalRecordSpecialEventsResponseWithInvalidMsgType(t *testing.T) {
 	reply := RecordSpecialEventsResponse{}
 
 	err := codec.Unmarshal(message, &reply)
-
 	if err == nil {
 		t.Fatalf("Expected error: '%v'", "Invalid value in message - expected 0x52, received 0x94")
 	}

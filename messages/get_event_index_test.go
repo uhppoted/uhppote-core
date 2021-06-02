@@ -19,15 +19,12 @@ func TestMarshalGetEventIndexRequest(t *testing.T) {
 	}
 
 	m, err := codec.Marshal(request)
-
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
+		t.Fatalf("Unexpected error: %v", err)
 	}
 
 	if !reflect.DeepEqual(m, expected) {
 		t.Errorf("Invalid byte array:\nExpected:\n%s\nReturned:\n%s", dump(expected, ""), dump(m, ""))
-		return
 	}
 }
 
@@ -46,8 +43,7 @@ func TestFactoryUnmarshalGetEventIndexRequest(t *testing.T) {
 
 	request, err := UnmarshalRequest(message)
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
+		t.Fatalf("Unexpected error: %v", err)
 	}
 
 	rq, ok := request.(*GetEventIndexRequest)
@@ -57,7 +53,6 @@ func TestFactoryUnmarshalGetEventIndexRequest(t *testing.T) {
 
 	if !reflect.DeepEqual(*rq, expected) {
 		t.Errorf("Invalid unmarshalled request:\nexpected:%#v\ngot:     %#v", expected, *rq)
-		return
 	}
 }
 
@@ -72,9 +67,8 @@ func TestUnmarshalGetEventIndexResponse(t *testing.T) {
 	reply := GetEventIndexResponse{}
 
 	err := codec.Unmarshal(message, &reply)
-
 	if err != nil {
-		t.Errorf("Unexpected error: %v\n", err)
+		t.Fatalf("Unexpected error: %v\n", err)
 	}
 
 	if reply.MsgType != 0xb4 {
@@ -106,8 +100,7 @@ func TestFactoryUnmarshalGetEventIndexResponse(t *testing.T) {
 
 	response, err := UnmarshalResponse(message)
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
+		t.Fatalf("Unexpected error: %v", err)
 	}
 
 	reply, ok := response.(*GetEventIndexResponse)
@@ -117,7 +110,6 @@ func TestFactoryUnmarshalGetEventIndexResponse(t *testing.T) {
 
 	if !reflect.DeepEqual(*reply, expected) {
 		t.Errorf("Invalid unmarshalled response:\nexpected:%#v\ngot:     %#v", expected, *reply)
-		return
 	}
 }
 
@@ -132,9 +124,7 @@ func TestUnmarshalGetEventIndexResponseWithInvalidMsgType(t *testing.T) {
 	reply := GetEventIndexResponse{}
 
 	err := codec.Unmarshal(message, &reply)
-
 	if err == nil {
-		t.Errorf("Expected error: '%v'", "Invalid value in message - expected 0xb4, received 0x94")
-		return
+		t.Fatalf("Expected error: '%v'", "Invalid value in message - expected 0xb4, received 0x94")
 	}
 }

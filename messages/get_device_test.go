@@ -22,13 +22,11 @@ func TestMarshalGetDeviceRequest(t *testing.T) {
 	m, err := codec.Marshal(request)
 
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
+		t.Fatalf("Unexpected error: %v", err)
 	}
 
 	if !reflect.DeepEqual(m, expected) {
 		t.Errorf("Invalid byte array for uhppote.Marshal(%s):\nExpected:\n%s\nReturned:\n%s", "GetDeviceRequest", dump(expected, ""), dump(m, ""))
-		return
 	}
 }
 
@@ -43,9 +41,8 @@ func TestUnmarshalGetDeviceResponse(t *testing.T) {
 	reply := GetDeviceResponse{}
 
 	err := codec.Unmarshal(message, &reply)
-
 	if err != nil {
-		t.Errorf("Unexpected error: %v\n", err)
+		t.Fatalf("Unexpected error: %v\n", err)
 	}
 
 	if reply.MsgType != 0x94 {
@@ -92,7 +89,6 @@ func TestFactoryUnmarshalGetDeviceResponse(t *testing.T) {
 	}
 
 	response, err := UnmarshalResponse(message)
-
 	if err != nil {
 		t.Fatalf("Unexpected error: %v\n", err)
 	}
@@ -154,7 +150,6 @@ func TestUnmarshalGetDeviceResponseWithInvalidMsgType(t *testing.T) {
 	err := codec.Unmarshal(message, &reply)
 
 	if err == nil {
-		t.Errorf("Expected error: '%v'", "Invalid value in message - expected 0x94, received 0x92")
-		return
+		t.Fatalf("Expected error: '%v'", "Invalid value in message - expected 0x94, received 0x92")
 	}
 }

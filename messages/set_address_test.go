@@ -26,13 +26,11 @@ func TestMarshalSetAddressRequest(t *testing.T) {
 	m, err := codec.Marshal(request)
 
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
+		t.Fatalf("Unexpected error: %v", err)
 	}
 
 	if !reflect.DeepEqual(m, expected) {
 		t.Errorf("Invalid byte array:\nExpected:\n%s\nReturned:\n%s", dump(expected, ""), dump(m, ""))
-		return
 	}
 }
 
@@ -55,8 +53,7 @@ func TestFactoryUnmarshalSetAddressRequest(t *testing.T) {
 
 	request, err := UnmarshalRequest(message)
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
+		t.Fatalf("Unexpected error: %v", err)
 	}
 
 	rq, ok := request.(*SetAddressRequest)
@@ -66,6 +63,5 @@ func TestFactoryUnmarshalSetAddressRequest(t *testing.T) {
 
 	if !reflect.DeepEqual(*rq, expected) {
 		t.Errorf("Invalid unmarshalled request:\nexpected:%#v\ngot:     %#v", expected, *rq)
-		return
 	}
 }

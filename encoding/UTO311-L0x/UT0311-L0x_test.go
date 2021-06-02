@@ -49,13 +49,11 @@ func TestMarshalInterface(t *testing.T) {
 	m, err := Marshal(request)
 
 	if err != nil {
-		t.Errorf("Marshal returned unexpected error: %v", err)
-		return
+		t.Fatalf("Marshal returned unexpected error: %v", err)
 	}
 
 	if !reflect.DeepEqual(m, expected) {
-		t.Errorf("Marshal returned invalid message - \nExpected:\n%s\nReturned:\n%s", print(expected), print(m))
-		return
+		t.Fatalf("Marshal returned invalid message - \nExpected:\n%s\nReturned:\n%s", print(expected), print(m))
 	}
 }
 
@@ -110,13 +108,11 @@ func TestMarshal(t *testing.T) {
 	m, err := Marshal(request)
 
 	if err != nil {
-		t.Errorf("Marshal returned unexpected error: %v", err)
-		return
+		t.Fatalf("Marshal returned unexpected error: %v", err)
 	}
 
 	if !reflect.DeepEqual(m, expected) {
-		t.Errorf("Marshal returned invalid message - \nExpected:\n%s\nReturned:\n%s", print(expected), print(m))
-		return
+		t.Fatalf("Marshal returned invalid message - \nExpected:\n%s\nReturned:\n%s", print(expected), print(m))
 	}
 }
 
@@ -138,13 +134,11 @@ func TestMarshalWithDecimalMsgType(t *testing.T) {
 	m, err := Marshal(request)
 
 	if err != nil {
-		t.Errorf("Marshal returned unexpected error: %v", err)
-		return
+		t.Fatalf("Marshal returned unexpected error: %v", err)
 	}
 
 	if !reflect.DeepEqual(m, expected) {
-		t.Errorf("Marshal returned invalid message - \nExpected:\n%s\nReturned:\n%s", print(expected), print(m))
-		return
+		t.Fatalf("Marshal returned invalid message - \nExpected:\n%s\nReturned:\n%s", print(expected), print(m))
 	}
 }
 
@@ -166,13 +160,11 @@ func TestMarshalWithHexadecimalMsgType(t *testing.T) {
 	m, err := Marshal(request)
 
 	if err != nil {
-		t.Errorf("Marshal returned unexpected error: %v", err)
-		return
+		t.Fatalf("Marshal returned unexpected error: %v", err)
 	}
 
 	if !reflect.DeepEqual(m, expected) {
-		t.Errorf("Marshal returned invalid message - \nExpected:\n%s\nReturned:\n%s", print(expected), print(m))
-		return
+		t.Fatalf("Marshal returned invalid message - \nExpected:\n%s\nReturned:\n%s", print(expected), print(m))
 	}
 }
 
@@ -207,8 +199,7 @@ func TestUnmarshal(t *testing.T) {
 	err := Unmarshal(message, &reply)
 
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
+		t.Fatalf("Unexpected error: %v", err)
 	}
 
 	if reply.MsgType != 0x94 {
@@ -296,8 +287,7 @@ func TestUnmarshalInterface(t *testing.T) {
 	err := Unmarshal(message, &reply)
 
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
+		t.Fatalf("Unexpected error: %v", err)
 	}
 
 	if reply.MsgType != 0x94 {
@@ -331,8 +321,7 @@ func TestUnmarshalFromArray(t *testing.T) {
 	err := UnmarshalArray(message, &reply)
 
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
+		t.Fatalf("Unexpected error: %v", err)
 	}
 
 	if len(reply) != 2 {
@@ -463,8 +452,7 @@ func TestUnmarshalArrayElement(t *testing.T) {
 	for _, m := range message {
 		v, err := UnmarshalArrayElement(m, &reply)
 		if err != nil {
-			t.Errorf("Unexpected error: %v", err)
-			return
+			t.Fatalf("Unexpected error: %v", err)
 		} else if v != nil {
 			reply = append(reply, v.(test))
 		}
@@ -507,8 +495,7 @@ func TestUnmarshalWithDecimalMsgType(t *testing.T) {
 	err := Unmarshal(message, &reply)
 
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
+		t.Fatalf("Unexpected error: %v", err)
 	}
 
 	if reply.MsgType != 0x94 {
@@ -536,8 +523,7 @@ func TestUnmarshalWithHexadecimalMsgType(t *testing.T) {
 	err := Unmarshal(message, &reply)
 
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
+		t.Fatalf("Unexpected error: %v", err)
 	}
 
 	if reply.MsgType != 0x94 {
@@ -565,8 +551,7 @@ func TestUnmarshalWithInvalidMsgType(t *testing.T) {
 	err := Unmarshal(message, &reply)
 
 	if err == nil {
-		t.Errorf("Expected error: '%v'", " Invalid value in message - expected 92, received 0x94")
-		return
+		t.Fatalf("Expected error: '%v'", " Invalid value in message - expected 92, received 0x94")
 	}
 }
 
@@ -589,8 +574,7 @@ func TestUnmarshalDateTimel(t *testing.T) {
 	err := Unmarshal(message, &reply)
 
 	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-		return
+		t.Fatalf("Unexpected error: %v", err)
 	}
 
 	datetime, _ := time.ParseInLocation("2006-01-02 15:04:05", "2018-12-31 12:23:34", time.Local)
