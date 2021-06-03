@@ -20,10 +20,8 @@ func (u *uhppote) SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bo
 	for _, k := range []uint8{1, 2, 3} {
 		if segment, ok := profile.Segments[k]; !ok {
 			return false, fmt.Errorf("Time profile is missing segment %v", k)
-		} else if segment.Start == nil {
-			return false, fmt.Errorf("Time profile requires a valid segment %v 'start' time", k)
-		} else if segment.End == nil {
-			return false, fmt.Errorf("Time profile requires a valid segment %v 'end' time", k)
+		} else if segment.End.Before(time.Time(segment.Start)) {
+			return false, fmt.Errorf("Time profile segment %v end is before start (%v)", k, segment)
 		}
 	}
 
@@ -39,12 +37,12 @@ func (u *uhppote) SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bo
 		Friday:          profile.Weekdays[time.Friday],
 		Saturday:        profile.Weekdays[time.Saturday],
 		Sunday:          profile.Weekdays[time.Sunday],
-		Segment1Start:   *profile.Segments[1].Start,
-		Segment1End:     *profile.Segments[1].End,
-		Segment2Start:   *profile.Segments[2].Start,
-		Segment2End:     *profile.Segments[2].End,
-		Segment3Start:   *profile.Segments[3].Start,
-		Segment3End:     *profile.Segments[3].End,
+		Segment1Start:   profile.Segments[1].Start,
+		Segment1End:     profile.Segments[1].End,
+		Segment2Start:   profile.Segments[2].Start,
+		Segment2End:     profile.Segments[2].End,
+		Segment3Start:   profile.Segments[3].Start,
+		Segment3End:     profile.Segments[3].End,
 		LinkedProfileID: profile.LinkedProfileID,
 	}
 

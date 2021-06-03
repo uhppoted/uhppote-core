@@ -54,9 +54,11 @@ func TestTimeProfileJSONMarshal(t *testing.T) {
       "end": "09:45"
     },
     {
-      "start": "11:35"
+      "start": "11:35",
+      "end": "00:00"
     },
     {
+      "start": "00:00",
       "end": "17:59"
     }
   ]
@@ -150,10 +152,4 @@ func TestTimeProfileJSONUnmarshal(t *testing.T) {
 	if !reflect.DeepEqual(profile, expected) {
 		t.Errorf("TimeProfile incorrectly unmarshalled\n   expected:%+v\n   got:     %+v", expected, profile)
 	}
-}
-
-func hhmm(s string) *HHmm {
-	t, _ := HHmmFromString(s)
-
-	return t
 }

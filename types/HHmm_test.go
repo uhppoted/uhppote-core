@@ -6,6 +6,12 @@ import (
 	"time"
 )
 
+func hhmm(s string) HHmm {
+	t, _ := HHmmFromString(s)
+
+	return *t
+}
+
 func TestHHmmMarshalJSON(t *testing.T) {
 	expected := `"08:31"`
 	hhmm := NewHHmm(8, 31)

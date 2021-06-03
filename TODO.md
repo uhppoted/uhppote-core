@@ -2,7 +2,7 @@
 
 ### IN PROGRESS
 
-- [ ] (maybe) make TimeProfile segments not pointers
+- [ ] Make TimeProfile segments to not be pointers
 - [ ] Unit test for unmarshalling missing time profile segments
 - [ ] Add check for deviceID != 0 in IUHPPOTE functions 
 - [ ] Retype UHPPOTE.BindAddress as types.BindAddr

@@ -121,8 +121,8 @@ func TestGetTimeProfileWithInvalidResponse(t *testing.T) {
 	}
 }
 
-func hhmm(s string) *types.HHmm {
+func hhmm(s string) types.HHmm {
 	t, _ := types.HHmmFromString(s)
 
-	return t
+	return *t
 }

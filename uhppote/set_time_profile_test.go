@@ -291,7 +291,7 @@ func TestSetTimeProfileWithMissingSegment3(t *testing.T) {
 	}
 }
 
-func TestSetTimeProfileWithInvalidSegment1Start(t *testing.T) {
+func TestSetTimeProfileWithMissingSegment1End(t *testing.T) {
 	message := []byte{
 		0x17, 0x88, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -314,7 +314,7 @@ func TestSetTimeProfileWithInvalidSegment1Start(t *testing.T) {
 			time.Sunday:    true,
 		},
 		Segments: types.Segments{
-			1: types.Segment{End: hhmm("09:45")},
+			1: types.Segment{Start: hhmm("09:45")},
 			2: types.Segment{Start: hhmm("11:35"), End: hhmm("13:15")},
 			3: types.Segment{Start: hhmm("14:01"), End: hhmm("17:59")},
 		},
@@ -362,7 +362,7 @@ func TestSetTimeProfileWithInvalidSegment1End(t *testing.T) {
 			time.Sunday:    true,
 		},
 		Segments: types.Segments{
-			1: types.Segment{Start: hhmm("08:30")},
+			1: types.Segment{Start: hhmm("08:30"), End: hhmm("07:00")},
 			2: types.Segment{Start: hhmm("11:35"), End: hhmm("13:15")},
 			3: types.Segment{Start: hhmm("14:01"), End: hhmm("17:59")},
 		},
@@ -387,7 +387,7 @@ func TestSetTimeProfileWithInvalidSegment1End(t *testing.T) {
 	}
 }
 
-func TestSetTimeProfileWithInvalidSegment2Start(t *testing.T) {
+func TestSetTimeProfileWithMissingSegment2End(t *testing.T) {
 	message := []byte{
 		0x17, 0x88, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -411,7 +411,7 @@ func TestSetTimeProfileWithInvalidSegment2Start(t *testing.T) {
 		},
 		Segments: types.Segments{
 			1: types.Segment{Start: hhmm("08:30"), End: hhmm("09:45")},
-			2: types.Segment{End: hhmm("13:15")},
+			2: types.Segment{Start: hhmm("13:15")},
 			3: types.Segment{Start: hhmm("14:01"), End: hhmm("17:59")},
 		},
 	}
@@ -508,7 +508,7 @@ func TestSetTimeProfileWithInvalidSegment3Start(t *testing.T) {
 		Segments: types.Segments{
 			1: types.Segment{Start: hhmm("08:30"), End: hhmm("09:45")},
 			2: types.Segment{Start: hhmm("11:35"), End: hhmm("13:15")},
-			3: types.Segment{End: hhmm("17:59")},
+			3: types.Segment{Start: hhmm("18:00"), End: hhmm("17:59")},
 		},
 	}
 

@@ -80,7 +80,7 @@ func TestSegmentsMarshalJSONWithMissingSegment(t *testing.T) {
 }
 
 func TestSegmentsMarshalJSONWithPartialSegments(t *testing.T) {
-	expected := []byte(`[{},{"start":"11:35"},{"end":"18:00"}]`)
+	expected := []byte(`[{"start":"00:00","end":"00:00"},{"start":"11:35","end":"00:00"},{"start":"00:00","end":"18:00"}]`)
 
 	segments := Segments{
 		1: Segment{},
