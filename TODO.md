@@ -2,13 +2,14 @@
 
 ### IN PROGRESS
 
-- [ ] Make TimeProfile segments to not be pointers
-- [ ] Unit test for unmarshalling missing time profile segments
 - [ ] Add check for deviceID != 0 in IUHPPOTE functions 
+- [ ] Rework HHmm to not use time.Time internally
 - [ ] Retype UHPPOTE.BindAddress as types.BindAddr
 - [ ] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
 - [ ] Retype UHPPOTE.ListenAddress as types.ListenAddr
 
+- [x] Unit test for unmarshalling missing time profile segments
+- [x] Make TimeProfile segments to not be pointers
 - [x] Rework JSON segments marshalling to be array 
 - [x] Rearchitecture as factory/device/driver
 - [x] Change *Device to Device in UHPPOTE.devices to prevent copy-from-range-of-map mistakes
