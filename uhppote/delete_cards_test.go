@@ -33,3 +33,12 @@ func TestDeleteCards(t *testing.T) {
 		t.Errorf("Invalid response:\nexpected:%#v\ngot:     %#v", expected, enabled)
 	}
 }
+
+func TestDeleteCardsWithInvalidDeviceID(t *testing.T) {
+	u := uhppote{}
+
+	_, err := u.DeleteCards(0)
+	if err == nil {
+		t.Fatalf("Expected 'Invalid device ID' error, got %v", err)
+	}
+}

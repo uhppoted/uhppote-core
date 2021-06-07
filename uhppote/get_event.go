@@ -6,15 +6,19 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *uhppote) GetEvent(serialNumber, index uint32) (*types.Event, error) {
+func (u *uhppote) GetEvent(deviceID, index uint32) (*types.Event, error) {
+	if deviceID == 0 {
+		return nil, fmt.Errorf("Invalid device ID (%v)", deviceID)
+	}
+
 	request := messages.GetEventRequest{
-		SerialNumber: types.SerialNumber(serialNumber),
+		SerialNumber: types.SerialNumber(deviceID),
 		Index:        index,
 	}
 
 	reply := messages.GetEventResponse{}
 
-	err := u.send(serialNumber, request, &reply)
+	err := u.send(deviceID, request, &reply)
 	if err != nil {
 		return nil, err
 	}

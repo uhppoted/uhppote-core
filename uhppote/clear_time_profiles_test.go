@@ -33,3 +33,12 @@ func TestClearTimeProfiles(t *testing.T) {
 		t.Errorf("Invalid response:\nexpected:%#v\ngot:     %#v", expected, enabled)
 	}
 }
+
+func TestClearTimeProfilesWithInvalidDeviceID(t *testing.T) {
+	u := uhppote{}
+
+	_, err := u.ClearTimeProfiles(0)
+	if err == nil {
+		t.Fatalf("Expected 'Invalid device ID' error, got %v", err)
+	}
+}

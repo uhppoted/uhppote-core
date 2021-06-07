@@ -13,6 +13,10 @@ import (
 // if the request failed for any reason. Returns an error if the request could not
 // be sent or the response is invalid.
 func (u *uhppote) RecordSpecialEvents(deviceID uint32, enable bool) (bool, error) {
+	if deviceID == 0 {
+		return false, fmt.Errorf("Invalid device ID (%v)", deviceID)
+	}
+
 	request := messages.RecordSpecialEventsRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		Enable:       enable,

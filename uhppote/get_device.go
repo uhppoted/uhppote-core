@@ -1,6 +1,7 @@
 package uhppote
 
 import (
+	"fmt"
 	"net"
 	"time"
 
@@ -52,6 +53,10 @@ func (u *uhppote) GetDevices() ([]types.Device, error) {
 }
 
 func (u *uhppote) GetDevice(serialNumber uint32) (*types.Device, error) {
+	if serialNumber == 0 {
+		return nil, fmt.Errorf("Invalid device ID (%v)", serialNumber)
+	}
+
 	request := messages.GetDeviceRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 	}

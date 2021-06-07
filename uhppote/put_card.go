@@ -8,6 +8,10 @@ import (
 )
 
 func (u *uhppote) PutCard(deviceID uint32, card types.Card) (bool, error) {
+	if deviceID == 0 {
+		return false, fmt.Errorf("Invalid device ID (%v)", deviceID)
+	}
+
 	request := messages.PutCardRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   card.CardNumber,

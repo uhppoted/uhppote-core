@@ -9,6 +9,10 @@ import (
 )
 
 func (u *uhppote) SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bool, error) {
+	if deviceID == 0 {
+		return false, fmt.Errorf("Invalid device ID (%v)", deviceID)
+	}
+
 	if profile.From == nil {
 		return false, fmt.Errorf("Time profile requires a valid 'from' date")
 	}

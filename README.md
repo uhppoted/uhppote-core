@@ -39,22 +39,25 @@ Supported operating systems:
 
 ## API
 
-- FindDevices
-- FindDevice
+- GetDevices
+- GetDevice
 - SetAddress
-- GetStatus
 - GetTime
 - SetTime
 - GetDoorControlState
 - SetDoorControlState
 - GetListener
 - SetListener
+- GetStatus
 - GetCards
-- GetCardByIndex
 - GetCardById
+- GetCardByIndex
 - PutCard
 - DeleteCard
-- RecordSpecialEvents
+- DeleteCards
+- GetTimeProfile
+- SetTimeProfile
+- ClearTimeProfiles
 - GetEvent
 - GetEventIndex
 - SetEventIndex

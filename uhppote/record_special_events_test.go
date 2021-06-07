@@ -33,3 +33,12 @@ func TestRecordSpecialEvents(t *testing.T) {
 		t.Errorf("Invalid response:\nexpected:%#v\ngot:     %#v", expected, enabled)
 	}
 }
+
+func TestRecordSpecialEventsWithInvalidDeviceID(t *testing.T) {
+	u := uhppote{}
+
+	_, err := u.RecordSpecialEvents(0, true)
+	if err == nil {
+		t.Fatalf("Expected 'Invalid device ID' error, got %v", err)
+	}
+}

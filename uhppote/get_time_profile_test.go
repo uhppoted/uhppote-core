@@ -121,6 +121,15 @@ func TestGetTimeProfileWithInvalidResponse(t *testing.T) {
 	}
 }
 
+func TestGetTimeProfileWithInvalidDeviceID(t *testing.T) {
+	u := uhppote{}
+
+	_, err := u.GetTimeProfile(0, 29)
+	if err == nil {
+		t.Fatalf("Expected 'Invalid device ID' error, got %v", err)
+	}
+}
+
 func hhmm(s string) types.HHmm {
 	t, _ := types.HHmmFromString(s)
 

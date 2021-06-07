@@ -51,6 +51,15 @@ func TestGetCardByID(t *testing.T) {
 	}
 }
 
+func TestGetCardByIdWithInvalidDeviceID(t *testing.T) {
+	u := uhppote{}
+
+	_, err := u.GetCardByID(0, 8165535)
+	if err == nil {
+		t.Fatalf("Expected 'Invalid device ID' error, got %v", err)
+	}
+}
+
 func TestGetCardByIndex(t *testing.T) {
 	message := []byte{
 		0x17, 0x5c, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0xd4, 0x88, 0x5d, 0x00, 0x20, 0x20, 0x01, 0x01,
@@ -145,5 +154,14 @@ func TestGetCardByIndexWithCardDeleted(t *testing.T) {
 
 	if card != nil {
 		t.Fatalf("Expected <nil> from GetCardByIndex, got:%v", *card)
+	}
+}
+
+func TestGetCardByIndexWithInvalidDeviceID(t *testing.T) {
+	u := uhppote{}
+
+	_, err := u.GetCardByIndex(0, 17)
+	if err == nil {
+		t.Fatalf("Expected 'Invalid device ID' error, got %v", err)
 	}
 }

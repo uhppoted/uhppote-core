@@ -1,19 +1,18 @@
 package uhppote
 
 import (
+	"fmt"
+	"net"
+
 	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
-	"net"
 )
 
-type GetListenerResponse struct {
-	MsgType      types.MsgType      `uhppote:"value:0x92"`
-	SerialNumber types.SerialNumber `uhppote:"offset:4"`
-	Address      net.IP             `uhppote:"offset:8"`
-	Port         uint16             `uhppote:"offset:12"`
-}
-
 func (u *uhppote) GetListener(serialNumber uint32) (*types.Listener, error) {
+	if serialNumber == 0 {
+		return nil, fmt.Errorf("Invalid device ID (%v)", serialNumber)
+	}
+
 	request := messages.GetListenerRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 	}

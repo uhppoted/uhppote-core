@@ -1,12 +1,18 @@
 package uhppote
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
-	"time"
 )
 
 func (u *uhppote) GetStatus(serialNumber uint32) (*types.Status, error) {
+	if serialNumber == 0 {
+		return nil, fmt.Errorf("Invalid device ID (%v)", serialNumber)
+	}
+
 	request := messages.GetStatusRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 	}

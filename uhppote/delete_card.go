@@ -8,6 +8,10 @@ import (
 )
 
 func (u *uhppote) DeleteCard(deviceID uint32, cardNumber uint32) (bool, error) {
+	if deviceID == 0 {
+		return false, fmt.Errorf("Invalid device ID (%v)", deviceID)
+	}
+
 	request := messages.DeleteCardRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   cardNumber,

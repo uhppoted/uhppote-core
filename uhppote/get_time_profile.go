@@ -9,6 +9,10 @@ import (
 )
 
 func (u *uhppote) GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeProfile, error) {
+	if deviceID == 0 {
+		return nil, fmt.Errorf("Invalid device ID (%v)", deviceID)
+	}
+
 	request := messages.GetTimeProfileRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		ProfileID:    profileID,

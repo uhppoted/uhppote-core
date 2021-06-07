@@ -6,13 +6,17 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *uhppote) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
-	request := messages.GetCardByIndexRequest{
-		SerialNumber: types.SerialNumber(deviceID),
-		Index:        index,
+func (u *uhppote) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) {
+	if deviceID == 0 {
+		return nil, fmt.Errorf("Invalid device ID (%v)", deviceID)
 	}
 
-	response := messages.GetCardByIndexResponse{}
+	request := messages.GetCardByIDRequest{
+		SerialNumber: types.SerialNumber(deviceID),
+		CardNumber:   cardNumber,
+	}
+
+	response := messages.GetCardByIDResponse{}
 
 	err := u.send(deviceID, request, &response)
 	if err != nil {
@@ -20,13 +24,15 @@ func (u *uhppote) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
 	}
 
 	if uint32(response.SerialNumber) != deviceID {
-		return nil, fmt.Errorf("Incorrect device ID in response - expected '%v', received '%v'", deviceID, response.SerialNumber)
+		return nil, fmt.Errorf("Incorrect serial number in response - expected '%v', received '%v'", deviceID, response.SerialNumber)
 	}
 
-	// 0:          not found
-	// 0xffffffff: deleted
-	if response.CardNumber == 0 || response.CardNumber == 0xffffffff {
+	if response.CardNumber == 0 {
 		return nil, nil
+	}
+
+	if response.CardNumber != cardNumber {
+		return nil, fmt.Errorf("Incorrect card number in response - expected '%v', received '%v'", cardNumber, response.CardNumber)
 	}
 
 	if response.From == nil {
@@ -52,13 +58,17 @@ func (u *uhppote) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
 	return &card, nil
 }
 
-func (u *uhppote) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) {
-	request := messages.GetCardByIDRequest{
-		SerialNumber: types.SerialNumber(deviceID),
-		CardNumber:   cardNumber,
+func (u *uhppote) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
+	if deviceID == 0 {
+		return nil, fmt.Errorf("Invalid device ID (%v)", deviceID)
 	}
 
-	response := messages.GetCardByIDResponse{}
+	request := messages.GetCardByIndexRequest{
+		SerialNumber: types.SerialNumber(deviceID),
+		Index:        index,
+	}
+
+	response := messages.GetCardByIndexResponse{}
 
 	err := u.send(deviceID, request, &response)
 	if err != nil {
@@ -66,15 +76,13 @@ func (u *uhppote) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) 
 	}
 
 	if uint32(response.SerialNumber) != deviceID {
-		return nil, fmt.Errorf("Incorrect serial number in response - expected '%v', received '%v'", deviceID, response.SerialNumber)
+		return nil, fmt.Errorf("Incorrect device ID in response - expected '%v', received '%v'", deviceID, response.SerialNumber)
 	}
 
-	if response.CardNumber == 0 {
+	// 0:          not found
+	// 0xffffffff: deleted
+	if response.CardNumber == 0 || response.CardNumber == 0xffffffff {
 		return nil, nil
-	}
-
-	if response.CardNumber != cardNumber {
-		return nil, fmt.Errorf("Incorrect card number in response - expected '%v', received '%v'", cardNumber, response.CardNumber)
 	}
 
 	if response.From == nil {

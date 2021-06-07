@@ -96,3 +96,12 @@ func TestGetEventWithError(t *testing.T) {
 		t.Fatalf("Expected error return from GetEvent")
 	}
 }
+
+func TestGetEventWithInvalidDeviceID(t *testing.T) {
+	u := uhppote{}
+
+	_, err := u.GetEvent(0, 17)
+	if err == nil {
+		t.Fatalf("Expected 'Invalid device ID' error, got %v", err)
+	}
+}

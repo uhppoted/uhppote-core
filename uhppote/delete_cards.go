@@ -1,19 +1,25 @@
 package uhppote
 
 import (
+	"fmt"
+
 	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *uhppote) DeleteCards(serialNumber uint32) (bool, error) {
+func (u *uhppote) DeleteCards(deviceID uint32) (bool, error) {
+	if deviceID == 0 {
+		return false, fmt.Errorf("Invalid device ID (%v)", deviceID)
+	}
+
 	request := messages.DeleteCardsRequest{
-		SerialNumber: types.SerialNumber(serialNumber),
+		SerialNumber: types.SerialNumber(deviceID),
 		MagicWord:    0x55aaaa55,
 	}
 
 	reply := messages.DeleteCardsResponse{}
 
-	err := u.send(serialNumber, request, &reply)
+	err := u.send(deviceID, request, &reply)
 	if err != nil {
 		return false, err
 	}
