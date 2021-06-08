@@ -3,7 +3,6 @@ package types
 import (
 	"encoding/json"
 	"testing"
-	"time"
 )
 
 func hhmm(s string) HHmm {
@@ -41,25 +40,18 @@ func TestHHmmUnmarshalJSON(t *testing.T) {
 }
 
 func TestHHmmBefore(t *testing.T) {
-	now := time.Now()
-	y := now.Year()
-	m := now.Month()
-	d := now.Day()
-	s := now.Second()
-	ns := now.Nanosecond()
-
 	tests := []struct {
 		p        HHmm
-		q        time.Time
+		q        HHmm
 		expected bool
 	}{
-		{NewHHmm(10, 30), time.Date(y, m, d, 11, 30, s, ns, time.Local), true},
-		{NewHHmm(11, 30), time.Date(y, m, d, 11, 30, s, ns, time.Local), false},
-		{NewHHmm(12, 30), time.Date(y, m, d, 11, 30, s, ns, time.Local), false},
+		{NewHHmm(10, 30), NewHHmm(11, 30), true},
+		{NewHHmm(11, 30), NewHHmm(11, 30), false},
+		{NewHHmm(12, 30), NewHHmm(11, 30), false},
 
-		{NewHHmm(11, 25), time.Date(y, m, d, 11, 30, s, ns, time.Local), true},
-		{NewHHmm(11, 30), time.Date(y, m, d, 11, 30, s, ns, time.Local), false},
-		{NewHHmm(11, 35), time.Date(y, m, d, 11, 30, s, ns, time.Local), false},
+		{NewHHmm(11, 25), NewHHmm(11, 30), true},
+		{NewHHmm(11, 30), NewHHmm(11, 30), false},
+		{NewHHmm(11, 35), NewHHmm(11, 30), false},
 	}
 
 	for _, v := range tests {
@@ -69,49 +61,24 @@ func TestHHmmBefore(t *testing.T) {
 	}
 }
 
-func TestHHmmBeforeNow(t *testing.T) {
-	now := time.Now()
-	hhmm, _ := HHmmFromString(now.Format("15:04"))
-
-	if hhmm.Before(now) {
-		t.Errorf("HHmm '%v' should not be before now (%v)", hhmm, now)
-	}
-}
-
 func TestHHmmAfter(t *testing.T) {
-	now := time.Now()
-	y := now.Year()
-	m := now.Month()
-	d := now.Day()
-	s := now.Second()
-	ns := now.Nanosecond()
-
 	tests := []struct {
 		p        HHmm
-		q        time.Time
+		q        HHmm
 		expected bool
 	}{
-		{NewHHmm(10, 30), time.Date(y, m, d, 11, 30, s, ns, time.Local), false},
-		{NewHHmm(11, 30), time.Date(y, m, d, 11, 30, s, ns, time.Local), false},
-		{NewHHmm(12, 30), time.Date(y, m, d, 11, 30, s, ns, time.Local), true},
+		{NewHHmm(10, 30), NewHHmm(11, 30), false},
+		{NewHHmm(11, 30), NewHHmm(11, 30), false},
+		{NewHHmm(12, 30), NewHHmm(11, 30), true},
 
-		{NewHHmm(11, 25), time.Date(y, m, d, 11, 30, s, ns, time.Local), false},
-		{NewHHmm(11, 30), time.Date(y, m, d, 11, 30, s, ns, time.Local), false},
-		{NewHHmm(11, 35), time.Date(y, m, d, 11, 30, s, ns, time.Local), true},
+		{NewHHmm(11, 25), NewHHmm(11, 30), false},
+		{NewHHmm(11, 30), NewHHmm(11, 30), false},
+		{NewHHmm(11, 35), NewHHmm(11, 30), true},
 	}
 
 	for _, v := range tests {
 		if after := v.p.After(v.q); after != v.expected {
 			t.Errorf("Expected %v %v 'after' %v, got:%v", v.expected, v.p, v.q, after)
 		}
-	}
-}
-
-func TestHHmmAfterNow(t *testing.T) {
-	now := time.Now()
-	hhmm, _ := HHmmFromString(now.Format("15:04"))
-
-	if hhmm.After(now) {
-		t.Errorf("HHmm '%v' should not be after now (%v)", hhmm, now)
 	}
 }

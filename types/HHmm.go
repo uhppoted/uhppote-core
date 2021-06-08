@@ -22,6 +22,13 @@ func NewHHmm(hours, minutes int) HHmm {
 	}
 }
 
+func HHmmFromTime(t time.Time) HHmm {
+	return HHmm{
+		hours:   t.Hour(),
+		minutes: t.Minute(),
+	}
+}
+
 func HHmmFromString(s string) (*HHmm, error) {
 	re := regexp.MustCompile("^([0-9]{2}):([0-9]{2})$")
 
@@ -59,7 +66,11 @@ func (h HHmm) String() string {
 	return fmt.Sprintf("%02d:%02d", h.hours, h.minutes)
 }
 
-func (h HHmm) Before(v interface{}) bool {
+func (h HHmm) Before(t HHmm) bool {
+	return h.before(t)
+}
+
+func (h HHmm) before(v interface{}) bool {
 	switch t := v.(type) {
 	case time.Time:
 		if h.hours < t.Hour() {
@@ -90,15 +101,36 @@ func (h HHmm) Before(v interface{}) bool {
 	return false
 }
 
-func (h HHmm) After(t time.Time) bool {
-	if h.hours > t.Hour() {
-		return true
-	}
+func (h HHmm) After(t HHmm) bool {
+	return h.after(t)
+}
 
-	if h.hours == t.Hour() {
-		if h.minutes > t.Minute() {
+func (h HHmm) after(v interface{}) bool {
+	switch t := v.(type) {
+	case time.Time:
+		if h.hours > t.Hour() {
 			return true
 		}
+
+		if h.hours == t.Hour() {
+			if h.minutes > t.Minute() {
+				return true
+			}
+		}
+
+	case HHmm:
+		if h.hours > t.hours {
+			return true
+		}
+
+		if h.hours == t.hours {
+			if h.minutes > t.minutes {
+				return true
+			}
+		}
+
+	default:
+		panic("Cannot compare HHmm to anything except time.Time and types.HHmm")
 	}
 
 	return false
