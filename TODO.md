@@ -2,11 +2,12 @@
 
 ### IN PROGRESS
 
-- [ ] Rework HHmm to not use time.Time internally
+- [ ] Rethink DateTime Stringer (shouldn't use *DateTime but ????)
 - [ ] Retype UHPPOTE.BindAddress as types.BindAddr
 - [ ] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
 - [ ] Retype UHPPOTE.ListenAddress as types.ListenAddr
 
+- [x] Rework HHmm to not use time.Time internally
 - [x] Add check for deviceID != 0 in IUHPPOTE functions 
 - [x] Unit test for unmarshalling missing time profile segments
 - [x] Make TimeProfile segments to not be pointers

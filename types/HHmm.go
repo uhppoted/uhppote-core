@@ -3,57 +3,100 @@ package types
 import (
 	"encoding/json"
 	"fmt"
+	"regexp"
+	"strconv"
 	"time"
 
 	"github.com/uhppoted/uhppote-core/encoding/bcd"
 )
 
-type HHmm time.Time
+type HHmm struct {
+	hours   int
+	minutes int
+}
 
 func NewHHmm(hours, minutes int) HHmm {
-	return HHmm(time.Date(0, time.January, 1, hours, minutes, 0, 0, time.Local))
+	return HHmm{
+		hours:   hours,
+		minutes: minutes,
+	}
 }
 
 func HHmmFromString(s string) (*HHmm, error) {
-	hhmmss, err := time.ParseInLocation("15:04", s, time.Local)
-	if err != nil {
-		return nil, err
+	re := regexp.MustCompile("^([0-9]{2}):([0-9]{2})$")
+
+	match := re.FindStringSubmatch(s)
+	if match == nil || len(match) != 3 {
+		return nil, fmt.Errorf("Invalid HH:mm string (%s)", s)
 	}
 
-	t := HHmm(hhmmss)
+	hours, err := strconv.Atoi(match[1])
+	if err != nil {
+		return nil, fmt.Errorf("Invalid HH:mm string (%w)", err)
+	}
 
-	return &t, nil
+	minutes, err := strconv.Atoi(match[2])
+	if err != nil {
+		return nil, fmt.Errorf("Invalid HH:mm string (%w)", err)
+	}
+
+	if hours < 0 || hours > 24 {
+		return nil, fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
+	}
+
+	if minutes < 0 || minutes > 60 {
+		return nil, fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
+	}
+
+	if hours == 24 && minutes != 0 {
+		return nil, fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
+	}
+
+	return &HHmm{hours: hours, minutes: minutes}, nil
 }
 
 func (h HHmm) String() string {
-	return time.Time(h).Format("15:04")
+	return fmt.Sprintf("%02d:%02d", h.hours, h.minutes)
 }
 
-func (h HHmm) Before(t time.Time) bool {
-	p := time.Time(h)
-
-	if p.Hour() < t.Hour() {
-		return true
-	}
-
-	if p.Hour() == t.Hour() {
-		if p.Minute() < t.Minute() {
+func (h HHmm) Before(v interface{}) bool {
+	switch t := v.(type) {
+	case time.Time:
+		if h.hours < t.Hour() {
 			return true
 		}
+
+		if h.hours == t.Hour() {
+			if h.minutes < t.Minute() {
+				return true
+			}
+		}
+
+	case HHmm:
+		if h.hours < t.hours {
+			return true
+		}
+
+		if h.hours == t.hours {
+			if h.minutes < t.minutes {
+				return true
+			}
+		}
+
+	default:
+		panic("Cannot compare HHmm to anything except time.Time and types.HHmm")
 	}
 
 	return false
 }
 
 func (h HHmm) After(t time.Time) bool {
-	p := time.Time(h)
-
-	if p.Hour() > t.Hour() {
+	if h.hours > t.Hour() {
 		return true
 	}
 
-	if p.Hour() == t.Hour() {
-		if p.Minute() > t.Minute() {
+	if h.hours == t.Hour() {
+		if h.minutes > t.Minute() {
 			return true
 		}
 	}
@@ -62,7 +105,7 @@ func (h HHmm) After(t time.Time) bool {
 }
 
 func (h HHmm) MarshalUT0311L0x() ([]byte, error) {
-	encoded, err := bcd.Encode(time.Time(h).Format("1504"))
+	encoded, err := bcd.Encode(fmt.Sprintf("%02d%02d", h.hours, h.minutes))
 
 	if err != nil {
 		return []byte{}, fmt.Errorf("Error encoding HHmm time %v to BCD: [%v]", h, err)
@@ -81,18 +124,40 @@ func (h *HHmm) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
 		return nil, err
 	}
 
-	time, err := time.ParseInLocation("1504", decoded, time.Local)
-	if err != nil {
-		return nil, err
+	re := regexp.MustCompile("^([0-9]{2})([0-9]{2})$")
+
+	match := re.FindStringSubmatch(decoded)
+	if match == nil || len(match) != 3 {
+		return nil, fmt.Errorf("Invalid HH:mm string (%s)", decoded)
 	}
 
-	v := HHmm(time)
+	hours, err := strconv.Atoi(match[1])
+	if err != nil {
+		return nil, fmt.Errorf("Invalid HH:mm string (%w)", err)
+	}
 
-	return &v, nil
+	minutes, err := strconv.Atoi(match[2])
+	if err != nil {
+		return nil, fmt.Errorf("Invalid HH:mm string (%w)", err)
+	}
+
+	if hours < 0 || hours > 24 {
+		return nil, fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", decoded)
+	}
+
+	if minutes < 0 || minutes > 60 {
+		return nil, fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", decoded)
+	}
+
+	if hours == 24 && minutes != 0 {
+		return nil, fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", decoded)
+	}
+
+	return &HHmm{hours: hours, minutes: minutes}, nil
 }
 
 func (h HHmm) MarshalJSON() ([]byte, error) {
-	return json.Marshal(time.Time(h).Format("15:04"))
+	return json.Marshal(fmt.Sprintf("%02d:%02d", h.hours, h.minutes))
 }
 
 func (h *HHmm) UnmarshalJSON(bytes []byte) error {
@@ -103,12 +168,39 @@ func (h *HHmm) UnmarshalJSON(bytes []byte) error {
 		return err
 	}
 
-	t, err := time.ParseInLocation("15:04", s, time.Local)
-	if err != nil {
-		return err
+	re := regexp.MustCompile("^([0-9]{2}):([0-9]{2})$")
+
+	match := re.FindStringSubmatch(s)
+	if match == nil || len(match) != 3 {
+		return fmt.Errorf("Invalid HH:mm string (%s)", s)
 	}
 
-	*h = HHmm(t)
+	hours, err := strconv.Atoi(match[1])
+	if err != nil {
+		return fmt.Errorf("Invalid HH:mm string (%w)", err)
+	}
+
+	minutes, err := strconv.Atoi(match[2])
+	if err != nil {
+		return fmt.Errorf("Invalid HH:mm string (%w)", err)
+	}
+
+	if hours < 0 || hours > 24 {
+		return fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
+	}
+
+	if minutes < 0 || minutes > 60 {
+		return fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
+	}
+
+	if hours == 24 && minutes != 0 {
+		return fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
+	}
+
+	*h = HHmm{
+		hours:   hours,
+		minutes: minutes,
+	}
 
 	return nil
 }

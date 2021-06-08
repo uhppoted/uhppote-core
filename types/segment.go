@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
-	"time"
 )
 
 type Segments map[uint8]Segment
@@ -58,10 +57,10 @@ func (ss *Segments) UnmarshalJSON(bytes []byte) error {
 }
 
 func (s Segment) String() string {
-	start := time.Time(s.Start)
-	end := time.Time(s.End)
+	start := s.Start
+	end := s.End
 
-	if start.Hour() == 0 && start.Minute() == 0 && end.Hour() == 0 && end.Minute() == 0 {
+	if start.hours == 0 && start.minutes == 0 && end.hours == 0 && end.minutes == 0 {
 		return ""
 	}
 

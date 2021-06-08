@@ -24,7 +24,7 @@ func (u *uhppote) SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bo
 	for _, k := range []uint8{1, 2, 3} {
 		if segment, ok := profile.Segments[k]; !ok {
 			return false, fmt.Errorf("Time profile is missing segment %v", k)
-		} else if segment.End.Before(time.Time(segment.Start)) {
+		} else if segment.End.Before(segment.Start) {
 			return false, fmt.Errorf("Time profile segment %v end is before start (%v)", k, segment)
 		}
 	}

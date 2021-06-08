@@ -47,7 +47,7 @@ release: test vet
 bump:
 
 debug: build
-	go test ./... -run TestSegmentsMarshal
+	go test ./... -run TestHHmm
 
 godoc:
 	godoc -http=:80	-index_interval=60s
