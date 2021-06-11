@@ -15,6 +15,7 @@ Supported operating systems:
 
 | *Version* | *Description*                                                                             |
 | --------- | ----------------------------------------------------------------------------------------- |
+| v0.7.0    | Added support for time profiles from the extended API                                     |
 | v0.6.12   | Improved handling of concurrent requests and invalid responses                            |
 | v0.6.10   | Bumped version to 0.6.10 for initial `uhppoted-app-wild-apricot` release                  |
 | v0.6.8    | Improved internal support for UHPPOTE v6.62 firmware                                      |
@@ -31,6 +32,22 @@ Supported operating systems:
 
 ### Building from source
 
+Assuming you have `Go` and `make` installed:
+
+```
+git clone https://github.com/uhppoted/uhppote-core.git
+cd uhppote-core
+make build
+```
+
+If you prefer not to use `make`:
+```
+git clone https://github.com/uhppoted/uhppote-core.git
+cd uhppote-core
+mkdir bin
+go build -o bin ./...
+```
+
 #### Dependencies
 
 | *Dependency*                        | *Description*                                          |
@@ -42,12 +59,13 @@ Supported operating systems:
 - GetDevices
 - GetDevice
 - SetAddress
+- GetListener
+- SetListener
 - GetTime
 - SetTime
 - GetDoorControlState
 - SetDoorControlState
-- GetListener
-- SetListener
+- RecordSpecialEvents
 - GetStatus
 - GetCards
 - GetCardById
@@ -61,7 +79,5 @@ Supported operating systems:
 - GetEvent
 - GetEventIndex
 - SetEventIndex
-- RecordSpecialEvents
 - OpenDoor
 - Listen
-

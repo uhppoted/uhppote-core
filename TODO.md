@@ -1,11 +1,4 @@
-## v0.7.x
-
-### IN PROGRESS
-
-- [ ] Rethink DateTime Stringer (shouldn't use *DateTime but ????)
-- [ ] Retype UHPPOTE.BindAddress as types.BindAddr
-- [ ] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
-- [ ] Retype UHPPOTE.ListenAddress as types.ListenAddr
+## v0.7.0
 
 - [x] Rework HHmm to not use time.Time internally
 - [x] Add check for deviceID != 0 in IUHPPOTE functions 
@@ -26,6 +19,12 @@
 - [x] Make UHPPOTE.Devices a private field
 
 ## TODO
+
+- [ ] Rethink DateTime Stringer (shouldn't use *DateTime but ????)
+- [ ] Retype UHPPOTE.BindAddress as types.BindAddr
+- [ ] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
+- [ ] Retype UHPPOTE.ListenAddress as types.ListenAddr
+- [ ] Document API in README
 
 - [ ] Implement separate Get..All functions (??)
 - [ ] Add https://odi.ch/weblog/posting.php?posting=731 to cookbook
