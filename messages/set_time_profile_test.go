@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
-	//	"github.com/uhppoted/uhppote-core/types"
 )
 
 func TestMarshalSetTimeProfileRequest(t *testing.T) {
