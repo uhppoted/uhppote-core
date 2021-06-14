@@ -1,30 +1,18 @@
-## v0.7.0
+## v0.7.x
 
-- [x] Rework HHmm to not use time.Time internally
-- [x] Add check for deviceID != 0 in IUHPPOTE functions 
-- [x] Unit test for unmarshalling missing time profile segments
-- [x] Make TimeProfile segments to not be pointers
-- [x] Rework JSON segments marshalling to be array 
-- [x] Rearchitecture as factory/device/driver
-- [x] Change *Device to Device in UHPPOTE.devices to prevent copy-from-range-of-map mistakes
-- [x] Replace types.Permission with int
-- [x] put-card with time profile
-- [x] get-card with time profile
-- [x] clear-time-profile
-- [x] date.Before not behaving quite right (should be inclusive?)
-- [x] Make UHPPOTE.BindAddress a private field
-- [x] Make UHPPOTE.BroadcastAddress a private field
-- [x] Make UHPPOTE.ListenAddress a private field
-- [x] update remaining tests with Errorf + return to Fatalf
-- [x] Make UHPPOTE.Devices a private field
-
-## TODO
+- [x] `clear-task-list`
+- [ ] `add-task-list`
+- [ ] `set-first-card`
+- [ ] `refresh-first-card`
 
 - [ ] Rethink DateTime Stringer (shouldn't use *DateTime but ????)
 - [ ] Retype UHPPOTE.BindAddress as types.BindAddr
 - [ ] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
 - [ ] Retype UHPPOTE.ListenAddress as types.ListenAddr
 - [ ] Document API in README
+
+
+## TODO
 
 - [ ] Implement separate Get..All functions (??)
 - [ ] Add https://odi.ch/weblog/posting.php?posting=731 to cookbook
