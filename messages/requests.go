@@ -32,6 +32,7 @@ var requests = map[byte]func() Request{
 	0x98: func() Request { return new(GetTimeProfileRequest) },
 	0xa6: func() Request { return new(ClearTaskListRequest) },
 	0xa8: func() Request { return new(AddTaskRequest) },
+	0xaa: func() Request { return new(SetFirstCardRequest) },
 	0xac: func() Request { return new(RefreshTaskListRequest) },
 	0xb0: func() Request { return new(GetEventRequest) },
 	0xb2: func() Request { return new(SetEventIndexRequest) },
