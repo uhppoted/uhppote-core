@@ -35,6 +35,8 @@ type IUHPPOTE interface {
 	ClearTimeProfiles(deviceID uint32) (bool, error)
 
 	ClearTaskList(deviceID uint32) (bool, error)
+	AddTask(deviceID uint32, task types.Task) (bool, error)
+	RefreshTaskList(deviceID uint32) (bool, error)
 
 	GetEvent(deviceID, index uint32) (*types.Event, error)
 	GetEventIndex(deviceID uint32) (*types.EventIndex, error)
