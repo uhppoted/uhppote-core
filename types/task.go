@@ -7,13 +7,13 @@ import (
 )
 
 type Task struct {
-	From      *Date    `json:"start-date,omitempty"`
-	To        *Date    `json:"end-date,omitempty"`
-	Weekdays  Weekdays `json:"weekdays,omitempty"`
-	Start     HHmm     `json:"start,omitempty"`
-	Door      uint8    `json:"door,omitempty"`
-	Task      TaskType `json:"task"`
-	MoreCards uint8    `json:"more-cards,omitempty"`
+	Task     TaskType `json:"task"`
+	Door     uint8    `json:"door,omitempty"`
+	From     *Date    `json:"start-date,omitempty"`
+	To       *Date    `json:"end-date,omitempty"`
+	Weekdays Weekdays `json:"weekdays,omitempty"`
+	Start    HHmm     `json:"start,omitempty"`
+	Cards    uint8    `json:"cards,omitempty"`
 }
 
 type TaskType int
@@ -36,14 +36,14 @@ const (
 
 func (tt TaskType) String() string {
 	return [...]string{
-		"DOOR CONTROLLED",
-		"DOOR OPEN",
-		"DOOR CLOSED",
+		"CONTROL DOOR",
+		"UNLOCK DOOR",
+		"LOCK DOOR",
 		"DISABLE TIME PROFILE",
 		"ENABLE TIME PROFILE",
-		"CARD - NO PASSWORD",
-		"CARD - IN PASSWORD",
-		"CARD - IN/OUT PASSWORD",
+		"ENABLE CARD, NO PASSWORD",
+		"ENABLE CARD+IN PASSWORD",
+		"ENABLE CARD+PASSWORD",
 		"ENABLE MORE CARDS",
 		"DISABLE MORE CARDS",
 		"TRIGGER ONCE",
@@ -69,10 +69,14 @@ func (t Task) String() string {
 	start := fmt.Sprintf("%v", t.Start)
 	door := fmt.Sprintf("%v", t.Door)
 	task := fmt.Sprintf("%v", t.Task)
-	cards := fmt.Sprintf("%v", t.MoreCards)
+	cards := ""
+
+	if t.Task == EnableMoreCards {
+		fmt.Sprintf("%v", t.Cards)
+	}
 
 	list := []string{}
-	for _, s := range []string{task, dates, weekdays, start, door, cards} {
+	for _, s := range []string{task, door, dates, weekdays, start, cards} {
 		if s != "" {
 			list = append(list, s)
 		}
@@ -83,13 +87,13 @@ func (t Task) String() string {
 
 func (t *Task) UnmarshalJSON(bytes []byte) error {
 	task := struct {
-		From      *Date    `json:"start-date,omitempty"`
-		To        *Date    `json:"end-date,omitempty"`
-		Weekdays  Weekdays `json:"weekdays,omitempty"`
-		Start     HHmm     `json:"start,omitempty"`
-		Door      uint8    `json:"door,omitempty"`
-		Task      TaskType `json:"task"`
-		MoreCards uint8    `json:"more-cards,omitempty"`
+		From     *Date    `json:"start-date,omitempty"`
+		To       *Date    `json:"end-date,omitempty"`
+		Weekdays Weekdays `json:"weekdays,omitempty"`
+		Start    HHmm     `json:"start,omitempty"`
+		Door     uint8    `json:"door,omitempty"`
+		Task     TaskType `json:"task"`
+		Cards    uint8    `json:"cards,omitempty"`
 	}{
 		Weekdays: Weekdays{},
 	}
@@ -104,7 +108,7 @@ func (t *Task) UnmarshalJSON(bytes []byte) error {
 	t.Start = task.Start
 	t.Door = task.Door
 	t.Task = task.Task
-	t.MoreCards = task.MoreCards
+	t.Cards = task.Cards
 
 	return nil
 }

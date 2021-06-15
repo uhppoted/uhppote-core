@@ -17,6 +17,8 @@ func TestAddTask(t *testing.T) {
 	}
 
 	task := types.Task{
+		Task: types.EnableTimeProfile,
+		Door: 3,
 		From: date("2021-04-01"),
 		To:   date("2021-12-29"),
 		Weekdays: types.Weekdays{
@@ -28,10 +30,8 @@ func TestAddTask(t *testing.T) {
 			time.Saturday:  true,
 			time.Sunday:    true,
 		},
-		Start:     hhmm("08:30"),
-		Door:      3,
-		Task:      types.EnableTimeProfile,
-		MoreCards: 7,
+		Start: hhmm("08:30"),
+		Cards: 7,
 	}
 
 	u := uhppote{
@@ -62,7 +62,9 @@ func TestAddTaskWithInvalidFromDate(t *testing.T) {
 	}
 
 	task := types.Task{
-		To: date("2021-12-29"),
+		Task: types.EnableTimeProfile,
+		Door: 3,
+		To:   date("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -72,10 +74,8 @@ func TestAddTaskWithInvalidFromDate(t *testing.T) {
 			time.Saturday:  true,
 			time.Sunday:    true,
 		},
-		Start:     hhmm("08:30"),
-		Door:      3,
-		Task:      types.EnableTimeProfile,
-		MoreCards: 7,
+		Start: hhmm("08:30"),
+		Cards: 7,
 	}
 
 	u := uhppote{
@@ -106,6 +106,8 @@ func TestAddTaskWithInvalidToDate(t *testing.T) {
 	}
 
 	task := types.Task{
+		Task: types.EnableTimeProfile,
+		Door: 3,
 		From: date("2021-04-01"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
@@ -116,10 +118,8 @@ func TestAddTaskWithInvalidToDate(t *testing.T) {
 			time.Saturday:  true,
 			time.Sunday:    true,
 		},
-		Start:     hhmm("08:30"),
-		Door:      3,
-		Task:      types.EnableTimeProfile,
-		MoreCards: 7,
+		Start: hhmm("08:30"),
+		Cards: 7,
 	}
 
 	u := uhppote{
@@ -150,6 +150,8 @@ func TestAddTaskWithInvalidResponse(t *testing.T) {
 	}
 
 	task := types.Task{
+		Task: types.EnableTimeProfile,
+		Door: 3,
 		From: date("2021-04-01"),
 		To:   date("2021-12-29"),
 		Weekdays: types.Weekdays{
@@ -161,10 +163,8 @@ func TestAddTaskWithInvalidResponse(t *testing.T) {
 			time.Saturday:  true,
 			time.Sunday:    true,
 		},
-		Start:     hhmm("08:30"),
-		Door:      3,
-		Task:      types.EnableTimeProfile,
-		MoreCards: 7,
+		Start: hhmm("08:30"),
+		Cards: 7,
 	}
 
 	u := uhppote{
@@ -184,6 +184,8 @@ func TestAddTaskWithInvalidResponse(t *testing.T) {
 
 func TestAddTaskWithInvalidDeviceID(t *testing.T) {
 	task := types.Task{
+		Task: types.EnableTimeProfile,
+		Door: 3,
 		From: date("2021-04-01"),
 		To:   date("2021-12-29"),
 		Weekdays: types.Weekdays{
@@ -195,10 +197,8 @@ func TestAddTaskWithInvalidDeviceID(t *testing.T) {
 			time.Saturday:  true,
 			time.Sunday:    true,
 		},
-		Start:     hhmm("08:30"),
-		Door:      3,
-		Task:      types.EnableTimeProfile,
-		MoreCards: 7,
+		Start: hhmm("08:30"),
+		Cards: 7,
 	}
 
 	u := uhppote{}

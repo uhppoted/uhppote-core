@@ -9,11 +9,13 @@ import (
 )
 
 func TestTaskToString(t *testing.T) {
-	expected := "ENABLE TIME PROFILE 2021-04-01:2021-12-29 Mon,Tue,Thurs,Sat,Sun 08:30 3 13"
+	expected := "ENABLE TIME PROFILE 3 2021-04-01:2021-12-29 Mon,Tue,Thurs,Sat,Sun 08:30"
 
 	from := date("2021-04-01")
 	to := date("2021-12-29")
-	profile := Task{
+	task := Task{
+		Task: EnableTimeProfile,
+		Door: 3,
 		From: &from,
 		To:   &to,
 		Weekdays: Weekdays{
@@ -25,13 +27,11 @@ func TestTaskToString(t *testing.T) {
 			time.Saturday:  true,
 			time.Sunday:    true,
 		},
-		Start:     hhmm("08:30"),
-		Door:      3,
-		Task:      EnableTimeProfile,
-		MoreCards: 13,
+		Start: hhmm("08:30"),
+		Cards: 13,
 	}
 
-	s := fmt.Sprintf("%v", profile)
+	s := fmt.Sprintf("%v", task)
 
 	if s != expected {
 		t.Errorf("Task incorrectly stringified\n   expected:%+v\n   got:     %+v", expected, s)
@@ -40,19 +40,21 @@ func TestTaskToString(t *testing.T) {
 
 func TestTaskJSONMarshal(t *testing.T) {
 	expected := `{
+  "task": 4,
+  "door": 3,
   "start-date": "2021-04-01",
   "end-date": "2021-12-29",
   "weekdays": "Monday,Tuesday,Thursday,Saturday,Sunday",
   "start": "08:30",
-  "door": 3,
-  "task": 4,
-  "more-cards": 13
+  "cards": 13
 }`
 
 	from := date("2021-04-01")
 	to := date("2021-12-29")
 
 	task := Task{
+		Task: EnableTimeProfile,
+		Door: 3,
 		From: &from,
 		To:   &to,
 		Weekdays: Weekdays{
@@ -64,10 +66,8 @@ func TestTaskJSONMarshal(t *testing.T) {
 			time.Saturday:  true,
 			time.Sunday:    true,
 		},
-		Start:     hhmm("08:30"),
-		Door:      3,
-		Task:      EnableTimeProfile,
-		MoreCards: 13,
+		Start: hhmm("08:30"),
+		Cards: 13,
 	}
 
 	bytes, err := json.MarshalIndent(task, "", "  ")
@@ -96,10 +96,10 @@ func TestTaskJSONUnmarshal(t *testing.T) {
 			time.Saturday:  true,
 			time.Sunday:    true,
 		},
-		Start:     hhmm("08:30"),
-		Door:      3,
-		Task:      EnableTimeProfile,
-		MoreCards: 23,
+		Start: hhmm("08:30"),
+		Door:  3,
+		Task:  EnableTimeProfile,
+		Cards: 23,
 	}
 
 	bytes := []byte(`{
@@ -109,7 +109,7 @@ func TestTaskJSONUnmarshal(t *testing.T) {
   "start": "08:30",
   "door": 3,
   "task": 4,
-  "more-cards": 23
+  "cards": 23
 }`)
 
 	var profile Task

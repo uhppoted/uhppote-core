@@ -35,7 +35,7 @@ func (u *uhppote) AddTask(deviceID uint32, task types.Task) (bool, error) {
 		Start:        task.Start,
 		Door:         task.Door,
 		Task:         uint8(task.Task),
-		MoreCards:    task.MoreCards,
+		MoreCards:    task.Cards,
 	}
 
 	response := messages.AddTaskResponse{}
