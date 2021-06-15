@@ -72,7 +72,7 @@ func (t Task) String() string {
 	cards := ""
 
 	if t.Task == EnableMoreCards {
-		fmt.Sprintf("%v", t.Cards)
+		cards = fmt.Sprintf("%v", t.Cards)
 	}
 
 	list := []string{}

@@ -38,6 +38,36 @@ func TestTaskToString(t *testing.T) {
 	}
 }
 
+func TestTaskToStringWithEnableMoreCards(t *testing.T) {
+	expected := "ENABLE MORE CARDS 3 2021-04-01:2021-12-29 Mon,Tue,Thurs,Sat,Sun 08:30 13"
+
+	from := date("2021-04-01")
+	to := date("2021-12-29")
+	task := Task{
+		Task: EnableMoreCards,
+		Door: 3,
+		From: &from,
+		To:   &to,
+		Weekdays: Weekdays{
+			time.Monday:    true,
+			time.Tuesday:   true,
+			time.Wednesday: false,
+			time.Thursday:  true,
+			time.Friday:    false,
+			time.Saturday:  true,
+			time.Sunday:    true,
+		},
+		Start: hhmm("08:30"),
+		Cards: 13,
+	}
+
+	s := fmt.Sprintf("%v", task)
+
+	if s != expected {
+		t.Errorf("Task incorrectly stringified\n   expected:%+v\n   got:     %+v", expected, s)
+	}
+}
+
 func TestTaskJSONMarshal(t *testing.T) {
 	expected := `{
   "task": 4,
