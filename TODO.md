@@ -4,7 +4,6 @@
 - [x] `add-task`
 - [x] `refresh-task-list`
 - [x] `set-first-card`
-- [ ] First card/more card privileges
 
 - [ ] Rethink DateTime Stringer (shouldn't use *DateTime but ????)
 - [ ] Retype UHPPOTE.BindAddress as types.BindAddr

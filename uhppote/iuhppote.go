@@ -13,12 +13,13 @@ type IUHPPOTE interface {
 	GetDevice(deviceID uint32) (*types.Device, error)
 
 	SetAddress(deviceID uint32, address, mask, gateway net.IP) (*types.Result, error)
+	GetListener(deviceID uint32) (*types.Listener, error)
+	SetListener(deviceID uint32, address net.UDPAddr) (*types.Result, error)
 	GetTime(deviceID uint32) (*types.Time, error)
 	SetTime(deviceID uint32, datetime time.Time) (*types.Time, error)
 	GetDoorControlState(deviceID uint32, door byte) (*types.DoorControlState, error)
 	SetDoorControlState(deviceID uint32, door uint8, state uint8, delay uint8) (*types.DoorControlState, error)
-	GetListener(deviceID uint32) (*types.Listener, error)
-	SetListener(deviceID uint32, address net.UDPAddr) (*types.Result, error)
+	RecordSpecialEvents(deviceID uint32, enable bool) (bool, error)
 
 	GetStatus(deviceID uint32) (*types.Status, error)
 
@@ -33,7 +34,8 @@ type IUHPPOTE interface {
 	SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bool, error)
 	ClearTimeProfiles(deviceID uint32) (bool, error)
 
-	RecordSpecialEvents(deviceID uint32, enable bool) (bool, error)
+	ClearTaskList(deviceID uint32) (bool, error)
+
 	GetEvent(deviceID, index uint32) (*types.Event, error)
 	GetEventIndex(deviceID uint32) (*types.EventIndex, error)
 	SetEventIndex(deviceID, index uint32) (*types.EventIndexResult, error)
