@@ -1,5 +1,7 @@
 ## v0.7.x
 
+- [ ] _unknown_ task type
+- [ ] Make task dates not pointers
 - [x] `clear-task-list`
 - [x] `add-task`
 - [x] `refresh-task-list`

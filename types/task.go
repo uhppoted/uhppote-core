@@ -3,6 +3,8 @@ package types
 import (
 	"encoding/json"
 	"fmt"
+	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -50,6 +52,46 @@ func (tt TaskType) String() string {
 		"DISABLE PUSH BUTTON",
 		"ENABLE PUSH BUTTON",
 	}[tt]
+}
+
+func (tt *TaskType) UnmarshalTSV(s string) (interface{}, error) {
+	// ... numeric task type?
+	if regexp.MustCompile("^[0-9]+$").MatchString(s) {
+		if v, err := strconv.Atoi(s); err != nil {
+			return nil, err
+		} else if v < 0 || v > 12 {
+			return nil, fmt.Errorf("invalid task type code (%v)", v)
+		} else {
+			return TaskType(v), nil
+		}
+	}
+
+	// ... text task typ
+	re := regexp.MustCompile("[^a-z]+")
+	clean := func(s string) string { return re.ReplaceAllString(strings.ToLower(s), "") }
+	task := clean(s)
+
+	for _, v := range []TaskType{
+		DoorControlled,
+		DoorOpen,
+		DoorClosed,
+		DisableTimeProfile,
+		EnableTimeProfile,
+		CardNoPassword,
+		CardInPassword,
+		CardInOutPassword,
+		EnableMoreCards,
+		DisableMoreCards,
+		TriggerOnce,
+		DisablePushButton,
+		EnablePushButton,
+	} {
+		if task == clean(fmt.Sprintf("%v", v)) {
+			return TaskType(v), nil
+		}
+	}
+
+	return nil, fmt.Errorf("invalid task type (%v)", s)
 }
 
 func (t Task) String() string {
