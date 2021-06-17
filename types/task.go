@@ -11,8 +11,8 @@ import (
 type Task struct {
 	Task     TaskType `json:"task"`
 	Door     uint8    `json:"door,omitempty"`
-	From     *Date    `json:"start-date,omitempty"`
-	To       *Date    `json:"end-date,omitempty"`
+	From     Date     `json:"start-date,omitempty"`
+	To       Date     `json:"end-date,omitempty"`
 	Weekdays Weekdays `json:"weekdays,omitempty"`
 	Start    HHmm     `json:"start,omitempty"`
 	Cards    uint8    `json:"cards,omitempty"`
@@ -144,8 +144,16 @@ func (t *Task) UnmarshalJSON(bytes []byte) error {
 		return err
 	}
 
-	t.From = task.From
-	t.To = task.To
+	if task.From == nil {
+		return fmt.Errorf("Invalid 'from' date")
+	}
+
+	if task.To == nil {
+		return fmt.Errorf("Invalid 'to' date")
+	}
+
+	t.From = *task.From
+	t.To = *task.To
 	t.Weekdays = task.Weekdays
 	t.Start = task.Start
 	t.Door = task.Door

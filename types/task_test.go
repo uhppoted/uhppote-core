@@ -11,13 +11,11 @@ import (
 func TestTaskToString(t *testing.T) {
 	expected := "ENABLE TIME PROFILE 3 2021-04-01:2021-12-29 Mon,Tue,Thurs,Sat,Sun 08:30"
 
-	from := date("2021-04-01")
-	to := date("2021-12-29")
 	task := Task{
 		Task: EnableTimeProfile,
 		Door: 3,
-		From: &from,
-		To:   &to,
+		From: date("2021-04-01"),
+		To:   date("2021-12-29"),
 		Weekdays: Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -41,13 +39,11 @@ func TestTaskToString(t *testing.T) {
 func TestTaskToStringWithEnableMoreCards(t *testing.T) {
 	expected := "ENABLE MORE CARDS 3 2021-04-01:2021-12-29 Mon,Tue,Thurs,Sat,Sun 08:30 13"
 
-	from := date("2021-04-01")
-	to := date("2021-12-29")
 	task := Task{
 		Task: EnableMoreCards,
 		Door: 3,
-		From: &from,
-		To:   &to,
+		From: date("2021-04-01"),
+		To:   date("2021-12-29"),
 		Weekdays: Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -79,14 +75,11 @@ func TestTaskJSONMarshal(t *testing.T) {
   "cards": 13
 }`
 
-	from := date("2021-04-01")
-	to := date("2021-12-29")
-
 	task := Task{
 		Task: EnableTimeProfile,
 		Door: 3,
-		From: &from,
-		To:   &to,
+		From: date("2021-04-01"),
+		To:   date("2021-12-29"),
 		Weekdays: Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -111,12 +104,9 @@ func TestTaskJSONMarshal(t *testing.T) {
 }
 
 func TestTaskJSONUnmarshal(t *testing.T) {
-	from := date("2021-04-01")
-	to := date("2021-12-29")
-
 	expected := Task{
-		From: &from,
-		To:   &to,
+		From: date("2021-04-01"),
+		To:   date("2021-12-29"),
 		Weekdays: Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,

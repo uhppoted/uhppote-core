@@ -13,18 +13,10 @@ func (u *uhppote) AddTask(deviceID uint32, task types.Task) (bool, error) {
 		return false, fmt.Errorf("Invalid device ID (%v)", deviceID)
 	}
 
-	if task.From == nil {
-		return false, fmt.Errorf("Task requires a valid 'from' date")
-	}
-
-	if task.To == nil {
-		return false, fmt.Errorf("Task requires a valid 'to' date")
-	}
-
 	request := messages.AddTaskRequest{
 		SerialNumber: types.SerialNumber(deviceID),
-		From:         *task.From,
-		To:           *task.To,
+		From:         task.From,
+		To:           task.To,
 		Monday:       task.Weekdays[time.Monday],
 		Tuesday:      task.Weekdays[time.Tuesday],
 		Wednesday:    task.Weekdays[time.Wednesday],
