@@ -58,7 +58,7 @@ type EventV6_62 struct {
 // 18	12	SwipeNOPass	Denied Access
 // 19	13	(Reserved)
 // 20	14	ValidEvent	Push Button
-// 21	15	(Reserved)
+// 21	15	(Reserved)  
 // 22	16	(Reserved)
 // 23	17	ValidEvent	Door Open
 // 24	18	ValidEvent	Door Closed
