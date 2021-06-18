@@ -1,18 +1,17 @@
 ## v0.7.x
 
-- [ ] _unknown_ task type
+- [ ] Update README
 - [x] Make task dates not pointers
 - [x] `clear-task-list`
 - [x] `add-task`
 - [x] `refresh-task-list`
 - [x] `set-first-card`
 
+- [ ] Move `encoding/conf` to `uhppoted-lib`
 - [ ] Rethink DateTime Stringer (shouldn't use *DateTime but ????)
 - [ ] Retype UHPPOTE.BindAddress as types.BindAddr
 - [ ] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
 - [ ] Retype UHPPOTE.ListenAddress as types.ListenAddr
-- [ ] Document API in README
-
 
 ## TODO
 

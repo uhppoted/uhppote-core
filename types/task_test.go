@@ -9,7 +9,7 @@ import (
 )
 
 func TestTaskToString(t *testing.T) {
-	expected := "ENABLE TIME PROFILE 3 2021-04-01:2021-12-29 Mon,Tue,Thurs,Sat,Sun 08:30"
+	expected := "ENABLE TIME PROFILE      3 2021-04-01:2021-12-29 Mon,Tue,Thurs,Sat,Sun 08:30"
 
 	task := Task{
 		Task: EnableTimeProfile,
@@ -37,7 +37,7 @@ func TestTaskToString(t *testing.T) {
 }
 
 func TestTaskToStringWithEnableMoreCards(t *testing.T) {
-	expected := "ENABLE MORE CARDS 3 2021-04-01:2021-12-29 Mon,Tue,Thurs,Sat,Sun 08:30 13"
+	expected := "ENABLE MORE CARDS        3 2021-04-01:2021-12-29 Mon,Tue,Thurs,Sat,Sun 08:30 13"
 
 	task := Task{
 		Task: EnableMoreCards,

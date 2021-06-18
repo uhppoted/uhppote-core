@@ -59,14 +59,14 @@ func (tt *TaskType) UnmarshalTSV(s string) (interface{}, error) {
 	if regexp.MustCompile("^[0-9]+$").MatchString(s) {
 		if v, err := strconv.Atoi(s); err != nil {
 			return nil, err
-		} else if v < 0 || v > 12 {
+		} else if v < 1 || v > 13 {
 			return nil, fmt.Errorf("invalid task type code (%v)", v)
 		} else {
 			return TaskType(v), nil
 		}
 	}
 
-	// ... text task typ
+	// ... text task type
 	re := regexp.MustCompile("[^a-z]+")
 	clean := func(s string) string { return re.ReplaceAllString(strings.ToLower(s), "") }
 	task := clean(s)
@@ -110,7 +110,7 @@ func (t Task) String() string {
 	weekdays := fmt.Sprintf("%v", t.Weekdays)
 	start := fmt.Sprintf("%v", t.Start)
 	door := fmt.Sprintf("%v", t.Door)
-	task := fmt.Sprintf("%v", t.Task)
+	task := fmt.Sprintf("%-24v", t.Task)
 	cards := ""
 
 	if t.Task == EnableMoreCards {
