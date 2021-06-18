@@ -62,7 +62,7 @@ func (tt *TaskType) UnmarshalTSV(s string) (interface{}, error) {
 		} else if v < 1 || v > 13 {
 			return nil, fmt.Errorf("invalid task type code (%v)", v)
 		} else {
-			return TaskType(v), nil
+			return TaskType(v - 1), nil
 		}
 	}
 
