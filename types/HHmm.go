@@ -66,6 +66,10 @@ func (h HHmm) String() string {
 	return fmt.Sprintf("%02d:%02d", h.hours, h.minutes)
 }
 
+func (h HHmm) Equals(t HHmm) bool {
+	return h.hours == t.hours && h.minutes == t.minutes
+}
+
 func (h HHmm) Before(t HHmm) bool {
 	return h.before(t)
 }

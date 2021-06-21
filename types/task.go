@@ -22,8 +22,8 @@ type TaskType int
 
 const (
 	DoorControlled TaskType = iota
-	DoorOpen
-	DoorClosed
+	DoorNormallyOpen
+	DoorNormallyClosed
 	DisableTimeProfile
 	EnableTimeProfile
 	CardNoPassword
@@ -73,8 +73,8 @@ func (tt *TaskType) UnmarshalTSV(s string) (interface{}, error) {
 
 	for _, v := range []TaskType{
 		DoorControlled,
-		DoorOpen,
-		DoorClosed,
+		DoorNormallyOpen,
+		DoorNormallyClosed,
 		DisableTimeProfile,
 		EnableTimeProfile,
 		CardNoPassword,
