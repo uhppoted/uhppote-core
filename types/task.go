@@ -155,7 +155,7 @@ func (t Task) String() string {
 	weekdays := fmt.Sprintf("%v", t.Weekdays)
 	start := fmt.Sprintf("%v", t.Start)
 	door := fmt.Sprintf("%v", t.Door)
-	task := fmt.Sprintf("%-24v", t.Task)
+	task := fmt.Sprintf("%4v", t.Task)
 	cards := ""
 
 	if t.Task == EnableMoreCards {
