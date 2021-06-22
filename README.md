@@ -56,8 +56,8 @@ go build -o bin ./...
 
 ## API
 
-- GetDevices
-- GetDevice
+- [`GetDevices`](#getdevices)
+- [GetDevice](#getdevice)
 - SetAddress
 - GetListener
 - SetListener
@@ -76,8 +76,37 @@ go build -o bin ./...
 - GetTimeProfile
 - SetTimeProfile
 - ClearTimeProfiles
+- [`ClearTaskList`](#cleartasklist)
+- [`AddTask`](#addtask)
+- RefreshTaskList
+- SetTaskList
 - GetEvent
 - GetEventIndex
 - SetEventIndex
 - OpenDoor
 - Listen
+
+Other than `GetDevices` API which specifically uses UDP broadcast to issue a request, the API will uses the configured controller IP address if possible, falling back to a broadcast request if necessary.
+
+#### `GetDevices`
+
+Retrieves a list of all UHPPOTE controllers that respond to a broadcast `get-device` request.
+
+#### `GetDevice`
+
+Retrieves the controller information for a specific UHPPOTE controller from the response to a `get-device` request. 
+
+#### `ClearTaskList`
+
+Clears the scheduled task list on a specific UHPPOTE controller, preparatory to using `AddTask` and `RefreshTask`. 
+
+#### `AddTask`
+
+Adds a scheduled task to the task list on a specific UHPPOTE controller. The task is not activated until `RefreshTaskList` is invoked. `ClearTaskList` should have been invoked prior to invoking a sequence of `AddTask` invocations to put the task list in a known state.
+
+#### `RefreshTask`
+
+Activates all tasks added by `AddTask`.
+
+
+

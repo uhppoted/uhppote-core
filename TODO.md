@@ -1,6 +1,6 @@
 ## v0.7.x
 
-- [ ] Update README
+- [x] Update README
 - [x] Make task dates not pointers
 - [x] `clear-task-list`
 - [x] `add-task`
