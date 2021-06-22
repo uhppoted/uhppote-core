@@ -54,6 +54,51 @@ func (tt TaskType) String() string {
 	}[tt]
 }
 
+func (tt TaskType) MarshalJSON() ([]byte, error) {
+	return json.Marshal(tt.String())
+}
+
+func (tt *TaskType) UnmarshalJSON(b []byte) error {
+	// ... numeric task type?
+	if regexp.MustCompile("^[0-9]+$").Match(b) {
+		if v, err := strconv.Atoi(string(b)); err == nil && v > 0 && v < 14 {
+			*tt = TaskType(v - 1)
+			return nil
+		}
+
+		return fmt.Errorf("invalid task type (%v)", string(b))
+	}
+
+	// ... text task type
+	re := regexp.MustCompile("[^a-z]+")
+	clean := func(s string) string { return re.ReplaceAllString(strings.ToLower(s), "") }
+	task := clean(string(b))
+
+	for _, v := range []TaskType{
+		DoorControlled,
+		DoorNormallyOpen,
+		DoorNormallyClosed,
+		DisableTimeProfile,
+		EnableTimeProfile,
+		CardNoPassword,
+		CardInPassword,
+		CardInOutPassword,
+		EnableMoreCards,
+		DisableMoreCards,
+		TriggerOnce,
+		DisablePushButton,
+		EnablePushButton,
+	} {
+		if task == clean(fmt.Sprintf("%v", v)) {
+			*tt = TaskType(v)
+
+			return nil
+		}
+	}
+
+	return fmt.Errorf("invalid task type (%v)", string(b))
+}
+
 func (tt *TaskType) UnmarshalTSV(s string) (interface{}, error) {
 	// ... numeric task type?
 	if regexp.MustCompile("^[0-9]+$").MatchString(s) {

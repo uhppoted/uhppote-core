@@ -66,7 +66,7 @@ func TestTaskToStringWithEnableMoreCards(t *testing.T) {
 
 func TestTaskJSONMarshal(t *testing.T) {
 	expected := `{
-  "task": 4,
+  "task": "ENABLE TIME PROFILE",
   "door": 3,
   "start-date": "2021-04-01",
   "end-date": "2021-12-29",
@@ -128,7 +128,7 @@ func TestTaskJSONUnmarshal(t *testing.T) {
   "weekdays": "Monday,Tuesday,Thursday,Saturday,Sunday",
   "start": "08:30",
   "door": 3,
-  "task": 4,
+  "task": 5,
   "cards": 23
 }`)
 
@@ -140,5 +140,35 @@ func TestTaskJSONUnmarshal(t *testing.T) {
 
 	if !reflect.DeepEqual(profile, expected) {
 		t.Errorf("Task incorrectly unmarshalled\n   expected:%+v\n   got:     %+v", expected, profile)
+	}
+}
+
+func TestTaskTypeJSONUnmarshalFromNumber(t *testing.T) {
+	expected := TriggerOnce
+	bytes := []byte(`11`)
+
+	var task TaskType
+
+	if err := json.Unmarshal(bytes, &task); err != nil {
+		t.Fatalf("Error unmarshalling TaskType - %v", err)
+	}
+
+	if !reflect.DeepEqual(task, expected) {
+		t.Errorf("TaskType incorrectly unmarshalled - expected:%v, got:%v", expected, task)
+	}
+}
+
+func TestTaskTypeJSONUnmarshalFromString(t *testing.T) {
+	expected := TriggerOnce
+	bytes := []byte(`"trigger once"`)
+
+	var task TaskType
+
+	if err := json.Unmarshal(bytes, &task); err != nil {
+		t.Fatalf("Error unmarshalling TaskType - %v", err)
+	}
+
+	if !reflect.DeepEqual(task, expected) {
+		t.Errorf("TaskType incorrectly unmarshalled - expected:%v, got:%v", expected, task)
 	}
 }
