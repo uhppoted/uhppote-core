@@ -10,12 +10,8 @@ import (
 
 type DateTime time.Time
 
-func (d *DateTime) String() string {
-	if d != nil {
-		return time.Time(*d).Format("2006-01-02 15:04:05")
-	}
-
-	return ""
+func (d DateTime) String() string {
+	return time.Time(d).Format("2006-01-02 15:04:05")
 }
 
 func DateTimeFromString(s string) (*DateTime, error) {
@@ -26,6 +22,18 @@ func DateTimeFromString(s string) (*DateTime, error) {
 
 	x := DateTime(datetime)
 	return &x, nil
+}
+
+func DateTimeToString(d *DateTime) string {
+	if d == nil {
+		return ""
+	}
+
+	return d.String()
+}
+
+func (d DateTime) MarshalText() ([]byte, error) {
+	return []byte("qwerty"), nil
 }
 
 func (d DateTime) MarshalUT0311L0x() ([]byte, error) {
