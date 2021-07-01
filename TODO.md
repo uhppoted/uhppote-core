@@ -1,18 +1,10 @@
-## v0.7.1
-
-- [x] Update README
-- [x] Make task dates not pointers
-- [x] `clear-task-list`
-- [x] `add-task`
-- [x] `refresh-task-list`
-- [x] Rework DateTime Stringer implementation
-- [x] Move `encoding/conf` to `uhppoted-lib`
-
-## TODO
+## v0.7.x
 
 - [ ] Retype UHPPOTE.BindAddress as types.BindAddr
 - [ ] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
 - [ ] Retype UHPPOTE.ListenAddress as types.ListenAddr
+
+## TODO
 
 - [ ] Implement separate Get..All functions (??)
 - [ ] Add https://odi.ch/weblog/posting.php?posting=731 to cookbook

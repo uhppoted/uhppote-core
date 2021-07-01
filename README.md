@@ -15,6 +15,7 @@ Supported operating systems:
 
 | *Version* | *Description*                                                                             |
 | --------- | ----------------------------------------------------------------------------------------- |
+| v0.7.1    | Added support for task list functions from the extended API                               |
 | v0.7.0    | Added support for time profiles from the extended API                                     |
 | v0.6.12   | Improved handling of concurrent requests and invalid responses                            |
 | v0.6.10   | Bumped version to 0.6.10 for initial `uhppoted-app-wild-apricot` release                  |
@@ -57,7 +58,7 @@ go build -o bin ./...
 ## API
 
 - [`GetDevices`](#getdevices)
-- [GetDevice](#getdevice)
+- [`GetDevice`](#getdevice)
 - SetAddress
 - GetListener
 - SetListener
@@ -78,7 +79,7 @@ go build -o bin ./...
 - ClearTimeProfiles
 - [`ClearTaskList`](#cleartasklist)
 - [`AddTask`](#addtask)
-- RefreshTaskList
+- [`RefreshTaskList`](#refreshtasklist)
 - SetTaskList
 - GetEvent
 - GetEventIndex
@@ -104,7 +105,7 @@ Clears the scheduled task list on a specific UHPPOTE controller, preparatory to 
 
 Adds a scheduled task to the task list on a specific UHPPOTE controller. The task is not activated until `RefreshTaskList` is invoked. `ClearTaskList` should have been invoked prior to invoking a sequence of `AddTask` invocations to put the task list in a known state.
 
-#### `RefreshTask`
+#### `RefreshTaskList`
 
 Activates all tasks added by `AddTask`.
 
