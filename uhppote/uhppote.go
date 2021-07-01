@@ -10,7 +10,7 @@ import (
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
 )
 
-var VERSION string = "v0.7.x"
+var VERSION string = "v0.7.1"
 
 type driver interface {
 	Broadcast([]byte, *net.UDPAddr) ([][]byte, error)
