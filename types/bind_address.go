@@ -35,10 +35,6 @@ func (a *BindAddr) Set(v string) error {
 	return nil
 }
 
-func (a *BindAddr) MarshalJSON() ([]byte, error) {
-	return json.Marshal(a.String())
-}
-
 func (a *BindAddr) UnmarshalJSON(bytes []byte) error {
 	var s string
 
@@ -54,6 +50,12 @@ func (a *BindAddr) UnmarshalJSON(bytes []byte) error {
 	*a = *addr
 
 	return nil
+}
+
+func (a *BindAddr) MarshalConf(tag string) ([]byte, error) {
+	s := fmt.Sprintf("%v", a)
+
+	return []byte(s), nil
 }
 
 func (a *BindAddr) UnmarshalConf(tag string, values map[string]string) (interface{}, error) {
