@@ -1,5 +1,9 @@
 ## CHANGELOG
 
+### v0.7.2
+
+1. Retyped UHPPOTE.BindAddress as types.BindAddr
+
 ### v0.7.1
 
 1. Implemented `clear-task-list`

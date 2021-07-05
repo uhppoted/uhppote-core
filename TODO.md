@@ -1,6 +1,8 @@
 ## v0.7.x
 
-- [ ] Retype UHPPOTE.BindAddress as types.BindAddr
+### IN PROGRESS
+
+- [x] Retype UHPPOTE.BindAddress as types.BindAddr
 - [ ] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
 - [ ] Retype UHPPOTE.ListenAddress as types.ListenAddr
 

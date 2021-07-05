@@ -8,9 +8,10 @@ import (
 	"time"
 
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
+	"github.com/uhppoted/uhppote-core/types"
 )
 
-var VERSION string = "v0.7.1"
+var VERSION string = "v0.7.x"
 
 type driver interface {
 	Broadcast([]byte, *net.UDPAddr) ([][]byte, error)
@@ -27,7 +28,11 @@ type uhppote struct {
 	driver        driver
 }
 
-func NewUHPPOTE(bind, broadcast, listen net.UDPAddr, timeout time.Duration, devices []Device, debug bool) IUHPPOTE {
+func NewUHPPOTE(bindAddr types.BindAddr, broadcastAddr, listenAddr net.UDPAddr, timeout time.Duration, devices []Device, debug bool) IUHPPOTE {
+	bind := net.UDPAddr(bindAddr)
+	broadcast := net.UDPAddr(broadcastAddr)
+	listen := net.UDPAddr(listenAddr)
+
 	uhppote := uhppote{
 		bindAddr:      &bind,
 		broadcastAddr: &broadcast,
