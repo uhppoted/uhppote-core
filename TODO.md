@@ -3,7 +3,7 @@
 ### IN PROGRESS
 
 - [x] Retype UHPPOTE.BindAddress as types.BindAddr
-- [ ] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
+- [x] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
 - [ ] Retype UHPPOTE.ListenAddress as types.ListenAddr
 
 ## TODO

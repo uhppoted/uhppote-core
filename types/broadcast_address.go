@@ -7,13 +7,13 @@ import (
 	"regexp"
 )
 
-type BindAddr net.UDPAddr
+type BroadcastAddr net.UDPAddr
 
-const BIND_PORT = 0
+const BROADCAST_PORT = 60000
 
-func (a *BindAddr) String() string {
+func (a *BroadcastAddr) String() string {
 	if a != nil {
-		if a.Port == BIND_PORT {
+		if a.Port == BROADCAST_PORT {
 			return a.IP.String()
 		} else {
 			return (*net.UDPAddr)(a).String()
@@ -23,26 +23,18 @@ func (a *BindAddr) String() string {
 	return ""
 }
 
-func (a *BindAddr) Set(v string) error {
-	addr, err := ResolveBindAddr(v)
-	if err != nil {
-		return err
-	} else if addr == nil {
-		return fmt.Errorf("Invalid bind address '%v'", v)
-	}
-
-	*a = *addr
-	return nil
+func (a *BroadcastAddr) MarshalJSON() ([]byte, error) {
+	return json.Marshal(a.String())
 }
 
-func (a *BindAddr) UnmarshalJSON(bytes []byte) error {
+func (a *BroadcastAddr) UnmarshalJSON(bytes []byte) error {
 	var s string
 
 	if err := json.Unmarshal(bytes, &s); err != nil {
 		return err
 	}
 
-	addr, err := ResolveBindAddr(s)
+	addr, err := ResolveBroadcastAddr(s)
 	if err != nil {
 		return err
 	}
@@ -52,7 +44,7 @@ func (a *BindAddr) UnmarshalJSON(bytes []byte) error {
 	return nil
 }
 
-func (a *BindAddr) Equal(addr *Address) bool {
+func (a *BroadcastAddr) Equal(addr *BroadcastAddr) bool {
 	switch {
 	case a == nil && addr == nil:
 		return true
@@ -65,7 +57,7 @@ func (a *BindAddr) Equal(addr *Address) bool {
 	}
 }
 
-func (a *BindAddr) Clone() *BindAddr {
+func (a *BroadcastAddr) Clone() *BroadcastAddr {
 	if a != nil {
 		addr := *a
 		return &addr
@@ -74,16 +66,16 @@ func (a *BindAddr) Clone() *BindAddr {
 	return nil
 }
 
-func ResolveBindAddr(s string) (*BindAddr, error) {
+func ResolveBroadcastAddr(s string) (*BroadcastAddr, error) {
 	if matched, err := regexp.MatchString(`[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}:[0-9]{1,5}`, s); err != nil {
 		return nil, err
 	} else if matched {
 		if addr, err := net.ResolveUDPAddr("udp", s); err != nil {
 			return nil, err
-		} else if addr.Port == DEFAULT_PORT {
-			return nil, fmt.Errorf("%v: invalid 'bind' port (%v)", addr, addr.Port)
+		} else if addr.Port == 0 {
+			return nil, fmt.Errorf("%v: invalid 'broadcast' port (%v)", addr, addr.Port)
 		} else {
-			return &BindAddr{
+			return &BroadcastAddr{
 				IP:   addr.IP.To4(),
 				Port: addr.Port,
 			}, nil
@@ -94,9 +86,9 @@ func ResolveBindAddr(s string) (*BindAddr, error) {
 		return nil, err
 	} else if matched {
 		if ip := net.ParseIP(s); ip != nil {
-			return &BindAddr{
+			return &BroadcastAddr{
 				IP:   ip.To4(),
-				Port: BIND_PORT,
+				Port: BROADCAST_PORT,
 			}, nil
 		}
 	}
