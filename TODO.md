@@ -4,7 +4,7 @@
 
 - [x] Retype UHPPOTE.BindAddress as types.BindAddr
 - [x] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
-- [ ] Retype UHPPOTE.ListenAddress as types.ListenAddr
+- [x] Retype UHPPOTE.ListenAddress as types.ListenAddr
 
 ## TODO
 
