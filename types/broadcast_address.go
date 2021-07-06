@@ -23,6 +23,18 @@ func (a *BroadcastAddr) String() string {
 	return ""
 }
 
+func (a *BroadcastAddr) Set(v string) error {
+	addr, err := ResolveBroadcastAddr(v)
+	if err != nil {
+		return err
+	} else if addr == nil {
+		return fmt.Errorf("Invalid broadcast address '%v'", v)
+	}
+
+	*a = *addr
+	return nil
+}
+
 func (a *BroadcastAddr) MarshalJSON() ([]byte, error) {
 	return json.Marshal(a.String())
 }

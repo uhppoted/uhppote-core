@@ -17,6 +17,18 @@ func (a *ListenAddr) String() string {
 	return ""
 }
 
+func (a *ListenAddr) Set(v string) error {
+	addr, err := ResolveListenAddr(v)
+	if err != nil {
+		return err
+	} else if addr == nil {
+		return fmt.Errorf("Invalid listen address '%v'", v)
+	}
+
+	*a = *addr
+	return nil
+}
+
 func (a *ListenAddr) MarshalJSON() ([]byte, error) {
 	return json.Marshal(a.String())
 }
