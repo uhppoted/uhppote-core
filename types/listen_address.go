@@ -9,12 +9,8 @@ import (
 
 type ListenAddr net.UDPAddr
 
-func (a *ListenAddr) String() string {
-	if a != nil {
-		return (*net.UDPAddr)(a).String()
-	}
-
-	return ""
+func (a ListenAddr) String() string {
+	return (*net.UDPAddr)(&a).String()
 }
 
 func (a *ListenAddr) Set(v string) error {
@@ -29,8 +25,8 @@ func (a *ListenAddr) Set(v string) error {
 	return nil
 }
 
-func (a *ListenAddr) MarshalJSON() ([]byte, error) {
-	return json.Marshal(a.String())
+func (a ListenAddr) MarshalJSON() ([]byte, error) {
+	return json.Marshal(fmt.Sprintf("%v", a))
 }
 
 func (a *ListenAddr) UnmarshalJSON(bytes []byte) error {

@@ -3,6 +3,8 @@
 ### v0.7.2
 
 1. Retyped UHPPOTE.BindAddress as types.BindAddr
+2. Retyped UHPPOTE.BroadcastAddress as types.BroadcastAddr
+3. Retyped UHPPOTE.ListenAddress as types.ListenAddr
 
 ### v0.7.1
 

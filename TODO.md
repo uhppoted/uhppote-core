@@ -2,6 +2,8 @@
 
 ### IN PROGRESS
 
+- [ ] Set first card
+
 - [x] Retype UHPPOTE.BindAddress as types.BindAddr
 - [x] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
 - [x] Retype UHPPOTE.ListenAddress as types.ListenAddr

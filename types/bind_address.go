@@ -11,16 +11,12 @@ type BindAddr net.UDPAddr
 
 const BIND_PORT = 0
 
-func (a *BindAddr) String() string {
-	if a != nil {
-		if a.Port == BIND_PORT {
-			return a.IP.String()
-		} else {
-			return (*net.UDPAddr)(a).String()
-		}
+func (a BindAddr) String() string {
+	if a.Port == BIND_PORT {
+		return a.IP.String()
+	} else {
+		return (*net.UDPAddr)(&a).String()
 	}
-
-	return ""
 }
 
 func (a *BindAddr) Set(v string) error {
@@ -33,6 +29,10 @@ func (a *BindAddr) Set(v string) error {
 
 	*a = *addr
 	return nil
+}
+
+func (a BindAddr) MarshalJSON() ([]byte, error) {
+	return json.Marshal(fmt.Sprintf("%v", a))
 }
 
 func (a *BindAddr) UnmarshalJSON(bytes []byte) error {

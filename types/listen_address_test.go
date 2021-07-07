@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/json"
 	"reflect"
 	"testing"
 )
@@ -55,6 +56,27 @@ func TestInvalidListenAddrResolve(t *testing.T) {
 		addr, err := ResolveListenAddr(s)
 		if err == nil {
 			t.Errorf("Expected error resolving listen address %v, got:%v (%v)", s, addr, err)
+		}
+	}
+}
+
+func TestListenAddrMarshalJSON(t *testing.T) {
+	tests := map[int]string{
+		0:     `"192.168.1.100:0"`,
+		1:     `"192.168.1.100:1"`,
+		60001: `"192.168.1.100:60001"`,
+	}
+
+	for p, expected := range tests {
+		listen := ListenAddr{
+			IP:   []byte{192, 168, 1, 100},
+			Port: p,
+		}
+
+		if bytes, err := json.Marshal(listen); err != nil {
+			t.Fatalf("Error marshaling ListenAddr (%v)", err)
+		} else if s := string(bytes); s != expected {
+			t.Errorf("Incorrect JSON string - expected:%v, got:%v", expected, s)
 		}
 	}
 }

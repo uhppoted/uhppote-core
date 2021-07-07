@@ -11,16 +11,12 @@ type BroadcastAddr net.UDPAddr
 
 const BROADCAST_PORT = 60000
 
-func (a *BroadcastAddr) String() string {
-	if a != nil {
-		if a.Port == BROADCAST_PORT {
-			return a.IP.String()
-		} else {
-			return (*net.UDPAddr)(a).String()
-		}
+func (a BroadcastAddr) String() string {
+	if a.Port == BROADCAST_PORT {
+		return a.IP.String()
+	} else {
+		return (*net.UDPAddr)(&a).String()
 	}
-
-	return ""
 }
 
 func (a *BroadcastAddr) Set(v string) error {
@@ -35,8 +31,8 @@ func (a *BroadcastAddr) Set(v string) error {
 	return nil
 }
 
-func (a *BroadcastAddr) MarshalJSON() ([]byte, error) {
-	return json.Marshal(a.String())
+func (a BroadcastAddr) MarshalJSON() ([]byte, error) {
+	return json.Marshal(fmt.Sprintf("%v", a))
 }
 
 func (a *BroadcastAddr) UnmarshalJSON(bytes []byte) error {

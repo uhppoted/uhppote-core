@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/json"
 	"reflect"
 	"testing"
 )
@@ -76,4 +77,26 @@ func TestBindAddrSet(t *testing.T) {
 			t.Errorf("Incorrect 'bind' address '%v' - expected:%v, got:%v", s, expected, addr)
 		}
 	}
+}
+
+func TestBindAddrMarshalJSON(t *testing.T) {
+	tests := map[int]string{
+		0:     `"192.168.1.100"`,
+		1:     `"192.168.1.100:1"`,
+		60000: `"192.168.1.100:60000"`,
+	}
+
+	for p, expected := range tests {
+		bind := BindAddr{
+			IP:   []byte{192, 168, 1, 100},
+			Port: p,
+		}
+
+		if bytes, err := json.Marshal(bind); err != nil {
+			t.Fatalf("Error marshaling BindAddr (%v)", err)
+		} else if s := string(bytes); s != expected {
+			t.Errorf("Incorrect JSON string - expected:%v, got:%v", expected, s)
+		}
+	}
+
 }
