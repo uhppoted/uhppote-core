@@ -27,7 +27,7 @@ func (u *uhppote) GetDoorControlState(serialNumber uint32, door byte) (*types.Do
 	return &types.DoorControlState{
 		SerialNumber: reply.SerialNumber,
 		Door:         reply.Door,
-		ControlState: reply.ControlState,
+		ControlState: types.ControlState(reply.ControlState),
 		Delay:        reply.Delay,
 	}, nil
 }

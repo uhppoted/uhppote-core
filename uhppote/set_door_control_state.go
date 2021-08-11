@@ -7,7 +7,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *uhppote) SetDoorControlState(serialNumber uint32, door uint8, state uint8, delay uint8) (*types.DoorControlState, error) {
+func (u *uhppote) SetDoorControlState(serialNumber uint32, door uint8, state types.ControlState, delay uint8) (*types.DoorControlState, error) {
 	if serialNumber == 0 {
 		return nil, fmt.Errorf("Invalid device ID (%v)", serialNumber)
 	}
@@ -15,7 +15,7 @@ func (u *uhppote) SetDoorControlState(serialNumber uint32, door uint8, state uin
 	request := messages.SetDoorControlStateRequest{
 		SerialNumber: types.SerialNumber(serialNumber),
 		Door:         door,
-		ControlState: state,
+		ControlState: uint8(state),
 		Delay:        delay,
 	}
 
@@ -29,7 +29,7 @@ func (u *uhppote) SetDoorControlState(serialNumber uint32, door uint8, state uin
 	return &types.DoorControlState{
 		SerialNumber: reply.SerialNumber,
 		Door:         reply.Door,
-		ControlState: reply.ControlState,
+		ControlState: types.ControlState(reply.ControlState),
 		Delay:        reply.Delay,
 	}, nil
 }

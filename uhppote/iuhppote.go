@@ -18,7 +18,7 @@ type IUHPPOTE interface {
 	GetTime(deviceID uint32) (*types.Time, error)
 	SetTime(deviceID uint32, datetime time.Time) (*types.Time, error)
 	GetDoorControlState(deviceID uint32, door byte) (*types.DoorControlState, error)
-	SetDoorControlState(deviceID uint32, door uint8, state uint8, delay uint8) (*types.DoorControlState, error)
+	SetDoorControlState(deviceID uint32, door uint8, state types.ControlState, delay uint8) (*types.DoorControlState, error)
 	RecordSpecialEvents(deviceID uint32, enable bool) (bool, error)
 
 	GetStatus(deviceID uint32) (*types.Status, error)
