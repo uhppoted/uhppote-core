@@ -104,15 +104,13 @@ func TestSequentialRequests(t *testing.T) {
 		broadcastAddr: resolve("127.0.0.1:60000", t),
 		devices: map[uint32]Device{
 			423187757: Device{
-				Address:  resolve("127.0.0.1:65001", t),
-				Rollover: 100000,
-				Doors:    []string{},
+				Address: resolve("127.0.0.1:65001", t),
+				Doors:   []string{},
 			},
 
 			757781324: Device{
-				Address:  resolve("127.0.0.1:65002", t),
-				Rollover: 100000,
-				Doors:    []string{},
+				Address: resolve("127.0.0.1:65002", t),
+				Doors:   []string{},
 			},
 		},
 		driver: &udp{
@@ -176,15 +174,13 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 		broadcastAddr: bind,
 		devices: map[uint32]Device{
 			423187757: Device{
-				Address:  resolve("127.0.0.1:65001", t),
-				Rollover: 100000,
-				Doors:    []string{},
+				Address: resolve("127.0.0.1:65001", t),
+				Doors:   []string{},
 			},
 
 			757781324: Device{
-				Address:  resolve("127.0.0.1:65002", t),
-				Rollover: 100000,
-				Doors:    []string{},
+				Address: resolve("127.0.0.1:65002", t),
+				Doors:   []string{},
 			},
 		},
 		driver: &udp{
@@ -265,15 +261,13 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 		broadcastAddr: resolve("127.0.0.1:60000", t),
 		devices: map[uint32]Device{
 			423187757: Device{
-				Address:  resolve("127.0.0.1:65001", t),
-				Rollover: 100000,
-				Doors:    []string{},
+				Address: resolve("127.0.0.1:65001", t),
+				Doors:   []string{},
 			},
 
 			757781324: Device{
-				Address:  resolve("127.0.0.1:65002", t),
-				Rollover: 100000,
-				Doors:    []string{},
+				Address: resolve("127.0.0.1:65002", t),
+				Doors:   []string{},
 			},
 		},
 		driver: &udp{

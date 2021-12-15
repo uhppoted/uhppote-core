@@ -9,17 +9,15 @@ type Device struct {
 	Name     string
 	DeviceID uint32
 	Address  *net.UDPAddr
-	Rollover uint32
 	Doors    []string
 	TimeZone *time.Location
 }
 
-func NewDevice(name string, serialNumber uint32, address *net.UDPAddr, rollover uint32, doors []string) *Device {
+func NewDevice(name string, serialNumber uint32, address *net.UDPAddr, doors []string) *Device {
 	return &Device{
 		Name:     name,
 		DeviceID: serialNumber,
 		Address:  address,
-		Rollover: rollover,
 		Doors:    doors,
 		TimeZone: time.Local,
 	}
@@ -30,7 +28,6 @@ func (d Device) Clone() Device {
 		Name:     d.Name,
 		DeviceID: d.DeviceID,
 		Address:  nil,
-		Rollover: d.Rollover,
 		Doors:    make([]string, len(d.Doors)),
 		TimeZone: d.TimeZone,
 	}
@@ -54,12 +51,4 @@ func (d *Device) ID() uint32 {
 	}
 
 	return 0
-}
-
-func (d *Device) RolloverAt() uint32 {
-	if d != nil {
-		return d.Rollover
-	}
-
-	return 100000
 }

@@ -5,6 +5,7 @@
 1. Retyped UHPPOTE.BindAddress as types.BindAddr
 2. Retyped UHPPOTE.BroadcastAddress as types.BroadcastAddr
 3. Retyped UHPPOTE.ListenAddress as types.ListenAddr
+4. Removed rollover (ref. https://github.com/uhppoted/uhppote-cli/issues/7)
 
 ### v0.7.1
 

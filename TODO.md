@@ -2,11 +2,10 @@
 
 ### IN PROGRESS
 
+- [x] Remove _rollover_
 - [ ] Set first card
-
-- [x] Retype UHPPOTE.BindAddress as types.BindAddr
-- [x] Retype UHPPOTE.BroadcastAddress as types.BroadcastAddr
-- [x] Retype UHPPOTE.ListenAddress as types.ListenAddr
+- [ ] See if there's anything worth taking from CloudFlare blog post on UDP:
+      https://blog.cloudflare.com/everything-you-ever-wanted-to-know-about-udp-sockets-but-were-afraid-to-ask-part-1/
 
 ## TODO
 
