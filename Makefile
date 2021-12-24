@@ -2,6 +2,7 @@ DIST  ?= development
 DEBUG ?= --debug
 
 .PHONY: bump
+.PHONY: lib
 
 all: test      \
 	 benchmark \
@@ -49,3 +50,7 @@ debug: build
 
 godoc:
 	godoc -http=:80	-index_interval=60s
+
+lib: 
+	cd lib && go build -o libuhppote.so -buildmode=c-shared main.go && clang -o test test.c -L. -luhppote
+
