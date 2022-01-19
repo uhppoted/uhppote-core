@@ -4,11 +4,14 @@
 
 - [x] Remove _rollover_
 - [ ] Fix DateTime Unmarshal to set nanos etc to 0
+- [ ] (?)EventNotFoundError
+- [ ] (?)EventOverwrittenError
 
 - [ ] shared lib
       - https://pkg.go.dev/cmd/cgo#hdr-C_references_to_Go
       - https://github.com/golang/go/issues/18412
       - http://www.snowsyn.net/2016/09/11/creating-shared-libraries-in-go/
+      -  https://www.redteam.cafe/red-team/golang/red-team-how-to-embed-golang-tools-in-c
 
 - [ ] Set first card
 - [ ] See if there's anything worth taking from CloudFlare blog post on UDP:

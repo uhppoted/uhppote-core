@@ -24,7 +24,7 @@ func (u *uhppote) GetEvent(deviceID, index uint32) (*types.Event, error) {
 	}
 
 	if reply.Type == 0xff {
-		return nil, fmt.Errorf("Event %v has been overwritten", index)
+		return nil, fmt.Errorf("event at %v has been overwritten", index)
 	}
 
 	if reply.Index == 0 {
