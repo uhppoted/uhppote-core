@@ -99,7 +99,7 @@ func TestGetEventWithOverwrittenEvent(t *testing.T) {
 		},
 	}
 
-	expected := fmt.Errorf("Event %v has been overwritten", 37)
+	expected := fmt.Errorf("Event at index %v has been overwritten", 37)
 
 	response, err := u.GetEvent(423187757, 37)
 	if !reflect.DeepEqual(err, expected) {
