@@ -15,6 +15,7 @@ Supported operating systems:
 
 | *Version* | *Description*                                                                             |
 | --------- | ----------------------------------------------------------------------------------------- |
+| v0.7.2    | Replaced event rollover with simple indexes to match controller behaviour                 |
 | v0.7.1    | Added support for task list functions from the extended API                               |
 | v0.7.0    | Added support for time profiles from the extended API                                     |
 | v0.6.12   | Improved handling of concurrent requests and invalid responses                            |
@@ -53,39 +54,38 @@ go build -o bin ./...
 
 | *Dependency*                        | *Description*                                          |
 | ----------------------------------- | ------------------------------------------------------ |
-| golang.org/x/lint/golint            | Additional *lint* check for release builds             |
+|                                     |                                                        |
 
 ## API
 
 - [`GetDevices`](#getdevices)
 - [`GetDevice`](#getdevice)
-- SetAddress
-- GetListener
-- SetListener
-- GetTime
-- SetTime
-- GetDoorControlState
-- SetDoorControlState
-- RecordSpecialEvents
-- GetStatus
-- GetCards
-- GetCardById
-- GetCardByIndex
-- PutCard
-- DeleteCard
-- DeleteCards
-- GetTimeProfile
-- SetTimeProfile
-- ClearTimeProfiles
+- [`SetAddress`](#setaddress)
+- [`GetListener`](#getlistener)
+- [`SetListener`](#setlistener)
+- [`GetTime`](#gettime)
+- [`SetTime`](#settime)
+- [`GetDoorControlState`](#getdoorcontrolstate)
+- [`SetDoorControlState`](#setdoorcontrolstate)
+- [`RecordSpecialEvents`](#recordspecialevents)
+- [`GetStatus`](#getstatus)
+- [`GetCards`](#getcards)
+- [`GetCardById`](#getcardbyid)
+- [`GetCardByIndex`](#getcardbyindex)
+- [`PutCard`](#putcard)
+- [`DeleteCard`](#deletecard)
+- [`DeleteCards`](#deletecards)
+- [`GetTimeProfile`](#gettimeprofile)
+- [`SetTimeProfile`](#settimeprofile)
+- [`ClearTimeProfiles`](#cleartimeprofiles)
 - [`ClearTaskList`](#cleartasklist)
 - [`AddTask`](#addtask)
 - [`RefreshTaskList`](#refreshtasklist)
-- SetTaskList
-- GetEvent
-- GetEventIndex
-- SetEventIndex
-- OpenDoor
-- Listen
+- [`GetEvent`](#getevent)
+- [`GetEventIndex`](#geteventindex)
+- [`SetEventIndex`](#seteventindex)
+- [`OpenDoor`](#opendoor)
+- [`Listen`](#listen)
 
 Other than `GetDevices` API which specifically uses UDP broadcast to issue a request, the API will uses the configured controller IP address if possible, falling back to a broadcast request if necessary.
 
@@ -96,6 +96,78 @@ Retrieves a list of all UHPPOTE controllers that respond to a broadcast `get-dev
 #### `GetDevice`
 
 Retrieves the controller information for a specific UHPPOTE controller from the response to a `get-device` request. 
+
+#### `SetAddress`
+
+Sets the IPv4 address, subnet mask and gateway address for a controller.
+
+#### `GetListener`
+
+Retrieves the IPv4 address of the host configured to receive events from the controller.
+
+#### `SetListener`
+
+Sets the IPv4 address of the host to receive events from the controller.
+
+#### `GetTime`
+
+Retrieves the controller date and time.
+
+#### `SetTime`
+
+Sets the controller date and time.
+
+#### `GetDoorControlState`
+
+Retrieves a door control state (`normally open`, `normally closed` or `controlled`) from the controller.
+
+#### `SetDoorControlState`
+
+Sets a door control state (`normally open`, `normally closed` or `controlled`) on the controller.
+
+#### `RecordSpecialEvents`
+
+Enables or disables the door and relay events on a controller. 
+
+#### `GetStatus`
+
+Retrieves the controller current status.
+
+#### `GetCards`
+
+Retrieves the number of cards stored on a controller.
+
+#### `GetCardByID`
+
+Retrieves a stored card's information using the card number.
+
+#### `GetCardByIndex`
+
+Retrieves a stored card's information using an index into the card list.
+
+#### `PutCard`
+
+Adds or updates a card record on the controller.
+
+#### `DeleteCard`
+
+Deletes a card record from the controller.
+
+#### `DeleteCards`
+
+Deletes all card records from the controller.
+
+#### `GetTimeProfile`
+
+Retrieves a numbered time profile from the controller.
+
+#### `SetTimeProfile`
+
+Adds or updates a numbered time profile on the controller.
+
+#### `ClearTimeProfiles`
+
+Deletes all stored time profiles from a controller.
 
 #### `ClearTaskList`
 
@@ -108,6 +180,30 @@ Adds a scheduled task to the task list on a specific UHPPOTE controller. The tas
 #### `RefreshTaskList`
 
 Activates all tasks added by `AddTask`.
+
+#### `GetEvent`
+
+Retrieves a single stored event (by index) from the controller.
+
+#### `GetEventIndex`
+
+Retrieves the current value of the controller event index (typically used as a marker for events
+that have been retrieved).
+
+#### `SetEventIndex`
+
+Sets the current value of the controller event index (typically used to update the marker for events
+that have been retrieved).
+
+#### `OpenDoor`
+
+Unlocks a door remotely.
+
+#### `Listen`
+
+Establishes a 'listening' UDP connection to receive events from a controller (or multiple controller) and invokes
+a callback function to process each received event.
+
 
 
 
