@@ -1,8 +1,8 @@
-## v0.7.2
+## v0.7.x
 
 ### IN PROGRESS
 
-- [x] Remove _rollover_
+- [x] Add -trimpath to `go build`
 
 ## TODO
 

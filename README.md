@@ -47,7 +47,7 @@ If you prefer not to use `make`:
 git clone https://github.com/uhppoted/uhppote-core.git
 cd uhppote-core
 mkdir bin
-go build -o bin ./...
+go build -trimpath -o bin ./...
 ```
 
 #### Dependencies
