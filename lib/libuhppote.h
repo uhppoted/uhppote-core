@@ -19,6 +19,19 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 /* Start of preamble from import "C" comments.  */
 
 
+#line 3 "main.go"
+
+struct Devices {
+    int X;
+    int Y;
+    int Z[1];
+};
+
+struct Device {
+    unsigned int ID;
+};
+
+#line 1 "cgo-generated-wrapper"
 
 
 /* End of preamble from import "C" comments.  */
@@ -68,8 +81,15 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
-extern GoInt InterOp();
-extern GoInt InterOpX(char* path);
+
+/* Return type for InterOp */
+struct InterOp_return {
+	GoInt r0;
+	char* r1;
+};
+extern struct InterOp_return InterOp(char* path);
+extern struct Devices GetDevices();
+extern struct Device GetDevice(GoUint32 deviceID);
 
 #ifdef __cplusplus
 }
