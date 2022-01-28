@@ -68,7 +68,8 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
-extern GoInt GetDevices(char* path);
+extern GoInt InterOp();
+extern GoInt InterOpX(char* path);
 
 #ifdef __cplusplus
 }

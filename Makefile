@@ -52,5 +52,5 @@ godoc:
 	godoc -http=:80	-index_interval=60s
 
 lib: 
-	cd lib && go build -o libuhppote.so -buildmode=c-shared main.go && clang -o test test.c -L. -luhppote
+	cd lib && go build -trimpath -o libuhppote.so -buildmode=c-shared main.go && clang -o test test.c -L. -luhppote
 

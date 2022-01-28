@@ -2,13 +2,13 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "uhppote.h"
+#include "libuhppote.h"
 
 int main(int argc, char **argv) {
     char *path = "qwerty";
-    int w = GetDevices(path);
-
-    printf("%d\n", w);
+    
+    printf("%lld\n", InterOp());
+    printf("%lld\n", InterOpX(path));
 
     return 0;
 }
