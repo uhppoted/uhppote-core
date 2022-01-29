@@ -3,6 +3,7 @@
 ### IN PROGRESS
 
 - [x] Add -trimpath to `go build`
+- [ ] Shared-lib/DLL
 
 ## TODO
 

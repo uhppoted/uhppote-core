@@ -28,7 +28,7 @@ struct Devices {
 };
 
 struct Device {
-    unsigned int ID;
+    unsigned long ID;
 };
 
 #line 1 "cgo-generated-wrapper"
@@ -88,7 +88,13 @@ struct InterOp_return {
 	char* r1;
 };
 extern struct InterOp_return InterOp(char* path);
-extern struct Devices GetDevices();
+
+/* Return type for GetDevices */
+struct GetDevices_return {
+	int r0;
+	char* r1;
+};
+extern struct GetDevices_return GetDevices(GoSlice list);
 extern struct Device GetDevice(GoUint32 deviceID);
 
 #ifdef __cplusplus

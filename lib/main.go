@@ -8,7 +8,7 @@ struct Devices {
 };
 
 struct Device {
-    unsigned int ID;
+    unsigned long ID;
 };
 */
 import "C"
@@ -30,31 +30,39 @@ func InterOp(path *C.char) (int, *C.char) {
 }
 
 //export GetDevices
-func GetDevices() C.struct_Devices {
+func GetDevices(list []C.ulong) (C.int, *C.char) {
 	bind, err := types.ResolveBindAddr("192.168.1.100")
 	if err != nil {
-		return C.struct_Devices{123, 456, [1]C.int{789}}
+		return 0, C.CString(err.Error())
 	}
 
 	broadcast, err := types.ResolveBroadcastAddr("192.168.1.255")
 	if err != nil {
-		return C.struct_Devices{123, 456, [1]C.int{789}}
+		return 0, C.CString(err.Error())
 	}
 
 	listen, err := types.ResolveListenAddr("192.168.1.100:60001")
 	if err != nil {
-		return C.struct_Devices{123, 456, [1]C.int{789}}
+		return 0, C.CString(err.Error())
 	}
 
-	timeout := 1 * time.Second
+	timeout := 5 * time.Second
 	devices := []uhppote.Device{}
 
 	u := uhppote.NewUHPPOTE(*bind, *broadcast, *listen, timeout, devices, true)
 
-	if _, err := u.GetDevices(); err != nil {
-		return C.struct_Devices{123, 456, [1]C.int{789}}
+	if devices, err := u.GetDevices(); err != nil {
+		return 0, C.CString(err.Error())
 	} else {
-		return C.struct_Devices{123, 456, [1]C.int{789}}
+		for ix, device := range devices {
+			if ix < len(list) {
+				list[ix] = C.ulong(device.SerialNumber)
+			} else {
+				break
+			}
+		}
+
+		return C.int(len(devices)), nil
 	}
 }
 
@@ -83,7 +91,7 @@ func GetDevice(deviceID uint32) C.struct_Device {
 	if device, err := u.GetDevice(deviceID); err != nil {
 		return C.struct_Device{0}
 	} else {
-		return C.struct_Device{C.uint(device.SerialNumber)}
+		return C.struct_Device{C.ulong(device.SerialNumber)}
 	}
 }
 
