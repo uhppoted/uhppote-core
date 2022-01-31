@@ -29,6 +29,12 @@ struct Devices {
 
 struct Device {
     unsigned long ID;
+	char *        address;
+	char *        subnet;
+	char *        gateway;
+	char *        MAC;
+	char *        version;
+	char *        date;
 };
 
 #line 1 "cgo-generated-wrapper"
@@ -82,20 +88,19 @@ extern "C" {
 #endif
 
 
-/* Return type for InterOp */
-struct InterOp_return {
-	GoInt r0;
-	char* r1;
-};
-extern struct InterOp_return InterOp(char* path);
-
 /* Return type for GetDevices */
 struct GetDevices_return {
 	int r0;
 	char* r1;
 };
 extern struct GetDevices_return GetDevices(GoSlice list);
-extern struct Device GetDevice(GoUint32 deviceID);
+
+/* Return type for GetDevice */
+struct GetDevice_return {
+	struct Device r0;
+	char* r1;
+};
+extern struct GetDevice_return GetDevice(GoUint32 deviceID);
 
 #ifdef __cplusplus
 }

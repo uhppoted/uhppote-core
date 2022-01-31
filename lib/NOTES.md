@@ -11,6 +11,7 @@
 9.  https://opendatagroup.github.io/development/2019/06/13/go-ffi.html
 10. https://groups.google.com/g/golang-nuts/c/bBylU8kE5uk
 11. https://docs.google.com/document/d/1nr-TQHw_er6GOQRsF6T43GGhFDelrAP0NqSS_00RgZQ/edit
+12. https://resources.sei.cmu.edu/asset_files/Presentation/2016_017_101_484207.pdf
 
 
 ## OTHER
