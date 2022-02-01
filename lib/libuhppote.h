@@ -21,6 +21,22 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 #line 3 "main.go"
 
+
+typedef struct udevice {
+	unsigned id;
+	char    *address;
+	struct udevice *next;
+} udevice;
+
+typedef struct UHPPOTE {
+	char     *bind;
+	char     *broadcast;
+	char     *listen;
+	int       timeout;  // seconds
+	udevice  *devices;  // (optional) linked list of device address
+	int       debug;    // true/false
+} UHPPOTE;
+
 struct Devices {
     int X;
     int Y;
@@ -100,7 +116,7 @@ struct GetDevice_return {
 	struct Device r0;
 	char* r1;
 };
-extern struct GetDevice_return GetDevice(GoUint32 deviceID);
+extern struct GetDevice_return GetDevice(struct UHPPOTE u, GoUint32 deviceID);
 
 #ifdef __cplusplus
 }

@@ -1,6 +1,22 @@
 package main
 
 /*
+
+typedef struct udevice {
+	unsigned id;
+	char    *address;
+	struct udevice *next;
+} udevice;
+
+typedef struct UHPPOTE {
+	char     *bind;
+	char     *broadcast;
+	char     *listen;
+	int       timeout;  // seconds
+	udevice  *devices;  // (optional) linked list of device address
+	int       debug;    // true/false
+} UHPPOTE;
+
 struct Devices {
     int X;
     int Y;
@@ -21,11 +37,14 @@ import "C"
 
 import (
 	"fmt"
+	"net"
 	"time"
 
 	"github.com/uhppoted/uhppote-core/types"
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
+
+func main() {}
 
 //export GetDevices
 func GetDevices(list []C.ulong) (C.int, *C.char) {
@@ -65,28 +84,13 @@ func GetDevices(list []C.ulong) (C.int, *C.char) {
 }
 
 //export GetDevice
-func GetDevice(deviceID uint32) (C.struct_Device, *C.char) {
-	bind, err := types.ResolveBindAddr("192.168.1.100")
+func GetDevice(u C.struct_UHPPOTE, deviceID uint32) (C.struct_Device, *C.char) {
+	uu, err := makeUHPPOTE(u)
 	if err != nil {
 		return C.struct_Device{}, C.CString(err.Error())
 	}
 
-	broadcast, err := types.ResolveBroadcastAddr("192.168.1.255")
-	if err != nil {
-		return C.struct_Device{}, C.CString(err.Error())
-	}
-
-	listen, err := types.ResolveListenAddr("192.168.1.100:60001")
-	if err != nil {
-		return C.struct_Device{}, C.CString(err.Error())
-	}
-
-	timeout := 5 * time.Second
-	devices := []uhppote.Device{}
-
-	u := uhppote.NewUHPPOTE(*bind, *broadcast, *listen, timeout, devices, true)
-
-	device, err := u.GetDevice(deviceID)
+	device, err := uu.GetDevice(deviceID)
 	if err != nil {
 		return C.struct_Device{}, C.CString(err.Error())
 	}
@@ -102,4 +106,40 @@ func GetDevice(deviceID uint32) (C.struct_Device, *C.char) {
 	}, nil
 }
 
-func main() {}
+func makeUHPPOTE(u C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
+	bind, err := types.ResolveBindAddr(C.GoString(u.bind))
+	if err != nil {
+		return nil, err
+	}
+
+	broadcast, err := types.ResolveBroadcastAddr(C.GoString(u.broadcast))
+	if err != nil {
+		return nil, err
+	}
+
+	listen, err := types.ResolveListenAddr(C.GoString(u.listen))
+	if err != nil {
+		return nil, err
+	}
+
+	timeout := time.Duration(u.timeout) * time.Second
+	devices := []uhppote.Device{}
+	debug := u.debug != 0
+
+	d := u.devices
+	for d != nil {
+		addr, err := types.ResolveAddr(C.GoString(d.address))
+		if err != nil {
+			return nil, err
+		}
+
+		devices = append(devices, uhppote.Device{
+			DeviceID: uint32(d.id),
+			Address:  (*net.UDPAddr)(addr),
+		})
+
+		d = d.next
+	}
+
+	return uhppote.NewUHPPOTE(*bind, *broadcast, *listen, timeout, devices, debug), nil
+}

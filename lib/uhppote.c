@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 __thread char *err = NULL;
 
@@ -12,7 +13,19 @@ char *errmsg() {
 }
 
 int get_device(unsigned id, struct device *d) {
-    struct GetDevice_return rc = GetDevice(id);
+    udevice alpha = { .id=405419896, .address="192.168.1.100", .next=NULL };
+    udevice beta  = { .id=303986753, .address="192.168.1.100", .next=&alpha };
+
+    UHPPOTE u = {
+        .bind = "192.168.1.100",
+        .broadcast = "192.168.1.255",
+        .listen = "192.168.1.100:60001",
+        .timeout = 5,
+        .devices = &alpha,
+        .debug = true,
+    };
+
+    struct GetDevice_return rc = GetDevice(u,id);
 
     if (rc.r1 != NULL) {        
         unsigned N = strlen(rc.r1) + 1;

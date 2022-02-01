@@ -3,19 +3,21 @@
 ### IN PROGRESS
 
 - [x] Add -trimpath to `go build`
-- [ ] Shared-lib/DLL
+- [ ] 'C' shared-lib/DLL
+      - [x] `get-device`
+      - [x] Pass `uhppote` as parameter
+      - [ ] `get-devices`
+      - [ ] Fix panic on timeout but waiting for "ok" from MacOS
+```
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x10 pc=0x10e3015d9]
+```
 
 ## TODO
 
 - [ ] Fix DateTime Unmarshal to set nanos etc to 0
 - [ ] (?)EventNotFoundError
 - [ ] (?)EventOverwrittenError
-
-- [ ] shared lib
-      - https://pkg.go.dev/cmd/cgo#hdr-C_references_to_Go
-      - https://github.com/golang/go/issues/18412
-      - http://www.snowsyn.net/2016/09/11/creating-shared-libraries-in-go/
-      -  https://www.redteam.cafe/red-team/golang/red-team-how-to-embed-golang-tools-in-c
 
 - [ ] Set first card
 - [ ] See if there's anything worth taking from CloudFlare blog post on UDP:
