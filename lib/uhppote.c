@@ -19,7 +19,7 @@ UHPPOTE *setup() {
         u->bind = "192.168.1.100";
         u->broadcast = "192.168.1.255";
         u->listen = "192.168.1.100:60001";
-        u->timeout = 5;
+        u->timeout = 1;
         u->devices = NULL;
         u->debug = true;
 

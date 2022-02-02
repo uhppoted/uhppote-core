@@ -80,6 +80,10 @@ func GetDevice(u *C.struct_UHPPOTE, deviceID uint32) (C.struct_Device, *C.char) 
 		return C.struct_Device{}, C.CString(err.Error())
 	}
 
+	if device == nil {
+		return C.struct_Device{}, C.CString(fmt.Errorf("No device found for %v", deviceID).Error())
+	}
+
 	return C.struct_Device{
 		ID:      C.ulong(device.SerialNumber),
 		address: C.CString(fmt.Sprintf("%v", device.IpAddress)),
