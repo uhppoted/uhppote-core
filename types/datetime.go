@@ -33,7 +33,7 @@ func DateTimeToString(d *DateTime) string {
 }
 
 func (d DateTime) MarshalText() ([]byte, error) {
-	return []byte("qwerty"), nil
+	return []byte(""), nil
 }
 
 func (d DateTime) MarshalUT0311L0x() ([]byte, error) {
