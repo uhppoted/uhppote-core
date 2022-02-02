@@ -12,32 +12,99 @@ char *errmsg() {
     return err;
 }
 
-int get_device(unsigned id, struct device *d) {
-    udevice alpha = { .id=405419896, .address="192.168.1.100", .next=NULL };
-    udevice beta  = { .id=303986753, .address="192.168.1.100", .next=&alpha };
+UHPPOTE *setup() {
+    UHPPOTE *u;
 
-    UHPPOTE u = {
-        .bind = "192.168.1.100",
-        .broadcast = "192.168.1.255",
-        .listen = "192.168.1.100:60001",
-        .timeout = 5,
-        .devices = &alpha,
-        .debug = true,
+    if ((u = (UHPPOTE *) malloc(sizeof(UHPPOTE))) != NULL) {
+        u->bind = "192.168.1.100";
+        u->broadcast = "192.168.1.255";
+        u->listen = "192.168.1.100:60001";
+        u->timeout = 5;
+        u->devices = NULL;
+        u->debug = true;
+
+        udevice *alpha;
+        udevice *beta;
+
+        if ((alpha = (udevice *) malloc(sizeof(udevice))) != NULL) {
+            alpha->id=405419896;
+            alpha->address="192.168.1.100";
+            alpha->next=NULL;
+
+            u->devices = alpha;
+
+            if ((beta = (udevice *) malloc(sizeof(udevice))) != NULL) {
+                beta->id=303986753;
+                beta->address="192.168.1.100";
+                beta->next=NULL;
+
+                alpha->next = beta;
+            }
+        }
     };
 
-    struct GetDevice_return rc = GetDevice(u,id);
+    return u;
+}
 
-    if (rc.r1 != NULL) {        
-        unsigned N = strlen(rc.r1) + 1;
+int teardown(UHPPOTE *u) {
+    udevice *d = u->devices;
+
+    while (d != NULL) {
+        udevice *next = d->next;
+        free(d);
+        d = next;
+    }
+
+    free(u);
+
+    return 0;
+}
+
+int get_devices(int N, unsigned long list[]) {
+    UHPPOTE *u = setup();
+
+    // unsigned long list[0];
+    // int l = sizeof(list)/sizeof(unsigned long);
+    GoSlice slice = { list,N,N} ;
+
+    struct GetDevices_return rc = GetDevices(u, slice);
+    if (rc.r1 != NULL) {
+        unsigned l = strlen(rc.r1) + 1;
 
         if (err != NULL) {
             free(err);
         }
 
-        if ((err = malloc(N)) != NULL) {
-            snprintf(err, N, "%s", rc.r1);            
+        if ((err = malloc(l)) != NULL) {
+            snprintf(err, l, "%s", rc.r1);            
         }
 
+        teardown(u);
+        return -1;
+    }
+
+    teardown(u);
+
+    return rc.r0;
+}
+
+int get_device(unsigned id, struct device *d) {
+    UHPPOTE *u = setup();
+
+    struct GetDevice_return rc = GetDevice(u,id);
+
+    if (rc.r1 != NULL) {        
+        unsigned l = strlen(rc.r1) + 1;
+
+        if (err != NULL) {
+            free(err);
+        }
+
+        if ((err = malloc(l)) != NULL) {
+            snprintf(err, l, "%s", rc.r1);            
+        }
+
+        teardown(u);
         return -1;
     }
 
@@ -49,5 +116,6 @@ int get_device(unsigned id, struct device *d) {
     snprintf(d->version, sizeof(d->version), "%s", rc.r0.version);
     snprintf(d->date,    sizeof(d->date),    "%s", rc.r0.date);
 
+    teardown(u);
     return 0;
 }

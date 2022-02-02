@@ -109,14 +109,14 @@ struct GetDevices_return {
 	int r0;
 	char* r1;
 };
-extern struct GetDevices_return GetDevices(GoSlice list);
+extern struct GetDevices_return GetDevices(struct UHPPOTE* u, GoSlice list);
 
 /* Return type for GetDevice */
 struct GetDevice_return {
 	struct Device r0;
 	char* r1;
 };
-extern struct GetDevice_return GetDevice(struct UHPPOTE u, GoUint32 deviceID);
+extern struct GetDevice_return GetDevice(struct UHPPOTE* u, GoUint32 deviceID);
 
 #ifdef __cplusplus
 }

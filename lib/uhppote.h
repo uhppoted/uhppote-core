@@ -10,5 +10,6 @@ struct device {
 
 
 char *errmsg();
-int   get_device(unsigned id, struct device *);
+int   get_devices();
+int   get_device (unsigned id, struct device *);
 
