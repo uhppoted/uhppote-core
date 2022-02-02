@@ -60,25 +60,26 @@ int teardown(UHPPOTE *u) {
     return 0;
 }
 
+void set_error(const char *errmsg) {
+    unsigned l = strlen(errmsg) + 1;
+
+    if (err != NULL) {
+        free(err);
+    }
+
+    if ((err = malloc(l)) != NULL) {
+        snprintf(err, l, "%s", errmsg);            
+    }
+}
+
 int get_devices(int N, unsigned long list[]) {
     UHPPOTE *u = setup();
 
-    // unsigned long list[0];
-    // int l = sizeof(list)/sizeof(unsigned long);
     GoSlice slice = { list,N,N} ;
 
     struct GetDevices_return rc = GetDevices(u, slice);
     if (rc.r1 != NULL) {
-        unsigned l = strlen(rc.r1) + 1;
-
-        if (err != NULL) {
-            free(err);
-        }
-
-        if ((err = malloc(l)) != NULL) {
-            snprintf(err, l, "%s", rc.r1);            
-        }
-
+        set_error(rc.r1);
         teardown(u);
         return -1;
     }
@@ -94,16 +95,7 @@ int get_device(unsigned id, struct device *d) {
     struct GetDevice_return rc = GetDevice(u,id);
 
     if (rc.r1 != NULL) {        
-        unsigned l = strlen(rc.r1) + 1;
-
-        if (err != NULL) {
-            free(err);
-        }
-
-        if ((err = malloc(l)) != NULL) {
-            snprintf(err, l, "%s", rc.r1);            
-        }
-
+        set_error(rc.r1);
         teardown(u);
         return -1;
     }

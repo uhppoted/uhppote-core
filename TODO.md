@@ -9,13 +9,13 @@ panic: runtime error: invalid memory address or nil pointer dereference
 [signal SIGSEGV: segmentation violation code=0x1 addr=0x10 pc=0x10e3015d9]
 ```
 
-      - [ ] Commonalise error handling
       - [ ] Move UHPPOTE initialisation outside of getXXXXX
       - [ ] Restructure
             - [ ] Make 'C' folder
             - [ ] Build to bin
             - [ ] Move device functions out of main.go
             - [ ] Merge to _main_
+      - [x] Commonalise error handling
       - [x] `setup`/`teardown`
       - [x] `get-devices`
       - [x] `get-device`
