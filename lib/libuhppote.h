@@ -23,18 +23,18 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 
 typedef struct udevice {
-	unsigned id;
-	char    *address;
+	unsigned        id;
+	const char     *address;
 	struct udevice *next;
 } udevice;
 
 typedef struct UHPPOTE {
-	char     *bind;
-	char     *broadcast;
-	char     *listen;
-	int       timeout;  // seconds
-	udevice  *devices;  // (optional) linked list of device address
-	int       debug;    // true/false
+	const char *bind;
+	const char *broadcast;
+	const char *listen;
+	int         timeout;  // seconds
+	udevice    *devices;  // (optional) linked list of device address
+	int         debug;    // true/false
 } UHPPOTE;
 
 struct Devices {

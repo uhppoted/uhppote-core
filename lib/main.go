@@ -3,18 +3,18 @@ package main
 /*
 
 typedef struct udevice {
-	unsigned id;
-	char    *address;
+	unsigned        id;
+	const char     *address;
 	struct udevice *next;
 } udevice;
 
 typedef struct UHPPOTE {
-	char     *bind;
-	char     *broadcast;
-	char     *listen;
-	int       timeout;  // seconds
-	udevice  *devices;  // (optional) linked list of device address
-	int       debug;    // true/false
+	const char *bind;
+	const char *broadcast;
+	const char *listen;
+	int         timeout;  // seconds
+	udevice    *devices;  // (optional) linked list of device address
+	int         debug;    // true/false
 } UHPPOTE;
 
 struct Devices {
@@ -96,41 +96,53 @@ func GetDevice(u *C.struct_UHPPOTE, deviceID uint32) (C.struct_Device, *C.char) 
 }
 
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
-	bind, err := types.ResolveBindAddr(C.GoString(u.bind))
-	if err != nil {
-		return nil, err
-	}
-
-	broadcast, err := types.ResolveBroadcastAddr(C.GoString(u.broadcast))
-	if err != nil {
-		return nil, err
-	}
-
-	listen, err := types.ResolveListenAddr(C.GoString(u.listen))
-	if err != nil {
-		return nil, err
-	}
-
-	timeout := time.Duration(u.timeout) * time.Second
+	bind := types.BindAddr{IP: []byte{0, 0, 0, 0}, Port: 0}
+	broadcast := types.BroadcastAddr{IP: []byte{255, 255, 255, 255}, Port: 60000}
+	listen := types.ListenAddr{IP: []byte{0, 0, 0, 0}, Port: 60001}
+	timeout := 5 * time.Second
 	devices := []uhppote.Device{}
-	debug := u.debug != 0
+	debug := false
 
-	d := u.devices
-	for d != nil {
-		if d.id != 0 {
-			addr, err := types.ResolveAddr(C.GoString(d.address))
-			if err != nil {
-				return nil, err
-			}
-
-			devices = append(devices, uhppote.Device{
-				DeviceID: uint32(d.id),
-				Address:  (*net.UDPAddr)(addr),
-			})
+	if u != nil {
+		if addr, err := types.ResolveBindAddr(C.GoString(u.bind)); err != nil {
+			return nil, err
+		} else if addr != nil {
+			bind = *addr
 		}
 
-		d = d.next
+		if addr, err := types.ResolveBroadcastAddr(C.GoString(u.broadcast)); err != nil {
+			return nil, err
+		} else if addr != nil {
+			broadcast = *addr
+		}
+
+		if addr, err := types.ResolveListenAddr(C.GoString(u.listen)); err != nil {
+			return nil, err
+		} else if addr != nil {
+			listen = *addr
+		}
+
+		timeout = time.Duration(u.timeout) * time.Second
+		debug = u.debug != 0
+
+		d := u.devices
+		for d != nil {
+			if d.id != 0 {
+				addr, err := types.ResolveAddr(C.GoString(d.address))
+				if err != nil {
+					return nil, err
+				}
+
+				devices = append(devices, uhppote.Device{
+					DeviceID: uint32(d.id),
+					Address:  (*net.UDPAddr)(addr),
+				})
+			}
+
+			d = d.next
+		}
 	}
 
-	return uhppote.NewUHPPOTE(*bind, *broadcast, *listen, timeout, devices, debug), nil
+	return uhppote.NewUHPPOTE(bind, broadcast, listen, timeout, devices, debug), nil
+
 }

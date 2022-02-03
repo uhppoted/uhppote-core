@@ -5,59 +5,73 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdarg.h>
 
 __thread char *err = NULL;
+__thread UHPPOTE *u = NULL;
 
 char *errmsg() {
     return err;
 }
 
-UHPPOTE *setup() {
-    UHPPOTE *u;
+/* (optional) setup for UHPPOTE network configuration. Defaults to:
+ * - bind:        0.0.0.0:0
+ * - broadcast:   255.255.255.255:60000
+ * - listen:      0.0.0.0:60001
+ * - timeout:     5s
+ * - controllers: (none)
+ * - debug:       false
+ *
+ * NOTE: https://wiki.sei.cmu.edu/confluence/display/cplusplus/EXP58-CPP.+Pass+an+object+of+the+correct+type+to+va_start
+ */ 
+void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...) {
+    if (u != NULL) {
+        teardown();
+    }
 
     if ((u = (UHPPOTE *) malloc(sizeof(UHPPOTE))) != NULL) {
-        u->bind = "192.168.1.100";
-        u->broadcast = "192.168.1.255";
-        u->listen = "192.168.1.100:60001";
-        u->timeout = 1;
+        u->bind = bind;
+        u->broadcast = broadcast;
+        u->listen = listen;
+        u->timeout = timeout;
         u->devices = NULL;
-        u->debug = true;
+        u->debug = debug;
 
-        udevice *alpha;
-        udevice *beta;
+        va_list args;
+        va_start(args, debug);
 
-        if ((alpha = (udevice *) malloc(sizeof(udevice))) != NULL) {
-            alpha->id=405419896;
-            alpha->address="192.168.1.100";
-            alpha->next=NULL;
+        controller *p = va_arg(args, controller *);
+        udevice    *q = NULL;
+        udevice    *previous = NULL;
 
-            u->devices = alpha;
-
-            if ((beta = (udevice *) malloc(sizeof(udevice))) != NULL) {
-                beta->id=303986753;
-                beta->address="192.168.1.100";
-                beta->next=NULL;
-
-                alpha->next = beta;
+        while(p != NULL) {
+            if ((q = (udevice *) malloc(sizeof(udevice))) != NULL) {
+                q->id = p->id;
+                q->address = p->address;
+                q->next=previous;
+                previous = q;
             }
-        }
-    };
 
-    return u;
+            p = va_arg(args, controller *);
+        }
+        va_end(args);
+
+        u->devices = q;
+    }
 }
 
-int teardown(UHPPOTE *u) {
-    udevice *d = u->devices;
+void teardown() {
+    if (u != NULL) {
+        udevice *d = u->devices;
 
-    while (d != NULL) {
-        udevice *next = d->next;
-        free(d);
-        d = next;
+        while (d != NULL) {
+            udevice *next = d->next;
+            free(d);
+            d = next;
+        }        
     }
 
     free(u);
-
-    return 0;
 }
 
 void set_error(const char *errmsg) {
@@ -73,30 +87,22 @@ void set_error(const char *errmsg) {
 }
 
 int get_devices(int N, unsigned long list[]) {
-    UHPPOTE *u = setup();
-
     GoSlice slice = { list,N,N} ;
 
     struct GetDevices_return rc = GetDevices(u, slice);
     if (rc.r1 != NULL) {
         set_error(rc.r1);
-        teardown(u);
         return -1;
     }
-
-    teardown(u);
 
     return rc.r0;
 }
 
 int get_device(unsigned id, struct device *d) {
-    UHPPOTE *u = setup();
-
     struct GetDevice_return rc = GetDevice(u,id);
 
     if (rc.r1 != NULL) {        
         set_error(rc.r1);
-        teardown(u);
         return -1;
     }
 
@@ -108,6 +114,5 @@ int get_device(unsigned id, struct device *d) {
     snprintf(d->version, sizeof(d->version), "%s", rc.r0.version);
     snprintf(d->date,    sizeof(d->date),    "%s", rc.r0.date);
 
-    teardown(u);
     return 0;
 }

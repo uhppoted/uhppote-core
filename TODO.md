@@ -3,12 +3,13 @@
 ### IN PROGRESS
 
 - [ ] 'C' shared-lib/DLL
-      - [ ] Move UHPPOTE initialisation outside of getXXXXX
       - [ ] Restructure
             - [ ] Make 'C' folder
             - [ ] Build to bin
             - [ ] Move device functions out of main.go
             - [ ] Merge to _main_
+      - [ ] Rethink get_devices so that it can reassign the array
+      - [x] Move UHPPOTE initialisation outside of getXXXXX
       - [x] Fix panic on timeout but waiting for "ok" from MacOS
       - [x] Commonalise error handling
       - [x] `setup`/`teardown`
