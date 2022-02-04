@@ -55,6 +55,6 @@ godoc:
 	godoc -http=:80	-index_interval=60s
 
 example:
-	clang -o $(EXAMPLE)/example $(EXAMPLE)/example.c shared-lib/c/src/uhppote.c -I$(LIB) -L$(LIB) -luhppote
+	clang -o $(EXAMPLE)/example $(EXAMPLE)/example.c $(EXAMPLE)/device.c shared-lib/c/src/uhppote.c -I$(LIB) -L$(LIB) -luhppote
 	export DYLD_LIBRARY_PATH=$(LIB) && ./shared-lib/c/example/example get-device
 

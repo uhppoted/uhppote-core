@@ -4,14 +4,13 @@
 
 - [ ] 'C' shared-lib/DLL
       - [ ] Rethink get_devices so that it can reassign the array
-      - [ ] Restructure
+      - [ ] Merge to _main_
+      - [x] Restructure
             - [x] Make 'C' folder
             - [x] Build to shared-lib/lib
             - [x] DYLD_LIBRARY
             - [x] Replace libuhppote.h path with -I
-            - [ ] Figure out how to build to libuhppote.so automatically
-            - [ ] Move device functions out of main.go
-            - [ ] Merge to _main_
+            - [x] Move device functions out of main.go
       - [x] Move UHPPOTE initialisation outside of getXXXXX
       - [x] Fix panic on timeout but waiting for "ok" from MacOS
       - [x] Commonalise error handling
