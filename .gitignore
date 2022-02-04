@@ -1,1 +1,6 @@
 .DS_Store
+bin
+
+shared-lib/c/example/example
+shared-lib/c/example/libuhppote.so
+shared-lib/c/include/libuhppote.h

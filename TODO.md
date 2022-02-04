@@ -4,8 +4,9 @@
 
 - [ ] 'C' shared-lib/DLL
       - [ ] Restructure
-            - [ ] Make 'C' folder
-            - [ ] Build to bin
+            - [x] Make 'C' folder
+            - [x] Build to bin
+            - [ ] Figure out how to build to libuhppote.so automatically
             - [ ] Move device functions out of main.go
             - [ ] Merge to _main_
       - [ ] Rethink get_devices so that it can reassign the array
