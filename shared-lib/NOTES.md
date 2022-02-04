@@ -20,3 +20,4 @@
 
 1. http://www.swig.org/Doc2.0/Go.html
 2. unsigned long <<>> uint32 or uint64, depending on -long-type-size
+3. https://stackoverflow.com/questions/8437791/c-malloc-array-in-function-and-then-access-array-from-outside

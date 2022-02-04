@@ -21,13 +21,11 @@ int main(int argc, char **argv) {
     controller alpha = { .id=405419896, .address="192.168.1.100" };
     controller beta  = { .id=303986753, .address="192.168.1.100" };
 
-    setup("192.168.1.100:0","192.168.1.255:60000","192.168.1.100:60001", 1, true, &alpha, &beta, NULL);
+    setup("192.168.1.100:0","192.168.1.255:60000","192.168.1.100:60001", 2, true, &alpha, &beta, NULL);
 
     if (strncmp(cmd,"get-devices",11) == 0) {
         rc = getDevices();
-    }
-
-    if (strncmp(cmd,"get-device",10) == 0) {
+    } else if (strncmp(cmd,"get-device",10) == 0) {
         rc = getDevice();
     }
 

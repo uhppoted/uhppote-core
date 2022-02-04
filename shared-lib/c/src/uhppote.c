@@ -86,16 +86,42 @@ void set_error(const char *errmsg) {
     }
 }
 
-int get_devices(int N, unsigned long list[]) {
-    GoSlice slice = { list,N,N} ;
+// All this finagling because you can't return a slice from Go
+int get_devices(unsigned long **devices, int *N) {
+    struct GetDevices_return rc;
+    unsigned long *list = NULL;        
+    int size = 0;
 
-    struct GetDevices_return rc = GetDevices(u, slice);
-    if (rc.r1 != NULL) {
-        set_error(rc.r1);
-        return -1;
-    }
+    do {
+        size += 16;
 
-    return rc.r0;
+        unsigned long *p;        
+        if ((p = realloc(list, size * sizeof(unsigned long))) == NULL) {
+            free(list);
+            set_error("Error allocating storage for slice");
+            return -1;            
+        } else {
+            list = p;
+        }
+
+        GoSlice slice = { list,size,size} ;
+
+        rc = GetDevices(u, slice);
+        if (rc.r1 != NULL) {
+            free(list);
+            set_error(rc.r1);
+            return -1;
+        }
+
+    } while (rc.r0 > size);
+
+    *N = rc.r0;
+    *devices = malloc(rc.r0 * sizeof(unsigned long));
+
+    memmove(*devices, list, rc.r0 * sizeof(unsigned long));
+    free(list);
+
+    return 0;
 }
 
 int get_device(unsigned id, struct device *d) {

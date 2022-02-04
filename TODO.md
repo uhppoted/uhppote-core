@@ -3,8 +3,8 @@
 ### IN PROGRESS
 
 - [ ] 'C' shared-lib/DLL
-      - [ ] Rethink get_devices so that it can reassign the array
       - [ ] Merge to _main_
+      - [x] Rethink get_devices so that it can reassign the array
       - [x] Restructure
             - [x] Make 'C' folder
             - [x] Build to shared-lib/lib

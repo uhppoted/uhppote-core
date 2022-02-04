@@ -17,12 +17,6 @@ typedef struct UHPPOTE {
 	int         debug;    // true/false
 } UHPPOTE;
 
-struct Devices {
-    int X;
-    int Y;
-    int Z[1];
-};
-
 struct Device {
     unsigned long ID;
 	char *        address;

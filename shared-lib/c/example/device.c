@@ -1,26 +1,25 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "../include/uhppote.h"
 
 int getDevices() {
+    unsigned long *devices = NULL;
     int N;
-    int L = 10;
-    unsigned long list[L];
 
-    if ((N = get_devices(L, list)) < 0) {
+    if (get_devices(&devices, &N) < 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     } 
 
-    printf("\nget-devices\n");
-    printf("  N: %d\n", N);
-
-    int l = N < L ? N : L;      
-    for (int i=0; i<l; i++) {
-        printf("     %lu\n", list[i]);        
+    printf("\nget-devices (%d)\n", N);
+    if (N > 0 && devices != NULL) {
+        for (int i=0; i<N; i++) {
+            printf("   %lu\n", devices[i]);        
+        }
     }
-    
-    printf("\n");
+
+    free(devices);
 
     return 0;
 }
