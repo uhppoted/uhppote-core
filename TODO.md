@@ -2,19 +2,31 @@
 
 ### IN PROGRESS
 
+- [ ] 'C' shared-lib/DLL
+      - [ ] Merge to _main_
+      - [x] Rethink get_devices so that it can reassign the array
+      - [x] Restructure
+            - [x] Make 'C' folder
+            - [x] Build to shared-lib/lib
+            - [x] DYLD_LIBRARY
+            - [x] Replace libuhppote.h path with -I
+            - [x] Move device functions out of main.go
+      - [x] Move UHPPOTE initialisation outside of getXXXXX
+      - [x] Fix panic on timeout but waiting for "ok" from MacOS
+      - [x] Commonalise error handling
+      - [x] `setup`/`teardown`
+      - [x] `get-devices`
+      - [x] `get-device`
+      - [x] Pass `uhppote` as parameter
+
 - [x] Add -trimpath to `go build`
 
 ## TODO
 
+- [ ] Replace messy UDP broadcast wait implementation with WaitGroup
 - [ ] Fix DateTime Unmarshal to set nanos etc to 0
 - [ ] (?)EventNotFoundError
 - [ ] (?)EventOverwrittenError
-
-- [ ] shared lib
-      - https://pkg.go.dev/cmd/cgo#hdr-C_references_to_Go
-      - https://github.com/golang/go/issues/18412
-      - http://www.snowsyn.net/2016/09/11/creating-shared-libraries-in-go/
-      -  https://www.redteam.cafe/red-team/golang/red-team-how-to-embed-golang-tools-in-c
 
 - [ ] Set first card
 - [ ] See if there's anything worth taking from CloudFlare blog post on UDP:
