@@ -1,4 +1,6 @@
-DIST  ?= development
+DIST   ?= development
+LIB     = shared-lib/lib
+EXAMPLE = shared-lib/c/example
 DEBUG ?= --debug
 
 .PHONY: bump
@@ -17,7 +19,7 @@ format:
 
 build: format
 	go build -trimpath ./...
-	go build -trimpath -o bin/libuhppote.so -buildmode=c-shared shared-lib/go/main.go
+	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppote.so shared-lib/go/main.go
 
 test: build
 	go test ./...
@@ -52,6 +54,7 @@ debug: build
 godoc:
 	godoc -http=:80	-index_interval=60s
 
-lib: 
-	cd lib && go build -trimpath -o libuhppote.so -buildmode=c-shared main.go && clang -o test test.c -L. -luhppote
+example:
+	clang -o $(EXAMPLE)/example $(EXAMPLE)/example.c shared-lib/c/src/uhppote.c -I$(LIB) -L$(LIB) -luhppote
+	export DYLD_LIBRARY_PATH=$(LIB) && ./shared-lib/c/example/example get-device
 
