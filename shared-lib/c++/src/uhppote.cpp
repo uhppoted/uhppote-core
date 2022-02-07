@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
-#include <stdarg.h>
+#include <iostream>
 
 uhppote::uhppote() {
     u   = NULL;
@@ -19,39 +18,30 @@ uhppote::uhppote() {
  * - controllers: (none)
  * - debug:       false
  *
- * NOTE: https://wiki.sei.cmu.edu/confluence/display/cplusplus/EXP58-CPP.+Pass+an+object+of+the+correct+type+to+va_start
  */ 
-uhppote::uhppote(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...) {
+uhppote::uhppote(const std::string& bind, const std::string& broadcast, const std::string& listen, int timeout, const std::vector<controller>& controllers, bool debug) {
     uhppote();
 
     if ((u = (UHPPOTE *) malloc(sizeof(UHPPOTE))) != NULL) {
-        u->bind = bind;
-        u->broadcast = broadcast;
-        u->listen = listen;
+        u->bind = bind.c_str();
+        u->broadcast = broadcast.c_str();
+        u->listen = listen.c_str();
         u->timeout = timeout;
         u->devices = NULL;
         u->debug = debug;
 
-        va_list args;
-        va_start(args, debug);
-
-        controller *p = va_arg(args, controller *);
-        udevice    *q = NULL;
-        udevice    *previous = NULL;
-
-        while(p != NULL) {
+        udevice *q = NULL;
+        udevice *previous = NULL;
+        for (auto p : controllers){
             if ((q = (udevice *) malloc(sizeof(udevice))) != NULL) {
-                q->id = p->id;
-                q->address = p->address;
+                q->id = p.id;
+                q->address = p.address;
                 q->next=previous;
                 previous = q;
             }
-
-            p = va_arg(args, controller *);
         }
-        va_end(args);
 
-        u->devices = q;
+		u->devices = q;
     }
 }
 

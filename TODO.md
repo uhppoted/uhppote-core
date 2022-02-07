@@ -4,9 +4,11 @@
 
 - Shared-lib/DLL
   - [ ] 'C++' wrapper
-         - [ ] Wrap 'C' implementation in class
+         - [x] Wrap 'C' implementation in class
          - [ ] Replace char * etc with std::string
          - [ ] Replace unsigned long ** with std::vector
+         - [ ] Replace `printf` with `cout` 
+         - [ ] Replace `malloc`/`free`
   - [x] 'C' wrapper
 
 - [x] Add -trimpath to `go build`

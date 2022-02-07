@@ -1,6 +1,7 @@
 #pragma once
 
-#include <stdbool.h> 
+#include <string>
+#include <vector>
 #include "libuhppote.h"
 
 typedef struct controller {
@@ -21,9 +22,9 @@ typedef struct device {
 
 class uhppote {
     public:
-                  uhppote();
-                  uhppote(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...);
-         virtual ~uhppote();
+        uhppote();
+        uhppote(const std::string& bind, const std::string& broadcast, const std::string& listen, int timeout, const std::vector<controller>& controllers, bool debug);
+        virtual ~uhppote();
 
     public:
         char *errmsg() const;

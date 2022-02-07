@@ -19,8 +19,9 @@ int main(int argc, char **argv) {
 
     controller alpha = { .id=405419896, .address="192.168.1.100" };
     controller beta  = { .id=303986753, .address="192.168.1.100" };
+    std::vector<controller> controllers = { alpha, beta };
 
-    uhppote u("192.168.1.100:0","192.168.1.255:60000","192.168.1.100:60001", 2, true, &alpha, &beta, NULL);
+    uhppote u("192.168.1.100:0","192.168.1.255:60000","192.168.1.100:60001", 2, controllers, true);
 
     if (strncmp(cmd,"get-devices",11) == 0) {
         return getDevices(u);
