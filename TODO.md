@@ -5,8 +5,8 @@
 - Shared-lib/DLL
   - [ ] Figure out device address alloc/free weirdness
   - [ ] 'C++' wrapper
-         - [ ] Replace unsigned long ** with std::vector
          - [ ] Replace `malloc`/`free`
+         - [x] Replace unsigned long ** with references
          - [x] Wrap 'C' implementation in class
          - [x] Replace char * etc with std::string
          - [x] Replace `printf` with `cout` 

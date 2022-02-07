@@ -1,6 +1,7 @@
-DIST   ?= development
-LIB     = shared-lib/lib
-EXAMPLE = shared-lib/c/example
+DIST  ?= development
+LIB    = shared-lib/lib
+LIBC   = shared-lib/c
+LIBCPP = shared-lib/c++
 DEBUG ?= --debug
 
 .PHONY: bump
@@ -54,7 +55,10 @@ debug: build
 godoc:
 	godoc -http=:80	-index_interval=60s
 
-example:
-	clang -o $(EXAMPLE)/example $(EXAMPLE)/example.c $(EXAMPLE)/device.c shared-lib/c/src/uhppote.c -I$(LIB) -L$(LIB) -luhppote
-	export DYLD_LIBRARY_PATH=$(LIB) && ./shared-lib/c/example/example get-device
+example-c:
+	clang -o $(LIBC)/example/example $(LIBC)/example/example.c $(LIBC)/example/device.c $(LIBC)/src/uhppote.c -I$(LIB) -L$(LIB) -luhppote
+	export DYLD_LIBRARY_PATH=$(LIB) && $(EXAMPLEC)/example get-device
 
+example-c++:
+	clang -std=c++11 -lc++ -o $(LIBCPP)/example/example $(LIBCPP)/example/example.cpp $(LIBCPP)/example/device.cpp $(LIBCPP)/src/uhppote.cpp -I$(LIB) -L$(LIB) -luhppote
+	export DYLD_LIBRARY_PATH=$(LIB) && ./shared-lib/c/example/example get-device

@@ -66,7 +66,7 @@ void uhppote::set_error(const char *errmsg) {
 }
 
 // All this finagling because you can't return a slice from Go
-int uhppote::get_devices(unsigned long **devices, int *N) {
+int uhppote::get_devices(std::vector<unsigned long>& devices) {
     struct GetDevices_return rc;
     unsigned long *list = NULL;        
     int size = 0;
@@ -94,16 +94,16 @@ int uhppote::get_devices(unsigned long **devices, int *N) {
 
     } while (rc.r0 > size);
 
-    *N = rc.r0;
-    *devices = (unsigned long *) malloc(rc.r0 * sizeof(unsigned long));
+    for (int i=0; i<rc.r0; i++) {
+        devices.push_back(list[i]);
+    }
 
-    memmove(*devices, list, rc.r0 * sizeof(unsigned long));
     free(list);
 
     return 0;
 }
 
-int uhppote::get_device(unsigned id, struct device *d) {
+int uhppote::get_device(unsigned id, struct device& d) {
     struct GetDevice_return rc = GetDevice(u,id);
 
     if (rc.r1 != NULL) {        
@@ -111,13 +111,13 @@ int uhppote::get_device(unsigned id, struct device *d) {
         return -1;
     }
 
-    d->ID = rc.r0.ID;
-    d->address = rc.r0.address;
-    d->subnet = rc.r0.subnet;
-    d->gateway = rc.r0.gateway;
-    d->MAC = rc.r0.MAC;
-    d->version = rc.r0.version;
-    d->date = rc.r0.date;
+    d.ID = rc.r0.ID;
+    d.address = rc.r0.address;
+    d.subnet = rc.r0.subnet;
+    d.gateway = rc.r0.gateway;
+    d.MAC = rc.r0.MAC;
+    d.version = rc.r0.version;
+    d.date = rc.r0.date;
 
     return 0;
 }

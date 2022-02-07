@@ -1,25 +1,19 @@
 #include <iostream>
-
 #include "../include/uhppote.hpp"
 
 int getDevices(uhppote& u) {
-    unsigned long *devices = NULL;
-    int N;
+    std::vector<unsigned long> devices;
 
-    if (u.get_devices(&devices, &N) < 0) {
+    if (u.get_devices(devices) < 0) {
         std::cerr << "ERROR " << u.errmsg() << std::endl;
         return -1;
     } 
 
-    std::cout << std::endl << "get-devices (" << N << ")" << std::endl;
-    if (N > 0 && devices != NULL) {
-        for (int i=0; i<N; i++) {
-            std::cout << "   " << devices[i] << std::endl;
-        }
+    std::cout << std::endl << "get-devices (" << devices.size() << ")" << std::endl;
+    for (auto id : devices){
+        std::cout << "   " << id << std::endl;
     }
     std::cout << std::endl;
-
-    free(devices);
 
     return 0;
 }
@@ -27,7 +21,7 @@ int getDevices(uhppote& u) {
 int getDevice(uhppote& u) {
     struct device d;
 
-    if (u.get_device(405419896, &d) != 0) {
+    if (u.get_device(405419896, d) != 0) {
         std::cerr << "ERROR " << u.errmsg() << std::endl;
         return -1;
     } 

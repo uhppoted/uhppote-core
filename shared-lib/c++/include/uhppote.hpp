@@ -5,8 +5,8 @@
 #include "libuhppote.h"
 
 typedef struct controller {
-    unsigned int id;
-    std::string  address;
+    unsigned long id;
+    std::string   address;
 } controller;
 
 typedef struct device {
@@ -28,8 +28,8 @@ class uhppote {
 
     public:
         std::string errmsg();
-        int get_devices(unsigned long **devices, int *N);
-        int get_device (unsigned id, struct device *);
+        int get_devices(std::vector<unsigned long>& devices);
+        int get_device (unsigned id, struct device&);
 
     private:
         void set_error(const char *errmsg);

@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include <iostream>
 
 #include "../include/uhppote.hpp"
@@ -14,7 +13,7 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    char *cmd = argv[1];
+    std::string cmd(argv[1]);
 
     controller alpha = { .id=405419896, .address="192.168.1.100" };
     controller beta  = { .id=303986753, .address="192.168.1.100" };
@@ -22,15 +21,15 @@ int main(int argc, char **argv) {
 
     uhppote u("192.168.1.100:0","192.168.1.255:60000","192.168.1.100:60001", 2, controllers, true);
 
-    if (strncmp(cmd,"get-devices",11) == 0) {
+    if (cmd == "get-devices") {
         return getDevices(u);
     } 
 
-    if (strncmp(cmd,"get-device",10) == 0) {
+    if (cmd == "get-device") {
         return getDevice(u);
     }
 
-    if (strncmp(cmd,"all",3) == 0) {
+    if (cmd == "all") {
         getDevices(u);
         getDevice(u);
     }

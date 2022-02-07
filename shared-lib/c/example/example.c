@@ -27,6 +27,9 @@ int main(int argc, char **argv) {
         rc = getDevices();
     } else if (strncmp(cmd,"get-device",10) == 0) {
         rc = getDevice();
+    } else if (strncmp(cmd,"all",3) == 0) {
+        getDevices();
+        getDevice();        
     }
 
     teardown();
