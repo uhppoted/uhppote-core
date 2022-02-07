@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
 
 #include "../include/uhppote.hpp"
 
@@ -8,16 +7,17 @@ int getDevices(uhppote& u) {
     int N;
 
     if (u.get_devices(&devices, &N) < 0) {
-        printf("ERROR %s\n", u.errmsg());
+        std::cerr << "ERROR " << u.errmsg() << std::endl;
         return -1;
     } 
 
-    printf("\nget-devices (%d)\n", N);
+    std::cout << std::endl << "get-devices (" << N << ")" << std::endl;
     if (N > 0 && devices != NULL) {
         for (int i=0; i<N; i++) {
-            printf("   %lu\n", devices[i]);        
+            std::cout << "   " << devices[i] << std::endl;
         }
     }
+    std::cout << std::endl;
 
     free(devices);
 
@@ -28,17 +28,17 @@ int getDevice(uhppote& u) {
     struct device d;
 
     if (u.get_device(405419896, &d) != 0) {
-        printf("ERROR %s\n", u.errmsg());
+        std::cerr << "ERROR " << u.errmsg() << std::endl;
         return -1;
     } 
       
-    printf("\nget-device\n");
-    printf("  ID:      %lu\n", d.ID);
-    printf("  IP:      %s  %s  %s\n",  d.address,d.subnet,d.gateway);
-    printf("  MAC:     %s\n",  d.MAC);
-    printf("  version: %s\n",  d.version);
-    printf("  date:    %s\n",  d.date);
-    printf("\n");
+    std::cout << std::endl << "get-device" << std::endl;
+    std::cout << "  ID:      " << d.ID << std::endl;
+    std::cout << "  IP:      " << d.address << "  " << d.subnet << "  " << d.gateway << std::endl;
+    std::cout << "  MAC:     " << d.MAC << std::endl;
+    std::cout << "  version: " << d.version << std::endl;
+    std::cout << "  date:    " << d.date << std::endl;
+    std::cout << std::endl;
 
     return 0;
 }

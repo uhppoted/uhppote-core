@@ -4,7 +4,7 @@ package main
 
 typedef struct udevice {
 	unsigned        id;
-	const char     *address;
+	char           *address; // NOTE: should be const char * but C.GoString doesn't seem to respect the const'ness
 	struct udevice *next;
 } udevice;
 

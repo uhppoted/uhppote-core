@@ -18,6 +18,7 @@ int getDevices() {
             printf("   %lu\n", devices[i]);        
         }
     }
+    printf("\n");
 
     free(devices);
 

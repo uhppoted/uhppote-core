@@ -5,18 +5,18 @@
 #include "libuhppote.h"
 
 typedef struct controller {
-    unsigned    id;
-    const char *address;
+    unsigned int id;
+    std::string  address;
 } controller;
 
 typedef struct device {
     unsigned long ID;
-    char address[16];
-    char subnet[16];
-    char gateway[16];
-    char MAC[18];
-    char version[6];
-    char date[11];
+    std::string address;
+    std::string subnet;
+    std::string gateway;
+    std::string MAC;
+    std::string version;
+    std::string date;
 } device;
 
 
@@ -27,7 +27,7 @@ class uhppote {
         virtual ~uhppote();
 
     public:
-        char *errmsg() const;
+        std::string errmsg();
         int get_devices(unsigned long **devices, int *N);
         int get_device (unsigned id, struct device *);
 
@@ -36,5 +36,5 @@ class uhppote {
 
     private:
         UHPPOTE *u;
-        char    *err;
+        std::string err;
 };

@@ -1,13 +1,10 @@
 #include "../include/uhppote.hpp"
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <iostream>
 
 uhppote::uhppote() {
-    u   = NULL;
-    err = NULL;
+    u = NULL;
 }
 
 /* (optional) setup for UHPPOTE network configuration. Defaults to:
@@ -35,7 +32,7 @@ uhppote::uhppote(const std::string& bind, const std::string& broadcast, const st
         for (auto p : controllers){
             if ((q = (udevice *) malloc(sizeof(udevice))) != NULL) {
                 q->id = p.id;
-                q->address = p.address;
+                q->address = strdup(p.address.c_str()); // C.GoString doesn't seem to respect the const'ness
                 q->next=previous;
                 previous = q;
             }
@@ -51,6 +48,7 @@ uhppote::~uhppote() {
 
         while (d != NULL) {
             udevice *next = d->next;
+            free(d->address);
             free(d);
             d = next;
         }        
@@ -59,20 +57,12 @@ uhppote::~uhppote() {
     free(u);
 }
 
-char *uhppote::errmsg() const {
+std::string uhppote::errmsg() {
     return err;
 }
 
 void uhppote::set_error(const char *errmsg) {
-    unsigned l = strlen(errmsg) + 1;
-
-    if (err != NULL) {
-        free(err);
-    }
-
-    if ((err = (char *) malloc(l)) != NULL) {
-        snprintf(err, l, "%s", errmsg);            
-    }
+	err = errmsg;
 }
 
 // All this finagling because you can't return a slice from Go
@@ -122,12 +112,12 @@ int uhppote::get_device(unsigned id, struct device *d) {
     }
 
     d->ID = rc.r0.ID;
-    snprintf(d->address, sizeof(d->address), "%s", rc.r0.address);
-    snprintf(d->subnet,  sizeof(d->subnet),  "%s", rc.r0.subnet);
-    snprintf(d->gateway, sizeof(d->gateway), "%s", rc.r0.gateway);
-    snprintf(d->MAC,     sizeof(d->MAC),     "%s", rc.r0.MAC);
-    snprintf(d->version, sizeof(d->version), "%s", rc.r0.version);
-    snprintf(d->date,    sizeof(d->date),    "%s", rc.r0.date);
+    d->address = rc.r0.address;
+    d->subnet = rc.r0.subnet;
+    d->gateway = rc.r0.gateway;
+    d->MAC = rc.r0.MAC;
+    d->version = rc.r0.version;
+    d->date = rc.r0.date;
 
     return 0;
 }

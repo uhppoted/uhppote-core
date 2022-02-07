@@ -46,7 +46,7 @@ void setup(const char *bind, const char *broadcast, const char *listen, int time
         while(p != NULL) {
             if ((q = (udevice *) malloc(sizeof(udevice))) != NULL) {
                 q->id = p->id;
-                q->address = p->address;
+                q->address = strdup(p->address);
                 q->next=previous;
                 previous = q;
             }
@@ -65,6 +65,7 @@ void teardown() {
 
         while (d != NULL) {
             udevice *next = d->next;
+            free(d->address);
             free(d);
             d = next;
         }        

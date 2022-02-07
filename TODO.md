@@ -3,12 +3,13 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
+  - [ ] Figure out device address alloc/free weirdness
   - [ ] 'C++' wrapper
-         - [x] Wrap 'C' implementation in class
-         - [ ] Replace char * etc with std::string
          - [ ] Replace unsigned long ** with std::vector
-         - [ ] Replace `printf` with `cout` 
          - [ ] Replace `malloc`/`free`
+         - [x] Wrap 'C' implementation in class
+         - [x] Replace char * etc with std::string
+         - [x] Replace `printf` with `cout` 
   - [x] 'C' wrapper
 
 - [x] Add -trimpath to `go build`

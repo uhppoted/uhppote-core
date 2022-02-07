@@ -1,6 +1,5 @@
-#include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <iostream>
 
 #include "../include/uhppote.hpp"
 
@@ -10,7 +9,7 @@ extern int getDevice(uhppote&);
 
 int main(int argc, char **argv) {
     if (argc < 2) {
-        printf("\n*** ERROR missing command\n\n");
+        std::cerr << std::endl << "*** ERROR missing command" << std::endl << std::endl;
         usage();
         return -1;
     }
@@ -30,13 +29,18 @@ int main(int argc, char **argv) {
     if (strncmp(cmd,"get-device",10) == 0) {
         return getDevice(u);
     }
+
+    if (strncmp(cmd,"all",3) == 0) {
+        getDevices(u);
+        getDevice(u);
+    }
 }
 
 void usage() {
-    printf("Usage: example <command>\n");
-    printf("\n");
-    printf("   Supported commands:\n");
-    printf("      get-devices\n");
-    printf("      get-device\n");
-    printf("\n");
+    std::cout << "Usage: example <command>" << std::endl;
+    std::cout << std::endl;
+    std::cout << "   Supported commands:" << std::endl;
+    std::cout << "      get-devices" << std::endl;
+    std::cout << "      get-device" << std::endl;
+    std::cout << std::endl;
 }
