@@ -22,6 +22,6 @@ char *errmsg();
 void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...);
 void teardown();
 
-int   get_devices();
+int   get_devices(unsigned long **devices, int *N);
 int   get_device (unsigned id, struct device *);
 

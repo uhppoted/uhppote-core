@@ -3,23 +3,11 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] C++ example
-  - [x] 'C' shared-lib/DLL
-      - [x] Merge to _main_
-      - [x] Rethink get_devices so that it can reassign the array
-      - [x] Restructure
-            - [x] Make 'C' folder
-            - [x] Build to shared-lib/lib
-            - [x] DYLD_LIBRARY
-            - [x] Replace libuhppote.h path with -I
-            - [x] Move device functions out of main.go
-      - [x] Move UHPPOTE initialisation outside of getXXXXX
-      - [x] Fix panic on timeout but waiting for "ok" from MacOS
-      - [x] Commonalise error handling
-      - [x] `setup`/`teardown`
-      - [x] `get-devices`
-      - [x] `get-device`
-      - [x] Pass `uhppote` as parameter
+  - [ ] 'C++' wrapper
+         - [ ] Wrap 'C' implementation in class
+         - [ ] Replace char * etc with std::string
+         - [ ] Replace unsigned long ** with std::vector
+  - [x] 'C' wrapper
 
 - [x] Add -trimpath to `go build`
 
