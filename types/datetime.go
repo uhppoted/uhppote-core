@@ -10,30 +10,66 @@ import (
 
 type DateTime time.Time
 
+func DateTimeNow() DateTime {
+	return DateTime(time.Now().Truncate(1 * time.Second))
+}
+
+func (d DateTime) IsZero() bool {
+	return time.Time(d).IsZero()
+}
+
+// Because time.Truncate does not in any way behave like your would expect it to :-(
+func (d DateTime) Before(t time.Time) bool {
+	p := time.Time(d).UnixMilli() / 1000
+	q := t.UnixMilli() / 1000
+
+	return p < q
+}
+
+func (d DateTime) Add(dt time.Duration) DateTime {
+	return DateTime(time.Time(d).Add(dt).Truncate(1 * time.Second))
+}
+
 func (d DateTime) String() string {
-	return time.Time(d).Format("2006-01-02 15:04:05")
-}
-
-func DateTimeFromString(s string) (*DateTime, error) {
-	datetime, err := time.ParseInLocation("2006-01-02 15:04:05", s, time.Local)
-	if err != nil {
-		return nil, err
-	}
-
-	x := DateTime(datetime)
-	return &x, nil
-}
-
-func DateTimeToString(d *DateTime) string {
-	if d == nil {
+	if d.IsZero() {
 		return ""
 	}
 
-	return d.String()
+	return time.Time(d).Format("2006-01-02 15:04:05")
 }
 
-func (d DateTime) MarshalText() ([]byte, error) {
-	return []byte(""), nil
+func (d DateTime) MarshalJSON() ([]byte, error) {
+	if d.IsZero() {
+		return json.Marshal("")
+	}
+
+	return json.Marshal(time.Time(d).Format("2006-01-02 15:04:05 MST"))
+}
+
+func (d *DateTime) UnmarshalJSON(bytes []byte) error {
+	var s string
+
+	err := json.Unmarshal(bytes, &s)
+	if err != nil {
+		return err
+	}
+
+	if s == "" {
+		*d = DateTime{}
+		return nil
+	}
+
+	datetime, err := time.ParseInLocation("2006-01-02 15:04:05", s, time.Local)
+	if err != nil {
+		datetime, err = time.ParseInLocation("2006-01-02 15:04:05 MST", s, time.Local)
+		if err != nil {
+			return err
+		}
+	}
+
+	*d = DateTime(datetime.Truncate(1 * time.Second))
+
+	return nil
 }
 
 func (d DateTime) MarshalUT0311L0x() ([]byte, error) {
@@ -66,24 +102,6 @@ func (d *DateTime) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
 	return &v, nil
 }
 
-func (d DateTime) MarshalJSON() ([]byte, error) {
-	return json.Marshal(time.Time(d).Format("2006-01-02 15:04:05"))
-}
-
-func (d *DateTime) UnmarshalJSON(bytes []byte) error {
-	var s string
-
-	err := json.Unmarshal(bytes, &s)
-	if err != nil {
-		return err
-	}
-
-	date, err := time.ParseInLocation("2006-01-02 15:04:05", s, time.Local)
-	if err != nil {
-		return err
-	}
-
-	*d = DateTime(date)
-
-	return nil
+func (d DateTime) MarshalText() ([]byte, error) {
+	return []byte(""), nil
 }

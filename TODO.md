@@ -2,8 +2,10 @@
 
 ### IN PROGRESS
 
-- [ ] 'C' shared-lib/DLL
-      - [ ] Merge to _main_
+- Shared-lib/DLL
+  - [ ] C++ example
+  - [x] 'C' shared-lib/DLL
+      - [x] Merge to _main_
       - [x] Rethink get_devices so that it can reassign the array
       - [x] Restructure
             - [x] Make 'C' folder
