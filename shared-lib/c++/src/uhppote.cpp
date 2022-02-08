@@ -1,7 +1,7 @@
-#include "../include/uhppote.hpp"
-
 #include <stdlib.h>
 #include <iostream>
+
+#include "../include/uhppote.hpp"
 
 uhppote::uhppote() {
     u = NULL;
@@ -18,8 +18,8 @@ uhppote::uhppote() {
  */ 
 uhppote::uhppote(const std::string& bind, const std::string& broadcast, const std::string& listen, int timeout, const std::vector<controller>& controllers, bool debug) {
     uhppote();
-
-    if ((u = (UHPPOTE *) malloc(sizeof(UHPPOTE))) != NULL) {
+  
+    if ((u = new UHPPOTE) != NULL) {
         u->bind = bind.c_str();
         u->broadcast = broadcast.c_str();
         u->listen = listen.c_str();
@@ -30,10 +30,16 @@ uhppote::uhppote(const std::string& bind, const std::string& broadcast, const st
         udevice *q = NULL;
         udevice *previous = NULL;
         for (auto p : controllers){
-            if ((q = (udevice *) malloc(sizeof(udevice))) != NULL) {
+            if ((q = new udevice) != NULL) {
+                // NTS: because the controllers may go out of scope  after the invocation of the
+                //      constructor and c_str() returns a pointer to the underlying string char array
+                size_t N    = p.address.size()+1;
+                char  *addr = new char[N];
+                p.address.copy(addr,N);
+
                 q->id = p.id;
-                q->address = strdup(p.address.c_str()); // C.GoString doesn't seem to respect the const'ness
-                q->next=previous;
+                q->address = addr; 
+                q->next = previous;
                 previous = q;
             }
         }
@@ -48,13 +54,13 @@ uhppote::~uhppote() {
 
         while (d != NULL) {
             udevice *next = d->next;
-            free(d->address);
-            free(d);
+            delete[] d->address;
+            delete d;
             d = next;
         }        
     }
 
-    free(u);
+	delete u;
 }
 
 std::string uhppote::errmsg() {

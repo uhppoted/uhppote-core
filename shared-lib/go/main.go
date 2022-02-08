@@ -4,7 +4,7 @@ package main
 
 typedef struct udevice {
 	unsigned        id;
-	char           *address; // NOTE: should be const char * but C.GoString doesn't seem to respect the const'ness
+	const char     *address;
 	struct udevice *next;
 } udevice;
 
@@ -102,6 +102,7 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 			return nil, err
 		} else if addr != nil {
 			bind = *addr
+		} else {
 		}
 
 		if addr, err := types.ResolveBroadcastAddr(C.GoString(u.broadcast)); err != nil {

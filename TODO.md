@@ -3,13 +3,14 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] Figure out device address alloc/free weirdness
   - [ ] 'C++' wrapper
          - [ ] Replace `malloc`/`free`
          - [x] Replace unsigned long ** with references
          - [x] Wrap 'C' implementation in class
          - [x] Replace char * etc with std::string
          - [x] Replace `printf` with `cout` 
+  - [ ] Python
+  - [x] Figure out device address alloc/free weirdness
   - [x] 'C' wrapper
 
 - [ ] Check UHPPOTE encoding for revised Date implementation
