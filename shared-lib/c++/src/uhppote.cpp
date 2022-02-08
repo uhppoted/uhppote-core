@@ -74,26 +74,17 @@ void uhppote::set_error(const char *errmsg) {
 // All this finagling because you can't return a slice from Go
 int uhppote::get_devices(std::vector<unsigned long>& devices) {
     struct GetDevices_return rc;
-    unsigned long *list = NULL;        
+    std::vector<unsigned long> list;        
     int size = 0;
 
     do {
         size += 16;
 
-        unsigned long *p;        
-        if ((p = (unsigned long *) realloc(list, size * sizeof(unsigned long))) == NULL) {
-            free(list);
-            set_error("Error allocating storage for slice");
-            return -1;            
-        } else {
-            list = p;
-        }
-
-        GoSlice slice = { list,size,size} ;
+        list.resize(size);
+        GoSlice slice = { list.data(),size,size} ;
 
         rc = GetDevices(u, slice);
         if (rc.r1 != NULL) {
-            free(list);
             set_error(rc.r1);
             return -1;
         }
@@ -103,8 +94,6 @@ int uhppote::get_devices(std::vector<unsigned long>& devices) {
     for (int i=0; i<rc.r0; i++) {
         devices.push_back(list[i]);
     }
-
-    free(list);
 
     return 0;
 }
