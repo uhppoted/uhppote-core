@@ -17,7 +17,7 @@ func TestDeviceString(t *testing.T) {
 		Gateway:      net.IPv4(10, 0, 0, 1),
 		MacAddress:   MacAddress(MAC),
 		Version:      0x0892,
-		Date:         *released,
+		Date:         released,
 	}
 
 	expected := "Alpha  405419896  10.0.0.100      255.255.255.0   10.0.0.1        00:66:19:39:55:2d v8.92 2020-12-05"
@@ -39,7 +39,7 @@ func TestDeviceStringWithoutName(t *testing.T) {
 		Gateway:      net.IPv4(10, 0, 0, 1),
 		MacAddress:   MacAddress(MAC),
 		Version:      0x0892,
-		Date:         *released,
+		Date:         released,
 	}
 
 	expected := "405419896  10.0.0.100      255.255.255.0   10.0.0.1        00:66:19:39:55:2d v8.92 2020-12-05"
@@ -62,7 +62,7 @@ func TestDeviceStringWithPaddedName(t *testing.T) {
 		Gateway:      net.IPv4(10, 0, 0, 1),
 		MacAddress:   MacAddress(MAC),
 		Version:      0x0892,
-		Date:         *released,
+		Date:         released,
 	}
 
 	expected := "Al Pha  405419896  10.0.0.100      255.255.255.0   10.0.0.1        00:66:19:39:55:2d v8.92 2020-12-05"

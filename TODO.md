@@ -12,6 +12,8 @@
          - [x] Replace `printf` with `cout` 
   - [x] 'C' wrapper
 
+- [ ] Check UHPPOTE encoding for revised Date implementation
+- [ ] Rework any Date pointers to rather use IsZero/IsValid
 - [x] Add -trimpath to `go build`
 
 ## TODO

@@ -67,12 +67,15 @@ func TestUnmarshalGetTimeProfileResponse(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
+	from := yyyymmdd("2021-04-01")
+	to := yyyymmdd("2021-12-29")
+
 	expected := GetTimeProfileResponse{
 		MsgType:         0x98,
 		SerialNumber:    423187757,
 		ProfileID:       4,
-		From:            yyyymmdd("2021-04-01"),
-		To:              yyyymmdd("2021-12-29"),
+		From:            &from,
+		To:              &to,
 		Monday:          true,
 		Tuesday:         true,
 		Wednesday:       false,
@@ -108,12 +111,15 @@ func TestFactoryUnmarshalGetTimeProfileResponse(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
+	from := yyyymmdd("2021-04-01")
+	to := yyyymmdd("2021-12-29")
+
 	expected := GetTimeProfileResponse{
 		MsgType:         0x98,
 		SerialNumber:    423187757,
 		ProfileID:       4,
-		From:            yyyymmdd("2021-04-01"),
-		To:              yyyymmdd("2021-12-29"),
+		From:            &from,
+		To:              &to,
 		Monday:          true,
 		Tuesday:         true,
 		Wednesday:       false,
@@ -206,7 +212,7 @@ func TestUnmarshalGetTimeProfileResponseWithInvalidMsgType(t *testing.T) {
 	}
 }
 
-func yyyymmdd(s string) *types.Date {
+func yyyymmdd(s string) types.Date {
 	d, _ := types.DateFromString(s)
 
 	return d

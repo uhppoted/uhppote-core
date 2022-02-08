@@ -17,8 +17,8 @@ func TestMarshalAddTaskRequest(t *testing.T) {
 
 	request := AddTaskRequest{
 		SerialNumber: 423187757,
-		From:         *yyyymmdd("2021-04-01"),
-		To:           *yyyymmdd("2021-12-29"),
+		From:         yyyymmdd("2021-04-01"),
+		To:           yyyymmdd("2021-12-29"),
 		Monday:       true,
 		Tuesday:      true,
 		Wednesday:    false,
@@ -50,8 +50,8 @@ func TestFactoryUnmarshalAddTaskRequest(t *testing.T) {
 	expected := AddTaskRequest{
 		MsgType:      0xA8,
 		SerialNumber: 423187757,
-		From:         *yyyymmdd("2021-04-01"),
-		To:           *yyyymmdd("2021-12-29"),
+		From:         yyyymmdd("2021-04-01"),
+		To:           yyyymmdd("2021-12-29"),
 		Monday:       true,
 		Tuesday:      true,
 		Wednesday:    false,

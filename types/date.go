@@ -16,14 +16,16 @@ func ToDate(year int, month time.Month, day int) Date {
 	return Date(date)
 }
 
-func DateFromString(s string) (*Date, error) {
-	date, err := time.ParseInLocation("2006-01-02", s, time.Local)
-	if err != nil {
-		return nil, err
+func DateFromString(s string) (Date, error) {
+	if date, err := time.ParseInLocation("2006-01-02", s, time.Local); err != nil {
+		return Date{}, err
+	} else {
+		return Date(date), nil
 	}
+}
 
-	x := Date(date)
-	return &x, nil
+func (d Date) IsValid() bool {
+	return !time.Time(d).IsZero()
 }
 
 func (d Date) Before(date Date) bool {
@@ -77,6 +79,10 @@ func (d Date) Weekday() time.Weekday {
 }
 
 func (d Date) String() string {
+	if time.Time(d).IsZero() {
+		return ""
+	}
+
 	return time.Time(d).Format("2006-01-02")
 }
 
@@ -111,7 +117,11 @@ func (d *Date) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
 }
 
 func (d Date) MarshalJSON() ([]byte, error) {
-	return json.Marshal(time.Time(d).Format("2006-01-02"))
+	if time.Time(d).IsZero() {
+		return json.Marshal("")
+	} else {
+		return json.Marshal(time.Time(d).Format("2006-01-02"))
+	}
 }
 
 func (d *Date) UnmarshalJSON(bytes []byte) error {

@@ -67,8 +67,8 @@ func (c *Card) UnmarshalJSON(bytes []byte) error {
 	}
 
 	c.CardNumber = card.CardNumber
-	c.From = from
-	c.To = to
+	c.From = &from
+	c.To = &to
 	c.Doors = map[uint8]int{}
 
 	for _, i := range []uint8{1, 2, 3, 4} {
