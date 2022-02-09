@@ -7,7 +7,7 @@
         - [ ] `get-devices`
         - [ ] Initialise controller list
         - [ ] Use LD_LIBRARY
-        - (?) Throw exception on error (?)
+        - [x] Throw exception on error
 ```
     _fields_ = [    ("first",ctypes.c_uint8,4),
                     ("second",ctypes.c_uint8,4),
@@ -17,6 +17,7 @@
 
   - [ ] C++ wrapper
         - (?) Throw exception on error (?)
+        - (?) uint32_t (?)
         - [x] Replace `malloc`/`free`
         - [x] Replace unsigned long ** with references
         - [x] Wrap 'C' implementation in class
