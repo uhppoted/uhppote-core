@@ -15,6 +15,8 @@
 13. https://github.com/golang/go/issues/18412
 14. https://www.redteam.cafe/red-team/golang/red-team-how-to-embed-golang-tools-in-c
 15. http://akrennmair.github.io/golang-cgo-slides/#11
+16. https://stackoverflow.com/questions/46222239/python-ctypes-argtypes-has-no-from-params-method
+17. https://stackoverflow.com/questions/55103298/python-ctypes-read-pointerc-char-in-python
 
 ## OTHER
 

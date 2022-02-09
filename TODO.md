@@ -4,6 +4,10 @@
 
 - Shared-lib/DLL
   - [ ] Python
+        - [ ] `get-devices`
+        - [ ] Initialise controller list
+        - [ ] Use LD_LIBRARY
+
   - [x] 'C++' wrapper
          - [x] Replace `malloc`/`free`
          - [x] Replace unsigned long ** with references
