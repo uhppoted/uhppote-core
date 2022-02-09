@@ -3,12 +3,10 @@ import platform
 
 from dataclasses import dataclass
 
-
 if 'Windows' in platform.system():         
     lib = ctypes.windll.LoadLibrary("../../lib/uhppote.dll")
 else:
     lib = ctypes.cdll.LoadLibrary("../../lib/libuhppote.so")
-
 
 @dataclass
 class Device:
@@ -28,18 +26,35 @@ class UHPPOTE():
     timeout: int = 5
     debug: int = False
     
+
 class Uhppote:  
     def __init__(self, uhppote=None):
-      self._uhppote = None
-      if uhppote:
-        self._uhppote = GoUHPPOTE(uhppote.bind,
-                                  uhppote.broadcast,
-                                  uhppote.listen,
-                                  uhppote.timeout,
-                                  uhppote.debug)
+        self._uhppote = None
+        if uhppote:
+            self._uhppote = GoUHPPOTE(uhppote.bind,
+                                      uhppote.broadcast,
+                                      uhppote.listen,
+                                      uhppote.timeout,
+                                      uhppote.debug)
 
     def get_devices(self):
-      print("get-devices")
+        GetDevices = lib.GetDevices
+        GetDevices.argtypes = [ctypes.POINTER(GoUHPPOTE),GoUint32Slice]
+        GetDevices.restype = (GoGetDevicesResult)
+
+        N = 0
+
+        while True:
+            N = N + 16
+            slice = GoUint32Slice((ctypes.c_ulong * N)(*[0] * N), N, N) 
+            result = lib.GetDevices(self._uhppote, slice)
+
+            if result.r1:
+                raise Exception(f"{result.r1.decode('utf-8')}")
+            elif result.r0 <= N:
+                break
+
+        return slice.data[0:result.r0]
 
     def get_device(self, deviceID):
         GetDevice = lib.GetDevice
@@ -60,6 +75,13 @@ class Uhppote:
                         result.r0.date.decode('utf-8'))
 
 # INTERNAL TYPES
+
+class GoUint32Slice(ctypes.Structure):
+    _fields_ = [ ('data', ctypes.POINTER(ctypes.c_ulong)),
+                 ('len', ctypes.c_longlong),
+                 ('cap', ctypes.c_longlong),
+               ]
+
 class GoController(ctypes.Structure):
     _fields_ = [ ('id', ctypes.c_ulong),
                  ('address', ctypes.c_char_p),
@@ -84,6 +106,7 @@ class GoUHPPOTE(ctypes.Structure):
       self.devices = None
       self.debug = debug
 
+
 class GoDevice(ctypes.Structure):
     _fields_ = [ ('ID', ctypes.c_ulong),
                  ('address', ctypes.c_char_p),
@@ -92,6 +115,11 @@ class GoDevice(ctypes.Structure):
                  ('MAC', ctypes.c_char_p),
                  ('version', ctypes.c_char_p),
                  ('date', ctypes.c_char_p),
+               ]
+
+class GoGetDevicesResult(ctypes.Structure):
+    _fields_ = [ ('r0', ctypes.c_int),
+                 ('r1', ctypes.c_char_p)
                ]
 
 class GoGetDeviceResult(ctypes.Structure):

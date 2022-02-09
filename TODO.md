@@ -3,10 +3,11 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
+  - [ ] GetDevices - use slice length/capacity
   - [ ] Python
-        - [ ] `get-devices`
         - [ ] Initialise controller list
         - [ ] Use LD_LIBRARY
+        - [x] `get-devices`
         - [x] Throw exception on error
 ```
     _fields_ = [    ("first",ctypes.c_uint8,4),

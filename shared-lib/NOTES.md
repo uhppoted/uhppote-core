@@ -20,6 +20,7 @@
 18. https://stackoverflow.com/questions/61294630/ctypes-passing-a-string-as-a-pointer-from-python-to-c
 19. https://www.programcreek.com/python/example/1122/ctypes.Structure
 20. https://iotexpert.com/stupid-python-tricks-c-structures-using-the-ctypes-module-part-2/
+21. https://github.com/hermanTenuki/goinpy/blob/e0c398ee55edaef50ceb5257d8d2d10f3e8216a1/goinpy/goinpy.py#L9
 
 ## OTHER
 

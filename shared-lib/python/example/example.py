@@ -5,50 +5,6 @@ import ctypes
 import sys
 import uhppote
 
-# if 'Windows' in system:         
-#     lib = ctypes.windll.LoadLibrary("../../lib/uhppote.dll")
-# else:
-#     lib = ctypes.cdll.LoadLibrary("../../lib/libuhppote.so")
-
-# class udevice(ctypes.Structure):
-#     _fields_ = [ ('id', ctypes.c_ulong),
-#                  ('address', ctypes.c_char_p),
-#                  ('next', ctypes.c_void_p),
-#                ]
-
-# class UHPPOTE(ctypes.Structure):
-#     _fields_ = [ ('bind', ctypes.c_char_p),
-#                  ('broadcast', ctypes.c_char_p),
-#                  ('listen', ctypes.c_char_p),
-#                  ('timeout', ctypes.c_int),
-#                  ('devices', ctypes.POINTER(udevice)),
-#                  ('debug', ctypes.c_bool),
-#                ]
-
-#     def __init__(self, bind, broadcast,listen,timeout, debug):
-#       super(UHPPOTE,self).__init__()
-#       self.bind = ctypes.c_char_p(bytes(bind, 'utf-8'))
-#       self.broadcast = ctypes.c_char_p(bytes(broadcast, 'utf-8'))
-#       self.listen = ctypes.c_char_p(bytes(listen, 'utf-8'))
-#       self.timeout = timeout
-#       self.devices = None
-#       self.debug = debug
-
-# class Device(ctypes.Structure):
-#     _fields_ = [ ('ID', ctypes.c_ulong),
-#                  ('address', ctypes.c_char_p),
-#                  ('subnet', ctypes.c_char_p),
-#                  ('gateway', ctypes.c_char_p),
-#                  ('MAC', ctypes.c_char_p),
-#                  ('version', ctypes.c_char_p),
-#                  ('date', ctypes.c_char_p),
-#                ]
-
-# class GetDeviceResult(ctypes.Structure):
-#     _fields_ = [ ('r0', Device),
-#                  ('r1', ctypes.c_char_p)
-#                ]
-
 def usage():
     print()
     print("  Usage: python example.py <command>")
@@ -75,19 +31,30 @@ def help():
 
 
 def get_devices(u):
-    print("get-devices")
+    try:
+        list = u.get_devices()
+
+        print(f"get-devices ({len(list)})")
+        for id in list:
+            print(f"  {id}")
+        print()
+
+    except Exception as e:
+        print(f" *** ERROR get-devices ({e})")
+        print()
 
 def get_device(u, deviceID):
-    print("get-device")
     try:
         info = u.get_device(deviceID)
 
+        print("get-device")
         print(f"  ID:      {info.ID}")
         print(f"  IP:      {info.address}  {info.subnet}  {info.gateway}")
         print(f"  MAC:     {info.MAC}")
         print(f"  version: {info.version}")
         print(f"  date:    {info.date}")
         print()
+
     except Exception as e:
         print(f" *** ERROR get-device ({e})")
         print()
@@ -106,6 +73,7 @@ if __name__ == "__main__":
 
     elif cmd not in [ 'get-devices',
                       'get-device',
+                      'all',
                     ]:
         print()
         print(f"  ERROR: invalid command ({cmd}). Try 'help' to see all commands and options")
@@ -118,6 +86,10 @@ if __name__ == "__main__":
                 get_devices(u)
     
             elif cmd == 'get-device':
+                get_device(u, 405419896)
+
+            elif cmd == 'all':
+                get_devices(u)
                 get_device(u, 405419896)
     
         except BaseException as x:
