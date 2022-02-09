@@ -17,6 +17,9 @@
 15. http://akrennmair.github.io/golang-cgo-slides/#11
 16. https://stackoverflow.com/questions/46222239/python-ctypes-argtypes-has-no-from-params-method
 17. https://stackoverflow.com/questions/55103298/python-ctypes-read-pointerc-char-in-python
+18. https://stackoverflow.com/questions/61294630/ctypes-passing-a-string-as-a-pointer-from-python-to-c
+19. https://www.programcreek.com/python/example/1122/ctypes.Structure
+20. https://iotexpert.com/stupid-python-tricks-c-structures-using-the-ctypes-module-part-2/
 
 ## OTHER
 

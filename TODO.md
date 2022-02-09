@@ -7,14 +7,22 @@
         - [ ] `get-devices`
         - [ ] Initialise controller list
         - [ ] Use LD_LIBRARY
+        - (?) Throw exception on error (?)
+```
+    _fields_ = [    ("first",ctypes.c_uint8,4),
+                    ("second",ctypes.c_uint8,4),
+                    ("third",ctypes.c_uint8,8),
+                 ]
+```
 
-  - [x] 'C++' wrapper
-         - [x] Replace `malloc`/`free`
-         - [x] Replace unsigned long ** with references
-         - [x] Wrap 'C' implementation in class
-         - [x] Replace char * etc with std::string
-         - [x] Replace `printf` with `cout` 
-         - [x] Figure out device address alloc/free weirdness
+  - [ ] C++ wrapper
+        - (?) Throw exception on error (?)
+        - [x] Replace `malloc`/`free`
+        - [x] Replace unsigned long ** with references
+        - [x] Wrap 'C' implementation in class
+        - [x] Replace char * etc with std::string
+        - [x] Replace `printf` with `cout` 
+        - [x] Figure out device address alloc/free weirdness
   - [x] 'C' wrapper
 
 - [ ] Check UHPPOTE encoding for revised Date implementation

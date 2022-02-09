@@ -4,18 +4,18 @@ import argparse
 import ctypes
 import sys
 
-lib = ctypes.cdll.LoadLibrary("libuhppote.so")
+lib = ctypes.cdll.LoadLibrary("../../lib/libuhppote.so")
 
 class udevice(ctypes.Structure):
-    _fields_ = [ ('id', ctypes.POINTER(ctypes.c_ulong)),
-                 ('address', ctypes.POINTER(ctypes.c_char)),
+    _fields_ = [ ('id', ctypes.c_ulong),
+                 ('address', ctypes.c_char_p),
                  ('next', ctypes.c_void_p),
                ]
 
 class UHPPOTE(ctypes.Structure):
-    _fields_ = [ ('bind', ctypes.POINTER(ctypes.c_char)),
-                 ('broadcast', ctypes.POINTER(ctypes.c_char)),
-                 ('listen', ctypes.POINTER(ctypes.c_char)),
+    _fields_ = [ ('bind', ctypes.c_char_p),
+                 ('broadcast', ctypes.c_char_p),
+                 ('listen', ctypes.c_char_p),
                  ('timeout', ctypes.c_int),
                  ('devices', ctypes.POINTER(udevice)),
                  ('debug', ctypes.c_bool),
@@ -23,26 +23,26 @@ class UHPPOTE(ctypes.Structure):
 
     def __init__(self, bind, broadcast,listen,timeout, debug):
       super(UHPPOTE,self).__init__()
-      self.bind = ctypes.create_string_buffer(bind,len(bind))
-      self.broadcast = ctypes.create_string_buffer(broadcast,len(broadcast))
-      self.listen = ctypes.create_string_buffer(listen,len(listen))
+      self.bind = ctypes.c_char_p(bytes(bind, 'utf-8'))
+      self.broadcast = ctypes.c_char_p(bytes(broadcast, 'utf-8'))
+      self.listen = ctypes.c_char_p(bytes(listen, 'utf-8'))
       self.timeout = timeout
       self.devices = None
       self.debug = debug
 
 class Device(ctypes.Structure):
     _fields_ = [ ('ID', ctypes.c_ulong),
-                 ('address', ctypes.POINTER(ctypes.c_char)),
-                 ('subnet', ctypes.POINTER(ctypes.c_char)),
-                 ('gateway', ctypes.POINTER(ctypes.c_char)),
-                 ('MAC', ctypes.POINTER(ctypes.c_char)),
-                 ('version', ctypes.POINTER(ctypes.c_char)),
-                 ('date', ctypes.POINTER(ctypes.c_char)),
+                 ('address', ctypes.c_char_p),
+                 ('subnet', ctypes.c_char_p),
+                 ('gateway', ctypes.c_char_p),
+                 ('MAC', ctypes.c_char_p),
+                 ('version', ctypes.c_char_p),
+                 ('date', ctypes.c_char_p),
                ]
 
 class GetDeviceResult(ctypes.Structure):
     _fields_ = [ ('r0', Device),
-                 ('r1', ctypes.POINTER(ctypes.c_char))
+                 ('r1', ctypes.c_char_p)
                ]
 
 def usage():
@@ -73,23 +73,27 @@ def help():
 def get_devices():
     print("get-devices")
 
-def get_device():
-    print("get-device")
+def get_device(deviceID):
     GetDevice = lib.GetDevice
     GetDevice.argtypes = [ctypes.POINTER(UHPPOTE),ctypes.c_ulong]
     GetDevice.restype = (GetDeviceResult)
 
-    u = UHPPOTE(b'192.168.1.100', b'192.168.1.255', b'192.168.1.100:60001', 2, True)
+    u = UHPPOTE('192.168.1.100', '192.168.1.255', '192.168.1.100:60001', 2, True)
 
-    result = lib.GetDevice(u, 405419896)
-    print("  ID:      " + str(result.r0.ID))
-    print("  IP:      " + str(ctypes.cast(result.r0.address,ctypes.c_char_p).value))
-    print("           " + str(ctypes.cast(result.r0.subnet,ctypes.c_char_p).value))
-    print("           " + str(ctypes.cast(result.r0.gateway,ctypes.c_char_p).value))
-    print("  MAC:     " + str(ctypes.cast(result.r0.MAC,ctypes.c_char_p).value))
-    print("  version: " + str(ctypes.cast(result.r0.version,ctypes.c_char_p).value))
-    print("  date:    " + str(ctypes.cast(result.r0.date,ctypes.c_char_p).value))
-    print(ctypes.cast(result.r1,ctypes.c_char_p).value)
+    result = lib.GetDevice(u, deviceID)
+
+    print("get-device")
+
+    if result.r1:
+        print("** ERROR:" + result.r1.decode('utf-8'))
+    else:
+        print(f"  ID:      {result.r0.ID}")
+        print(f"  IP:      {result.r0.address.decode('utf-8')}  {result.r0.subnet.decode('utf-8')}  {result.r0.gateway.decode('utf-8')}")
+        print(f"  MAC:     {result.r0.MAC.decode('utf-8')}")
+        print(f"  version: {result.r0.version.decode('utf-8')}")
+        print(f"  date:    {result.r0.date.decode('utf-8')}")
+
+    print()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Example CLI for the uhppote-core Python integration')
@@ -115,7 +119,7 @@ if __name__ == "__main__":
                 get_devices()
     
             elif cmd == 'get-device':
-                get_device()
+                get_device(405419896)
     
         except BaseException as x:
             print()
