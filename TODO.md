@@ -6,9 +6,10 @@
   - [ ] GetDevices - use slice length/capacity
   - [ ] Python
         - [ ] Initialise controller list
-        - [ ] Use LD_LIBRARY
+        - [x] Use LD_LIBRARY
         - [x] `get-devices`
         - [x] Throw exception on error
+        - [ ] Use specific ctypes
 ```
     _fields_ = [    ("first",ctypes.c_uint8,4),
                     ("second",ctypes.c_uint8,4),

@@ -4,9 +4,9 @@ import platform
 from dataclasses import dataclass
 
 if 'Windows' in platform.system():         
-    lib = ctypes.windll.LoadLibrary("../../lib/uhppote.dll")
+    lib = ctypes.windll.LoadLibrary("uhppote.dll")
 else:
-    lib = ctypes.cdll.LoadLibrary("../../lib/libuhppote.so")
+    lib = ctypes.cdll.LoadLibrary("libuhppote.so")
 
 @dataclass
 class Device:
