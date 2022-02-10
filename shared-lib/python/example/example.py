@@ -3,6 +3,9 @@
 import argparse
 import ctypes
 import sys
+
+sys.path.append('..')
+
 import uhppote
 
 def usage():

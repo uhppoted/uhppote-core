@@ -7,7 +7,7 @@
   - [ ] Rework linked device as array of const pointer
 
   - [ ] Python
-        - [ ] Move uhppote.py out of example folder
+        - [x] Move uhppote.py out of example folder
         - [x] Initialise controller list
         - [x] Use LD_LIBRARY
         - [x] `get-devices`

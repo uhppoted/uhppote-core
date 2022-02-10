@@ -9,6 +9,7 @@ from ctypes import c_ulong
 from ctypes import pointer
 from ctypes import Structure
 from ctypes import POINTER
+from ctypes.util import find_library
 
 from dataclasses import dataclass
 
