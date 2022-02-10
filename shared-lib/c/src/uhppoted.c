@@ -1,5 +1,5 @@
-#include "../include/uhppote.h"
-#include "libuhppote.h"
+#include "../include/uhppoted.h"
+#include "libuhppoted.h"
 
 #include <stdio.h>
 #include <stdlib.h>

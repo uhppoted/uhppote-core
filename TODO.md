@@ -3,16 +3,13 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] Rename to uhppoted
-  - [ ] GetDevices - use slice length/capacity
   - [ ] Rework linked device as array of const pointer
+  - [ ] GetDevices - use slice length/capacity
 
+  - [x] Rename to uhppoted
   - [x] C++ wrapper
-        - [x] Throw exception on error
-        - [x] uint32_t & bool
-        - [x] namespaces
-  - [x] 'C' wrapper
-  - [x] Python
+  - [x] C wrapper
+  - [x] Python wrapper
 
 - [ ] Check UHPPOTE encoding for revised Date implementation
       - should return Date{} for 0000...

@@ -10,14 +10,13 @@ from ctypes import c_ulong
 from ctypes import pointer
 from ctypes import Structure
 from ctypes import POINTER
-from ctypes.util import find_library
 
 from dataclasses import dataclass
 
 if 'Windows' in platform.system():         
-    lib = ctypes.windll.LoadLibrary("uhppote.dll")
+    lib = ctypes.windll.LoadLibrary("uhppoted")
 else:
-    lib = ctypes.cdll.LoadLibrary("libuhppote.so")
+    lib = ctypes.cdll.LoadLibrary("libuhppoted.so")
 
 @dataclass
 class Controller:
@@ -99,9 +98,6 @@ class GoUint32Slice(Structure):
                  ('cap', c_longlong),
                ]
 
-    # _fields_ = [ ('id', c_ulong),
-    #              ('address', c_char_p)
-    #            ]
 class GoController(Structure):
     pass
     

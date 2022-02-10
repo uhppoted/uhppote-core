@@ -4,9 +4,7 @@ import argparse
 import ctypes
 import sys
 
-sys.path.append('..')
-
-import uhppote
+import uhppoted
 
 def usage():
     print()
@@ -83,11 +81,11 @@ if __name__ == "__main__":
         print()
 
     else:
-        alpha = uhppote.Controller(405419896, "192.168.1.100")
-        beta  = uhppote.Controller(303986753, "192.168.1.100")
+        alpha = uhppoted.Controller(405419896, "192.168.1.100")
+        beta  = uhppoted.Controller(303986753, "192.168.1.100")
         controllers = [ alpha,beta ]
 
-        u = uhppote.Uhppote(uhppote=uhppote.UHPPOTE('192.168.1.100', '192.168.1.255', '192.168.1.100:60001', 1, controllers, True))
+        u = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE('192.168.1.100', '192.168.1.255', '192.168.1.100:60001', 1, controllers, True))
         try:            
             if cmd == 'get-devices':
                 get_devices(u)

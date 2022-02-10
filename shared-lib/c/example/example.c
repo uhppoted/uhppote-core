@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "../include/uhppote.h"
+#include "../include/uhppoted.h"
 
 void usage();
 extern int getDevices();

@@ -1,8 +1,9 @@
-DIST  ?= development
-LIB    = shared-lib/lib
-LIBC   = shared-lib/c
-LIBCPP = shared-lib/c++
-DEBUG ?= --debug
+DIST     ?= development
+LIB       = shared-lib/lib
+LIBC      = shared-lib/c
+LIBCPP    = shared-lib/c++
+LIBPYTHON = shared-lib/python
+DEBUG    ?= --debug
 
 .PHONY: bump
 .PHONY: lib
@@ -20,7 +21,7 @@ format:
 
 build: format
 	go build -trimpath ./...
-	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppote.so shared-lib/go/main.go
+	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so shared-lib/go/main.go
 
 test: build
 	go test ./...
@@ -55,10 +56,16 @@ debug: build
 godoc:
 	godoc -http=:80	-index_interval=60s
 
-example-c:
-	clang -o $(LIBC)/example/example $(LIBC)/example/example.c $(LIBC)/example/device.c $(LIBC)/src/uhppote.c -I$(LIB) -L$(LIB) -luhppote
-	export DYLD_LIBRARY_PATH=$(LIB) && $(EXAMPLEC)/example get-device
+lib: format
+	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so shared-lib/go/main.go
 
-example-c++:
-	clang -std=c++11 -lc++ -o $(LIBCPP)/example/example $(LIBCPP)/example/example.cpp $(LIBCPP)/example/device.cpp $(LIBCPP)/src/uhppote.cpp -I$(LIB) -L$(LIB) -luhppote
-	export DYLD_LIBRARY_PATH=$(LIB) && ./shared-lib/c/example/example get-device
+shared-lib-c: lib
+	clang -o $(LIBC)/example/example $(LIBC)/example/example.c $(LIBC)/example/device.c $(LIBC)/src/uhppoted.c -I$(LIB) -L$(LIB) -luhppoted
+	export DYLD_LIBRARY_PATH=$(LIB) && $(LIBC)/example/example all
+
+shared-lib-c++: lib
+	clang -std=c++11 -lc++ -o $(LIBCPP)/example/example $(LIBCPP)/example/example.cpp $(LIBCPP)/example/device.cpp $(LIBCPP)/src/uhppoted.cpp -I$(LIB) -L$(LIB) -luhppoted
+	export DYLD_LIBRARY_PATH=$(LIB) && $(LIBCPP)/example/example all
+
+shared-lib-python: lib
+	export DYLD_LIBRARY_PATH=$(LIB) && export PYTHONPATH=$(PYTHONPATH):$(LIBPYTHON) && python $(LIBPYTHON)/example/example.py all

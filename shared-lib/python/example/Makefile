@@ -1,16 +1,19 @@
 LIB=../../lib
-CMD=python example.py 
+GO=GODEBUG=cgocheck=2
+DLL=export DYLD_LIBRARY_PATH=$(LIB) 
+WRAPPER=export PYTHONPATH=$(PYTHONPATH):..
+CMD=$(GO) && $(DLL) && $(WRAPPER) && python example.py 
 
 lib: 
-	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppote.so ../../go/main.go
+	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so ../../go/main.go
 
 build: 
 
 get-devices: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-devices
+	$(CMD) get-devices
 
 get-device: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-device
+	$(CMD) get-device
 
 run: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) all
+	$(CMD) all

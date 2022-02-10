@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../include/uhppote.h"
+#include "../include/uhppoted.h"
 
 int getDevices() {
     uint32_t *devices = NULL;
