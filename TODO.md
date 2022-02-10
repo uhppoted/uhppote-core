@@ -8,7 +8,7 @@
   - [ ] Rework linked device as array of const pointer
 
   - [ ] C++ wrapper
-        - [ ] Throw exception on error
+        - [x] Throw exception on error
         - [x] uint32_t & bool
         - [ ] namespaces
   - [x] 'C' wrapper

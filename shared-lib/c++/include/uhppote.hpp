@@ -19,7 +19,6 @@ typedef struct device {
     std::string date;
 } device;
 
-
 class uhppote {
     public:
         uhppote();
@@ -27,14 +26,9 @@ class uhppote {
         virtual ~uhppote();
 
     public:
-        std::string errmsg();
-        int get_devices(std::vector<uint32_t>& devices);
-        int get_device (uint32_t id, struct device&);
-
-    private:
-        void set_error(const char *errmsg);
+        std::vector<uint32_t> get_devices();
+        device get_device (uint32_t id);
 
     private:
         UHPPOTE *u;
-        std::string err;
 };

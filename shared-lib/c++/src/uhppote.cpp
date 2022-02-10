@@ -64,16 +64,8 @@ uhppote::~uhppote() {
 	delete u;
 }
 
-std::string uhppote::errmsg() {
-    return err;
-}
-
-void uhppote::set_error(const char *errmsg) {
-	err = errmsg;
-}
-
 // All this finagling because you can't return a slice from Go
-int uhppote::get_devices(std::vector<uint32_t>& devices) {
+std::vector<uint32_t> uhppote::get_devices() {
     struct GetDevices_return rc;
     std::vector<uint32_t> list;        
     int size = 0;
@@ -86,34 +78,35 @@ int uhppote::get_devices(std::vector<uint32_t>& devices) {
 
         rc = GetDevices(u, slice);
         if (rc.r1 != NULL) {
-            set_error(rc.r1);
-            return -1;
+            throw std::runtime_error(rc.r1);
         }
 
     } while (rc.r0 > size);
 
+    std::vector<uint32_t> devices;
     for (int i=0; i<rc.r0; i++) {
         devices.push_back(list[i]);
     }
 
-    return 0;
+    return devices;
 }
 
-int uhppote::get_device(uint32_t id, struct device& d) {
+struct device uhppote::get_device(uint32_t id) {
     struct GetDevice_return rc = GetDevice(u,id);
 
-    if (rc.r1 != NULL) {        
-        set_error(rc.r1);
-        return -1;
+    if (rc.r1 != NULL) {
+        throw std::runtime_error(rc.r1);
+    } else {
+        device d;
+
+        d.ID = rc.r0.ID;
+        d.address = rc.r0.address;
+        d.subnet = rc.r0.subnet;
+        d.gateway = rc.r0.gateway;
+        d.MAC = rc.r0.MAC;
+        d.version = rc.r0.version;
+        d.date = rc.r0.date;        
+
+        return d;
     }
-
-    d.ID = rc.r0.ID;
-    d.address = rc.r0.address;
-    d.subnet = rc.r0.subnet;
-    d.gateway = rc.r0.gateway;
-    d.MAC = rc.r0.MAC;
-    d.version = rc.r0.version;
-    d.date = rc.r0.date;
-
-    return 0;
 }

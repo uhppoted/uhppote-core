@@ -20,18 +20,24 @@ int main(int argc, char **argv) {
     std::vector<controller> controllers = { alpha, beta };
 
     uhppote u("192.168.1.100:0","192.168.1.255:60000","192.168.1.100:60001", 2, controllers, true);
+ 
+    try {
+        if (cmd == "get-devices") {
+            return getDevices(u);
+        } 
+    
+        if (cmd == "get-device") {
+            return getDevice(u, 405419896);
+        }
 
-    if (cmd == "get-devices") {
-        return getDevices(u);
-    } 
+        if (cmd == "all") {
+            getDevices(u);
+            getDevice(u, 405419896);
+        }
 
-    if (cmd == "get-device") {
-        return getDevice(u, 405419896);
-    }
-
-    if (cmd == "all") {
-        getDevices(u);
-        getDevice(u, 405419896);
+        return 0;
+    } catch (const std::exception& e) {  
+        return -1;
     }
 }
 
