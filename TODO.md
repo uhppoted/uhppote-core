@@ -7,10 +7,10 @@
   - [ ] GetDevices - use slice length/capacity
   - [ ] Rework linked device as array of const pointer
 
-  - [ ] C++ wrapper
+  - [x] C++ wrapper
         - [x] Throw exception on error
         - [x] uint32_t & bool
-        - [ ] namespaces
+        - [x] namespaces
   - [x] 'C' wrapper
   - [x] Python
 

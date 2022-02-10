@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include <iostream>
-
 #include "../include/uhppote.hpp"
+
+using namespace std;
 
 uhppote::uhppote() {
     u = NULL;
@@ -16,7 +17,7 @@ uhppote::uhppote() {
  * - debug:       false
  *
  */ 
-uhppote::uhppote(const std::string& bind, const std::string& broadcast, const std::string& listen, int timeout, const std::vector<controller>& controllers, bool debug) {
+uhppote::uhppote(const string& bind, const string& broadcast, const string& listen, int timeout, const vector<controller>& controllers, bool debug) {
     uhppote();
   
     if ((u = new UHPPOTE) != NULL) {
@@ -65,9 +66,9 @@ uhppote::~uhppote() {
 }
 
 // All this finagling because you can't return a slice from Go
-std::vector<uint32_t> uhppote::get_devices() {
+vector<uint32_t> uhppote::get_devices() {
     struct GetDevices_return rc;
-    std::vector<uint32_t> list;        
+    vector<uint32_t> list;        
     int size = 0;
 
     do {
@@ -78,12 +79,12 @@ std::vector<uint32_t> uhppote::get_devices() {
 
         rc = GetDevices(u, slice);
         if (rc.r1 != NULL) {
-            throw std::runtime_error(rc.r1);
+            throw runtime_error(rc.r1);
         }
 
     } while (rc.r0 > size);
 
-    std::vector<uint32_t> devices;
+    vector<uint32_t> devices;
     for (int i=0; i<rc.r0; i++) {
         devices.push_back(list[i]);
     }
@@ -95,7 +96,7 @@ struct device uhppote::get_device(uint32_t id) {
     struct GetDevice_return rc = GetDevice(u,id);
 
     if (rc.r1 != NULL) {
-        throw std::runtime_error(rc.r1);
+        throw runtime_error(rc.r1);
     } else {
         device d;
 
