@@ -1,6 +1,15 @@
 import ctypes
 import platform
 
+from ctypes import c_bool
+from ctypes import c_char_p
+from ctypes import c_int
+from ctypes import c_longlong
+from ctypes import c_ulong
+from ctypes import pointer
+from ctypes import Structure
+from ctypes import POINTER
+
 from dataclasses import dataclass
 
 if 'Windows' in platform.system():         
@@ -8,6 +17,20 @@ if 'Windows' in platform.system():
 else:
     lib = ctypes.cdll.LoadLibrary("libuhppote.so")
 
+@dataclass
+class Controller:
+    id: int
+    address: str
+
+@dataclass
+class UHPPOTE:
+    bind: str
+    broadcast: str
+    listen: str
+    timeout: int
+    controllers: list[Controller]
+    debug: int
+    
 @dataclass
 class Device:
     ID: int
@@ -18,15 +41,6 @@ class Device:
     version: str
     date: str
 
-@dataclass
-class UHPPOTE():
-    bind: str = ''
-    broadcast: str = ''
-    listen: str = ''
-    timeout: int = 5
-    debug: int = False
-    
-
 class Uhppote:  
     def __init__(self, uhppote=None):
         self._uhppote = None
@@ -35,18 +49,19 @@ class Uhppote:
                                       uhppote.broadcast,
                                       uhppote.listen,
                                       uhppote.timeout,
+                                      uhppote.controllers,
                                       uhppote.debug)
 
     def get_devices(self):
         GetDevices = lib.GetDevices
-        GetDevices.argtypes = [ctypes.POINTER(GoUHPPOTE),GoUint32Slice]
+        GetDevices.argtypes = [POINTER(GoUHPPOTE),GoUint32Slice]
         GetDevices.restype = (GoGetDevicesResult)
 
         N = 0
 
         while True:
             N = N + 16
-            slice = GoUint32Slice((ctypes.c_ulong * N)(*[0] * N), N, N) 
+            slice = GoUint32Slice((c_ulong * N)(*[0] * N), N, N) 
             result = lib.GetDevices(self._uhppote, slice)
 
             if result.r1:
@@ -58,7 +73,7 @@ class Uhppote:
 
     def get_device(self, deviceID):
         GetDevice = lib.GetDevice
-        GetDevice.argtypes = [ctypes.POINTER(GoUHPPOTE),ctypes.c_ulong]
+        GetDevice.argtypes = [POINTER(GoUHPPOTE),c_ulong]
         GetDevice.restype = (GoGetDeviceResult)
 
         result = lib.GetDevice(self._uhppote, deviceID)
@@ -76,54 +91,68 @@ class Uhppote:
 
 # INTERNAL TYPES
 
-class GoUint32Slice(ctypes.Structure):
-    _fields_ = [ ('data', ctypes.POINTER(ctypes.c_ulong)),
-                 ('len', ctypes.c_longlong),
-                 ('cap', ctypes.c_longlong),
+class GoUint32Slice(Structure):
+    _fields_ = [ ('data', POINTER(c_ulong)),
+                 ('len', c_longlong),
+                 ('cap', c_longlong),
                ]
 
-class GoController(ctypes.Structure):
-    _fields_ = [ ('id', ctypes.c_ulong),
-                 ('address', ctypes.c_char_p),
-                 ('next', ctypes.c_void_p),
+    # _fields_ = [ ('id', c_ulong),
+    #              ('address', c_char_p)
+    #            ]
+class GoController(Structure):
+    pass
+    
+GoController._fields_ = [ ('id', c_ulong),
+                          ('address', c_char_p),
+                          ('next', POINTER(GoController))
+                       ]
+
+class GoUHPPOTE(Structure):
+    _fields_ = [ ('bind', c_char_p),
+                 ('broadcast', c_char_p),
+                 ('listen', c_char_p),
+                 ('timeout', c_int),
+                 ('devices', POINTER(GoController)),
+                 ('debug', c_bool)
                ]
 
-class GoUHPPOTE(ctypes.Structure):
-    _fields_ = [ ('bind', ctypes.c_char_p),
-                 ('broadcast', ctypes.c_char_p),
-                 ('listen', ctypes.c_char_p),
-                 ('timeout', ctypes.c_int),
-                 ('devices', ctypes.POINTER(GoController)),
-                 ('debug', ctypes.c_bool),
-               ]
-
-    def __init__(self,bind,broadcast,listen,timeout,debug):
+    def __init__(self,bind,broadcast,listen,timeout,controllers,debug):
       super(GoUHPPOTE,self).__init__()
-      self.bind = ctypes.c_char_p(bytes(bind, 'utf-8'))
-      self.broadcast = ctypes.c_char_p(bytes(broadcast, 'utf-8'))
-      self.listen = ctypes.c_char_p(bytes(listen, 'utf-8'))
+      self.bind = c_char_p(bytes(bind, 'utf-8'))
+      self.broadcast = c_char_p(bytes(broadcast, 'utf-8'))
+      self.listen = c_char_p(bytes(listen, 'utf-8'))
       self.timeout = timeout
       self.devices = None
       self.debug = debug
 
+      p = None
+      for c in controllers:
+          cc = GoController()
+          cc.id = c_ulong(c.id)
+          cc.address = c_char_p(bytes(c.address, 'utf-8'))
+          cc.next = p
+          p = pointer(cc)
 
-class GoDevice(ctypes.Structure):
-    _fields_ = [ ('ID', ctypes.c_ulong),
-                 ('address', ctypes.c_char_p),
-                 ('subnet', ctypes.c_char_p),
-                 ('gateway', ctypes.c_char_p),
-                 ('MAC', ctypes.c_char_p),
-                 ('version', ctypes.c_char_p),
-                 ('date', ctypes.c_char_p),
+      self.devices = p
+
+class GoDevice(Structure):
+    _fields_ = [ ('ID', c_ulong),
+                 ('address', c_char_p),
+                 ('subnet', c_char_p),
+                 ('gateway', c_char_p),
+                 ('MAC', c_char_p),
+                 ('version', c_char_p),
+                 ('date', c_char_p),
                ]
 
-class GoGetDevicesResult(ctypes.Structure):
-    _fields_ = [ ('r0', ctypes.c_int),
-                 ('r1', ctypes.c_char_p)
+class GoGetDevicesResult(Structure):
+    _fields_ = [ ('r0', c_int),
+                 ('r1', c_char_p)
                ]
 
-class GoGetDeviceResult(ctypes.Structure):
+class GoGetDeviceResult(Structure):
     _fields_ = [ ('r0', GoDevice),
-                 ('r1', ctypes.c_char_p)
+                 ('r1', c_char_p)
                ]
 

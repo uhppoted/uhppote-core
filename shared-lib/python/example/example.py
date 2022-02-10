@@ -80,7 +80,11 @@ if __name__ == "__main__":
         print()
 
     else:
-        u = uhppote.Uhppote(uhppote=uhppote.UHPPOTE('192.168.1.100', '192.168.1.255', '192.168.1.100:60001', 1, True))
+        alpha = uhppote.Controller(405419896, "192.168.1.100")
+        beta  = uhppote.Controller(303986753, "192.168.1.100")
+        controllers = [ alpha,beta ]
+
+        u = uhppote.Uhppote(uhppote=uhppote.UHPPOTE('192.168.1.100', '192.168.1.255', '192.168.1.100:60001', 1, controllers, True))
         try:            
             if cmd == 'get-devices':
                 get_devices(u)

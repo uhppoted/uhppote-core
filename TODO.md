@@ -4,8 +4,11 @@
 
 - Shared-lib/DLL
   - [ ] GetDevices - use slice length/capacity
+  - [ ] Rework linked device as array of const pointer
+
   - [ ] Python
-        - [ ] Initialise controller list
+        - [ ] Move uhppote.py out of example folder
+        - [x] Initialise controller list
         - [x] Use LD_LIBRARY
         - [x] `get-devices`
         - [x] Throw exception on error
@@ -18,14 +21,8 @@
 ```
 
   - [ ] C++ wrapper
-        - (?) Throw exception on error (?)
-        - (?) uint32_t (?)
-        - [x] Replace `malloc`/`free`
-        - [x] Replace unsigned long ** with references
-        - [x] Wrap 'C' implementation in class
-        - [x] Replace char * etc with std::string
-        - [x] Replace `printf` with `cout` 
-        - [x] Figure out device address alloc/free weirdness
+        - [ ] Throw exception on error
+        - (?) uint32_t
   - [x] 'C' wrapper
 
 - [ ] Check UHPPOTE encoding for revised Date implementation
