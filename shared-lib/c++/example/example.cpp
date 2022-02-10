@@ -4,7 +4,7 @@
 
 void usage();
 extern int getDevices(uhppote&);
-extern int getDevice(uhppote&);
+extern int getDevice(uhppote&, uint32_t);
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -26,12 +26,12 @@ int main(int argc, char **argv) {
     } 
 
     if (cmd == "get-device") {
-        return getDevice(u);
+        return getDevice(u, 405419896);
     }
 
     if (cmd == "all") {
         getDevices(u);
-        getDevice(u);
+        getDevice(u, 405419896);
     }
 }
 

@@ -73,9 +73,9 @@ void uhppote::set_error(const char *errmsg) {
 }
 
 // All this finagling because you can't return a slice from Go
-int uhppote::get_devices(std::vector<unsigned long>& devices) {
+int uhppote::get_devices(std::vector<uint32_t>& devices) {
     struct GetDevices_return rc;
-    std::vector<unsigned long> list;        
+    std::vector<uint32_t> list;        
     int size = 0;
 
     do {
@@ -99,7 +99,7 @@ int uhppote::get_devices(std::vector<unsigned long>& devices) {
     return 0;
 }
 
-int uhppote::get_device(unsigned id, struct device& d) {
+int uhppote::get_device(uint32_t id, struct device& d) {
     struct GetDevice_return rc = GetDevice(u,id);
 
     if (rc.r1 != NULL) {        

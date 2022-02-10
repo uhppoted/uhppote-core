@@ -7,21 +7,17 @@
   - [ ] GetDevices - use slice length/capacity
   - [ ] Rework linked device as array of const pointer
 
-  - [x] Python
-        - [x] Move uhppote.py out of example folder
-        - [x] Initialise controller list
-        - [x] Use LD_LIBRARY
-        - [x] `get-devices`
-        - [x] Throw exception on error
-        - [x] Use specific ctypes
-
   - [ ] C++ wrapper
         - [ ] Throw exception on error
-        - (?) uint32_t
+        - [x] uint32_t & bool
+        - [ ] namespaces
   - [x] 'C' wrapper
+  - [x] Python
 
 - [ ] Check UHPPOTE encoding for revised Date implementation
-- [ ] Rework any Date pointers to rather use IsZero/IsValid
+      - should return Date{} for 0000...
+      - should return DateTime{} for 0000...
+- [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
 
 ## TODO
 

@@ -5,12 +5,12 @@
 #include "libuhppote.h"
 
 typedef struct controller {
-    unsigned long id;
-    std::string   address;
+    uint32_t    id;
+    std::string address;
 } controller;
 
 typedef struct device {
-    unsigned long ID;
+    uint32_t ID;
     std::string address;
     std::string subnet;
     std::string gateway;
@@ -28,8 +28,8 @@ class uhppote {
 
     public:
         std::string errmsg();
-        int get_devices(std::vector<unsigned long>& devices);
-        int get_device (unsigned id, struct device&);
+        int get_devices(std::vector<uint32_t>& devices);
+        int get_device (uint32_t id, struct device&);
 
     private:
         void set_error(const char *errmsg);

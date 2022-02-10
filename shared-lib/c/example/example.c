@@ -26,18 +26,12 @@ int main(int argc, char **argv) {
     if (strncmp(cmd,"get-devices",11) == 0) {
         rc = getDevices();
     } else if (strncmp(cmd,"get-device",10) == 0) {
-        rc = getDevice();
+        rc = getDevice(405419896);
     } else if (strncmp(cmd,"all",3) == 0) {
-        int r;
         rc = 0;
-
-        if ((r = getDevices()) != 0) {
-            rc = r;
-        }
         
-        if ((r = getDevice()) != 0) {
-            rc = r;
-        }
+        getDevices();
+        getDevice(405419896);
     }
 
     teardown();

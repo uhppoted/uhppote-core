@@ -2,7 +2,7 @@
 #include "../include/uhppote.hpp"
 
 int getDevices(uhppote& u) {
-    std::vector<unsigned long> devices;
+    std::vector<uint32_t> devices;
 
     if (u.get_devices(devices) < 0) {
         std::cerr << "ERROR " << u.errmsg() << std::endl;
@@ -18,10 +18,10 @@ int getDevices(uhppote& u) {
     return 0;
 }
 
-int getDevice(uhppote& u) {
+int getDevice(uhppote& u, uint32_t deviceID) {
     struct device d;
 
-    if (u.get_device(405419896, d) != 0) {
+    if (u.get_device(deviceID, d) != 0) {
         std::cerr << "ERROR " << u.errmsg() << std::endl;
         return -1;
     } 

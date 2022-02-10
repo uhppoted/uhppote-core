@@ -25,10 +25,10 @@ int getDevices() {
     return 0;
 }
 
-int getDevice() {
+int getDevice(uint32_t deviceID) {
     struct device d;
 
-    if (get_device(405419896, &d) != 0) {
+    if (get_device(deviceID, &d) != 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     } 
