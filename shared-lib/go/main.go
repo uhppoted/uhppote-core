@@ -1,10 +1,12 @@
 package main
 
 /*
+#include <stdbool.h>
+#include <stdint.h>
 
 typedef struct udevice {
-	unsigned        id;
-	const char     *address;
+	uint32_t    id;
+	const char *address;
 	struct udevice *next;
 } udevice;
 
@@ -14,17 +16,17 @@ typedef struct UHPPOTE {
 	const char *listen;
 	int         timeout;  // seconds
 	udevice    *devices;  // (optional) linked list of device address
-	int         debug;    // true/false
+	bool        debug;
 } UHPPOTE;
 
 struct Device {
     unsigned long ID;
-	char *        address;
-	char *        subnet;
-	char *        gateway;
-	char *        MAC;
-	char *        version;
-	char *        date;
+	char *address;
+	char *subnet;
+	char *gateway;
+	char *MAC;
+	char *version;
+	char *date;
 };
 */
 import "C"
@@ -41,7 +43,7 @@ import (
 func main() {}
 
 //export GetDevices
-func GetDevices(u *C.struct_UHPPOTE, list []C.ulong) (C.int, *C.char) {
+func GetDevices(u *C.struct_UHPPOTE, list []uint32) (C.int, *C.char) {
 	uu, err := makeUHPPOTE(u)
 	if err != nil {
 		return 0, C.CString(err.Error())
@@ -52,7 +54,7 @@ func GetDevices(u *C.struct_UHPPOTE, list []C.ulong) (C.int, *C.char) {
 	} else {
 		for ix, device := range devices {
 			if ix < len(list) {
-				list[ix] = C.ulong(device.SerialNumber)
+				list[ix] = uint32(device.SerialNumber)
 			} else {
 				break
 			}
@@ -118,7 +120,7 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 		}
 
 		timeout = time.Duration(u.timeout) * time.Second
-		debug = u.debug != 0
+		debug = bool(u.debug)
 
 		d := u.devices
 		for d != nil {

@@ -3,22 +3,17 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
+  - [ ] Rename to uhppoted
   - [ ] GetDevices - use slice length/capacity
   - [ ] Rework linked device as array of const pointer
 
-  - [ ] Python
+  - [x] Python
         - [x] Move uhppote.py out of example folder
         - [x] Initialise controller list
         - [x] Use LD_LIBRARY
         - [x] `get-devices`
         - [x] Throw exception on error
-        - [ ] Use specific ctypes
-```
-    _fields_ = [    ("first",ctypes.c_uint8,4),
-                    ("second",ctypes.c_uint8,4),
-                    ("third",ctypes.c_uint8,8),
-                 ]
-```
+        - [x] Use specific ctypes
 
   - [ ] C++ wrapper
         - [ ] Throw exception on error
@@ -27,7 +22,6 @@
 
 - [ ] Check UHPPOTE encoding for revised Date implementation
 - [ ] Rework any Date pointers to rather use IsZero/IsValid
-- [x] Add -trimpath to `go build`
 
 ## TODO
 

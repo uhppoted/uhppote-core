@@ -5,6 +5,7 @@ from ctypes import c_bool
 from ctypes import c_char_p
 from ctypes import c_int
 from ctypes import c_longlong
+from ctypes import c_uint32
 from ctypes import c_ulong
 from ctypes import pointer
 from ctypes import Structure
@@ -30,7 +31,7 @@ class UHPPOTE:
     listen: str
     timeout: int
     controllers: list[Controller]
-    debug: int
+    debug: bool
     
 @dataclass
 class Device:
@@ -62,7 +63,7 @@ class Uhppote:
 
         while True:
             N = N + 16
-            slice = GoUint32Slice((c_ulong * N)(*[0] * N), N, N) 
+            slice = GoUint32Slice((c_uint32 * N)(*[0] * N), N, N) 
             result = lib.GetDevices(self._uhppote, slice)
 
             if result.r1:
@@ -93,7 +94,7 @@ class Uhppote:
 # INTERNAL TYPES
 
 class GoUint32Slice(Structure):
-    _fields_ = [ ('data', POINTER(c_ulong)),
+    _fields_ = [ ('data', POINTER(c_uint32)),
                  ('len', c_longlong),
                  ('cap', c_longlong),
                ]
@@ -104,7 +105,7 @@ class GoUint32Slice(Structure):
 class GoController(Structure):
     pass
     
-GoController._fields_ = [ ('id', c_ulong),
+GoController._fields_ = [ ('id', c_uint32),
                           ('address', c_char_p),
                           ('next', POINTER(GoController))
                        ]
@@ -125,12 +126,12 @@ class GoUHPPOTE(Structure):
       self.listen = c_char_p(bytes(listen, 'utf-8'))
       self.timeout = timeout
       self.devices = None
-      self.debug = debug
+      self.debug = c_bool(debug)
 
       p = None
       for c in controllers:
           cc = GoController()
-          cc.id = c_ulong(c.id)
+          cc.id = c_uint32(c.id)
           cc.address = c_char_p(bytes(c.address, 'utf-8'))
           cc.next = p
           p = pointer(cc)
