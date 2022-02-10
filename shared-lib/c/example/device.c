@@ -4,7 +4,7 @@
 #include "../include/uhppote.h"
 
 int getDevices() {
-    unsigned long *devices = NULL;
+    uint32_t *devices = NULL;
     int N;
 
     if (get_devices(&devices, &N) < 0) {
@@ -15,7 +15,7 @@ int getDevices() {
     printf("\nget-devices (%d)\n", N);
     if (N > 0 && devices != NULL) {
         for (int i=0; i<N; i++) {
-            printf("   %lu\n", devices[i]);        
+            printf("   %u\n", devices[i]);        
         }
     }
     printf("\n");
@@ -34,7 +34,7 @@ int getDevice() {
     } 
       
     printf("\nget-device\n");
-    printf("  ID:      %lu\n", d.ID);
+    printf("  ID:      %u\n", d.ID);
     printf("  IP:      %s  %s  %s\n",  d.address,d.subnet,d.gateway);
     printf("  MAC:     %s\n",  d.MAC);
     printf("  version: %s\n",  d.version);

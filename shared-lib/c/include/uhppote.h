@@ -1,14 +1,15 @@
 #pragma once
 
+#include <stdint.h> 
 #include <stdbool.h> 
 
 typedef struct controller {
-    unsigned    id;
+    uint32_t    id;
     const char *address;
 } controller;
 
 typedef struct device {
-    unsigned long ID;
+    uint32_t ID;
     char address[16];
     char subnet[16];
     char gateway[16];
@@ -22,6 +23,6 @@ char *errmsg();
 void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...);
 void teardown();
 
-int   get_devices(unsigned long **devices, int *N);
-int   get_device (unsigned id, struct device *);
+int   get_devices(uint32_t **devices, int *N);
+int   get_device (uint32_t id, struct device *);
 

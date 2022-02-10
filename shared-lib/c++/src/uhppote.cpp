@@ -31,8 +31,9 @@ uhppote::uhppote(const std::string& bind, const std::string& broadcast, const st
         udevice *previous = NULL;
         for (auto p : controllers){
             if ((q = new udevice) != NULL) {
-                // NTS: because the controllers may go out of scope  after the invocation of the
-                //      constructor and c_str() returns a pointer to the underlying string char array
+                // NTS: because the controllers may go out of scope after the invocation of the
+                //      constructor and c_str() returns a pointer to the underlying string char
+                //      array
                 size_t N    = p.address.size()+1;
                 char  *addr = new char[N];
                 p.address.copy(addr,N);

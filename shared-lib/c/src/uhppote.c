@@ -21,7 +21,8 @@ char *errmsg() {
  * - controllers: (none)
  * - debug:       false
  *
- * NOTE: https://wiki.sei.cmu.edu/confluence/display/cplusplus/EXP58-CPP.+Pass+an+object+of+the+correct+type+to+va_start
+ * NOTES: 1. https://wiki.sei.cmu.edu/confluence/display/cplusplus/EXP58-CPP.+Pass+an+object+of+the+correct+type+to+va_start
+ *        2. https://www.linkedin.com/pulse/modern-c-variadic-functions-how-shoot-yourself-foot-avoid-zinin
  */ 
 void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...) {
     if (u != NULL) {
@@ -34,7 +35,7 @@ void setup(const char *bind, const char *broadcast, const char *listen, int time
         u->listen = listen;
         u->timeout = timeout;
         u->devices = NULL;
-        u->debug = debug;
+        u->debug = debug != 0;
 
         va_list args;
         va_start(args, debug);
@@ -43,6 +44,7 @@ void setup(const char *bind, const char *broadcast, const char *listen, int time
         udevice    *q = NULL;
         udevice    *previous = NULL;
 
+        // NTS: duplicates address because the controllers may go out of scope after the invocation of setup(..)
         while(p != NULL) {
             if ((q = (udevice *) malloc(sizeof(udevice))) != NULL) {
                 q->id = p->id;
@@ -65,7 +67,7 @@ void teardown() {
 
         while (d != NULL) {
             udevice *next = d->next;
-            free(d->address);
+            free((char *) d->address); // Known to be malloc'd in setup
             free(d);
             d = next;
         }        
@@ -87,16 +89,16 @@ void set_error(const char *errmsg) {
 }
 
 // All this finagling because you can't return a slice from Go
-int get_devices(unsigned long **devices, int *N) {
+int get_devices(uint32_t **devices, int *N) {
     struct GetDevices_return rc;
-    unsigned long *list = NULL;        
+    uint32_t *list = NULL;        
     int size = 0;
 
     do {
         size += 16;
 
-        unsigned long *p;        
-        if ((p = realloc(list, size * sizeof(unsigned long))) == NULL) {
+        uint32_t *p;        
+        if ((p = realloc(list, size * sizeof(uint32_t))) == NULL) {
             free(list);
             set_error("Error allocating storage for slice");
             return -1;            
@@ -116,9 +118,9 @@ int get_devices(unsigned long **devices, int *N) {
     } while (rc.r0 > size);
 
     *N = rc.r0;
-    *devices = malloc(rc.r0 * sizeof(unsigned long));
+    *devices = malloc(rc.r0 * sizeof(uint32_t));
 
-    memmove(*devices, list, rc.r0 * sizeof(unsigned long));
+    memmove(*devices, list, rc.r0 * sizeof(uint32_t));
     free(list);
 
     return 0;
