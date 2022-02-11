@@ -3,7 +3,7 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] Try unsafe.Slice for udevices
+  - [x] Try unsafe.Slice for udevices
   - [ ] GetDevices - use slice length/capacity
   - [ ] (?) Free returned strings (?)
   - [ ] Cross-compile

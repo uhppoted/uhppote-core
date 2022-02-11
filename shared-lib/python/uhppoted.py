@@ -101,27 +101,19 @@ class GoUint32Slice(Structure):
         ('cap', c_longlong),
     ]
 
-class GoController(Structure):
-    _fields_ = [
-        ('id', c_uint32), 
-        ('address', c_char_p),
-    ]
 
-class GoControllers(Structure):
-    _fields_ = [
-        ('N', c_int),
-        ('devices', POINTER(POINTER(GoController))),
-    ]
+class GoController(Structure):
+    pass
+
+
+GoController._fields_ = [('id', c_uint32), ('address', c_char_p),
+                         ('next', POINTER(GoController))]
+
 
 class GoUHPPOTE(Structure):
-    _fields_ = [
-        ('bind', c_char_p), 
-        ('broadcast', c_char_p),
-        ('listen', c_char_p), 
-        ('timeout', c_int),
-        ('devices', GoControllers), 
-        ('debug', c_bool)
-    ]
+    _fields_ = [('bind', c_char_p), ('broadcast', c_char_p),
+                ('listen', c_char_p), ('timeout', c_int),
+                ('devices', POINTER(GoController)), ('debug', c_bool)]
 
     def __init__(self, bind, broadcast, listen, timeout, controllers, debug):
         super(GoUHPPOTE, self).__init__()
@@ -129,19 +121,20 @@ class GoUHPPOTE(Structure):
         self.broadcast = c_char_p(bytes(broadcast, 'utf-8'))
         self.listen = c_char_p(bytes(listen, 'utf-8'))
         self.timeout = timeout
-        self.devices.N = 0
-        self.devices.devices = None
+        self.devices = None
         self.debug = c_bool(debug)
 
-        self.devices.N = len(controllers)
-        self.devices.devices = (len(controllers) * POINTER(GoController))()
-        for ix,c in enumerate(controllers):
+        p = None
+        for c in controllers:
             cc = GoController()
             cc.id = c_uint32(c.id)
             cc.address = c_char_p(bytes(c.address, 'utf-8'))
-            self.devices.devices[ix] = pointer(cc)
+            cc.next = p
+            p = pointer(cc)
 
- 
+        self.devices = p
+
+
 class GoDevice(Structure):
     _fields_ = [
         ('ID', c_ulong),

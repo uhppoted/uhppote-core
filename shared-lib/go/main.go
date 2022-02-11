@@ -7,6 +7,7 @@ package main
 typedef struct udevice {
 	uint32_t    id;
 	const char *address;
+	struct udevice *next;
 } udevice;
 
 typedef struct UHPPOTE {
@@ -14,10 +15,7 @@ typedef struct UHPPOTE {
 	const char *broadcast;
 	const char *listen;
 	int         timeout;  // seconds
-	struct {
-	   int       N;
-	   udevice **devices;
-	}           devices;  // (optional) list of controllers
+	udevice    *devices;  // (optional) linked list of device address
 	bool        debug;
 } UHPPOTE;
 
@@ -37,7 +35,6 @@ import (
 	"fmt"
 	"net"
 	"time"
-	"unsafe"
 
 	"github.com/uhppoted/uhppote-core/types"
 	"github.com/uhppoted/uhppote-core/uhppote"
@@ -125,8 +122,8 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 		timeout = time.Duration(u.timeout) * time.Second
 		debug = bool(u.debug)
 
-		slice := unsafe.Slice(u.devices.devices, u.devices.N)
-		for _, d := range slice {
+		d := u.devices
+		for d != nil {
 			if d.id != 0 {
 				addr, err := types.ResolveAddr(C.GoString(d.address))
 				if err != nil {
@@ -138,9 +135,10 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 					Address:  (*net.UDPAddr)(addr),
 				})
 			}
+
+			d = d.next
 		}
 	}
 
 	return uhppote.NewUHPPOTE(bind, broadcast, listen, timeout, devices, debug), nil
-
 }
