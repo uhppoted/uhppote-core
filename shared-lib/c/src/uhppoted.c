@@ -142,5 +142,12 @@ int get_device(unsigned id, struct device *d) {
     snprintf(d->version, sizeof(d->version), "%s", rc.r0.version);
     snprintf(d->date,    sizeof(d->date),    "%s", rc.r0.date);
 
+    free(rc.r0.address);
+    free(rc.r0.subnet);
+    free(rc.r0.gateway);
+    free(rc.r0.MAC);
+    free(rc.r0.version);
+    free(rc.r0.date);
+
     return 0;
 }
