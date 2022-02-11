@@ -106,7 +106,7 @@ int get_devices(uint32_t **devices, int *N) {
             list = p;
         }
 
-        GoSlice slice = { list,size,size} ;
+        GoSlice slice = { list,0,size} ;
 
         rc = GetDevices(u, slice);
         if (rc.r1 != NULL) {

@@ -63,7 +63,7 @@ class Uhppote:
 
         while True:
             N = N + 16
-            slice = GoUint32Slice((c_uint32 * N)(*[0] * N), N, N)
+            slice = GoUint32Slice((c_uint32 * N)(*[0] * N), 0, N)
             result = lib.GetDevices(self._uhppote, slice)
 
             if result.r1:

@@ -52,9 +52,9 @@ func GetDevices(u *C.struct_UHPPOTE, list []uint32) (C.int, *C.char) {
 	if devices, err := uu.GetDevices(); err != nil {
 		return 0, C.CString(err.Error())
 	} else {
-		for ix, device := range devices {
-			if ix < len(list) {
-				list[ix] = uint32(device.SerialNumber)
+		for _, device := range devices {
+			if len(list) < cap(list) {
+				list = append(list, uint32(device.SerialNumber))
 			} else {
 				break
 			}
