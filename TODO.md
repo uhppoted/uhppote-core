@@ -3,8 +3,13 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] Rework linked device as array of const pointer
+  - [ ] Try unsafe.Slice for udevices
   - [ ] GetDevices - use slice length/capacity
+  - [ ] (?) Free returned strings (?)
+  - [ ] Cross-compile
+```
+The cgo tool is enabled by default for native builds on systems where it is expected to work. It is disabled by default when cross-compiling. You can control this by setting the CGO_ENABLED environment variable when running the go tool: set it to 1 to enable the use of cgo, and to 0 to disable it. 
+```
 
   - [x] Rename to uhppoted
   - [x] C++ wrapper

@@ -34,43 +34,46 @@ void setup(const char *bind, const char *broadcast, const char *listen, int time
         u->broadcast = broadcast;
         u->listen = listen;
         u->timeout = timeout;
-        u->devices = NULL;
+        u->devices.N = 0;
+        u->devices.devices = NULL;
         u->debug = debug != 0;
 
         va_list args;
         va_start(args, debug);
 
         controller *p = va_arg(args, controller *);
-        udevice    *q = NULL;
-        udevice    *previous = NULL;
+        int         ix = 0;
+        udevice   **list = NULL;
+        udevice    *q;
 
         // NTS: duplicates address because the controllers may go out of scope after the invocation of setup(..)
-        while(p != NULL) {
+        while (p != NULL) {
             if ((q = (udevice *) malloc(sizeof(udevice))) != NULL) {
                 q->id = p->id;
                 q->address = strdup(p->address);
-                q->next=previous;
-                previous = q;
+
+                list = realloc(list,(ix+1) * sizeof(udevice *));
+                list[ix++] = q;
             }
 
             p = va_arg(args, controller *);
         }
         va_end(args);
 
-        u->devices = q;
+        u->devices.N = ix;
+        u->devices.devices = list;
     }
 }
 
 void teardown() {
     if (u != NULL) {
-        udevice *d = u->devices;
-
-        while (d != NULL) {
-            udevice *next = d->next;
-            free((char *) d->address); // Known to be malloc'd in setup
+        for (int ix=0; ix<u->devices.N; ix++) {
+            udevice *d = u->devices.devices[ix];
+            free((char *) d->address); // (strdup'd in setup)
             free(d);
-            d = next;
-        }        
+        }
+
+        free(u->devices.devices);
     }
 
     free(u);

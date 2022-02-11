@@ -26,13 +26,14 @@ uhppote::uhppote(const string& bind, const string& broadcast, const string& list
         u->broadcast = broadcast.c_str();
         u->listen = listen.c_str();
         u->timeout = timeout;
-        u->devices = NULL;
+        u->devices.N = 0;
+        u->devices.devices = NULL;
         u->debug = debug;
 
-        udevice *q = NULL;
-        udevice *previous = NULL;
+        vector<udevice *> devices;
         for (auto p : controllers){
-            if ((q = new udevice) != NULL) {
+            auto q = new udevice;
+            if (q != NULL) {
                 // NTS: because the controllers may go out of scope after the invocation of the
                 //      constructor and c_str() returns a pointer to the underlying string char
                 //      array
@@ -42,25 +43,31 @@ uhppote::uhppote(const string& bind, const string& broadcast, const string& list
 
                 q->id = p.id;
                 q->address = addr; 
-                q->next = previous;
-                previous = q;
+
+                devices.push_back(q);
             }
         }
 
-		u->devices = q;
+        u->devices.N = devices.size();
+        u->devices.devices = new udevice *[devices.size()];
+
+        copy(devices.begin(), devices.end(), u->devices.devices);
     }
 }
 
 uhppote::~uhppote() {
     if (u != NULL) {
-        udevice *d = u->devices;
+        udevice *d;
 
-        while (d != NULL) {
-            udevice *next = d->next;
-            delete[] d->address;
+        for (int i=0; i<u->devices.N; i++) {
+            if ((d = u->devices.devices[i]) != NULL) {
+                delete[] d->address;                
+            }
+            
             delete d;
-            d = next;
-        }        
+        }
+
+        delete[] u->devices.devices;
     }
 
 	delete u;
