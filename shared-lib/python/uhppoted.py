@@ -54,24 +54,25 @@ class Uhppote:
                                       uhppote.listen, uhppote.timeout,
                                       uhppote.controllers, uhppote.debug)
 
+
     def get_devices(self):
         GetDevices = lib.GetDevices
-        GetDevices.argtypes = [POINTER(GoUHPPOTE), GoUint32Slice]
+        GetDevices.argtypes = [POINTER(GoUHPPOTE), ctypes.c_int, POINTER(ctypes.c_uint32)]
         GetDevices.restype = (GoGetDevicesResult)
 
         N = 0
-
         while True:
             N = N + 16
-            slice = GoUint32Slice((c_uint32 * N)(*[0] * N), 0, N)
-            result = lib.GetDevices(self._uhppote, slice)
+            list = (c_uint32 * N)(*[0] * N)
+            result = lib.GetDevices(self._uhppote, N, list)
 
-            if result.r1:
-                raise Exception(f"{result.r1.decode('utf-8')}")
-            elif result.r0 <= N:
+            if result.err:
+                raise Exception(f"{result.err.decode('utf-8')}")
+            elif result.N <= N:
                 break
 
-        return slice.data[0:result.r0]
+        return list[0:result.N]
+
 
     def get_device(self, deviceID):
         GetDevice = lib.GetDevice
@@ -92,19 +93,8 @@ class Uhppote:
 
 
 # INTERNAL TYPES
-
-
-class GoUint32Slice(Structure):
-    _fields_ = [
-        ('data', POINTER(c_uint32)),
-        ('len', c_longlong),
-        ('cap', c_longlong),
-    ]
-
-
 class GoController(Structure):
     pass
-
 
 GoController._fields_ = [('id', c_uint32), ('address', c_char_p),
                          ('next', POINTER(GoController))]
@@ -148,7 +138,7 @@ class GoDevice(Structure):
 
 
 class GoGetDevicesResult(Structure):
-    _fields_ = [('r0', c_int), ('r1', c_char_p)]
+    _fields_ = [('N', c_int), ('err', c_char_p)]
 
 
 class GoGetDeviceResult(Structure):

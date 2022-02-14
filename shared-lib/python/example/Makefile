@@ -5,6 +5,7 @@ WRAPPER=export PYTHONPATH=$(PYTHONPATH):..
 CMD=$(GO) && $(DLL) && $(WRAPPER) && python example.py 
 
 lib: 
+	go fmt ../../go/...
 	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so ../../go/main.go
 
 build: 

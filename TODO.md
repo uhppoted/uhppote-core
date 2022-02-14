@@ -3,10 +3,13 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
+  - [ ] C#
+        - (?) make GetDevices list a mutable C uint32_t array
+        - https://stackoverflow.com/questions/736474/c-how-to-pass-null-to-a-function-expecting-a-ref/736481#736481
+        - https://www.mono-project.com/docs/advanced/pinvoke/
+
   - [ ] Cross-compile
-```
-The cgo tool is enabled by default for native builds on systems where it is expected to work. It is disabled by default when cross-compiling. You can control this by setting the CGO_ENABLED environment variable when running the go tool: set it to 1 to enable the use of cgo, and to 0 to disable it. 
-```
+        - https://github.com/elastic/golang-crossbuild
 
   - [x] GetDevices - use slice length/capacity
   - [x] Free returned strings

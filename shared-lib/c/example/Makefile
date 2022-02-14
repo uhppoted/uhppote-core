@@ -2,6 +2,7 @@ LIB=../../lib
 CMD=./example
 
 lib: 
+	go fmt ../../go/...
 	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so ../../go/main.go
 
 build: 

@@ -4,6 +4,10 @@ package main
 #include <stdbool.h>
 #include <stdint.h>
 
+typedef struct UnmanagedStruct {
+    int n;
+} UnmanagedStruct;
+
 typedef struct udevice {
 	uint32_t    id;
 	const char *address;
@@ -35,6 +39,7 @@ import (
 	"fmt"
 	"net"
 	"time"
+	"unsafe"
 
 	"github.com/uhppoted/uhppote-core/types"
 	"github.com/uhppoted/uhppote-core/uhppote"
@@ -43,7 +48,7 @@ import (
 func main() {}
 
 //export GetDevices
-func GetDevices(u *C.struct_UHPPOTE, list []uint32) (C.int, *C.char) {
+func GetDevices(u *C.struct_UHPPOTE, N C.int, list *C.uint) (C.int, *C.char) {
 	uu, err := makeUHPPOTE(u)
 	if err != nil {
 		return 0, C.CString(err.Error())
@@ -52,9 +57,10 @@ func GetDevices(u *C.struct_UHPPOTE, list []uint32) (C.int, *C.char) {
 	if devices, err := uu.GetDevices(); err != nil {
 		return 0, C.CString(err.Error())
 	} else {
-		for _, device := range devices {
-			if len(list) < cap(list) {
-				list = append(list, uint32(device.SerialNumber))
+		slice := unsafe.Slice(list, N)
+		for ix, device := range devices {
+			if ix < int(N) {
+				slice[ix] = C.uint(device.SerialNumber)
 			} else {
 				break
 			}
@@ -100,26 +106,34 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 	debug := false
 
 	if u != nil {
-		if addr, err := types.ResolveBindAddr(C.GoString(u.bind)); err != nil {
-			return nil, err
-		} else if addr != nil {
-			bind = *addr
-		} else {
+		if s := C.GoString(u.bind); s != "" {
+			if addr, err := types.ResolveBindAddr(s); err != nil {
+				return nil, err
+			} else if addr != nil {
+				bind = *addr
+			}
 		}
 
-		if addr, err := types.ResolveBroadcastAddr(C.GoString(u.broadcast)); err != nil {
-			return nil, err
-		} else if addr != nil {
-			broadcast = *addr
+		if s := C.GoString(u.broadcast); s != "" {
+			if addr, err := types.ResolveBroadcastAddr(s); err != nil {
+				return nil, err
+			} else if addr != nil {
+				broadcast = *addr
+			}
 		}
 
-		if addr, err := types.ResolveListenAddr(C.GoString(u.listen)); err != nil {
-			return nil, err
-		} else if addr != nil {
-			listen = *addr
+		if s := C.GoString(u.listen); s != "" {
+			if addr, err := types.ResolveListenAddr(s); err != nil {
+				return nil, err
+			} else if addr != nil {
+				listen = *addr
+			}
 		}
 
-		timeout = time.Duration(u.timeout) * time.Second
+		if u.timeout > 0 {
+			timeout = time.Duration(u.timeout) * time.Second
+		}
+
 		debug = bool(u.debug)
 
 		d := u.devices

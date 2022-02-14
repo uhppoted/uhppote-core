@@ -21,7 +21,6 @@ format:
 
 build: format
 	go build -trimpath ./...
-	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so shared-lib/go/main.go
 
 test: build
 	go test ./...
@@ -43,6 +42,7 @@ build-all: test vet
 	env GOOS=linux   GOARCH=arm GOARM=7 go build -trimpath ./...
 	env GOOS=darwin  GOARCH=amd64       go build -trimpath ./...
 	env GOOS=windows GOARCH=amd64       go build -trimpath ./...
+	# env CC_FOR_TARGET=????? CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -trimpath -buildmode=c-shared shared-lib/go/main.go
 
 release: test vet
 	env GOOS=linux   GOARCH=amd64       go build -trimpath -o dist/$(DIST)/linux   ./...
@@ -69,3 +69,13 @@ shared-lib-c++: lib
 
 shared-lib-python: lib
 	export DYLD_LIBRARY_PATH=$(LIB) && export PYTHONPATH=$(PYTHONPATH):$(LIBPYTHON) && python $(LIBPYTHON)/example/example.py all
+
+
+# xxx:
+# 	docker run -it --rm \
+#   		-v $GOPATH/src/github.com/uhppoted/uhppote-core:/go/src/github.com/uhppoted/uhppote-core \
+#   		-w /go/src/github.com/uhppoted/uhppote-core \
+#   		-e CGO_ENABLED=1 \
+#   		docker.elastic.co/beats-dev/golang-crossbuild:1.17.6-darwin \
+#   		--build-cmd "ls -la /" \
+#   		-p "darwin/amd64"

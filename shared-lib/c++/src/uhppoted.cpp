@@ -74,11 +74,9 @@ vector<uint32_t> uhppote::get_devices() {
 
     do {
         size += 16;
-
         list.resize(size);
-        GoSlice slice = { list.data(),0,size} ;
 
-        rc = GetDevices(u, slice);
+        rc = GetDevices(u, size, list.data());
         if (rc.r1 != NULL) {
             throw runtime_error(rc.r1);
         }
