@@ -11,7 +11,7 @@
         - [x] 'usage'
         - [x] 'help'
         - [x] Implement IDisposable (for using)
-        - (?) namespace
+        - [x] namespace
   
   - [ ] Cross-compile
         - https://github.com/elastic/golang-crossbuild

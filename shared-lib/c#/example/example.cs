@@ -1,5 +1,9 @@
 using System;
 
+using Uhppoted = uhppoted.uhppoted;
+using Controller = uhppoted.controller;
+using Device  = uhppoted.Device;
+
 public class example {
     public static void Main(string[] args) {
         if (args.Length < 1) {
@@ -15,11 +19,11 @@ public class example {
         }
 
         try {
-           controller []controllers = { new controller(405419896, "192.168.1.100"),
-                                        new controller(303986753, "192.168.1.100")
+           Controller []controllers = { new Controller(405419896, "192.168.1.100"),
+                                        new Controller(303986753, "192.168.1.100")
                                       };
 
-           using uhppoted u = new uhppoted("192.168.1.100","192.168.1.100:60000","192.168.1.100:60001",2,controllers,true);
+           Uhppoted u = new Uhppoted("192.168.1.100","192.168.1.100:60000","192.168.1.100:60001",2,controllers,true);
 
            switch (cmd) {
               case "get-devices":
@@ -73,7 +77,7 @@ public class example {
        Console.WriteLine();
     }
 
-    static void GetDevices(uhppoted u) {
+    static void GetDevices(Uhppoted u) {
        uint []list = u.GetDevices();
 
        Console.WriteLine (String.Format("get-devices ({0})",list.Length));
@@ -83,10 +87,10 @@ public class example {
        Console.WriteLine();
     }
 
-    static void GetDevice(uhppoted u, uint deviceID) {
+    static void GetDevice(Uhppoted u, uint deviceID) {
        Device device = u.GetDevice(deviceID);
 
-       Console.WriteLine (String.Format("get-device)"));
+       Console.WriteLine (String.Format("get-device"));
        Console.WriteLine (String.Format("  ID:       {0}",device.ID));
        Console.WriteLine (String.Format("  IP:       {0}  {0}  {0}",device.address,device.subnet, device.gateway));
        Console.WriteLine (String.Format("  MAC:      {0}",device.MAC));
