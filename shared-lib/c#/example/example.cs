@@ -19,20 +19,20 @@ public class example {
                                         new controller(303986753, "192.168.1.100")
                                       };
 
-           uhppoted u = new uhppoted("192.168.1.100","192.168.1.100:60000","192.168.1.100:60001",2,controllers,true);
+           using uhppoted u = new uhppoted("192.168.1.100","192.168.1.100:60000","192.168.1.100:60001",2,controllers,true);
 
            switch (cmd) {
               case "get-devices":
-                 GetDevices(ref u);
+                 GetDevices(u);
                  break;
 
               case "get-device":
-                 GetDevice(ref u, 405419896);
+                 GetDevice(u, 405419896);
                  break;
 
               case "all":
-                 GetDevices(ref u);
-                 GetDevice (ref u, 405419896);
+                 GetDevices(u);
+                 GetDevice (u, 405419896);
                  break;
 
               default:
@@ -73,7 +73,7 @@ public class example {
        Console.WriteLine();
     }
 
-    static void GetDevices(ref uhppoted u) {
+    static void GetDevices(uhppoted u) {
        uint []list = u.GetDevices();
 
        Console.WriteLine (String.Format("get-devices ({0})",list.Length));
@@ -83,7 +83,7 @@ public class example {
        Console.WriteLine();
     }
 
-    static void GetDevice(ref uhppoted u, uint deviceID) {
+    static void GetDevice(uhppoted u, uint deviceID) {
        Device device = u.GetDevice(deviceID);
 
        Console.WriteLine (String.Format("get-device)"));

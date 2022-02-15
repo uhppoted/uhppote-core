@@ -10,7 +10,7 @@
         - [x] 'all'
         - [x] 'usage'
         - [x] 'help'
-        - [ ] Implement IDisposable (for using)
+        - [x] Implement IDisposable (for using)
         - (?) namespace
   
   - [ ] Cross-compile

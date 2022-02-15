@@ -36,7 +36,7 @@ public class Device {
     }
 };
 
-public class uhppoted {
+public class uhppoted: IDisposable {
     private UHPPOTE u = new UHPPOTE();
 
     public uhppoted() {
@@ -67,6 +67,15 @@ public class uhppoted {
     }
 
     ~uhppoted() {
+        dispose();
+    }
+
+    public void Dispose() {
+        dispose();
+        GC.SuppressFinalize(this);
+    }
+
+    private void dispose() {
         IntPtr p = this.u.devices;
         while (p != IntPtr.Zero) {
             udevice q = (udevice) Marshal.PtrToStructure(p, typeof(udevice));
