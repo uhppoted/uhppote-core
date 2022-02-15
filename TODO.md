@@ -6,12 +6,12 @@
   - [ ] C#
         - [x] uhppoted class
         - [x] Use 'controller' class for constructor
-        - [ ] get-device
-        - [ ] namespace
+        - [x] get-device
         - [x] 'all'
         - [x] 'usage'
         - [x] 'help'
         - [ ] Implement IDisposable (for using)
+        - (?) namespace
   
   - [ ] Cross-compile
         - https://github.com/elastic/golang-crossbuild

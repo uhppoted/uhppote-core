@@ -16,29 +16,25 @@ public class UhppotedException : Exception {
     public UhppotedException(string message): base(message) {}
 };
 
-struct udevice {
-	public uint     ID;
-	public string   address;
-	public IntPtr   next;
-};
+public class Device {
+    public uint   ID;
+    public string address;
+    public string subnet;
+    public string gateway;
+    public string MAC;
+    public string version;
+    public string date;
 
-struct UHPPOTE {
-	public string bind;
-	public string broadcast;
-	public string listen;
-	public int    timeout;  // seconds, defaults to 5 if <= 0
-	public IntPtr devices;  // (optional) linked list of device address
-	public bool   debug;
+    public Device(uint ID, string address,string subnet,string gateway,string MAC,string version,string date) {
+        this.ID = ID;
+        this.address = address;
+        this.subnet = subnet;
+        this.gateway = gateway;
+        this.MAC = MAC;
+        this.version = version;
+        this.date = date;
+    }
 };
-
-// Return value for interop function GetDevices - for some reason the compiler thinks it's never initialised
-// Ref. https://stackoverflow.com/questions/3820985/suppressing-is-never-used-and-is-never-assigned-to-warnings-in-c-sharp/3821035#3821035
-#pragma warning disable 0649
-struct GoGetDevices {
-	public int N;
-    public string err;
-};
-#pragma warning restore 0649
 
 public class uhppoted {
     private UHPPOTE u = new UHPPOTE();
@@ -104,4 +100,63 @@ public class uhppoted {
 
         return list;
     }
+
+    [DllImport( "libuhppoted.so")]
+    private static extern GoGetDevice GetDevice (ref UHPPOTE u,uint deviceID);
+
+    public Device GetDevice(uint deviceID) {
+        GoGetDevice rv = GetDevice(ref this.u,deviceID);
+
+        if (rv.err != null && rv.err != "") {
+            throw new UhppotedException(rv.err);
+        }
+
+        return new Device(rv.device.ID,
+                          rv.device.address,
+                          rv.device.subnet,
+                          rv.device.gateway,
+                          rv.device.MAC,
+                          rv.device.version,
+                          rv.device.date);
+    }
 }
+
+struct udevice {
+    public uint     ID;
+    public string   address;
+    public IntPtr   next;
+};
+
+struct UHPPOTE {
+    public string bind;
+    public string broadcast;
+    public string listen;
+    public int    timeout;  // seconds, defaults to 5 if <= 0
+    public IntPtr devices;  // (optional) linked list of device address
+    public bool   debug;
+};
+
+// Return value for interop function GetDevices - for some reason the compiler thinks it's never initialised
+// Ref. https://stackoverflow.com/questions/3820985/suppressing-is-never-used-and-is-never-assigned-to-warnings-in-c-sharp/3821035#3821035
+#pragma warning disable 0649
+struct GoGetDevices {
+    public int N;
+    public string err;
+};
+
+struct GoGetDevice {
+    public GoDevice device;
+    public string err;
+};
+
+struct GoDevice {
+    public uint   ID;
+    public string address;
+    public string subnet;
+    public string gateway;
+    public string MAC;
+    public string version;
+    public string date;
+};
+#pragma warning restore 0649
+

@@ -26,11 +26,11 @@ int getDevice(uhppote& u, uint32_t deviceID) {
         auto d = u.get_device(deviceID);
       
         cout << endl << "get-device" << endl;
-        cout << "  ID:      " << d.ID << endl;
-        cout << "  IP:      " << d.address << "  " << d.subnet << "  " << d.gateway << endl;
-        cout << "  MAC:     " << d.MAC << endl;
-        cout << "  version: " << d.version << endl;
-        cout << "  date:    " << d.date << endl;
+        cout << "  ID:       " << d.ID << endl;
+        cout << "  IP:       " << d.address << "  " << d.subnet << "  " << d.gateway << endl;
+        cout << "  MAC:      " << d.MAC << endl;
+        cout << "  version:  " << d.version << endl;
+        cout << "  released: " << d.date << endl;
         cout << endl;
 
         return 0;

@@ -26,8 +26,13 @@ public class example {
                  GetDevices(ref u);
                  break;
 
+              case "get-device":
+                 GetDevice(ref u, 405419896);
+                 break;
+
               case "all":
                  GetDevices(ref u);
+                 GetDevice (ref u, 405419896);
                  break;
 
               default:
@@ -78,4 +83,15 @@ public class example {
        Console.WriteLine();
     }
 
+    static void GetDevice(ref uhppoted u, uint deviceID) {
+       Device device = u.GetDevice(deviceID);
+
+       Console.WriteLine (String.Format("get-device)"));
+       Console.WriteLine (String.Format("  ID:       {0}",device.ID));
+       Console.WriteLine (String.Format("  IP:       {0}  {0}  {0}",device.address,device.subnet, device.gateway));
+       Console.WriteLine (String.Format("  MAC:      {0}",device.MAC));
+       Console.WriteLine (String.Format("  version:  {0}",device.version));
+       Console.WriteLine (String.Format("  released: {0}",device.date));
+       Console.WriteLine();
+    }
 }

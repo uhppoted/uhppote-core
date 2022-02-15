@@ -34,11 +34,11 @@ int getDevice(uint32_t deviceID) {
     } 
       
     printf("\nget-device\n");
-    printf("  ID:      %u\n", d.ID);
-    printf("  IP:      %s  %s  %s\n",  d.address,d.subnet,d.gateway);
-    printf("  MAC:     %s\n",  d.MAC);
-    printf("  version: %s\n",  d.version);
-    printf("  date:    %s\n",  d.date);
+    printf("  ID:       %u\n", d.ID);
+    printf("  IP:       %s  %s  %s\n",  d.address,d.subnet,d.gateway);
+    printf("  MAC:      %s\n",  d.MAC);
+    printf("  version:  %s\n",  d.version);
+    printf("  released: %s\n",  d.date);
     printf("\n");
 
     return 0;

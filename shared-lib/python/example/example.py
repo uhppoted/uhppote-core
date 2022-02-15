@@ -58,11 +58,11 @@ def get_device(u, deviceID):
         info = u.get_device(deviceID)
 
         print("get-device")
-        print(f"  ID:      {info.ID}")
-        print(f"  IP:      {info.address}  {info.subnet}  {info.gateway}")
-        print(f"  MAC:     {info.MAC}")
-        print(f"  version: {info.version}")
-        print(f"  date:    {info.date}")
+        print(f"  ID:       {info.ID}")
+        print(f"  IP:       {info.address}  {info.subnet}  {info.gateway}")
+        print(f"  MAC:      {info.MAC}")
+        print(f"  version:  {info.version}")
+        print(f"  released: {info.date}")
         print()
 
     except Exception as e:
