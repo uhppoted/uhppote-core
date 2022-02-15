@@ -11,30 +11,32 @@ def usage():
     print()
     print("  Usage: python example.py <command>")
     print()
+    print("         python example.py help for a list of commands")
+    print()
 
 
 def help():
-    print("")
+    print()
     print("Usage: python example.py <command>")
-    print("")
+    print()
     print("  commands")
     print("    get-devices")
     print("    get-device")
     print("    help")
-    print("")
+    print()
     print("  get-devices")
     print(
         "    Retrieves a list of UHPPOTE controller IDs findable on the local LAN."
     )
-    print("")
+    print()
     print("  get-device")
     print(
         "    Retrieves the basic device information for a single UHPPOTE controller."
     )
-    print("")
+    print()
     print("  help")
     print("    Displays this information.")
-    print("")
+    print()
 
 
 def get_devices(u):

@@ -6,14 +6,12 @@
   - [ ] C#
         - [x] uhppoted class
         - [x] Use 'controller' class for constructor
-        - [ ] namespace
         - [ ] get-device
-        - [ ] 'all'
-        - [ ] 'usage'
-        - [ ] 'help'
+        - [ ] namespace
+        - [x] 'all'
+        - [x] 'usage'
+        - [x] 'help'
         - [ ] Implement IDisposable (for using)
-        - (?) Marshal UHPPOTE as an IntPtr
-        - https://stackoverflow.com/questions/736474/c-how-to-pass-null-to-a-function-expecting-a-ref/736481#736481
   
   - [ ] Cross-compile
         - https://github.com/elastic/golang-crossbuild
