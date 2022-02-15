@@ -5,7 +5,7 @@
 - Shared-lib/DLL
   - [ ] C#
         - [x] uhppoted class
-        - [ ] Use 'controller' class for constructor
+        - [x] Use 'controller' class for constructor
         - [ ] namespace
         - [ ] get-device
         - [ ] 'all'
