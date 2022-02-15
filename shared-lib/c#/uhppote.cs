@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices; 
+using System.Text;
 
 [StructLayout(LayoutKind.Sequential)]
 public class udevice {
@@ -14,7 +15,7 @@ public class udevice {
     }
 };
 
-public struct UHPPOTE {
+struct UHPPOTE {
 	public string bind;
 	public string broadcast;
 	public string listen;
@@ -23,9 +24,13 @@ public struct UHPPOTE {
 	public bool   debug;
 };
 
-public struct GoGetDevices {
+struct GoGetDevices {
 	public int N;
     public string err;
+}
+
+public class UhppotedException : Exception {
+    public UhppotedException(string message): base(message) {}
 }
 
 public class uhppoted {
@@ -76,11 +81,15 @@ public class uhppoted {
             N += 16;
             slice = new uint[N];
             rv = GetDevices(ref this.u,N, slice);
+
+            if (rv.err != null && rv.err != "") {
+               throw new UhppotedException(rv.err);
+            }
         } while (N < rv.N);
 
         uint[] list = new uint[rv.N];
 
-        Array.Copy(slice , list , list.Length);
+        Array.Copy(slice,list ,list.Length);
 
         return list;
     }

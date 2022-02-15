@@ -63,13 +63,12 @@ shared-lib-c: lib
 	clang -o $(LIBC)/example/example $(LIBC)/example/example.c $(LIBC)/example/device.c $(LIBC)/src/uhppoted.c -I$(LIB) -L$(LIB) -luhppoted
 	export DYLD_LIBRARY_PATH=$(LIB) && $(LIBC)/example/example all
 
-shared-lib-c++: lib
+shared-lib-cpp: lib
 	clang -std=c++11 -lc++ -o $(LIBCPP)/example/example $(LIBCPP)/example/example.cpp $(LIBCPP)/example/device.cpp $(LIBCPP)/src/uhppoted.cpp -I$(LIB) -L$(LIB) -luhppoted
 	export DYLD_LIBRARY_PATH=$(LIB) && $(LIBCPP)/example/example all
 
 shared-lib-python: lib
 	export DYLD_LIBRARY_PATH=$(LIB) && export PYTHONPATH=$(PYTHONPATH):$(LIBPYTHON) && python $(LIBPYTHON)/example/example.py all
-
 
 # xxx:
 # 	docker run -it --rm \
