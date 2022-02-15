@@ -4,13 +4,20 @@
 
 - Shared-lib/DLL
   - [ ] C#
-        - (?) make GetDevices list a mutable C uint32_t array
+        - [ ] uhppoted class
+        - [ ] namespace
+        - [ ] get-device
+        - [ ] 'all'
+        - [ ] 'usage'
+        - [ ] 'help'
+        - [ ] Implement IDisposable (for using)
+        - (?) Marshal UHPPOTE as an IntPtr
         - https://stackoverflow.com/questions/736474/c-how-to-pass-null-to-a-function-expecting-a-ref/736481#736481
-        - https://www.mono-project.com/docs/advanced/pinvoke/
-
+  
   - [ ] Cross-compile
         - https://github.com/elastic/golang-crossbuild
 
+  - [x] make GetDevices list a mutable C uint32_t array
   - [x] GetDevices - use slice length/capacity
   - [x] Free returned strings
   - [x] Try unsafe.Slice for udevices

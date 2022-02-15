@@ -6,7 +6,7 @@ lib:
 	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so ../../go/main.go
 
 build: 
-	csc /unsafe example.cs
+	csc ../uhppote.cs example.cs
 
 get-devices: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-devices
