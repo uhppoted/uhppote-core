@@ -3,7 +3,12 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
+  - [ ] CCL
+  - [ ] Free returned pointers
+  - [ ] Standardise on returning err only
+
   - [ ] C#
+        - [ ] Capitalise class names
         - [x] uhppoted class
         - [x] Use 'controller' class for constructor
         - [x] get-device

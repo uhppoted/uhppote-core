@@ -47,6 +47,14 @@ import (
 
 func main() {}
 
+//export Woot
+func Woot() *C.char {
+	fmt.Printf("WOOOOT\n")
+
+	return C.CString("y33t")
+	//return nil
+}
+
 //export GetDevices
 func GetDevices(u *C.struct_UHPPOTE, N C.int, list *C.uint) (C.int, *C.char) {
 	uu, err := makeUHPPOTE(u)
