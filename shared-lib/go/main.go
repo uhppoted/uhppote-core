@@ -48,8 +48,13 @@ import (
 func main() {}
 
 //export Woot
-func Woot() *C.char {
-	fmt.Printf("WOOOOT\n")
+func Woot(N *int) *C.char {
+	if N == nil {
+		fmt.Printf("WOOOOT %v\n", N)
+	} else {
+		fmt.Printf("WOOOOT %v\n", *N)
+		*N = 737
+	}
 
 	return C.CString("y33t")
 	//return nil

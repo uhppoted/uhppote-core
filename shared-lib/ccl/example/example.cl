@@ -8,16 +8,29 @@
    (external-call "Woot" :void)
 )
 
-(defun woot () ""
-   (with-macptrs ((v (external-call "Woot" :address)))
+(defun woot (N) ""
+   (with-macptrs ((v (external-call "Woot" :address N :address)))
        (unless (%null-ptr-p v)
          (go-err (go-string v))
        )
    )
 )
 
+;;;; (defun woot2 (N) ""
+;;;;    (with-macptrs ((v (external-call "Woot" :address N :address)))
+;;;;        (unless (%null-ptr-p v)
+;;;;          (go-err (go-string v))
+;;;;        )
+;;;;    )
+;;;; )
+
 (defun debug () "" 
-   (woot)
+   (rlet ((N :signed-long 666))
+      (print (%get-signed-long N))
+      (woot N)
+      (print (%get-signed-long N))
+      "ok"
+   )
 )
 
 (defun go-err (err) ""
