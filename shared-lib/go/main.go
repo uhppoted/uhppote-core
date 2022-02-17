@@ -48,16 +48,23 @@ import (
 func main() {}
 
 //export Woot
-func Woot(N *int) *C.char {
-	if N == nil {
-		fmt.Printf("WOOOOT %v\n", N)
-	} else {
-		fmt.Printf("WOOOOT %v\n", *N)
+func Woot(N *C.int, list *C.uint) *C.char {
+	fmt.Printf("WOOOOT %v %v\n", N, list)
+
+	if N != nil {
+		fmt.Printf("WOOOOT/N %v\n", *N)
 		*N = 737
 	}
 
+	if list != nil {
+		slice := unsafe.Slice(list, 3)
+		fmt.Printf("WOOOOT/list %v\n", slice)
+		slice[0] = 98
+		slice[1] = 76
+		slice[2] = 54
+	}
+
 	return C.CString("y33t")
-	//return nil
 }
 
 //export GetDevices

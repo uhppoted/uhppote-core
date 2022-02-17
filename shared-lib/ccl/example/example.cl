@@ -8,28 +8,25 @@
    (external-call "Woot" :void)
 )
 
-(defun woot (N) ""
-   (with-macptrs ((v (external-call "Woot" :address N :address)))
+(defun woot (N lp) ""
+   (with-macptrs ((v (external-call "Woot" :address N :address lp :address)))
        (unless (%null-ptr-p v)
          (go-err (go-string v))
        )
    )
 )
 
-;;;; (defun woot2 (N) ""
-;;;;    (with-macptrs ((v (external-call "Woot" :address N :address)))
-;;;;        (unless (%null-ptr-p v)
-;;;;          (go-err (go-string v))
-;;;;        )
-;;;;    )
-;;;; )
-
 (defun debug () "" 
-   (rlet ((N :signed-long 666))
-      (print (%get-signed-long N))
-      (woot N)
-      (print (%get-signed-long N))
-      "ok"
+   (multiple-value-bind (l lp) (make-heap-ivector 3 '(unsigned-byte 32))
+    (setf (aref l 0) 135)
+    (setf (aref l 1) 248)
+    (setf (aref l 2) 667)
+    (rlet ((N :signed-long 666))
+         (print (list "BEFORE" (%get-signed-long N) l lp))
+         (woot N lp)
+         (print (list "AFTER" (%get-signed-long N) l lp))
+         "ok"
+      )
    )
 )
 
