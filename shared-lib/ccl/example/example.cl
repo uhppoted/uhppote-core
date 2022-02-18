@@ -1,27 +1,55 @@
-(open-shared-library "libuhppoted.so")
+(open-shared-library "libuhppoted-debug.so")
 
 (defun uhppoted-externs () ""
-   (external "GetDevicesN")
+   (external "GetDevices")
 )
 
-(defun demo () ""                                                  
-   (external-call "GetDevicesN" :void)
+(define-condition on-uhppote-error (error)
+   ((message :initarg :message :reader message))
 )
 
 (defun get-devices (N lp) ""
-   (with-macptrs ((v (external-call "GetDevicesN" :address (%null-ptr) :address N :address lp :address)))
+   (with-macptrs ((v (external-call "GetDevices" :address (%null-ptr) :address N :address lp :address)))
        (unless (%null-ptr-p v)
-         (go-err (go-string v))
+         (error 'on-uhppote-error :message (go-string v))
        )
    )
 )
 
 (defun debug () "" 
-   (multiple-value-bind (l lp) (make-heap-ivector 10 '(unsigned-byte 32))
-    (rlet ((N :signed-long 10))
-         (get-devices N lp)
-         (print (list "get-devices" (%get-signed-long N) l lp))
-         "ok"
+   (handler-bind
+      ((on-uhppote-error
+         #'(lambda (c) 
+              (format t "*** ERROR: ~a" (message c))
+              (invoke-restart 'return-value nil)
+           )
+         )
+      )
+      (multiple-value-bind (l lp) (make-heap-ivector 10 '(unsigned-byte 32))
+         (rlet ((N :signed-long 10))
+            (get-devices N lp)
+            (print (list "get-devices" (%get-signed-long N) l lp))
+            "ok"
+         )
+      )
+   )
+)
+
+(defun debug-error () "" 
+   (handler-bind
+      ((on-uhppote-error
+         #'(lambda (c) 
+              (format t "*** ERROR: ~a" (message c))
+              (invoke-restart 'return-value nil)
+           )
+         )
+      )
+      (multiple-value-bind (l lp) (make-heap-ivector 10 '(unsigned-byte 32))
+         (rlet ((N :signed-long 10))
+            (get-devices N (%null-ptr))
+            (print (list "get-devices" (%get-signed-long N) l lp))
+            "ok"
+         )
       )
    )
 )

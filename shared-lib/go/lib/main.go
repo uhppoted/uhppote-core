@@ -50,40 +50,6 @@ import (
 
 func main() {}
 
-//export GetDevicesN
-func GetDevicesN(u *C.struct_UHPPOTEN, N *C.int, list *C.uint) *C.char {
-	if N == nil {
-		return C.CString("invalid argument (N) - expected valid pointer")
-	}
-
-	if list == nil {
-		return C.CString("invalid argument (list) - expected valid pointer to list")
-	}
-
-	uu, err := makeUHPPOTE(nil)
-	if err != nil {
-		return C.CString(err.Error())
-	}
-
-	devices, err := uu.GetDevices()
-	if err != nil {
-		return C.CString(err.Error())
-	}
-
-	slice := unsafe.Slice(list, *N)
-	for ix, device := range devices {
-		if ix < int(*N) {
-			slice[ix] = C.uint(device.SerialNumber)
-		} else {
-			break
-		}
-	}
-
-	*N = C.int(len(devices))
-
-	return nil
-}
-
 //export GetDevices
 func GetDevices(u *C.struct_UHPPOTE, N C.int, list *C.uint) (C.int, *C.char) {
 	uu, err := makeUHPPOTE(u)

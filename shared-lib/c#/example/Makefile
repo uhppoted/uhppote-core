@@ -3,7 +3,7 @@ CMD=mono example.exe
 
 lib: 
 	go fmt ../../go/...
-	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so ../../go/main.go
+	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so ../../go/lib/main.go
 
 build: 
 	csc ../uhppoted.cs example.cs

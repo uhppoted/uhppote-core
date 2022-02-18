@@ -42,7 +42,7 @@ build-all: test vet
 	env GOOS=linux   GOARCH=arm GOARM=7 go build -trimpath ./...
 	env GOOS=darwin  GOARCH=amd64       go build -trimpath ./...
 	env GOOS=windows GOARCH=amd64       go build -trimpath ./...
-	# env CC_FOR_TARGET=????? CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -trimpath -buildmode=c-shared shared-lib/go/main.go
+	# env CC_FOR_TARGET=????? CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -trimpath -buildmode=c-shared shared-lib/go/lib/main.go
 
 release: test vet
 	env GOOS=linux   GOARCH=amd64       go build -trimpath -o dist/$(DIST)/linux   ./...
@@ -57,7 +57,8 @@ godoc:
 	godoc -http=:80	-index_interval=60s
 
 lib: format
-	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so shared-lib/go/main.go
+	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so shared-lib/go/lib/main.go
+	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted-debug.so shared-lib/go/debug/main.go
 
 shared-lib-c: lib
 	clang -o $(LIBC)/example/example $(LIBC)/example/example.c $(LIBC)/example/device.c $(LIBC)/src/uhppoted.c -I$(LIB) -L$(LIB) -luhppoted

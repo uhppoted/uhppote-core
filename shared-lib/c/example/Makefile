@@ -3,7 +3,7 @@ CMD=./example
 
 lib: 
 	go fmt ../../go/...
-	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so ../../go/main.go
+	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so ../../go/lib/main.go
 
 build: 
 	clang -o example example.c device.c ../src/uhppoted.c -I$(LIB) -L$(LIB) -luhppoted

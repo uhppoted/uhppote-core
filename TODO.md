@@ -7,9 +7,11 @@
   - [ ] Standardise on returning err only
 
   - [ ] CCL
-        - make-struct UHPPOTEN
-        - `get-devices` return list/error
+        - make-struct UHPPOTE
+        - `get-devices` with UHPPOTE
         - `get-device`
+        - ``` > Error: Restart RETURN-VALUE is not active ```
+        - (?) make it a warning (??)
 
   - [ ] C#
         - [ ] Capitalise class names
