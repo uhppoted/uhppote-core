@@ -1,15 +1,15 @@
 (open-shared-library "libuhppoted.so")
 
 (defun uhppoted-externs () ""
-   (external "Woot")
+   (external "GetDevicesN")
 )
 
 (defun demo () ""                                                  
-   (external-call "Woot" :void)
+   (external-call "GetDevicesN" :void)
 )
 
-(defun woot (N lp) ""
-   (with-macptrs ((v (external-call "Woot" :address N :address lp :address)))
+(defun get-devices (N lp) ""
+   (with-macptrs ((v (external-call "GetDevicesN" :address (%null-ptr) :address N :address lp :address)))
        (unless (%null-ptr-p v)
          (go-err (go-string v))
        )
@@ -17,14 +17,10 @@
 )
 
 (defun debug () "" 
-   (multiple-value-bind (l lp) (make-heap-ivector 3 '(unsigned-byte 32))
-    (setf (aref l 0) 135)
-    (setf (aref l 1) 248)
-    (setf (aref l 2) 667)
-    (rlet ((N :signed-long 666))
-         (print (list "BEFORE" (%get-signed-long N) l lp))
-         (woot N lp)
-         (print (list "AFTER" (%get-signed-long N) l lp))
+   (multiple-value-bind (l lp) (make-heap-ivector 10 '(unsigned-byte 32))
+    (rlet ((N :signed-long 10))
+         (get-devices N lp)
+         (print (list "get-devices" (%get-signed-long N) l lp))
          "ok"
       )
    )

@@ -3,9 +3,13 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] CCL
   - [ ] Free returned pointers
   - [ ] Standardise on returning err only
+
+  - [ ] CCL
+        - make-struct UHPPOTEN
+        - `get-devices` return list/error
+        - `get-device`
 
   - [ ] C#
         - [ ] Capitalise class names
