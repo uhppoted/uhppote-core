@@ -8,11 +8,29 @@
    ((message :initarg :message :reader message))
 )
 
-(defun get-devices (N lp) ""
-   (with-macptrs ((v (external-call "GetDevices" :address (%null-ptr) :address N :address lp :address)))
-       (unless (%null-ptr-p v)
-         (error 'on-uhppote-error :message (go-string v))
-       )
+(defun get-devices () ""
+   (multiple-value-bind (l lp) (make-heap-ivector 10 '(unsigned-byte 32))
+      (rlet ((N :signed-long 10))
+         (with-macptrs ((v (external-call "GetDevices" :address (%null-ptr) :address N :address lp :address)))
+            (unless (%null-ptr-p v)
+               (error 'on-uhppote-error :message (go-string v))
+            )
+         )
+      )
+      l
+   )
+)
+
+(defun example () "" 
+   (handler-bind
+      ((on-uhppote-error
+         #'(lambda (c) 
+              (format t "*** ERROR: ~a" (message c))
+              (invoke-restart 'return-value nil)
+           )
+         )
+      )
+      (list "get-devices" (get-devices))
    )
 )
 
@@ -25,38 +43,8 @@
            )
          )
       )
-      (multiple-value-bind (l lp) (make-heap-ivector 10 '(unsigned-byte 32))
-         (rlet ((N :signed-long 10))
-            (get-devices N lp)
-            (print (list "get-devices" (%get-signed-long N) l lp))
-            "ok"
-         )
-      )
+      (list "get-devices" (get-devices))
    )
-)
-
-(defun debug-error () "" 
-   (handler-bind
-      ((on-uhppote-error
-         #'(lambda (c) 
-              (format t "*** ERROR: ~a" (message c))
-              (invoke-restart 'return-value nil)
-           )
-         )
-      )
-      (multiple-value-bind (l lp) (make-heap-ivector 10 '(unsigned-byte 32))
-         (rlet ((N :signed-long 10))
-            (get-devices N (%null-ptr))
-            (print (list "get-devices" (%get-signed-long N) l lp))
-            "ok"
-         )
-      )
-   )
-)
-
-(defun go-err (err) ""
-   (format T "~% *** ERROR ~a~2%" err)
-   nil
 )
 
 (defun go-string (cstr) "Converts a 'C' char * returned by the Go FFI to a string"

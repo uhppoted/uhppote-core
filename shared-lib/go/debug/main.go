@@ -14,9 +14,6 @@ typedef struct udevice {
 	struct udevice *next;
 } udevice;
 
-typedef struct UHPPOTEN {
-} UHPPOTEN;
-
 typedef struct UHPPOTE {
 	const char *bind;
 	const char *broadcast;
@@ -50,7 +47,7 @@ import (
 func main() {}
 
 //export GetDevices
-func GetDevices(u *C.struct_UHPPOTEN, N *C.int, list *C.uint) *C.char {
+func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint) *C.char {
 	if N == nil {
 		return C.CString("invalid argument (N) - expected valid pointer")
 	}

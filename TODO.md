@@ -8,10 +8,16 @@
 
   - [ ] CCL
         - make-struct UHPPOTE
-        - `get-devices` with UHPPOTE
-        - `get-device`
+        - [ ] `get-devices` 
+               - UHPPOTE
+               - loop until n<N
+               - [x] move vector/N to `get-devices`
+        - [ ] `get-device`
+        - [ ] help
+        - [ ] usage
         - ``` > Error: Restart RETURN-VALUE is not active ```
         - (?) make it a warning (??)
+        - https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/
 
   - [ ] C#
         - [ ] Capitalise class names
