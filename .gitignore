@@ -1,4 +1,5 @@
 .DS_Store
+*.swp
 bin
 __pycache__
 

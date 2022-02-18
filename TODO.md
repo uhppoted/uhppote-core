@@ -9,8 +9,9 @@
   - [ ] CCL
         - make-struct UHPPOTE
         - [ ] `get-devices` 
-               - UHPPOTE
                - loop until n<N
+               - UHPPOTE
+               - [x] trim list to N
                - [x] move vector/N to `get-devices`
         - [ ] `get-device`
         - [ ] help

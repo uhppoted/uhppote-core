@@ -16,8 +16,8 @@
                (error 'on-uhppote-error :message (go-string v))
             )
          )
+         (subseq l 0 (%get-signed-long N))
       )
-      l
    )
 )
 
