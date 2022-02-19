@@ -19,11 +19,11 @@ typedef struct device {
     std::string date;
 } device;
 
-class uhppote {
+class uhppoted {
     public:
-        uhppote();
-        uhppote(const std::string& bind, const std::string& broadcast, const std::string& listen, int timeout, const std::vector<controller>& controllers, bool debug);
-        virtual ~uhppote();
+                 uhppoted();
+                 uhppoted(const std::string& bind, const std::string& broadcast, const std::string& listen, int timeout, const std::vector<controller>& controllers, bool debug);
+        virtual ~uhppoted();
 
     public:
         std::vector<uint32_t> get_devices();
@@ -31,4 +31,15 @@ class uhppote {
 
     private:
         UHPPOTE *u;
+};
+
+class uhppoted_exception : public std::exception {
+    public:
+                 uhppoted_exception(char *); 
+        virtual ~uhppoted_exception();
+
+        virtual const char* what() const noexcept;
+
+    private:
+        std::string message;
 };

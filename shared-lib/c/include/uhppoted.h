@@ -19,10 +19,11 @@ typedef struct device {
 } device;
 
 
-char *errmsg();
 void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...);
 void teardown();
 
-int   get_devices(uint32_t **devices, int *N);
-int   get_device (uint32_t id, struct device *);
+const char * errmsg();
+
+int get_devices(uint32_t **devices, int *N);
+int get_device (uint32_t id, struct device *);
 

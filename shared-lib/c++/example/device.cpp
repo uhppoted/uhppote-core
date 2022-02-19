@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int getDevices(uhppote& u) {
+int getDevices(uhppoted& u) {
     try {
         auto devices = u.get_devices();
     
@@ -21,7 +21,7 @@ int getDevices(uhppote& u) {
     return -1;
 }
 
-int getDevice(uhppote& u, uint32_t deviceID) {
+int getDevice(uhppoted& u, uint32_t deviceID) {
     try {
         auto d = u.get_device(deviceID);
       

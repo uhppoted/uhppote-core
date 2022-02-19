@@ -4,8 +4,8 @@
 using namespace std;
 
 void usage();
-extern int getDevices(uhppote&);
-extern int getDevice(uhppote&, uint32_t);
+extern int getDevices(uhppoted&);
+extern int getDevice(uhppoted&, uint32_t);
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
     controller beta  = { .id=303986753, .address="192.168.1.100" };
     vector<controller> controllers = { alpha, beta };
 
-    uhppote u("192.168.1.100:0","192.168.1.255:60000","192.168.1.100:60001", 2, controllers, true);
+    uhppoted u("192.168.1.100:0","192.168.1.255:60000","192.168.1.100:60001", 2, controllers, true);
  
     if (cmd == "get-devices") {
         return getDevices(u);

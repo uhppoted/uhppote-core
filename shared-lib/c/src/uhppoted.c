@@ -9,7 +9,7 @@
 __thread char *err = NULL;
 __thread UHPPOTE *u = NULL;
 
-char *errmsg() {
+const char *errmsg() {
     return err;
 }
 
@@ -73,10 +73,12 @@ void teardown() {
         }        
     }
 
-    free(u);
+    if (err != NULL) {
+        free(err);
+    }
 }
 
-void set_error(const char *errmsg) {
+void set_error(char *errmsg) {
     unsigned l = strlen(errmsg) + 1;
 
     if (err != NULL) {
@@ -86,27 +88,23 @@ void set_error(const char *errmsg) {
     if ((err = malloc(l)) != NULL) {
         snprintf(err, l, "%s", errmsg);            
     }
+
+    free(errmsg);
 }
 
-// All this finagling because you can't return a slice from Go
 int get_devices(uint32_t **devices, int *N) {
     uint32_t *list = NULL;        
-    int size = 0;
-    int count;
+    int allocated = 0;
 
-    do {
-        size += 16;
-        count = size;
-
-        uint32_t *p;        
-        if ((p = realloc(list, size * sizeof(uint32_t))) == NULL) {
+    for (;;) {
+        allocated += 16;
+        if ((list = realloc(list, allocated * sizeof(uint32_t))) == NULL) {
             free(list);
             set_error("Error allocating storage for slice");
             return -1;            
-        } else {
-            list = p;
         }
 
+        int count = allocated;
         char *err = GetDevices(u, &count, list);
         if (err != NULL) {
             free(list);
@@ -114,15 +112,16 @@ int get_devices(uint32_t **devices, int *N) {
             return -1;
         }
 
-    } while (count > size);
+        if (count <= allocated) {
+            *N = count;
+            *devices = malloc(count * sizeof(uint32_t));
 
-    *N = count;
-    *devices = malloc(count * sizeof(uint32_t));
+            memmove(*devices, list, count * sizeof(uint32_t));
+            free(list);
 
-    memmove(*devices, list, count * sizeof(uint32_t));
-    free(list);
-
-    return 0;
+            return 0;
+        }
+    } 
 }
 
 int get_device(unsigned id, struct device *d) {

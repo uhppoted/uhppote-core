@@ -5,9 +5,23 @@
 
 using namespace std;
 
-uhppote::uhppote() {
+uhppoted_exception::uhppoted_exception(char *err) {
+   message = string(err);
+
+   free(err); 
+}
+
+uhppoted_exception::~uhppoted_exception() {
+}
+
+const char * uhppoted_exception::what() const noexcept {
+    return message.c_str();
+}
+  
+uhppoted::uhppoted() {
     u = NULL;
 }
+
 
 /* (optional) setup for UHPPOTE network configuration. Defaults to:
  * - bind:        0.0.0.0:0
@@ -18,9 +32,7 @@ uhppote::uhppote() {
  * - debug:       false
  *
  */ 
-uhppote::uhppote(const string& bind, const string& broadcast, const string& listen, int timeout, const vector<controller>& controllers, bool debug) {
-    uhppote();
-  
+uhppoted::uhppoted(const string& bind, const string& broadcast, const string& listen, int timeout, const vector<controller>& controllers, bool debug) : uhppoted() {
     if ((u = new UHPPOTE) != NULL) {
         u->bind = bind.c_str();
         u->broadcast = broadcast.c_str();
@@ -51,7 +63,7 @@ uhppote::uhppote(const string& bind, const string& broadcast, const string& list
     }
 }
 
-uhppote::~uhppote() {
+uhppoted::~uhppoted() {
     if (u != NULL) {
         udevice *d = u->devices;
 
@@ -66,37 +78,36 @@ uhppote::~uhppote() {
 	delete u;
 }
 
-// All this finagling because you can't return a slice from Go
-vector<uint32_t> uhppote::get_devices() {
+vector<uint32_t> uhppoted::get_devices() {
     vector<uint32_t> list;        
-    int size = 0;
-    int count;
+    int allocated = 0;
 
-    do {
-        size += 16;
-        count = size;
-        list.resize(size);
+    for (;;) {
+        allocated += 16;
+        list.resize(allocated);
 
+        int count = allocated;
         char *err = GetDevices(u, &count, list.data());
         if (err != NULL) {
-            throw runtime_error(err);
+            throw uhppoted_exception(err);
         }
 
-    } while (count > size);
+        if (count <= allocated) {
+           vector<uint32_t> devices;
+           for (int i=0; i<count; i++) {
+               devices.push_back(list[i]);
+           }
 
-    vector<uint32_t> devices;
-    for (int i=0; i<count; i++) {
-        devices.push_back(list[i]);
-    }
-
-    return devices;
+           return devices;            
+        }
+    } 
 }
 
-struct device uhppote::get_device(uint32_t id) {
+struct device uhppoted::get_device(uint32_t id) {
     struct GetDevice_return rc = GetDevice(u,id);
 
     if (rc.r1 != NULL) {
-        throw runtime_error(rc.r1);
+        throw uhppoted_exception(rc.r1);
     } else {
         device d;
 

@@ -3,7 +3,10 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] Free returned pointers
+  - [ ] Free returned err pointers
+        - [x] C
+        - [x] C++
+
   - [ ] Standardise on returning err only
         - [x] `get-devices`
               - [x] C
@@ -17,6 +20,9 @@
               - [ ] Python
               - [ ] C#
               - [ ] CCL
+
+  - [x] C++ Rename to uhppoted
+  - [ ] C# Capitalise class names
 
   - [ ] CCL
         - make-struct UHPPOTE
@@ -32,16 +38,7 @@
         - (?) make it a warning (??)
         - https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/
 
-  - [ ] C#
-        - [ ] Capitalise class names
-        - [x] uhppoted class
-        - [x] Use 'controller' class for constructor
-        - [x] get-device
-        - [x] 'all'
-        - [x] 'usage'
-        - [x] 'help'
-        - [x] Implement IDisposable (for using)
-        - [x] namespace
+
   
   - [ ] Cross-compile
         - https://github.com/elastic/golang-crossbuild
