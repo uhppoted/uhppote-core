@@ -87,24 +87,26 @@ namespace uhppoted {
        }
    
        [DllImport( "libuhppoted.so")]
-       private static extern GoGetDevices GetDevices(ref UHPPOTE u,int N,uint[] list);
+       private static extern string GetDevices(ref UHPPOTE u,ref int N,uint[] list);
    
        public uint[] GetDevices() {
-           GoGetDevices rv;
            int N = 0;
+           int count = N;
            uint[] slice;
    
            do {
                N += 16;
+               count = N;
                slice = new uint[N];
-               rv = GetDevices(ref this.u,N, slice);
+
+               string err = GetDevices(ref this.u,ref count, slice);
    
-               if (rv.err != null && rv.err != "") {
-                  throw new UhppotedException(rv.err);
+               if (err != null && err != "") {
+                  throw new UhppotedException(err);
                }
-           } while (N < rv.N);
+           } while (N < count);
    
-           uint[] list = new uint[rv.N];
+           uint[] list = new uint[count];
    
            Array.Copy(slice,list ,list.Length);
    

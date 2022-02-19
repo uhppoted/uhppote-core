@@ -90,12 +90,13 @@ void set_error(const char *errmsg) {
 
 // All this finagling because you can't return a slice from Go
 int get_devices(uint32_t **devices, int *N) {
-    struct GetDevices_return rc;
     uint32_t *list = NULL;        
     int size = 0;
+    int count;
 
     do {
         size += 16;
+        count = size;
 
         uint32_t *p;        
         if ((p = realloc(list, size * sizeof(uint32_t))) == NULL) {
@@ -106,19 +107,19 @@ int get_devices(uint32_t **devices, int *N) {
             list = p;
         }
 
-        rc = GetDevices(u, size, list);
-        if (rc.r1 != NULL) {
+        char *err = GetDevices(u, &count, list);
+        if (err != NULL) {
             free(list);
-            set_error(rc.r1);
+            set_error(err);
             return -1;
         }
 
-    } while (rc.r0 > size);
+    } while (count > size);
 
-    *N = rc.r0;
-    *devices = malloc(rc.r0 * sizeof(uint32_t));
+    *N = count;
+    *devices = malloc(count * sizeof(uint32_t));
 
-    memmove(*devices, list, rc.r0 * sizeof(uint32_t));
+    memmove(*devices, list, count * sizeof(uint32_t));
     free(list);
 
     return 0;

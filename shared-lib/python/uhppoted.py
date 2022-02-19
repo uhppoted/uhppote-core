@@ -57,21 +57,22 @@ class Uhppote:
 
     def get_devices(self):
         GetDevices = lib.GetDevices
-        GetDevices.argtypes = [POINTER(GoUHPPOTE), ctypes.c_int, POINTER(ctypes.c_uint32)]
-        GetDevices.restype = (GoGetDevicesResult)
+        GetDevices.argtypes = [POINTER(GoUHPPOTE), POINTER(ctypes.c_int), POINTER(ctypes.c_uint32)]
+        GetDevices.restype = ctypes.c_char_p
 
         N = 0
         while True:
             N = N + 16
+            count = ctypes.c_int(N)
             list = (c_uint32 * N)(*[0] * N)
-            result = lib.GetDevices(self._uhppote, N, list)
+            err = lib.GetDevices(self._uhppote, ctypes.byref(count), list)
 
-            if result.err:
+            if err:
                 raise Exception(f"{result.err.decode('utf-8')}")
-            elif result.N <= N:
+            elif count.value <= N:
                 break
 
-        return list[0:result.N]
+        return list[0:count.value]
 
 
     def get_device(self, deviceID):
@@ -135,10 +136,6 @@ class GoDevice(Structure):
         ('version', c_char_p),
         ('date', c_char_p),
     ]
-
-
-class GoGetDevicesResult(Structure):
-    _fields_ = [('N', c_int), ('err', c_char_p)]
 
 
 class GoGetDeviceResult(Structure):

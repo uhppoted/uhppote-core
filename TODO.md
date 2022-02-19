@@ -5,6 +5,18 @@
 - Shared-lib/DLL
   - [ ] Free returned pointers
   - [ ] Standardise on returning err only
+        - [x] `get-devices`
+              - [x] C
+              - [x] C++
+              - [x] Python
+              - [x] C#
+              - [x] CCL
+        - [ ] `get-device`
+              - [ ] C
+              - [ ] C++
+              - [ ] Python
+              - [ ] C#
+              - [ ] CCL
 
   - [ ] CCL
         - make-struct UHPPOTE

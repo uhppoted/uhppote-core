@@ -14,9 +14,6 @@ typedef struct udevice {
 	struct udevice *next;
 } udevice;
 
-typedef struct UHPPOTEN {
-} UHPPOTEN;
-
 typedef struct UHPPOTE {
 	const char *bind;
 	const char *broadcast;
@@ -51,26 +48,37 @@ import (
 func main() {}
 
 //export GetDevices
-func GetDevices(u *C.struct_UHPPOTE, N C.int, list *C.uint) (C.int, *C.char) {
+func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint) *C.char {
+	if N == nil {
+		return C.CString("invalid argument (N) - expected valid pointer")
+	}
+
+	if list == nil {
+		return C.CString("invalid argument (list) - expected valid pointer to list")
+	}
+
 	uu, err := makeUHPPOTE(u)
 	if err != nil {
-		return 0, C.CString(err.Error())
+		return C.CString(err.Error())
 	}
 
-	if devices, err := uu.GetDevices(); err != nil {
-		return 0, C.CString(err.Error())
-	} else {
-		slice := unsafe.Slice(list, N)
-		for ix, device := range devices {
-			if ix < int(N) {
-				slice[ix] = C.uint(device.SerialNumber)
-			} else {
-				break
-			}
+	devices, err := uu.GetDevices()
+	if err != nil {
+		return C.CString(err.Error())
+	}
+
+	slice := unsafe.Slice(list, *N)
+	for ix, device := range devices {
+		if ix < int(*N) {
+			slice[ix] = C.uint(device.SerialNumber)
+		} else {
+			break
 		}
-
-		return C.int(len(devices)), nil
 	}
+
+	*N = C.int(len(devices))
+
+	return nil
 }
 
 //export GetDevice

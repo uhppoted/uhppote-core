@@ -68,23 +68,24 @@ uhppote::~uhppote() {
 
 // All this finagling because you can't return a slice from Go
 vector<uint32_t> uhppote::get_devices() {
-    struct GetDevices_return rc;
     vector<uint32_t> list;        
     int size = 0;
+    int count;
 
     do {
         size += 16;
+        count = size;
         list.resize(size);
 
-        rc = GetDevices(u, size, list.data());
-        if (rc.r1 != NULL) {
-            throw runtime_error(rc.r1);
+        char *err = GetDevices(u, &count, list.data());
+        if (err != NULL) {
+            throw runtime_error(err);
         }
 
-    } while (rc.r0 > size);
+    } while (count > size);
 
     vector<uint32_t> devices;
-    for (int i=0; i<rc.r0; i++) {
+    for (int i=0; i<count; i++) {
         devices.push_back(list[i]);
     }
 
