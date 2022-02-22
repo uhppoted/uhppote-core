@@ -16,7 +16,7 @@
               - [ ] CCL
 
   - [x] C++ Rename to uhppoted
-  - [ ] C# Capitalise class names
+  - [x] C# Capitalise class names
 
   - [ ] CCL
         - make-struct UHPPOTE

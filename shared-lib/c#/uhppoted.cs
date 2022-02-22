@@ -3,11 +3,11 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 namespace uhppoted {
-   public class controller {
+   public class Controller {
        public uint     ID;
        public string   address;
    
-       public controller(uint ID, string address) {
+       public Controller(uint ID, string address) {
           this.ID = ID;
           this.address = address;
        }
@@ -37,13 +37,13 @@ namespace uhppoted {
        }
    };
    
-   public class uhppoted: IDisposable {
+   public class Uhppoted: IDisposable {
        private UHPPOTE u = new UHPPOTE();
    
-       public uhppoted() {
+       public Uhppoted() {
        }
    
-       public uhppoted(string bind,string broadcast,string listen,int timeout,controller []controllers,bool debug) {
+       public Uhppoted(string bind,string broadcast,string listen,int timeout,Controller []controllers,bool debug) {
            this.u.bind = bind;
            this.u.broadcast = broadcast;
            this.u.listen = listen;
@@ -52,7 +52,7 @@ namespace uhppoted {
    
            IntPtr p = IntPtr.Zero;
            for (int ix=0; ix<controllers.Length; ix++) {
-               controller c = controllers[ix];
+               Controller c = controllers[ix];
                udevice d;
    
                d.ID = c.ID;
@@ -67,7 +67,7 @@ namespace uhppoted {
            this.u.devices = p;
        }
    
-       ~uhppoted() {
+       ~Uhppoted() {
            dispose();
        }
    

@@ -1,8 +1,6 @@
 using System;
 
-using Uhppoted = uhppoted.uhppoted;
-using Controller = uhppoted.controller;
-using Device  = uhppoted.Device;
+using uhppoted;
 
 public class example {
     public static void Main(string[] args) {
