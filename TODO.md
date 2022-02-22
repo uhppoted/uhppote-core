@@ -8,12 +8,6 @@
         - [x] C++
 
   - [ ] Standardise on returning err only
-        - [x] `get-devices`
-              - [x] C
-              - [x] C++
-              - [x] Python
-              - [x] C#
-              - [x] CCL
         - [ ] `get-device`
               - [ ] C
               - [ ] C++

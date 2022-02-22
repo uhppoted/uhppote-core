@@ -33,13 +33,14 @@ class uhppoted {
         UHPPOTE *u;
 };
 
-class uhppoted_exception : public std::exception {
+// Ref. https://www.boost.org/community/error_handling.html
+class uhppoted_exception : public virtual std::exception {
     public:
                  uhppoted_exception(char *); 
         virtual ~uhppoted_exception();
 
-        virtual const char* what() const noexcept;
+        virtual const char *what() const noexcept;
 
     private:
-        std::string message;
+        std::shared_ptr<char *> message;
 };

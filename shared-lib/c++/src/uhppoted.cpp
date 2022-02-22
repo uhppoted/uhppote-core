@@ -5,17 +5,17 @@
 
 using namespace std;
 
+// std::make_shared can throw exception - probably better to have
+// a class method to create exception (?)
 uhppoted_exception::uhppoted_exception(char *err) {
-   message = string(err);
-
-   free(err); 
+   message = std::make_shared<char *>(err);
 }
 
 uhppoted_exception::~uhppoted_exception() {
 }
 
 const char * uhppoted_exception::what() const noexcept {
-    return message.c_str();
+    return *message;
 }
   
 uhppoted::uhppoted() {
