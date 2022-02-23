@@ -15,14 +15,15 @@
               - [ ] C#
               - [ ] CCL
 
+  - [ ] Python: use `errcheck` attribute
   - [x] C++ Rename to uhppoted
   - [x] C# Capitalise class names
 
   - [ ] CCL
         - make-struct UHPPOTE
         - [ ] `get-devices` 
-               - loop until n<N
                - UHPPOTE
+               - [x] loop until n<N
                - [x] trim list to N
                - [x] move vector/N to `get-devices`
         - [ ] `get-device`
@@ -32,19 +33,8 @@
         - (?) make it a warning (??)
         - https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/
 
-
-  
   - [ ] Cross-compile
         - https://github.com/elastic/golang-crossbuild
-
-  - [x] make GetDevices list a mutable C uint32_t array
-  - [x] GetDevices - use slice length/capacity
-  - [x] Free returned strings
-  - [x] Try unsafe.Slice for udevices
-  - [x] Rename to uhppoted
-  - [x] C++ wrapper
-  - [x] C wrapper
-  - [x] Python wrapper
 
 - [ ] Check UHPPOTE encoding for revised Date implementation
       - should return Date{} for 0000...
