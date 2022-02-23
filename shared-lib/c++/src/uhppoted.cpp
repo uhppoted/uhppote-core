@@ -5,10 +5,10 @@
 
 using namespace std;
 
-// std::make_shared can throw exception - probably better to have
-// a class method to create exception (?)
+// NTS: std::make_shared can throw an exception but there doesn't seem
+//      to be a clean alternative
 uhppoted_exception::uhppoted_exception(char *err) {
-   message = std::make_shared<char *>(err);
+   message = make_shared<char *>(err);
 }
 
 uhppoted_exception::~uhppoted_exception() {

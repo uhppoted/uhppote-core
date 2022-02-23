@@ -4,8 +4,7 @@
 
 - Shared-lib/DLL
   - [ ] Free returned err pointers
-        - [x] C
-        - [x] C++
+        - [ ] CCL
 
   - [ ] Standardise on returning err only
         - [ ] `get-device`
@@ -20,12 +19,8 @@
   - [x] C# Capitalise class names
 
   - [ ] CCL
-        - make-struct UHPPOTE
         - [ ] `get-devices` 
-               - UHPPOTE
-               - [x] loop until n<N
-               - [x] trim list to N
-               - [x] move vector/N to `get-devices`
+               - make-struct UHPPOTE
         - [ ] `get-device`
         - [ ] help
         - [ ] usage

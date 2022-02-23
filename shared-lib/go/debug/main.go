@@ -49,6 +49,11 @@ func main() {}
 
 //export GetDevices
 func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint) *C.char {
+	fmt.Printf(">>>> UHPPOTE: %v\n", u)
+	if u != nil {
+		fmt.Printf(">>>> >>> UHPPOTE: %#v\n", u)
+	}
+
 	if N == nil {
 		return C.CString("invalid argument (N) - expected valid pointer")
 	}
