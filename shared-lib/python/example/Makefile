@@ -1,21 +1,24 @@
 LIB=../../lib
 GO=GODEBUG=cgocheck=2
-DLL=export DYLD_LIBRARY_PATH=$(LIB) 
+DLL=export DYLD_LIBRARY_PATH=$(LIB)/lib
 WRAPPER=export PYTHONPATH=$(PYTHONPATH):..
-CMD=$(GO) && $(DLL) && $(WRAPPER) && python example.py 
+CMD=python example.py 
 
 lib: 
 	go fmt ../../go/...
-	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so       ../../go/lib/main.go
-	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted-debug.so ../../go/debug/main.go
+	go build -trimpath -buildmode=c-shared -o $(LIB)/lib/libuhppoted.so   ../../go/lib/main.go
+	go build -trimpath -buildmode=c-shared -o $(LIB)/debug/libuhppoted.so ../../go/debug/main.go
 
 build: 
 
 get-devices: build
-	$(CMD) get-devices
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-devices
 
 get-device: build
-	$(CMD) get-device
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-device
 
 run: build
-	$(CMD) all
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) all
+
+debug: build
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD)  all

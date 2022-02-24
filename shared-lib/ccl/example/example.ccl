@@ -1,4 +1,4 @@
-(open-shared-library "libuhppoted-debug.so")
+(open-shared-library "../../lib/lib/libuhppoted.so")
 
 (defun uhppoted-externs () ""
    (external "GetDevices")
@@ -19,6 +19,14 @@
   )
 )
 
+(def-foreign-type nil
+  (:struct :UDEVICE
+           (:id      :int)
+           (:address :address)
+           (:next    :address)
+  )
+)
+
 (defun get-devices (&optional (N 16)) ""
    (destructuring-bind  (p q) (get-devices-n N)
       (cond ((>= N p) (subseq q 0 p))
@@ -28,21 +36,37 @@
 )
 
 (defun get-devices-n (max) ""
-    (multiple-value-bind (devices pdevices) (make-heap-ivector max '(unsigned-byte 32))
-       (rlet ((pU (:struct :UHPPOTE) 
-                  :bind      (%null-ptr)
-                  :broadcast (%null-ptr)
-                  :listen    (%null-ptr)
-                  :timeout   13 
-                  :devices   (%null-ptr) 
-                  :debug     1)
-              (pN :signed-long max))
-          (with-macptrs ((err (external-call "GetDevices" :address pU :address pN :address pdevices :address)))
-             (unless (%null-ptr-p err)
-                (error 'on-uhppote-error :message (go-string err))
+    (with-cstrs ((bind      "192.168.1.100")
+                 (broadcast "192.168.1.100:60000")
+                 (listen    "192.168.1.100:60001")
+                 (alpha     "192.168.1.100")
+                 (beta      "192.168.1.100"))
+       (rlet ((palpha (:struct UDEVICE)
+                      :id      303986753
+                      :address alpha
+                      :next    (%null-ptr))
+              (pbeta (:struct UDEVICE)
+                      :id      405419896
+                      :address beta
+                      :next    palpha)
+             )
+          (multiple-value-bind (devices pdevices) (make-heap-ivector max '(unsigned-byte 32))
+             (rlet ((pU (:struct :UHPPOTE) 
+                         :bind      bind
+                         :broadcast broadcast
+                         :listen    listen
+                         :timeout   1
+                         :devices   pbeta
+                         :debug     1)
+                    (pN :signed-long max))
+                (with-macptrs ((err (external-call "GetDevices" :address pU :address pN :address pdevices :address)))
+                   (unless (%null-ptr-p err)
+                      (error 'on-uhppote-error :message (go-string err))
+                   )
+                )
+                (list (%get-signed-long pN) devices)
              )
           )
-          (list (%get-signed-long pN) devices)
        )
     )
 )

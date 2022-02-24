@@ -4,10 +4,6 @@ package main
 #include <stdbool.h>
 #include <stdint.h>
 
-typedef struct UnmanagedStruct {
-    int n;
-} UnmanagedStruct;
-
 typedef struct udevice {
 	uint32_t    id;
 	const char *address;
@@ -49,11 +45,6 @@ func main() {}
 
 //export GetDevices
 func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint) *C.char {
-	fmt.Printf(">>>> UHPPOTE: %v\n", u)
-	if u != nil {
-		fmt.Printf(">>>> >>> UHPPOTE: %#v\n", u)
-	}
-
 	if N == nil {
 		return C.CString("invalid argument (N) - expected valid pointer")
 	}
@@ -62,7 +53,7 @@ func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint) *C.char {
 		return C.CString("invalid argument (list) - expected valid pointer to list")
 	}
 
-	_, err := makeUHPPOTE(nil)
+	_, err := makeUHPPOTE(u)
 	if err != nil {
 		return C.CString(err.Error())
 	}

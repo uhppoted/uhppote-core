@@ -4,10 +4,6 @@ package main
 #include <stdbool.h>
 #include <stdint.h>
 
-typedef struct UnmanagedStruct {
-    int n;
-} UnmanagedStruct;
-
 typedef struct udevice {
 	uint32_t    id;
 	const char *address;

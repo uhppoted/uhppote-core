@@ -1,15 +1,19 @@
-# LIB=../../lib
-LIB=.
-CMD=ccl64
+LIB=../../lib
+CMD=ccl64 --load example.ccl
+
+.PHONY: debug
 
 lib: 
 	go fmt ../../go/...
-	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so       ../../go/lib/main.go
-	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted-debug.so ../../go/debug/main.go
+	go build -trimpath -buildmode=c-shared -o $(LIB)/lib/libuhppoted.so   ../../go/lib/main.go
+	go build -trimpath -buildmode=c-shared -o $(LIB)/debug/libuhppoted.so ../../go/debug/main.go
 
-# build: 
-# 	csc ../uhppoted.cs example.cs
-# 
+build: 
+	GODEBUG=cgocheck=2 && $(CMD)
+
+debug: 
+	GODEBUG=cgocheck=2 && $(CMD)
+
 # usage: build
 # 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD)
 # 

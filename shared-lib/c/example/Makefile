@@ -3,17 +3,20 @@ CMD=./example
 
 lib: 
 	go fmt ../../go/...
-	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so       ../../go/lib/main.go
-	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted-debug.so ../../go/debug/main.go
+	go build -trimpath -buildmode=c-shared -o $(LIB)/lib/libuhppoted.so   ../../go/lib/main.go
+	go build -trimpath -buildmode=c-shared -o $(LIB)/debug/libuhppoted.so ../../go/debug/main.go
 
 build: 
-	clang -o example example.c device.c ../src/uhppoted.c -I$(LIB) -L$(LIB) -luhppoted
+	clang -o example example.c device.c ../src/uhppoted.c -I$(LIB)/lib -L$(LIB)/lib -luhppoted
 
 get-devices: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-devices
+	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/lib && $(CMD) get-devices
 
 get-device: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-device
+	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/lib && $(CMD) get-device
 
 run: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) all
+	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/lib && $(CMD) all
+
+debug: build
+	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) all

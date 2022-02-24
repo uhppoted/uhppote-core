@@ -57,8 +57,8 @@ godoc:
 	godoc -http=:80	-index_interval=60s
 
 lib: format
-	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so shared-lib/go/lib/main.go
-	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted-debug.so shared-lib/go/debug/main.go
+	go build -trimpath -buildmode=c-shared -o $(LIB)/lib/libuhppoted.so   shared-lib/go/lib/main.go
+	go build -trimpath -buildmode=c-shared -o $(LIB)/debug/libuhppoted.so shared-lib/go/debug/main.go
 
 shared-lib-c: lib
 	clang -o $(LIBC)/example/example $(LIBC)/example/example.c $(LIBC)/example/device.c $(LIBC)/src/uhppoted.c -I$(LIB) -L$(LIB) -luhppoted

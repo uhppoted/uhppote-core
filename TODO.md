@@ -3,8 +3,25 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] Free returned err pointers
-        - [ ] CCL
+  - [ ] CCL
+        - [x] `get-devices` 
+               - [x] UHPPOTE
+                 - [x] bind
+                 - [x] broadcast
+                 - [x] listen
+                 - [x] timeout
+                 - [x] debug
+                 - [x] devices
+        - [ ] Free returned err pointer
+        - [ ] `get-device`
+        - [ ] help
+        - [ ] usage
+        - [ ] https://stackoverflow.com/questions/833314/compiling-binaries-with-clozure-common-lisp
+        - ``` > Error: Restart RETURN-VALUE is not active ```
+        - (?) make it a warning (??)
+        - https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/
+        - https://lispwannabe.wordpress.com/2010/01/25/clozure-common-lisp-ffi-mini-tutorial/
+        - https://lispwannabe.wordpress.com/tag/clozure/
 
   - [ ] Standardise on returning err only
         - [ ] `get-device`
@@ -17,16 +34,6 @@
   - [ ] Python: use `errcheck` attribute
   - [x] C++ Rename to uhppoted
   - [x] C# Capitalise class names
-
-  - [ ] CCL
-        - [ ] `get-devices` 
-               - make-struct UHPPOTE
-        - [ ] `get-device`
-        - [ ] help
-        - [ ] usage
-        - ``` > Error: Restart RETURN-VALUE is not active ```
-        - (?) make it a warning (??)
-        - https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/
 
   - [ ] Cross-compile
         - https://github.com/elastic/golang-crossbuild
