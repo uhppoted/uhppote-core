@@ -5,7 +5,7 @@
 - Shared-lib/DLL
   - [ ] CCL
         - [ ] Separate out `uhppoted`
-              - [ ] function as parameter
+              - [x] function as parameter
               - [ ] `devices` list as parameter
         - [ ] Free returned err pointer
         - [ ] ``` > Error: Restart RETURN-VALUE is not active ```
