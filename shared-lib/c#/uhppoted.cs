@@ -113,12 +113,12 @@ namespace uhppoted {
        }
    
        [DllImport( "libuhppoted.so")]
-       private static extern string GetDeviceX (ref UHPPOTE u,uint deviceID,ref GoDevice device);
+       private static extern string GetDevice (ref UHPPOTE u,uint deviceID,ref GoDevice device);
    
        public Device GetDevice(uint deviceID) {
            GoDevice device = new GoDevice();
 
-           string err = GetDeviceX(ref this.u, deviceID, ref device);
+           string err = GetDevice(ref this.u, deviceID, ref device);
            if (err != null && err != "") {
                throw new UhppotedException(err);
            }

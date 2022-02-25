@@ -20,13 +20,13 @@
         - https://lispwannabe.wordpress.com/2010/01/25/clozure-common-lisp-ffi-mini-tutorial/
         - https://lispwannabe.wordpress.com/tag/clozure/
 
-  - [ ] Standardise on returning err only
-        - [ ] `get-device`
+  - [x] Standardise on returning err only
+        - [x] `get-device`
               - [x] C
               - [x] C++
               - [x] Python
               - [x] C#
-              - [ ] Remove old GetDevice
+              - [x] Remove old GetDevice
 
   - [ ] Python: use `errcheck` attribute
 

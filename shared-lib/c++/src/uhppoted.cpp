@@ -106,7 +106,7 @@ vector<uint32_t> uhppoted::get_devices() {
 struct device uhppoted::get_device(uint32_t id) {
     struct Device device;
 
-    char *err  = GetDeviceX(u,id, &device);
+    char *err  = GetDevice(u,id, &device);
     if (err != NULL) {
         throw uhppoted_exception(err);
     }

@@ -127,7 +127,7 @@ int get_devices(uint32_t **devices, int *N) {
 int get_device(unsigned id, struct device *d) {
     struct Device device;
     
-    char *err = GetDeviceX(u,id,&device);
+    char *err = GetDevice(u,id,&device);
     if (err != NULL) {
         set_error(err);
         return -1;

@@ -76,7 +76,7 @@ class Uhppote:
 
 
     def get_device(self, deviceID):
-        GetDevice = lib.GetDeviceX
+        GetDevice = lib.GetDevice
         GetDevice.argtypes = [POINTER(GoUHPPOTE), c_ulong]
         GetDevice.restype = ctypes.c_char_p
 

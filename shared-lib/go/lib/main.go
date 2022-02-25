@@ -78,30 +78,34 @@ func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint) *C.char {
 }
 
 //export GetDevice
-func GetDevice(u *C.struct_UHPPOTE, deviceID uint32) (C.struct_Device, *C.char) {
+func GetDevice(u *C.struct_UHPPOTE, deviceID uint32, d *C.struct_Device) *C.char {
+	if d == nil {
+		return C.CString("invalid argument (device) - expected valid pointer to Device struct")
+	}
+
 	uu, err := makeUHPPOTE(u)
 	if err != nil {
-		return C.struct_Device{}, C.CString(err.Error())
+		return C.CString(err.Error())
 	}
 
 	device, err := uu.GetDevice(deviceID)
 	if err != nil {
-		return C.struct_Device{}, C.CString(err.Error())
+		return C.CString(err.Error())
 	}
 
 	if device == nil {
-		return C.struct_Device{}, C.CString(fmt.Errorf("No device found for %v", deviceID).Error())
+		return C.CString(fmt.Errorf("No device found for %v", deviceID).Error())
 	}
 
-	return C.struct_Device{
-		ID:      C.ulong(device.SerialNumber),
-		address: C.CString(fmt.Sprintf("%v", device.IpAddress)),
-		subnet:  C.CString(fmt.Sprintf("%v", device.SubnetMask)),
-		gateway: C.CString(fmt.Sprintf("%v", device.Gateway)),
-		MAC:     C.CString(fmt.Sprintf("%v", device.MacAddress)),
-		version: C.CString(fmt.Sprintf("%v", device.Version)),
-		date:    C.CString(fmt.Sprintf("%v", device.Date)),
-	}, nil
+	d.ID = C.ulong(deviceID)
+	d.address = C.CString("192.168.1.101")
+	d.subnet = C.CString("255.255.255.0")
+	d.gateway = C.CString("192.168.1.1")
+	d.MAC = C.CString("00:12:23:34:45:56")
+	d.version = C.CString("v8.92")
+	d.date = C.CString("2018-11-05")
+
+	return nil
 }
 
 //export GetDeviceX
