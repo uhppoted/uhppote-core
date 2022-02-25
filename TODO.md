@@ -3,12 +3,14 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
+  - [ ] Rework UHPPOTE.devices as array of struct/pointer to struct
+
   - [ ] CCL
+        - [ ] Free returned err pointer
+        - [ ] ``` > Error: Restart RETURN-VALUE is not active ```
         - [ ] Separate out `uhppoted`
               - [x] function as parameter
               - [ ] `devices` list as parameter
-        - [ ] Free returned err pointer
-        - [ ] ``` > Error: Restart RETURN-VALUE is not active ```
         - [ ] `get-device`
         - [ ] help
         - [ ] usage

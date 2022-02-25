@@ -125,27 +125,29 @@ int get_devices(uint32_t **devices, int *N) {
 }
 
 int get_device(unsigned id, struct device *d) {
-    struct GetDevice_return rc = GetDevice(u,id);
-
-    if (rc.r1 != NULL) {        
-        set_error(rc.r1);
+    struct Device device;
+    
+    char *err = GetDeviceX(u,id,&device);
+    if (err != NULL) {
+        set_error(err);
         return -1;
     }
 
-    d->ID = rc.r0.ID;
-    snprintf(d->address, sizeof(d->address), "%s", rc.r0.address);
-    snprintf(d->subnet,  sizeof(d->subnet),  "%s", rc.r0.subnet);
-    snprintf(d->gateway, sizeof(d->gateway), "%s", rc.r0.gateway);
-    snprintf(d->MAC,     sizeof(d->MAC),     "%s", rc.r0.MAC);
-    snprintf(d->version, sizeof(d->version), "%s", rc.r0.version);
-    snprintf(d->date,    sizeof(d->date),    "%s", rc.r0.date);
+    d->ID = device.ID;
+    
+    snprintf(d->address, sizeof(d->address), "%s", device.address);
+    snprintf(d->subnet,  sizeof(d->subnet),  "%s", device.subnet);
+    snprintf(d->gateway, sizeof(d->gateway), "%s", device.gateway);
+    snprintf(d->MAC,     sizeof(d->MAC),     "%s", device.MAC);
+    snprintf(d->version, sizeof(d->version), "%s", device.version);
+    snprintf(d->date,    sizeof(d->date),    "%s", device.date);
 
-    free(rc.r0.address);
-    free(rc.r0.subnet);
-    free(rc.r0.gateway);
-    free(rc.r0.MAC);
-    free(rc.r0.version);
-    free(rc.r0.date);
+    free(device.address);
+    free(device.subnet);
+    free(device.gateway);
+    free(device.MAC);
+    free(device.version);
+    free(device.date);
 
     return 0;
 }

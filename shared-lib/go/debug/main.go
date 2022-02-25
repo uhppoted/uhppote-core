@@ -101,6 +101,28 @@ func GetDevice(u *C.struct_UHPPOTE, deviceID uint32) (C.struct_Device, *C.char) 
 	}, nil
 }
 
+//export GetDeviceX
+func GetDeviceX(u *C.struct_UHPPOTE, deviceID uint32, d *C.struct_Device) *C.char {
+	if d == nil {
+		return C.CString("invalid argument (device) - expected valid pointer to Device struct")
+	}
+
+	_, err := makeUHPPOTE(u)
+	if err != nil {
+		return C.CString(err.Error())
+	}
+
+	d.ID = C.ulong(deviceID)
+	d.address = C.CString("192.168.1.101")
+	d.subnet = C.CString("255.255.255.0")
+	d.gateway = C.CString("192.168.1.1")
+	d.MAC = C.CString("00:12:23:34:45:56")
+	d.version = C.CString("v8.92")
+	d.date = C.CString("2018-11-05")
+
+	return nil
+}
+
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 	bind := types.BindAddr{IP: []byte{0, 0, 0, 0}, Port: 0}
 	broadcast := types.BroadcastAddr{IP: []byte{255, 255, 255, 255}, Port: 60000}

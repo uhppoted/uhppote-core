@@ -104,6 +104,11 @@ func GetDevice(u *C.struct_UHPPOTE, deviceID uint32) (C.struct_Device, *C.char) 
 	}, nil
 }
 
+//export GetDeviceX
+func GetDeviceX(u *C.struct_UHPPOTE, deviceID uint32, d *C.struct_Device) *C.char {
+	return C.CString("NOT IMPLEMENTED")
+}
+
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 	bind := types.BindAddr{IP: []byte{0, 0, 0, 0}, Port: 0}
 	broadcast := types.BroadcastAddr{IP: []byte{255, 255, 255, 255}, Port: 60000}
