@@ -99,8 +99,7 @@ namespace uhppoted {
                count = N;
                slice = new uint[N];
 
-               string err = GetDevices(ref this.u,ref count, slice);
-   
+               string err = GetDevices(ref this.u, ref count, slice);
                if (err != null && err != "") {
                   throw new UhppotedException(err);
                }
@@ -114,22 +113,23 @@ namespace uhppoted {
        }
    
        [DllImport( "libuhppoted.so")]
-       private static extern GoGetDevice GetDevice (ref UHPPOTE u,uint deviceID);
+       private static extern string GetDeviceX (ref UHPPOTE u,uint deviceID,ref GoDevice device);
    
        public Device GetDevice(uint deviceID) {
-           GoGetDevice rv = GetDevice(ref this.u,deviceID);
-   
-           if (rv.err != null && rv.err != "") {
-               throw new UhppotedException(rv.err);
+           GoDevice device = new GoDevice();
+
+           string err = GetDeviceX(ref this.u, deviceID, ref device);
+           if (err != null && err != "") {
+               throw new UhppotedException(err);
            }
    
-           return new Device(rv.device.ID,
-                             rv.device.address,
-                             rv.device.subnet,
-                             rv.device.gateway,
-                             rv.device.MAC,
-                             rv.device.version,
-                             rv.device.date);
+           return new Device(device.ID,
+                             device.address,
+                             device.subnet,
+                             device.gateway,
+                             device.MAC,
+                             device.version,
+                             device.date);
        }
    }
    
@@ -147,20 +147,7 @@ namespace uhppoted {
        public IntPtr devices;  // (optional) linked list of device address
        public bool   debug;
    };
-   
-   // Return value for interop function GetDevices - for some reason the compiler thinks it's never initialised
-   // Ref. https://stackoverflow.com/questions/3820985/suppressing-is-never-used-and-is-never-assigned-to-warnings-in-c-sharp/3821035#3821035
-   #pragma warning disable 0649
-   struct GoGetDevices {
-       public int N;
-       public string err;
-   };
-   
-   struct GoGetDevice {
-       public GoDevice device;
-       public string err;
-   };
-   
+
    struct GoDevice {
        public uint   ID;
        public string address;
@@ -170,5 +157,9 @@ namespace uhppoted {
        public string version;
        public string date;
    };
+   
+   // Return value for interop function GetDevices - for some reason the compiler thinks it's never initialised
+   // Ref. https://stackoverflow.com/questions/3820985/suppressing-is-never-used-and-is-never-assigned-to-warnings-in-c-sharp/3821035#3821035
+   #pragma warning disable 0649
    #pragma warning restore 0649
 }

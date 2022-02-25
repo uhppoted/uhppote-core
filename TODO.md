@@ -25,8 +25,7 @@
               - [x] C
               - [x] C++
               - [x] Python
-              - [ ] C#
-              - [ ] CCL
+              - [x] C#
               - [ ] Remove old GetDevice
 
   - [ ] Python: use `errcheck` attribute
