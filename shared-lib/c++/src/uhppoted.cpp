@@ -104,21 +104,29 @@ vector<uint32_t> uhppoted::get_devices() {
 }
 
 struct device uhppoted::get_device(uint32_t id) {
-    struct GetDevice_return rc = GetDevice(u,id);
+    struct Device device;
 
-    if (rc.r1 != NULL) {
-        throw uhppoted_exception(rc.r1);
-    } else {
-        device d;
-
-        d.ID = rc.r0.ID;
-        d.address = rc.r0.address;
-        d.subnet = rc.r0.subnet;
-        d.gateway = rc.r0.gateway;
-        d.MAC = rc.r0.MAC;
-        d.version = rc.r0.version;
-        d.date = rc.r0.date;        
-
-        return d;
+    char *err  = GetDeviceX(u,id, &device);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
     }
+
+    struct device d;
+
+    d.ID      = device.ID;
+    d.address = device.address;
+    d.subnet  = device.subnet;
+    d.gateway = device.gateway;
+    d.MAC     = device.MAC;
+    d.version = device.version;
+    d.date    = device.date;        
+
+    free(device.address);
+    free(device.subnet);
+    free(device.gateway);
+    free(device.MAC);
+    free(device.version);
+    free(device.date);
+
+    return d;
 }

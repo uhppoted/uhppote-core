@@ -22,8 +22,8 @@
 
   - [ ] Standardise on returning err only
         - [ ] `get-device`
-              - [ ] C
-              - [ ] C++
+              - [x] C
+              - [x] C++
               - [ ] Python
               - [ ] C#
               - [ ] CCL
