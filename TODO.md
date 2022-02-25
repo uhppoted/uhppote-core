@@ -24,13 +24,12 @@
         - [ ] `get-device`
               - [x] C
               - [x] C++
-              - [ ] Python
+              - [x] Python
               - [ ] C#
               - [ ] CCL
+              - [ ] Remove old GetDevice
 
   - [ ] Python: use `errcheck` attribute
-  - [x] C++ Rename to uhppoted
-  - [x] C# Capitalise class names
 
   - [ ] Cross-compile
         - https://github.com/elastic/golang-crossbuild

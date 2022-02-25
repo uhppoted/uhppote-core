@@ -21,4 +21,4 @@ run: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) all
 
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD)  all
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-device

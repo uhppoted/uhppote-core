@@ -65,10 +65,10 @@ class Uhppote:
             N = N + 16
             count = ctypes.c_int(N)
             list = (c_uint32 * N)(*[0] * N)
-            err = lib.GetDevices(self._uhppote, ctypes.byref(count), list)
+            err = GetDevices(self._uhppote, ctypes.byref(count), list)
 
             if err:
-                raise Exception(f"{result.err.decode('utf-8')}")
+                raise Exception(f"{err.decode('utf-8')}")
             elif count.value <= N:
                 break
 
@@ -76,21 +76,23 @@ class Uhppote:
 
 
     def get_device(self, deviceID):
-        GetDevice = lib.GetDevice
+        GetDevice = lib.GetDeviceX
         GetDevice.argtypes = [POINTER(GoUHPPOTE), c_ulong]
-        GetDevice.restype = (GoGetDeviceResult)
+        GetDevice.restype = ctypes.c_char_p
 
-        result = lib.GetDevice(self._uhppote, deviceID)
+        device = GoDevice()
 
-        if result.r1:
-            raise Exception(f"{result.r1.decode('utf-8')}")
+        err = GetDevice(self._uhppote, deviceID, ctypes.byref(device))
+        if err:
+            raise Exception(f"{err.decode('utf-8')}")
         else:
-            return Device(result.r0.ID, result.r0.address.decode('utf-8'),
-                          result.r0.subnet.decode('utf-8'),
-                          result.r0.gateway.decode('utf-8'),
-                          result.r0.MAC.decode('utf-8'),
-                          result.r0.version.decode('utf-8'),
-                          result.r0.date.decode('utf-8'))
+            return Device(device.ID, 
+                          device.address.decode('utf-8'),
+                          device.subnet.decode('utf-8'),
+                          device.gateway.decode('utf-8'),
+                          device.MAC.decode('utf-8'),
+                          device.version.decode('utf-8'),
+                          device.date.decode('utf-8'))
 
 
 # INTERNAL TYPES
@@ -136,7 +138,3 @@ class GoDevice(Structure):
         ('version', c_char_p),
         ('date', c_char_p),
     ]
-
-
-class GoGetDeviceResult(Structure):
-    _fields_ = [('r0', GoDevice), ('r1', c_char_p)]
