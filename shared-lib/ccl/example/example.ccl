@@ -1,7 +1,10 @@
-(open-shared-library "../../lib/lib/libuhppoted.so")
+(open-shared-library (native-translated-namestring (make-pathname :directory (getenv "DYLD_LIBRARY_PATH") 
+                                                                  :name "libuhppoted" 
+                                                                  :type "so")))
 
 (defun uhppoted-externs () ""
-   (external "GetDevices")
+   (list (external "GetDevices")
+         (external "GetDevice"))
 )
 
 (define-condition on-uhppote-error (error)
@@ -42,9 +45,9 @@
                  (alpha     "192.168.1.100")
                  (beta      "192.168.1.100"))
        (rlet ((palpha (:struct UDEVICE)
-                      :id      303986753
-                      :address alpha
-                      :next    (%null-ptr))
+                       :id      303986753
+                       :address alpha
+                       :next    (%null-ptr))
               (pbeta (:struct UDEVICE)
                       :id      405419896
                       :address beta

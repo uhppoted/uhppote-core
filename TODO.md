@@ -13,11 +13,11 @@
                  - [x] debug
                  - [x] devices
         - [ ] Free returned err pointer
+        - [ ] ``` > Error: Restart RETURN-VALUE is not active ```
         - [ ] `get-device`
         - [ ] help
         - [ ] usage
         - [ ] https://stackoverflow.com/questions/833314/compiling-binaries-with-clozure-common-lisp
-        - ``` > Error: Restart RETURN-VALUE is not active ```
         - (?) make it a warning (??)
         - https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/
         - https://lispwannabe.wordpress.com/2010/01/25/clozure-common-lisp-ffi-mini-tutorial/
