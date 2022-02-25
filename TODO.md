@@ -4,14 +4,7 @@
 
 - Shared-lib/DLL
   - [ ] CCL
-        - [x] `get-devices` 
-               - [x] UHPPOTE
-                 - [x] bind
-                 - [x] broadcast
-                 - [x] listen
-                 - [x] timeout
-                 - [x] debug
-                 - [x] devices
+        - [ ] Separate out `uhppoted`
         - [ ] Free returned err pointer
         - [ ] ``` > Error: Restart RETURN-VALUE is not active ```
         - [ ] `get-device`
