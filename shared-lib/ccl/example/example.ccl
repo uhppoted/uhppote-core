@@ -62,7 +62,7 @@
    )
 )
 
-(defun uhppoted (&key (bind-addr "") (broadcast-addr "") (listen-addr "") (timeout 5) (debug NIL)) ""
+(defun uhppoted (f &key (bind-addr "") (broadcast-addr "") (listen-addr "") (timeout 5) (debug NIL)) ""
     (with-cstrs ((bind      bind-addr)
                  (broadcast broadcast-addr)
                  (listen    listen-addr)
@@ -92,7 +92,8 @@
            )
          )
       )
-      (list "get-devices" (uhppoted :bind-addr "192.168.1.100"
+      (list "get-devices" (uhppoted get-devices
+                                    :bind-addr "192.168.1.100"
                                     :broadcast-addr "192.168.1.100"
                                     :listen-addr "192.168.1.100:60001"
                                     :timeout 1
