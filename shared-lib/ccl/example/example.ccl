@@ -62,23 +62,15 @@
    )
 )
 
-(defun uhppoted () ""
-    (with-cstrs ((bind      "192.168.1.100")
+(defun uhppoted (&optional (bind-addr "")) ""
+    (with-cstrs ((bind      bind-addr)
                  (broadcast "192.168.1.100:60000")
                  (listen    "192.168.1.100:60001")
                  (alpha     "192.168.1.100")
                  (beta      "192.168.1.100"))
-       (rlet ((palpha (:struct UDEVICE)
-                       :id      303986753
-                       :address alpha
-                       :next    (%null-ptr))
-              
-              (pbeta (:struct UDEVICE)
-                      :id      405419896
-                      :address beta
-                      :next    palpha)
-              
-              (pU (:struct :UHPPOTE) 
+       (rlet ((palpha (:struct UDEVICE) :id 303986753 :address alpha :next (%null-ptr))
+              (pbeta  (:struct UDEVICE) :id 405419896 :address beta  :next palpha)
+              (uhppote (:struct :UHPPOTE) 
                          :bind      bind
                          :broadcast broadcast
                          :listen    listen
@@ -86,7 +78,7 @@
                          :devices   pbeta
                          :debug     1)
              )
-          (get-devices pU)
+          (get-devices uhppote)
        )
    )
 )
