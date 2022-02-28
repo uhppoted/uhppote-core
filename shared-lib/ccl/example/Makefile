@@ -8,7 +8,7 @@ lib:
 	go build -trimpath -buildmode=c-shared -o $(LIB)/lib/libuhppoted.so   ../../go/lib/main.go
 	go build -trimpath -buildmode=c-shared -o $(LIB)/debug/libuhppoted.so ../../go/debug/main.go
 
-build: 
+run: 
 	$(CMD)
 
 debug: 

@@ -2,14 +2,24 @@
                                                                   :name "libuhppoted" 
                                                                   :type "so")))
 
+
 (defun uhppoted-externs () ""
    (list (external "GetDevices")
-         (external "GetDevice"))
-)
+         (external "GetDevice")))
+
 
 (define-condition on-uhppote-error (error)
-   ((message :initarg :message :reader message))
-)
+   ((message :initarg :message :reader message)))
+
+
+(defstruct device
+           ID 
+           address
+           subnet
+           gateway
+           MAC
+           version
+           date)
 
 (def-foreign-type nil
   (:struct :UHPPOTE
@@ -18,49 +28,68 @@
            (:listen    :address)
            (:timeout   :int)
            (:devices   :address)
-           (:debug     :int)
-  )
-)
+           (:debug     :int)))
+
 
 (def-foreign-type nil
   (:struct :UDEVICE
            (:id      :int)
            (:address :address)
-           (:next    :address)
-  )
-)
+           (:next    :address)))
+
+
+(def-foreign-type nil
+  (:struct :GoDevice
+           (:id      :unsigned-long)
+           (:address :address)
+           (:subnet  :address)
+           (:gateway :address)
+           (:MAC     :address)
+           (:version :address)
+           (:date    :address)))
+
 
 (defun go-string (cstr) "Converts a 'C' char * returned by the Go FFI to a string"
    (cond ((%null-ptr-p cstr) "")
-          (T (format nil "~{~A~}" (go-string-char cstr 0)))
-   )
-)
+          (T (format nil "~{~A~}" (go-string-char cstr 0)))))
+
 
 (defun go-string-char (cstr ix) "Accumulates characters from a 'C' char * until it reaches the \0 terminator"
    (let ((ch (%get-unsigned-byte cstr ix)))
         (cond ((eq ch 0) ())
-               (T (cons (code-char ch) (go-string-char cstr (+ ix 1))))
-        )
-   )
-)
+               (T (cons (code-char ch) (go-string-char cstr (+ ix 1)))))))
+
 
 (defun get-devices (uhppote &optional (N 16)) ""
    (destructuring-bind  (p q) (get-devices-n uhppote N)
       (cond ((>= N p) (subseq q 0 p))
-             (T (get-devices uhppote (+ N 16)))
-      )
-   )
-)
+             (T (get-devices uhppote (+ N 16))))))
+
 
 (defun get-devices-n (uhppote max) ""
    (multiple-value-bind (devices pdevices) (make-heap-ivector max '(unsigned-byte 32))
       (rlet ((N :signed-long max))
          (with-macptrs ((err (external-call "GetDevices" :address uhppote :address N :address pdevices :address)))
             (unless (%null-ptr-p err) (error 'on-uhppote-error :message (go-string err))))
-         (list (%get-signed-long N) devices)
-      )
+         (list (%get-signed-long N) devices))))
+
+
+(defun get-device (uhppote device-id) ""
+   (rlet ((device (:struct :GoDevice)))
+         (with-macptrs ((err (external-call "GetDevice" :address uhppote :unsigned-long device-id :address device :address)))
+            (unless (%null-ptr-p err) (error 'on-uhppote-error :message (go-string err)))
+         )
+         (make-device :id      (%get-unsigned-long device)
+                      :address (%get-cstring       (%get-ptr device 8))
+                      :subnet  (%get-cstring       (%get-ptr device 16))
+                      :gateway (%get-cstring       (%get-ptr device 24))
+                      :MAC     (%get-cstring       (%get-ptr device 32))
+                      :version (%get-cstring       (%get-ptr device 40))
+                      :date    (%get-cstring       (%get-ptr device 48))
+         )
    )
 )
+
 
 (defun uhppoted (f &key (bind-addr "") (broadcast-addr "") (listen-addr "") (timeout 5) (debug NIL)) ""
     (with-cstrs ((bind      bind-addr)
@@ -82,7 +111,8 @@
    )
 )
 
-(defun example () "" 
+
+(defun x-get-devices () "" 
    (handler-bind
       ((on-uhppote-error
          #'(lambda (c) 
@@ -91,23 +121,43 @@
            )
          )
       )
-      (list "get-devices" (uhppoted #'get-devices
-                                    :bind-addr "192.168.1.100"
+      (list "get-devices" (uhppoted #'(lambda (u) (get-devices u))
+                                    :bind-addr      "192.168.1.100"
                                     :broadcast-addr "192.168.1.100"
-                                    :listen-addr "192.168.1.100:60001"
-                                    :timeout 1
-                                    :debug T)))
+                                    :listen-addr    "192.168.1.100:60001"
+                                    :timeout        1
+                                    :debug          T)))
 )
+
+(defun x-get-device () "" 
+   (handler-bind
+      ((on-uhppote-error
+         #'(lambda (c) 
+              (format t "*** ERROR: ~a" (message c))
+              (invoke-restart 'return-value nil)
+           )
+         )
+      )
+      (list "get-device" (uhppoted #'(lambda (u) (get-device u 405419896))
+                                   :bind-addr      "192.168.1.100"
+                                   :broadcast-addr "192.168.1.100"
+                                   :listen-addr    "192.168.1.100:60001"
+                                   :timeout        1
+                                   :debug          T))
+    )
+)
+
 
 (defun debug () "" 
    (handler-bind
       ((on-uhppote-error
          #'(lambda (c) 
-              (format t "*** ERROR: ~a" (message c))
+              (format t "~%*** ERROR: ~a~%~%" (message c))
               (invoke-restart 'return-value nil)
            )
          )
       )
-      (list "get-devices" (uhppoted #'get-devices)))
+      (list "get-device" (uhppoted #'(lambda (u) (get-device u 405419896))))
+    )
 )
 

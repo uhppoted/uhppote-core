@@ -8,33 +8,32 @@
         - [x] C++ clang-format
         - [x] Python yapf
         - [x] C# dotnet-format
+        - [ ] CCL
+              - (?) https://github.com/eschulte/lisp-format
 
+  - [ ] Python: use `errcheck` attribute
+  - [ ] lint
   - [ ] Rework UHPPOTE.devices as array of struct/pointer to struct
 
   - [ ] CCL
-        - [ ] Free returned err pointer
-        - [ ] ``` > Error: Restart RETURN-VALUE is not active ```
+        - [x] `get-device`
+        - [ ] error handling
+              - ``` > Error: Restart RETURN-VALUE is not active ```
+              - free returned err pointer
+
+        - [ ] (dispose-heap-ivector a ap)
         - [ ] Separate out `uhppoted`
-              - [x] function as parameter
               - [ ] `devices` list as parameter
-        - [ ] `get-device`
+              - [ ] Move to its own file
         - [ ] help
         - [ ] usage
+        - [ ] `get-devices` (as a command line argument)
+        - [ ] `get-device` (as a command line argument)
         - [ ] https://stackoverflow.com/questions/833314/compiling-binaries-with-clozure-common-lisp
         - (?) make it a warning (??)
         - https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/
         - https://lispwannabe.wordpress.com/2010/01/25/clozure-common-lisp-ffi-mini-tutorial/
         - https://lispwannabe.wordpress.com/tag/clozure/
-
-  - [x] Standardise on returning err only
-        - [x] `get-device`
-              - [x] C
-              - [x] C++
-              - [x] Python
-              - [x] C#
-              - [x] Remove old GetDevice
-
-  - [ ] Python: use `errcheck` attribute
 
   - [ ] Cross-compile
         - https://github.com/elastic/golang-crossbuild
