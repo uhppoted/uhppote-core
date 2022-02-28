@@ -10,12 +10,12 @@ int getDevices() {
     if (get_devices(&devices, &N) < 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
-    } 
+    }
 
     printf("\nget-devices (%d)\n", N);
     if (N > 0 && devices != NULL) {
-        for (int i=0; i<N; i++) {
-            printf("   %u\n", devices[i]);        
+        for (int i = 0; i < N; i++) {
+            printf("   %u\n", devices[i]);
         }
     }
     printf("\n");
@@ -31,14 +31,14 @@ int getDevice(uint32_t deviceID) {
     if (get_device(deviceID, &d) != 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
-    } 
-      
+    }
+
     printf("\nget-device\n");
     printf("  ID:       %u\n", d.ID);
-    printf("  IP:       %s  %s  %s\n",  d.address,d.subnet,d.gateway);
-    printf("  MAC:      %s\n",  d.MAC);
-    printf("  version:  %s\n",  d.version);
-    printf("  released: %s\n",  d.date);
+    printf("  IP:       %s  %s  %s\n", d.address, d.subnet, d.gateway);
+    printf("  MAC:      %s\n", d.MAC);
+    printf("  version:  %s\n", d.version);
+    printf("  released: %s\n", d.date);
     printf("\n");
 
     return 0;

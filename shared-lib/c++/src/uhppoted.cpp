@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <iostream>
+#include <stdlib.h>
 
 #include "../include/uhppoted.hpp"
 
@@ -8,20 +8,19 @@ using namespace std;
 // NTS: std::make_shared can throw an exception but there doesn't seem
 //      to be a clean alternative
 uhppoted_exception::uhppoted_exception(char *err) {
-   message = make_shared<char *>(err);
+    message = make_shared<char *>(err);
 }
 
 uhppoted_exception::~uhppoted_exception() {
 }
 
-const char * uhppoted_exception::what() const noexcept {
+const char *uhppoted_exception::what() const noexcept {
     return *message;
 }
-  
+
 uhppoted::uhppoted() {
     u = NULL;
 }
-
 
 /* (optional) setup for UHPPOTE network configuration. Defaults to:
  * - bind:        0.0.0.0:0
@@ -31,8 +30,8 @@ uhppoted::uhppoted() {
  * - controllers: (none)
  * - debug:       false
  *
- */ 
-uhppoted::uhppoted(const string& bind, const string& broadcast, const string& listen, int timeout, const vector<controller>& controllers, bool debug) : uhppoted() {
+ */
+uhppoted::uhppoted(const string &bind, const string &broadcast, const string &listen, int timeout, const vector<controller> &controllers, bool debug) : uhppoted() {
     if ((u = new UHPPOTE) != NULL) {
         u->bind = bind.c_str();
         u->broadcast = broadcast.c_str();
@@ -43,23 +42,23 @@ uhppoted::uhppoted(const string& bind, const string& broadcast, const string& li
 
         udevice *q = NULL;
         udevice *previous = NULL;
-        for (auto p : controllers){
+        for (auto p : controllers) {
             if ((q = new udevice) != NULL) {
                 // NTS: because the controllers may go out of scope after the invocation of the
                 //      constructor and c_str() returns a pointer to the underlying string char
                 //      array
-                size_t N    = p.address.size()+1;
-                char  *addr = new char[N];
-                p.address.copy(addr,N);
+                size_t N = p.address.size() + 1;
+                char *addr = new char[N];
+                p.address.copy(addr, N);
 
                 q->id = p.id;
-                q->address = addr; 
+                q->address = addr;
                 q->next = previous;
                 previous = q;
             }
         }
 
-		u->devices = q;
+        u->devices = q;
     }
 }
 
@@ -72,14 +71,14 @@ uhppoted::~uhppoted() {
             delete[] d->address;
             delete d;
             d = next;
-        }        
+        }
     }
 
-	delete u;
+    delete u;
 }
 
 vector<uint32_t> uhppoted::get_devices() {
-    vector<uint32_t> list;        
+    vector<uint32_t> list;
     int allocated = 0;
 
     for (;;) {
@@ -93,33 +92,33 @@ vector<uint32_t> uhppoted::get_devices() {
         }
 
         if (count <= allocated) {
-           vector<uint32_t> devices;
-           for (int i=0; i<count; i++) {
-               devices.push_back(list[i]);
-           }
+            vector<uint32_t> devices;
+            for (int i = 0; i < count; i++) {
+                devices.push_back(list[i]);
+            }
 
-           return devices;            
+            return devices;
         }
-    } 
+    }
 }
 
 struct device uhppoted::get_device(uint32_t id) {
     struct Device device;
 
-    char *err  = GetDevice(u,id, &device);
+    char *err = GetDevice(u, id, &device);
     if (err != NULL) {
         throw uhppoted_exception(err);
     }
 
     struct device d;
 
-    d.ID      = device.ID;
+    d.ID = device.ID;
     d.address = device.address;
-    d.subnet  = device.subnet;
+    d.subnet = device.subnet;
     d.gateway = device.gateway;
-    d.MAC     = device.MAC;
+    d.MAC = device.MAC;
     d.version = device.version;
-    d.date    = device.date;        
+    d.date = device.date;
 
     free(device.address);
     free(device.subnet);

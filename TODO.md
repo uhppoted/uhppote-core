@@ -3,6 +3,12 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
+  - [x] Format
+        - [x] C clang-format
+        - [x] C++ clang-format
+        - [x] Python yapf
+        - [x] C# dotnet-format
+
   - [ ] Rework UHPPOTE.devices as array of struct/pointer to struct
 
   - [ ] CCL

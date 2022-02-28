@@ -1,27 +1,29 @@
-#include <iostream>
 #include "../include/uhppoted.hpp"
+#include <iostream>
 
 using namespace std;
 
 void usage();
-extern int getDevices(uhppoted&);
-extern int getDevice(uhppoted&, uint32_t);
+extern int getDevices(uhppoted &);
+extern int getDevice(uhppoted &, uint32_t);
 
 int main(int argc, char **argv) {
     if (argc < 2) {
-        cerr << endl << "*** ERROR missing command" << endl << endl;
+        cerr << endl
+             << "*** ERROR missing command" << endl
+             << endl;
         usage();
         return -1;
     }
 
     string cmd(argv[1]);
 
-    controller alpha = { .id=405419896, .address="192.168.1.100" };
-    controller beta  = { .id=303986753, .address="192.168.1.100" };
-    vector<controller> controllers = { alpha, beta };
+    controller alpha = {.id = 405419896, .address = "192.168.1.100"};
+    controller beta = {.id = 303986753, .address = "192.168.1.100"};
+    vector<controller> controllers = {alpha, beta};
 
-    uhppoted u("192.168.1.100:0","192.168.1.255:60000","192.168.1.100:60001", 2, controllers, true);
- 
+    uhppoted u("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2, controllers, true);
+
     if (cmd == "get-devices") {
         return getDevices(u);
     } else if (cmd == "get-device") {
@@ -32,7 +34,9 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    cerr << endl << "*** ERROR invalid command '" << cmd << "'" << endl << endl;
+    cerr << endl
+         << "*** ERROR invalid command '" << cmd << "'" << endl
+         << endl;
 
     return -1;
 }

@@ -6,7 +6,11 @@ lib:
 	go build -trimpath -buildmode=c-shared -o $(LIB)/lib/libuhppoted.so   ../../go/lib/main.go
 	go build -trimpath -buildmode=c-shared -o $(LIB)/debug/libuhppoted.so ../../go/debug/main.go
 
-build: 
+format:
+	dotnet format --include ../*.cs --folder
+	dotnet format --include *.cs --folder
+
+build: format
 	csc ../uhppoted.cs example.cs
 
 usage: build

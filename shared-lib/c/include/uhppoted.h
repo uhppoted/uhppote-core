@@ -1,10 +1,10 @@
 #pragma once
 
-#include <stdint.h> 
-#include <stdbool.h> 
+#include <stdbool.h>
+#include <stdint.h>
 
 typedef struct controller {
-    uint32_t    id;
+    uint32_t id;
     const char *address;
 } controller;
 
@@ -18,12 +18,10 @@ typedef struct device {
     char date[11];
 } device;
 
-
 void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...);
 void teardown();
 
-const char * errmsg();
+const char *errmsg();
 
 int get_devices(uint32_t **devices, int *N);
-int get_device (uint32_t id, struct device *);
-
+int get_device(uint32_t id, struct device *);

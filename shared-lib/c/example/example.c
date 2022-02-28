@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../include/uhppoted.h"
 
@@ -18,18 +18,18 @@ int main(int argc, char **argv) {
     int rc = -1;
     char *cmd = argv[1];
 
-    controller alpha = { .id=405419896, .address="192.168.1.100" };
-    controller beta  = { .id=303986753, .address="192.168.1.100" };
+    controller alpha = {.id = 405419896, .address = "192.168.1.100"};
+    controller beta = {.id = 303986753, .address = "192.168.1.100"};
 
-    setup("192.168.1.100:0","192.168.1.255:60000","192.168.1.100:60001", 2, true, &alpha, &beta, NULL);
+    setup("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2, true, &alpha, &beta, NULL);
 
-    if (strncmp(cmd,"get-devices",11) == 0) {
+    if (strncmp(cmd, "get-devices", 11) == 0) {
         rc = getDevices();
-    } else if (strncmp(cmd,"get-device",10) == 0) {
+    } else if (strncmp(cmd, "get-device", 10) == 0) {
         rc = getDevice(405419896);
-    } else if (strncmp(cmd,"all",3) == 0) {
+    } else if (strncmp(cmd, "all", 3) == 0) {
         rc = 0;
-        
+
         getDevices();
         getDevice(405419896);
     }

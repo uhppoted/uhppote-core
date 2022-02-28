@@ -54,10 +54,13 @@ class Uhppote:
                                       uhppote.listen, uhppote.timeout,
                                       uhppote.controllers, uhppote.debug)
 
-
     def get_devices(self):
         GetDevices = lib.GetDevices
-        GetDevices.argtypes = [POINTER(GoUHPPOTE), POINTER(ctypes.c_int), POINTER(ctypes.c_uint32)]
+        GetDevices.argtypes = [
+            POINTER(GoUHPPOTE),
+            POINTER(ctypes.c_int),
+            POINTER(ctypes.c_uint32)
+        ]
         GetDevices.restype = ctypes.c_char_p
 
         N = 0
@@ -74,7 +77,6 @@ class Uhppote:
 
         return list[0:count.value]
 
-
     def get_device(self, deviceID):
         GetDevice = lib.GetDevice
         GetDevice.argtypes = [POINTER(GoUHPPOTE), c_ulong]
@@ -86,8 +88,7 @@ class Uhppote:
         if err:
             raise Exception(f"{err.decode('utf-8')}")
         else:
-            return Device(device.ID, 
-                          device.address.decode('utf-8'),
+            return Device(device.ID, device.address.decode('utf-8'),
                           device.subnet.decode('utf-8'),
                           device.gateway.decode('utf-8'),
                           device.MAC.decode('utf-8'),
@@ -98,6 +99,7 @@ class Uhppote:
 # INTERNAL TYPES
 class GoController(Structure):
     pass
+
 
 GoController._fields_ = [('id', c_uint32), ('address', c_char_p),
                          ('next', POINTER(GoController))]

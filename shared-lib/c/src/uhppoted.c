@@ -1,10 +1,10 @@
 #include "../include/uhppoted.h"
 #include "libuhppoted.h"
 
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdarg.h>
 
 __thread char *err = NULL;
 __thread UHPPOTE *u = NULL;
@@ -23,13 +23,13 @@ const char *errmsg() {
  *
  * NOTES: 1. https://wiki.sei.cmu.edu/confluence/display/cplusplus/EXP58-CPP.+Pass+an+object+of+the+correct+type+to+va_start
  *        2. https://www.linkedin.com/pulse/modern-c-variadic-functions-how-shoot-yourself-foot-avoid-zinin
- */ 
+ */
 void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...) {
     if (u != NULL) {
         teardown();
     }
 
-    if ((u = (UHPPOTE *) malloc(sizeof(UHPPOTE))) != NULL) {
+    if ((u = (UHPPOTE *)malloc(sizeof(UHPPOTE))) != NULL) {
         u->bind = bind;
         u->broadcast = broadcast;
         u->listen = listen;
@@ -41,15 +41,15 @@ void setup(const char *bind, const char *broadcast, const char *listen, int time
         va_start(args, debug);
 
         controller *p = va_arg(args, controller *);
-        udevice    *q = NULL;
-        udevice    *previous = NULL;
+        udevice *q = NULL;
+        udevice *previous = NULL;
 
         // NTS: duplicates address because the controllers may go out of scope after the invocation of setup(..)
-        while(p != NULL) {
-            if ((q = (udevice *) malloc(sizeof(udevice))) != NULL) {
+        while (p != NULL) {
+            if ((q = (udevice *)malloc(sizeof(udevice))) != NULL) {
                 q->id = p->id;
                 q->address = strdup(p->address);
-                q->next=previous;
+                q->next = previous;
                 previous = q;
             }
 
@@ -67,10 +67,10 @@ void teardown() {
 
         while (d != NULL) {
             udevice *next = d->next;
-            free((char *) d->address); // Known to be malloc'd in setup
+            free((char *)d->address); // Known to be malloc'd in setup
             free(d);
             d = next;
-        }        
+        }
     }
 
     if (err != NULL) {
@@ -86,14 +86,14 @@ void set_error(char *errmsg) {
     }
 
     if ((err = malloc(l)) != NULL) {
-        snprintf(err, l, "%s", errmsg);            
+        snprintf(err, l, "%s", errmsg);
     }
 
     free(errmsg);
 }
 
 int get_devices(uint32_t **devices, int *N) {
-    uint32_t *list = NULL;        
+    uint32_t *list = NULL;
     int allocated = 0;
 
     for (;;) {
@@ -101,7 +101,7 @@ int get_devices(uint32_t **devices, int *N) {
         if ((list = realloc(list, allocated * sizeof(uint32_t))) == NULL) {
             free(list);
             set_error("Error allocating storage for slice");
-            return -1;            
+            return -1;
         }
 
         int count = allocated;
@@ -121,26 +121,26 @@ int get_devices(uint32_t **devices, int *N) {
 
             return 0;
         }
-    } 
+    }
 }
 
 int get_device(unsigned id, struct device *d) {
     struct Device device;
-    
-    char *err = GetDevice(u,id,&device);
+
+    char *err = GetDevice(u, id, &device);
     if (err != NULL) {
         set_error(err);
         return -1;
     }
 
     d->ID = device.ID;
-    
+
     snprintf(d->address, sizeof(d->address), "%s", device.address);
-    snprintf(d->subnet,  sizeof(d->subnet),  "%s", device.subnet);
+    snprintf(d->subnet, sizeof(d->subnet), "%s", device.subnet);
     snprintf(d->gateway, sizeof(d->gateway), "%s", device.gateway);
-    snprintf(d->MAC,     sizeof(d->MAC),     "%s", device.MAC);
+    snprintf(d->MAC, sizeof(d->MAC), "%s", device.MAC);
     snprintf(d->version, sizeof(d->version), "%s", device.version);
-    snprintf(d->date,    sizeof(d->date),    "%s", device.date);
+    snprintf(d->date, sizeof(d->date), "%s", device.date);
 
     free(device.address);
     free(device.subnet);
