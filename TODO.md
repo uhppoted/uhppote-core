@@ -3,20 +3,14 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [x] Format
-        - [x] C clang-format
-        - [x] C++ clang-format
-        - [x] Python yapf
-        - [x] C# dotnet-format
+  - [ ] Format
         - [ ] CCL
               - (?) https://github.com/eschulte/lisp-format
 
-  - [ ] Python: use `errcheck` attribute
-  - [ ] lint
+  - [x] Python: use ctypes `errcheck`
   - [ ] Rework UHPPOTE.devices as array of struct/pointer to struct
 
   - [ ] CCL
-        - [x] `get-device`
         - [ ] error handling
               - ``` > Error: Restart RETURN-VALUE is not active ```
               - free returned err pointer
@@ -35,6 +29,7 @@
         - https://lispwannabe.wordpress.com/2010/01/25/clozure-common-lisp-ffi-mini-tutorial/
         - https://lispwannabe.wordpress.com/tag/clozure/
 
+  - [ ] lint
   - [ ] Cross-compile
         - https://github.com/elastic/golang-crossbuild
 

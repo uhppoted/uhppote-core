@@ -54,6 +54,13 @@ class Uhppote:
                                       uhppote.listen, uhppote.timeout,
                                       uhppote.controllers, uhppote.debug)
 
+    @staticmethod
+    def errcheck(err, func, args):
+        if err:
+            raise Exception(f"{err.decode('utf-8')}")
+        else:
+            return args
+
     def get_devices(self):
         GetDevices = lib.GetDevices
         GetDevices.argtypes = [
@@ -62,17 +69,17 @@ class Uhppote:
             POINTER(ctypes.c_uint32)
         ]
         GetDevices.restype = ctypes.c_char_p
+        GetDevices.errcheck = self.errcheck
 
         N = 0
         while True:
             N = N + 16
             count = ctypes.c_int(N)
             list = (c_uint32 * N)(*[0] * N)
-            err = GetDevices(self._uhppote, ctypes.byref(count), list)
 
-            if err:
-                raise Exception(f"{err.decode('utf-8')}")
-            elif count.value <= N:
+            GetDevices(self._uhppote, ctypes.byref(count), list)
+
+            if count.value <= N:
                 break
 
         return list[0:count.value]
@@ -81,19 +88,18 @@ class Uhppote:
         GetDevice = lib.GetDevice
         GetDevice.argtypes = [POINTER(GoUHPPOTE), c_ulong]
         GetDevice.restype = ctypes.c_char_p
+        GetDevice.errcheck = self.errcheck
 
         device = GoDevice()
 
-        err = GetDevice(self._uhppote, deviceID, ctypes.byref(device))
-        if err:
-            raise Exception(f"{err.decode('utf-8')}")
-        else:
-            return Device(device.ID, device.address.decode('utf-8'),
-                          device.subnet.decode('utf-8'),
-                          device.gateway.decode('utf-8'),
-                          device.MAC.decode('utf-8'),
-                          device.version.decode('utf-8'),
-                          device.date.decode('utf-8'))
+        GetDevice(self._uhppote, deviceID, ctypes.byref(device))
+
+        return Device(device.ID, device.address.decode('utf-8'),
+                      device.subnet.decode('utf-8'),
+                      device.gateway.decode('utf-8'),
+                      device.MAC.decode('utf-8'),
+                      device.version.decode('utf-8'),
+                      device.date.decode('utf-8'))
 
 
 # INTERNAL TYPES
