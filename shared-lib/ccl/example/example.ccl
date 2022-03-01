@@ -59,13 +59,13 @@
                (T (cons (code-char ch) (go-string-char cstr (+ ix 1)))))))
 
 
-(defun get-devices (uhppote &optional (N 16)) ""
-   (destructuring-bind  (p q) (get-devices-n uhppote N)
+(defun uhppoted-get-devices (uhppote &optional (N 16)) ""
+   (destructuring-bind  (p q) (uhppoted-get-devices-n uhppote N)
       (cond ((>= N p) (subseq q 0 p))
-             (T (get-devices uhppote (+ N 16))))))
+             (T (uhppoted-get-devices uhppote (+ N 16))))))
 
 
-(defun get-devices-n (uhppote max) ""
+(defun uhppoted-get-devices-n (uhppote max) ""
    (multiple-value-bind (devices pdevices) (make-heap-ivector max '(unsigned-byte 32))
       (rlet ((N :signed-long max))
          (with-macptrs ((err (external-call "GetDevices" :address uhppote :address N :address pdevices :address)))
@@ -73,7 +73,7 @@
          (list (%get-signed-long N) devices))))
 
 
-(defun get-device (uhppote device-id) ""
+(defun uhppoted-get-device (uhppote device-id) ""
    (rlet ((device (:struct :GoDevice)))
          (with-macptrs ((err (external-call "GetDevice" :address uhppote :unsigned-long device-id :address device :address)))
             (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-string err)))
@@ -107,7 +107,7 @@
              (with-warning (err) (warn err))))))
 
 
-(defun x-get-devices () "" 
+(defun get-devices () "" 
    (handler-bind
       ((uhppoted-error
          #'(lambda (c) 
@@ -116,7 +116,7 @@
            )
          )
       )
-      (list "get-devices" (uhppoted #'(lambda (u) (get-devices u))
+      (list "get-devices" (uhppoted #'(lambda (u) (uhppoted-get-devices u))
                                     :bind-addr      "192.168.1.100"
                                     :broadcast-addr "192.168.1.100"
                                     :listen-addr    "192.168.1.100:60001"
@@ -124,7 +124,7 @@
                                     :debug          T)))
 )
 
-(defun x-get-device () "" 
+(defun get-device () "" 
    (handler-bind
       ((uhppoted-error
          #'(lambda (c) 
@@ -133,7 +133,7 @@
            )
          )
       )
-      (list "get-device" (uhppoted #'(lambda (u) (get-device u 405419896))
+      (list "get-device" (uhppoted #'(lambda (u) (uhppoted-get-device u 405419896))
                                    :bind-addr      "192.168.1.100"
                                    :broadcast-addr "192.168.1.100"
                                    :listen-addr    "192.168.1.100:60001"
@@ -151,7 +151,7 @@
            )
          )
       )
-      (list "get-device" (uhppoted #'(lambda (u) (get-device u 405419896))))
+      (list "get-device" (uhppoted #'(lambda (u) (uhppoted-get-device u 405419896))))
     )
 )
 
