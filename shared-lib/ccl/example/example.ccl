@@ -8,9 +8,8 @@
          (external "GetDevice")))
 
 
-(define-condition on-uhppote-error (error)
+(define-condition uhppoted-error (error)
    ((message :initarg :message :reader message)))
-
 
 (defstruct device
            ID 
@@ -70,25 +69,21 @@
    (multiple-value-bind (devices pdevices) (make-heap-ivector max '(unsigned-byte 32))
       (rlet ((N :signed-long max))
          (with-macptrs ((err (external-call "GetDevices" :address uhppote :address N :address pdevices :address)))
-            (unless (%null-ptr-p err) (error 'on-uhppote-error :message (go-string err))))
+            (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-string err))))
          (list (%get-signed-long N) devices))))
 
 
 (defun get-device (uhppote device-id) ""
    (rlet ((device (:struct :GoDevice)))
          (with-macptrs ((err (external-call "GetDevice" :address uhppote :unsigned-long device-id :address device :address)))
-            (unless (%null-ptr-p err) (error 'on-uhppote-error :message (go-string err)))
-         )
-         (make-device :id      (%get-unsigned-long device)
-                      :address (%get-cstring       (%get-ptr device 8))
-                      :subnet  (%get-cstring       (%get-ptr device 16))
-                      :gateway (%get-cstring       (%get-ptr device 24))
-                      :MAC     (%get-cstring       (%get-ptr device 32))
-                      :version (%get-cstring       (%get-ptr device 40))
-                      :date    (%get-cstring       (%get-ptr device 48))
-         )
-   )
-)
+            (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-string err)))
+            (make-device :id      (%get-unsigned-long device)
+                         :address (%get-cstring (%get-ptr device 8))
+                         :subnet  (%get-cstring (%get-ptr device 16))
+                         :gateway (%get-cstring (%get-ptr device 24))
+                         :MAC     (%get-cstring (%get-ptr device 32))
+                         :version (%get-cstring (%get-ptr device 40))
+                         :date    (%get-cstring (%get-ptr device 48))))))
 
 
 (defun uhppoted (f &key (bind-addr "") (broadcast-addr "") (listen-addr "") (timeout 5) (debug NIL)) ""
@@ -106,18 +101,18 @@
                         :timeout   timeout
                         :devices   pbeta
                         :debug     (cond (debug 1) (T 0))))
-          (funcall f uhppote)
-       )
-   )
-)
+          (restart-case (funcall f uhppote)
+             (ignore () nil)
+          )
+       )))
 
 
 (defun x-get-devices () "" 
    (handler-bind
-      ((on-uhppote-error
+      ((uhppoted-error
          #'(lambda (c) 
-              (format t "*** ERROR: ~a" (message c))
-              (invoke-restart 'return-value nil)
+              (format t "*** ERROR: ~a~%" (message c))
+              (invoke-restart 'ignore)
            )
          )
       )
@@ -131,10 +126,10 @@
 
 (defun x-get-device () "" 
    (handler-bind
-      ((on-uhppote-error
+      ((uhppoted-error
          #'(lambda (c) 
-              (format t "*** ERROR: ~a" (message c))
-              (invoke-restart 'return-value nil)
+              (format t "*** ERROR: ~a~%" (message c))
+              (invoke-restart 'ignore)
            )
          )
       )
@@ -147,13 +142,12 @@
     )
 )
 
-
 (defun debug () "" 
    (handler-bind
-      ((on-uhppote-error
+      ((uhppoted-error
          #'(lambda (c) 
-              (format t "~%*** ERROR: ~a~%~%" (message c))
-              (invoke-restart 'return-value nil)
+              (format t "~%   *** ERROR: ~a~%~%" (message c))
+              (invoke-restart 'ignore)
            )
          )
       )

@@ -3,22 +3,21 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] Format
-        - [ ] CCL
-              - (?) https://github.com/eschulte/lisp-format
+  - [ ] Rework UHPPOTE.devices as array of struct/pointer to struct
 
   - [x] Python: use ctypes `errcheck`
-  - [ ] Rework UHPPOTE.devices as array of struct/pointer to struct
 
   - [ ] CCL
         - [ ] error handling
-              - ``` > Error: Restart RETURN-VALUE is not active ```
+              - [x] `ignore` restart
               - free returned err pointer
 
         - [ ] (dispose-heap-ivector a ap)
         - [ ] Separate out `uhppoted`
               - [ ] `devices` list as parameter
               - [ ] Move to its own file
+        - [ ] Formatting 
+              - https://github.com/eschulte/lisp-format
         - [ ] help
         - [ ] usage
         - [ ] `get-devices` (as a command line argument)
