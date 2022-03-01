@@ -10,6 +10,8 @@
   - [ ] CCL
         - [ ] error handling
               - [x] `ignore` restart
+              - [x] `use-value` restart
+              - [x] `with-warning` restart
               - free returned err pointer
 
         - [ ] (dispose-heap-ivector a ap)

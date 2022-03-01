@@ -103,9 +103,8 @@
                         :debug     (cond (debug 1) (T 0))))
           (restart-case (funcall f uhppote)
              (ignore () nil)
-             (use-value (value) value)
-          )
-       )))
+             (use-value  (value) value)
+             (with-warning (err) (warn err))))))
 
 
 (defun x-get-devices () "" 
@@ -148,7 +147,7 @@
       ((uhppoted-error
          #'(lambda (c) 
               (format t "~%   *** ERROR: ~a~%~%" (message c))
-              (invoke-restart 'use-value "oh noes i can has problem")
+              (invoke-restart 'with-warning "oh noes i can has problem")
            )
          )
       )

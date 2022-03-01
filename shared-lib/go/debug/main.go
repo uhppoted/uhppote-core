@@ -92,8 +92,7 @@ func GetDevice(u *C.struct_UHPPOTE, deviceID uint32, d *C.struct_Device) *C.char
 	d.version = C.CString("v8.92")
 	d.date = C.CString("2018-11-05")
 
-	return C.CString("OOOOOOOOOOOOOOOPS")
-	// return nil
+	return nil
 }
 
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
