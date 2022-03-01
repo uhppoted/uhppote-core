@@ -103,6 +103,7 @@
                         :debug     (cond (debug 1) (T 0))))
           (restart-case (funcall f uhppote)
              (ignore () nil)
+             (use-value (value) value)
           )
        )))
 
@@ -147,11 +148,12 @@
       ((uhppoted-error
          #'(lambda (c) 
               (format t "~%   *** ERROR: ~a~%~%" (message c))
-              (invoke-restart 'ignore)
+              (invoke-restart 'use-value "oh noes i can has problem")
            )
          )
       )
       (list "get-device" (uhppoted #'(lambda (u) (get-device u 405419896))))
     )
 )
+
 
