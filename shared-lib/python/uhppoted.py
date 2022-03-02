@@ -86,7 +86,7 @@ class Uhppote:
 
     def get_device(self, deviceID):
         GetDevice = lib.GetDevice
-        GetDevice.argtypes = [POINTER(GoUHPPOTE), c_ulong]
+        GetDevice.argtypes = [POINTER(GoUHPPOTE), c_ulong, POINTER(GoDevice)]
         GetDevice.restype = ctypes.c_char_p
         GetDevice.errcheck = self.errcheck
 
@@ -104,17 +104,17 @@ class Uhppote:
 
 # INTERNAL TYPES
 class GoController(Structure):
-    pass
+    _fields_ = [('id', c_uint32), ('address', c_char_p)]
 
 
-GoController._fields_ = [('id', c_uint32), ('address', c_char_p),
-                         ('next', POINTER(GoController))]
+class GoControllers(Structure):
+    _fields_ = [('N', c_int), ('devices', POINTER(GoController))]
 
 
 class GoUHPPOTE(Structure):
     _fields_ = [('bind', c_char_p), ('broadcast', c_char_p),
-                ('listen', c_char_p), ('timeout', c_int),
-                ('devices', POINTER(GoController)), ('debug', c_bool)]
+                ('listen', c_char_p), ('timeout', c_int), ('ndevices', c_int),
+                ('devices', POINTER(GoControllers)), ('debug', c_bool)]
 
     def __init__(self, bind, broadcast, listen, timeout, controllers, debug):
         super(GoUHPPOTE, self).__init__()
@@ -125,15 +125,15 @@ class GoUHPPOTE(Structure):
         self.devices = None
         self.debug = c_bool(debug)
 
-        p = None
-        for c in controllers:
-            cc = GoController()
-            cc.id = c_uint32(c.id)
-            cc.address = c_char_p(bytes(c.address, 'utf-8'))
-            cc.next = p
-            p = pointer(cc)
+        N = len(controllers)
+        if N > 0:
+            list = GoControllers(N, (GoController * N)())
 
-        self.devices = p
+            for ix, c in enumerate(controllers):
+                list.devices[ix] = GoController(
+                    c.id, c_char_p(bytes(c.address, 'utf-8')))
+
+            self.devices = pointer(list)
 
 
 class GoDevice(Structure):

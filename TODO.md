@@ -4,16 +4,14 @@
 
 - Shared-lib/DLL
   - [ ] Rework UHPPOTE.devices as array of struct/pointer to struct
-
-  - [x] Python: use ctypes `errcheck`
+        - [ ] C
+        - [ ] C++
+        - [ ] C#
+        - [#] Python
+        - [ ] CCL
 
   - [ ] CCL
-        - [ ] error handling
-              - [x] `ignore` restart
-              - [x] `use-value` restart
-              - [x] `with-warning` restart
-              - free returned err pointer
-
+        - [ ] free returned err pointer
         - [ ] (dispose-heap-ivector a ap)
         - [ ] Separate out `uhppoted`
               - [ ] `devices` list as parameter

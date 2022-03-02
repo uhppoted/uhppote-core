@@ -7,15 +7,19 @@ package main
 typedef struct udevice {
 	uint32_t    id;
 	const char *address;
-	struct udevice *next;
 } udevice;
+
+typedef struct udevices {
+	int      N;        // number of devicess
+	udevice *devices;  // array non-local devices
+} udevices;
 
 typedef struct UHPPOTE {
 	const char *bind;
 	const char *broadcast;
 	const char *listen;
 	int         timeout;  // seconds
-	udevice    *devices;  // (optional) linked list of device address
+	udevices   *devices;  // (optional) list of non-local devices
 	bool        debug;
 } UHPPOTE;
 
@@ -134,21 +138,21 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 
 		debug = bool(u.debug)
 
-		d := u.devices
-		for d != nil {
-			if d.id != 0 {
-				addr, err := types.ResolveAddr(C.GoString(d.address))
-				if err != nil {
-					return nil, err
+		if u.devices != nil && u.devices.N > 0 && u.devices.devices != nil {
+			list := unsafe.Slice(u.devices.devices, u.devices.N)
+			for _, d := range list {
+				if d.id != 0 {
+					addr, err := types.ResolveAddr(C.GoString(d.address))
+					if err != nil {
+						return nil, err
+					}
+
+					devices = append(devices, uhppote.Device{
+						DeviceID: uint32(d.id),
+						Address:  (*net.UDPAddr)(addr),
+					})
 				}
-
-				devices = append(devices, uhppote.Device{
-					DeviceID: uint32(d.id),
-					Address:  (*net.UDPAddr)(addr),
-				})
 			}
-
-			d = d.next
 		}
 	}
 
