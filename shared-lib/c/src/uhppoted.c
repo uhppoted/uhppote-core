@@ -37,9 +37,11 @@ void setup(const char *bind, const char *broadcast, const char *listen, int time
         u->devices = NULL;
         u->debug = debug != 0;
 
-        va_list args;
-        int N = 0;
+        udevices *devices;
+        udevice *list;
+        uint32_t N = 0;
 
+        va_list args;
         {
             va_start(args, debug);
             controller *p = va_arg(args, controller *);
@@ -50,15 +52,13 @@ void setup(const char *bind, const char *broadcast, const char *listen, int time
             va_end(args);
         }
 
-        udevices *devices;
-        udevice *list;
-
         if ((devices = (udevices *)malloc(sizeof(udevices))) == NULL) {
             return;
         }
 
         if ((list = (udevice *)malloc(sizeof(udevice) * N)) == NULL) {
             free(devices);
+            return;
         }
 
         {

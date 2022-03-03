@@ -40,37 +40,46 @@ uhppoted::uhppoted(const string &bind, const string &broadcast, const string &li
         u->devices = NULL;
         u->debug = debug;
 
-        udevice *q = NULL;
-        udevice *previous = NULL;
-        for (auto p : controllers) {
-            if ((q = new udevice) != NULL) {
-                // NTS: because the controllers may go out of scope after the invocation of the
-                //      constructor and c_str() returns a pointer to the underlying string char
-                //      array
-                size_t N = p.address.size() + 1;
-                char *addr = new char[N];
-                p.address.copy(addr, N);
+        udevices *devices;
+        udevice *list;
+        uint32_t N = controllers.size();
+        int ix = 0;
 
-                q->id = p.id;
-                q->address = addr;
-                q->next = previous;
-                previous = q;
-            }
+        if ((devices = new udevices) == NULL) {
+            return;
         }
 
-        u->devices = q;
+        if ((list = new udevice[N]) == NULL) {
+            delete devices;
+            return;
+        }
+
+        for (auto p : controllers) {
+            // NTS: because the controllers may go out of scope after the invocation of the
+            //      constructor and c_str() returns a pointer to the underlying string char
+            //      array
+            size_t N = p.address.size() + 1;
+            char *addr = new char[N];
+            p.address.copy(addr, N);
+
+            list[ix].id = p.id;
+            list[ix].address = addr;
+            ix++;
+        }
+
+        u->devices = devices;
+        u->devices->N = N;
+        u->devices->devices = list;
     }
 }
 
 uhppoted::~uhppoted() {
     if (u != NULL) {
-        udevice *d = u->devices;
+        udevices *devices;
 
-        while (d != NULL) {
-            udevice *next = d->next;
-            delete[] d->address;
-            delete d;
-            d = next;
+        if ((devices = u->devices) != NULL) {
+            delete[] devices->devices;
+            delete devices;
         }
     }
 
