@@ -10,8 +10,8 @@ typedef struct udevice {
 } udevice;
 
 typedef struct udevices {
-	int      N;        // number of devicess
-	udevice *devices;  // array non-local devices
+	uint32_t  N;        // number of devicess
+	udevice  *devices;  // array non-local devices
 } udevices;
 
 typedef struct UHPPOTE {
@@ -36,6 +36,7 @@ struct Device {
 import "C"
 
 import (
+	"fmt"
 	"net"
 	"time"
 	"unsafe"
@@ -154,6 +155,10 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 				}
 			}
 		}
+	}
+
+	for _, v := range devices {
+		fmt.Printf(">>> >> > %v %v\n", v.DeviceID, v.Address)
 	}
 
 	return uhppote.NewUHPPOTE(bind, broadcast, listen, timeout, devices, debug), nil

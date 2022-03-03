@@ -4,8 +4,11 @@
 
 - Shared-lib/DLL
   - [ ] Rework UHPPOTE.devices as array of struct/pointer to struct
-        - [ ] C
+        - [x] Make N uint32
+        - [ ] Update lib/main.go
+        - [x] C
         - [ ] C++
+              - https://stackoverflow.com/questions/2124339/c-preprocessor-va-args-number-of-arguments
         - [ ] C#
         - [#] Python
         - [ ] CCL
@@ -24,6 +27,7 @@
         - [ ] `get-device` (as a command line argument)
         - [ ] https://stackoverflow.com/questions/833314/compiling-binaries-with-clozure-common-lisp
         - (?) make it a warning (??)
+        - [Probably where the extra bytes in the struct come from](https://interrupt.memfault.com/blog/c-struct-padding-initialization)
         - https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/
         - https://lispwannabe.wordpress.com/2010/01/25/clozure-common-lisp-ffi-mini-tutorial/
         - https://lispwannabe.wordpress.com/tag/clozure/

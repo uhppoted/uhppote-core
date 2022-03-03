@@ -38,38 +38,57 @@ void setup(const char *bind, const char *broadcast, const char *listen, int time
         u->debug = debug != 0;
 
         va_list args;
-        va_start(args, debug);
+        int N = 0;
 
-        controller *p = va_arg(args, controller *);
-        udevice *q = NULL;
-        udevice *previous = NULL;
-
-        // NTS: duplicates address because the controllers may go out of scope after the invocation of setup(..)
-        while (p != NULL) {
-            if ((q = (udevice *)malloc(sizeof(udevice))) != NULL) {
-                q->id = p->id;
-                q->address = strdup(p->address);
-                q->next = previous;
-                previous = q;
+        {
+            va_start(args, debug);
+            controller *p = va_arg(args, controller *);
+            while (p != NULL) {
+                N++;
+                p = va_arg(args, controller *);
             }
-
-            p = va_arg(args, controller *);
+            va_end(args);
         }
-        va_end(args);
 
-        u->devices = q;
+        udevices *devices;
+        udevice *list;
+
+        if ((devices = (udevices *)malloc(sizeof(udevices))) == NULL) {
+            return;
+        }
+
+        if ((list = (udevice *)malloc(sizeof(udevice) * N)) == NULL) {
+            free(devices);
+        }
+
+        {
+            va_start(args, debug);
+            controller *p = va_arg(args, controller *);
+            int ix = 0;
+
+            // NTS: strdup's address because the controllers may go out of scope after the invocation of setup(..)
+            while (p != NULL) {
+                list[ix].id = p->id;
+                list[ix].address = strdup(p->address);
+                ix++;
+                p = va_arg(args, controller *);
+            }
+            va_end(args);
+        }
+
+        u->devices = devices;
+        u->devices->N = N;
+        u->devices->devices = list;
     }
 }
 
 void teardown() {
     if (u != NULL) {
-        udevice *d = u->devices;
+        udevices *devices;
 
-        while (d != NULL) {
-            udevice *next = d->next;
-            free((char *)d->address); // Known to be malloc'd in setup
-            free(d);
-            d = next;
+        if ((devices = u->devices) != NULL) {
+            free(devices->devices);
+            free(devices);
         }
     }
 

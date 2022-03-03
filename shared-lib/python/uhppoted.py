@@ -108,7 +108,7 @@ class GoController(Structure):
 
 
 class GoControllers(Structure):
-    _fields_ = [('N', c_int), ('devices', POINTER(GoController))]
+    _fields_ = [('N', c_uint32), ('devices', POINTER(GoController))]
 
 
 class GoUHPPOTE(Structure):
