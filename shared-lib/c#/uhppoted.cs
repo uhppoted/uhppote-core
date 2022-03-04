@@ -57,24 +57,39 @@ namespace uhppoted
             this.u.broadcast = broadcast;
             this.u.listen = listen;
             this.u.timeout = timeout;
+            this.u.devices = IntPtr.Zero;
             this.u.debug = debug;
 
-            IntPtr p = IntPtr.Zero;
+            uint N = (uint)controllers.Length;
+            udevice[] list = new udevice[N];
+
             for (int ix = 0; ix < controllers.Length; ix++)
             {
                 Controller c = controllers[ix];
-                udevice d;
 
-                d.ID = c.ID;
-                d.address = c.address;
-                d.next = p;
-
-                p = Marshal.AllocHGlobal(Marshal.SizeOf(d));
-
-                Marshal.StructureToPtr(d, p, false);
+                list[ix].ID = c.ID;
+                list[ix].address = c.address;
             }
 
-            this.u.devices = p;
+            int sz = Marshal.SizeOf(typeof(udevice));
+            IntPtr p = Marshal.AllocHGlobal((int)N * sz);
+
+            for (int ix = 0; ix < list.Length; ix++)
+            {
+                udevice d = list[ix];
+                IntPtr q = p + ix * sz;
+
+                Marshal.StructureToPtr(d, q, false);
+            }
+
+            udevices devices = new udevices();
+            devices.N = 2;
+            devices.devices = p;
+
+            IntPtr r = Marshal.AllocHGlobal(Marshal.SizeOf(devices));
+            Marshal.StructureToPtr(devices, r, false);
+
+            this.u.devices = r;
         }
 
         ~Uhppoted()
@@ -91,12 +106,14 @@ namespace uhppoted
         private void dispose()
         {
             IntPtr p = this.u.devices;
-            while (p != IntPtr.Zero)
+
+            if (p != IntPtr.Zero)
             {
-                udevice q = (udevice)Marshal.PtrToStructure(p, typeof(udevice));
-                IntPtr next = q.next;
+                udevices devices = (udevices)Marshal.PtrToStructure(p, typeof(udevices));
+                IntPtr q = devices.devices;
+
+                Marshal.FreeHGlobal(q);
                 Marshal.FreeHGlobal(p);
-                p = next;
             }
         }
 
@@ -156,7 +173,12 @@ namespace uhppoted
     {
         public uint ID;
         public string address;
-        public IntPtr next;
+    };
+
+    struct udevices
+    {
+        public uint N;
+        public IntPtr devices;  // array of udevice *
     };
 
     struct UHPPOTE
@@ -165,7 +187,7 @@ namespace uhppoted
         public string broadcast;
         public string listen;
         public int timeout;  // seconds, defaults to 5 if <= 0
-        public IntPtr devices;  // (optional) linked list of device address
+        public IntPtr devices;  // udevices * (optional list of non-local controller ID + address pairs)
         public bool debug;
     };
 
