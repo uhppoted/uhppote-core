@@ -36,7 +36,6 @@
            (:address :address)
            (:next    :address)))
 
-
 (def-foreign-type nil
   (:struct :GoDevice
            (:id      :unsigned-long)
@@ -155,4 +154,40 @@
     )
 )
 
+;;;; (rlet ((p (:array (:struct udevice)))))
+
+(def-foreign-type nil
+  (:struct :XDEVICE
+           (:id      :int)
+           (:address :address)))
+
+;(def-foreign-type nil
+;  (:struct :XDEVICES
+;           (:N       :int)
+;           (:devices (:array (:struct XDEVICE)))))
+
+(def-foreign-type nil
+  (:struct :XDEVICES
+           (:N       :int)
+           (:devices :address)))
+
+(defun x ()
+   (with-cstrs ((alpha     "192.168.1.101")
+                (beta      "192.168.1.102"))
+      (rlet ((p (:struct XDEVICE))
+             (q (:array (:struct XDEVICE) 2))
+             (u (:struct XDEVICES)
+                 :N 2
+                 :devices q))
+
+             (%setf-macptr p q)
+             (setf (pref p :xdevice.id) 7777778)
+             (setf (pref p :xdevice.address) alpha)
+
+             (%setf-macptr p (%inc-ptr p 16))
+             (setf (pref p :xdevice.id) 6666)
+             (setf (pref p :xdevice.address) beta)
+
+             (external-call "GetTest" :address u)
+      )))
 

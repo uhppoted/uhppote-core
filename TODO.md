@@ -4,17 +4,16 @@
 
 - Shared-lib/DLL
   - [ ] Rework UHPPOTE.devices as array of struct/pointer to struct
-        - [x] Make N uint32
-        - [ ] Update lib/main.go
-        - [x] C
-        - [ ] C++
-              - https://stackoverflow.com/questions/2124339/c-preprocessor-va-args-number-of-arguments
-        - [ ] C#
-        - [#] Python
         - [ ] CCL
+        - [ ] Update lib/main.go
 
   - [ ] CCL
+        - [ ] `get-devices`: use unsigned-long ????
+```
+   (multiple-value-bind (devices pdevices) (make-heap-ivector max '(unsigned-byte 32))
+```
         - [ ] free returned err pointer
+              - ccl:%str-from-ptr http://ccl.clozure.com/manual/chapter12.3.html
         - [ ] (dispose-heap-ivector a ap)
         - [ ] Separate out `uhppoted`
               - [ ] `devices` list as parameter
