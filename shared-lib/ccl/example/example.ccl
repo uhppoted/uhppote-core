@@ -25,11 +25,6 @@
            (:id      :int)
            (:address :address)))
 
-;(def-foreign-type nil
-;  (:struct :XDEVICES
-;           (:N       :int)
-;           (:devices (:array (:struct XDEVICE)))))
-
 (def-foreign-type nil
   (:struct :UDEVICES
            (:N       :int)
@@ -94,12 +89,10 @@
                          :date    (%get-cstring (%get-ptr device 48))))))
 
 
-(defun uhppoted (f &key (bind-addr "") (broadcast-addr "") (listen-addr "") (timeout 5) (debug NIL)) ""
+(defun uhppoted (f &key (bind-addr "") (broadcast-addr "") (listen-addr "") (timeout 5) (controllers NIL) (debug NIL)) ""
     (with-cstrs ((bind      bind-addr)
                  (broadcast broadcast-addr)
-                 (listen    listen-addr)
-                 (alpha     "192.168.1.100")
-                 (beta      "192.168.1.100"))
+                 (listen    listen-addr))
        (rlet ((p (:struct UDEVICE))
               (devices (:array (:struct UDEVICE) 2))
               (udevices (:struct UDEVICES) :N 2 :devices devices)
@@ -112,12 +105,11 @@
                         :debug     (cond (debug 1) (T 0))))
           
           (%setf-macptr p devices)
-          (setf (pref p :udevice.id) 303986753)
-          (setf (pref p :udevice.address) alpha)
-
-          (%setf-macptr p (%inc-ptr p 16))
-          (setf (pref p :udevice.id) 405419896)
-          (setf (pref p :udevice.address) beta)
+          (loop for (id addr) in controllers
+              do (progn
+                    (setf (pref p :udevice.id) id)
+                    (setf (pref p :udevice.address) (ccl::make-cstring addr))
+                    (%setf-macptr p (%inc-ptr p 16))))
 
           (restart-case (funcall f uhppote)
              (ignore () nil)
@@ -129,94 +121,37 @@
       ((uhppoted-error
          #'(lambda (c) 
               (format t "*** ERROR: ~a~%" (message c))
-              (invoke-restart 'ignore)
-           )
-         )
-      )
+              (invoke-restart 'ignore))))
       (list "get-devices" (uhppoted #'(lambda (u) (uhppoted-get-devices u))
                                     :bind-addr      "192.168.1.100"
                                     :broadcast-addr "192.168.1.100"
                                     :listen-addr    "192.168.1.100:60001"
                                     :timeout        1
-                                    :debug          T)))
-)
+                                    :controllers    (list '(405419896 "192.168.1.100") '(303986753 "192.168.1.100"))
+                                    :debug          T))))
 
 (defun get-device () "" 
    (handler-bind
       ((uhppoted-error
          #'(lambda (c) 
               (format t "*** ERROR: ~a~%" (message c))
-              (invoke-restart 'ignore)
-           )
-         )
-      )
+              (invoke-restart 'ignore))))
       (list "get-device" (uhppoted #'(lambda (u) (uhppoted-get-device u 405419896))
                                    :bind-addr      "192.168.1.100"
                                    :broadcast-addr "192.168.1.100"
                                    :listen-addr    "192.168.1.100:60001"
                                    :timeout        1
-                                   :debug          T))
-    )
-)
-
-; defun debug () "" 
-;   (handler-bind
-;      ((uhppoted-error
-;         #'(lambda (c) 
-;              (format t "~%   *** ERROR: ~a~%~%" (message c))
-;              (invoke-restart 'with-warning "oh noes i can has problem")
-;           )
-;         )
-;      )
-;      (list "get-device" (uhppoted #'(lambda (u) (uhppoted-get-device u 405419896))))
-;    )
-; 
-
-(defun uhppoted-x (f &key (bind-addr "") (broadcast-addr "") (listen-addr "") (timeout 5) (debug NIL)) ""
-    (with-cstrs ((bind      bind-addr)
-                 (broadcast broadcast-addr)
-                 (listen    listen-addr)
-                 (alpha     "192.168.1.100")
-                 (beta      "192.168.1.100"))
-       (rlet ((p (:struct UDEVICE))
-              (devices (:array (:struct UDEVICE) 2))
-              (udevices (:struct UDEVICES) :N 2 :devices devices)
-              (uhppote (:struct :UHPPOTE) 
-                        :bind      bind
-                        :broadcast broadcast
-                        :listen    listen
-                        :timeout   timeout
-                        :devices   udevices
-                        :debug     (cond (debug 1) (T 0))))
-          
-          (%setf-macptr p devices)
-          (setf (pref p :udevice.id) 303986753)
-          (setf (pref p :udevice.address) alpha)
-
-          (%setf-macptr p (%inc-ptr p 16))
-          (setf (pref p :udevice.id) 405419896)
-          (setf (pref p :udevice.address) beta)
-
-          (restart-case (funcall f uhppote)
-             (ignore () nil)
-             (use-value  (value) value)
-             (with-warning (err) (warn err))))))
-
+                                   :controllers   (list '(405419896 "192.168.1.100") '(303986753 "192.168.1.100"))
+                                   :debug          T))))
 
 (defun debug () "" 
    (handler-bind
       ((uhppoted-error
          #'(lambda (c) 
               (format t "~%   *** ERROR: ~a~%~%" (message c))
-              (invoke-restart 'with-warning "oh noes i can has problem")
-           )
-         )
-      )
-      (list "get-device" (uhppoted-x #'(lambda (u) (uhppoted-get-device u 405419896))
-                                   :bind-addr      "192.168.1.100"
-                                   :broadcast-addr "192.168.1.100"
-                                   :listen-addr    "192.168.1.100:60001"
-                                   :debug          T
-      ))
+              (invoke-restart 'with-warning "oh noes i can has problems"))))
+      (list "get-device" (uhppoted #'(lambda (u) (uhppoted-get-device u 405419896))
+                                   :controllers (list '(405419896 "192.168.1.101") 
+                                                      '(303986753 "192.168.1.102"))))
     )
 )

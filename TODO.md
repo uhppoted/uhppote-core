@@ -6,9 +6,13 @@
   - [ ] Rework UHPPOTE.devices as array of struct/pointer to struct
         - [x] Update lib/main.go
 
+  - (?) Make timeout milliseconds (or string)
+  - [ ] Make returned value the first argument to GetXXX
+
   - [ ] CCL
-        - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
+        - [x] `devices` list as parameter
         - [ ] rletz
+        - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
         - [ ] (rlet ((p (:array (:struct udevice)))))
         - [ ] `get-devices`: use unsigned-long ????
 ```
@@ -17,8 +21,9 @@
         - [ ] free returned err pointer
               - ccl:%str-from-ptr http://ccl.clozure.com/manual/chapter12.3.html
         - [ ] (dispose-heap-ivector a ap)
-        - [ ] Separate out `uhppoted`
-              - [ ] `devices` list as parameter
+        - [ ] free udevice cstrings
+        - [ ] Separate out `uhppoted` into it's own package
+              - [ ] (in-package "uhppoted")
               - [ ] Move to its own file
         - [ ] Formatting 
               - https://github.com/eschulte/lisp-format
