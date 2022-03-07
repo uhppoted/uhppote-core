@@ -37,7 +37,7 @@ import "C"
 
 import (
 	"fmt"
-	// "net"
+	"net"
 	"time"
 	"unsafe"
 
@@ -46,25 +46,6 @@ import (
 )
 
 func main() {}
-
-//export GetTest
-func GetTest(u *C.struct_udevices) {
-	fmt.Printf(">>> DEBUG/U: %v\n", u)
-
-	if u != nil {
-		fmt.Printf(">>> DEBUG/N:       %v\n", u.N)
-		fmt.Printf(">>> DEBUG/devices: %v\n", u.devices)
-
-		if u.devices != nil {
-			slice := unsafe.Slice(u.devices, u.N)
-			fmt.Printf(">>> DEBUG/slice: %v\n", slice)
-
-			for _, d := range slice {
-				fmt.Printf(">>> DEBUG/device: %v  %v\n", d.id, C.GoString(d.address))
-			}
-		}
-	}
-}
 
 //export GetDevices
 func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint) *C.char {
@@ -158,28 +139,32 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 
 		debug = bool(u.debug)
 
-		fmt.Printf(">>>> GO/DEBUG: %v\n", u.devices)
+		if u.devices != nil && u.devices.N > 0 && u.devices.devices != nil {
+			list := unsafe.Slice(u.devices.devices, u.devices.N)
+			for _, d := range list {
+				if d.id != 0 {
+					addr, err := types.ResolveAddr(C.GoString(d.address))
+					if err != nil {
+						return nil, err
+					}
 
-		// if u.devices != nil && u.devices.N > 0 && u.devices.devices != nil {
-		// 	list := unsafe.Slice(u.devices.devices, u.devices.N)
-		// 	for _, d := range list {
-		// 		if d.id != 0 {
-		// 			addr, err := types.ResolveAddr(C.GoString(d.address))
-		// 			if err != nil {
-		// 				return nil, err
-		// 			}
-
-		// 			devices = append(devices, uhppote.Device{
-		// 				DeviceID: uint32(d.id),
-		// 				Address:  (*net.UDPAddr)(addr),
-		// 			})
-		// 		}
-		// 	}
-		// }
+					devices = append(devices, uhppote.Device{
+						DeviceID: uint32(d.id),
+						Address:  (*net.UDPAddr)(addr),
+					})
+				}
+			}
+		}
 	}
 
+	fmt.Printf(">>> BIND:      %v\n", bind)
+	fmt.Printf(">>> BROADCAST: %v\n", broadcast)
+	fmt.Printf(">>> LISTEN:    %v\n", listen)
+	fmt.Printf(">>> TIMEOUT:   %v\n", timeout)
+	fmt.Printf(">>> DEBUG:     %v\n", debug)
+
 	for _, v := range devices {
-		fmt.Printf(">>> >> > %v %v\n", v.DeviceID, v.Address)
+		fmt.Printf(">>> DEVICE     %-10v %v\n", v.DeviceID, v.Address)
 	}
 
 	return uhppote.NewUHPPOTE(bind, broadcast, listen, timeout, devices, debug), nil

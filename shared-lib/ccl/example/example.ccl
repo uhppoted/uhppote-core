@@ -21,6 +21,21 @@
            date)
 
 (def-foreign-type nil
+  (:struct :UDEVICE
+           (:id      :int)
+           (:address :address)))
+
+;(def-foreign-type nil
+;  (:struct :XDEVICES
+;           (:N       :int)
+;           (:devices (:array (:struct XDEVICE)))))
+
+(def-foreign-type nil
+  (:struct :UDEVICES
+           (:N       :int)
+           (:devices :address)))
+
+(def-foreign-type nil
   (:struct :UHPPOTE
            (:bind      :address)
            (:broadcast :address)
@@ -29,12 +44,6 @@
            (:devices   :address)
            (:debug     :int)))
 
-
-(def-foreign-type nil
-  (:struct :UDEVICE
-           (:id      :int)
-           (:address :address)
-           (:next    :address)))
 
 (def-foreign-type nil
   (:struct :GoDevice
@@ -91,20 +100,29 @@
                  (listen    listen-addr)
                  (alpha     "192.168.1.100")
                  (beta      "192.168.1.100"))
-       (rlet ((palpha (:struct UDEVICE) :id 303986753 :address alpha :next (%null-ptr))
-              (pbeta  (:struct UDEVICE) :id 405419896 :address beta  :next palpha)
+       (rlet ((p (:struct UDEVICE))
+              (devices (:array (:struct UDEVICE) 2))
+              (udevices (:struct UDEVICES) :N 2 :devices devices)
               (uhppote (:struct :UHPPOTE) 
                         :bind      bind
                         :broadcast broadcast
                         :listen    listen
                         :timeout   timeout
-                        :devices   pbeta
+                        :devices   udevices
                         :debug     (cond (debug 1) (T 0))))
+          
+          (%setf-macptr p devices)
+          (setf (pref p :udevice.id) 303986753)
+          (setf (pref p :udevice.address) alpha)
+
+          (%setf-macptr p (%inc-ptr p 16))
+          (setf (pref p :udevice.id) 405419896)
+          (setf (pref p :udevice.address) beta)
+
           (restart-case (funcall f uhppote)
              (ignore () nil)
              (use-value  (value) value)
              (with-warning (err) (warn err))))))
-
 
 (defun get-devices () "" 
    (handler-bind
@@ -141,6 +159,50 @@
     )
 )
 
+; defun debug () "" 
+;   (handler-bind
+;      ((uhppoted-error
+;         #'(lambda (c) 
+;              (format t "~%   *** ERROR: ~a~%~%" (message c))
+;              (invoke-restart 'with-warning "oh noes i can has problem")
+;           )
+;         )
+;      )
+;      (list "get-device" (uhppoted #'(lambda (u) (uhppoted-get-device u 405419896))))
+;    )
+; 
+
+(defun uhppoted-x (f &key (bind-addr "") (broadcast-addr "") (listen-addr "") (timeout 5) (debug NIL)) ""
+    (with-cstrs ((bind      bind-addr)
+                 (broadcast broadcast-addr)
+                 (listen    listen-addr)
+                 (alpha     "192.168.1.100")
+                 (beta      "192.168.1.100"))
+       (rlet ((p (:struct UDEVICE))
+              (devices (:array (:struct UDEVICE) 2))
+              (udevices (:struct UDEVICES) :N 2 :devices devices)
+              (uhppote (:struct :UHPPOTE) 
+                        :bind      bind
+                        :broadcast broadcast
+                        :listen    listen
+                        :timeout   timeout
+                        :devices   udevices
+                        :debug     (cond (debug 1) (T 0))))
+          
+          (%setf-macptr p devices)
+          (setf (pref p :udevice.id) 303986753)
+          (setf (pref p :udevice.address) alpha)
+
+          (%setf-macptr p (%inc-ptr p 16))
+          (setf (pref p :udevice.id) 405419896)
+          (setf (pref p :udevice.address) beta)
+
+          (restart-case (funcall f uhppote)
+             (ignore () nil)
+             (use-value  (value) value)
+             (with-warning (err) (warn err))))))
+
+
 (defun debug () "" 
    (handler-bind
       ((uhppoted-error
@@ -150,44 +212,11 @@
            )
          )
       )
-      (list "get-device" (uhppoted #'(lambda (u) (uhppoted-get-device u 405419896))))
+      (list "get-device" (uhppoted-x #'(lambda (u) (uhppoted-get-device u 405419896))
+                                   :bind-addr      "192.168.1.100"
+                                   :broadcast-addr "192.168.1.100"
+                                   :listen-addr    "192.168.1.100:60001"
+                                   :debug          T
+      ))
     )
 )
-
-;;;; (rlet ((p (:array (:struct udevice)))))
-
-(def-foreign-type nil
-  (:struct :XDEVICE
-           (:id      :int)
-           (:address :address)))
-
-;(def-foreign-type nil
-;  (:struct :XDEVICES
-;           (:N       :int)
-;           (:devices (:array (:struct XDEVICE)))))
-
-(def-foreign-type nil
-  (:struct :XDEVICES
-           (:N       :int)
-           (:devices :address)))
-
-(defun x ()
-   (with-cstrs ((alpha     "192.168.1.101")
-                (beta      "192.168.1.102"))
-      (rlet ((p (:struct XDEVICE))
-             (q (:array (:struct XDEVICE) 2))
-             (u (:struct XDEVICES)
-                 :N 2
-                 :devices q))
-
-             (%setf-macptr p q)
-             (setf (pref p :xdevice.id) 7777778)
-             (setf (pref p :xdevice.address) alpha)
-
-             (%setf-macptr p (%inc-ptr p 16))
-             (setf (pref p :xdevice.id) 6666)
-             (setf (pref p :xdevice.address) beta)
-
-             (external-call "GetTest" :address u)
-      )))
-

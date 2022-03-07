@@ -5,11 +5,11 @@
 - Shared-lib/DLL
   - [ ] Rework UHPPOTE.devices as array of struct/pointer to struct
         - [x] Update lib/main.go
-        - [ ] CCL
-              - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
-              - rletz
 
   - [ ] CCL
+        - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
+        - [ ] rletz
+        - [ ] (rlet ((p (:array (:struct udevice)))))
         - [ ] `get-devices`: use unsigned-long ????
 ```
    (multiple-value-bind (devices pdevices) (make-heap-ivector max '(unsigned-byte 32))
