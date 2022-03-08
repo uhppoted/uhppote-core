@@ -3,23 +3,33 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] Rework UHPPOTE.devices as array of struct/pointer to struct
+  - [ ] `set-address`
+        - [ ] C
+        - [ ] C++
+        - [ ] C#
+        - [ ] Python
+        - [ ] CCL
+
+  - [ ] `make`
+         - [ ] Include lib Makefile in example Makefiles
+         - [ ] Makefile at root of shared-lib
+  
+  - [x ] Rework UHPPOTE.devices as array of struct/pointer to struct
         - [x] Update lib/main.go
 
-  - (?) Make timeout milliseconds (or string)
-  - [ ] Make returned value the first argument to GetXXX
+  - [ ] Standardize on function signature char * f(UHPPOTE *u, C.struct_XXX *returned, ...)
+  - (?) Make timeout milliseconds (or string ?)
 
   - [ ] CCL
-        - [x] `devices` list as parameter
         - [ ] rletz
+        - [ ] free returned err pointer
+              - ccl:%str-from-ptr http://ccl.clozure.com/manual/chapter12.3.html
         - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
         - [ ] (rlet ((p (:array (:struct udevice)))))
         - [ ] `get-devices`: use unsigned-long ????
 ```
    (multiple-value-bind (devices pdevices) (make-heap-ivector max '(unsigned-byte 32))
 ```
-        - [ ] free returned err pointer
-              - ccl:%str-from-ptr http://ccl.clozure.com/manual/chapter12.3.html
         - [ ] (dispose-heap-ivector a ap)
         - [ ] free udevice cstrings
         - [ ] Separate out `uhppoted` into it's own package
