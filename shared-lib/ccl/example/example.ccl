@@ -88,14 +88,26 @@
                          :version (%get-cstring (%get-ptr device 40))
                          :date    (%get-cstring (%get-ptr device 48))))))
 
+(defun uhppoted-set-address (uhppote device-id ip-addr subnet-mask gateway-addr) ""
+    (with-cstrs ((address ip-addr)
+                 (subnet  subnet-mask)
+                 (gateway gateway-addr))
+       (with-macptrs ((err (external-call "SetAddress" :address uhppote 
+                                                       :unsigned-long device-id 
+                                                       :address address  
+                                                       :address subnet
+                                                       :address gateway
+                                                       :address)))
+          (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-string err))))))
 
 (defun uhppoted (f &key (bind-addr "") (broadcast-addr "") (listen-addr "") (timeout 5) (controllers NIL) (debug NIL)) ""
     (with-cstrs ((bind      bind-addr)
                  (broadcast broadcast-addr)
                  (listen    listen-addr))
        (rlet ((p (:struct UDEVICE))
-              (devices (:array (:struct UDEVICE) 2))
-              (udevices (:struct UDEVICES) :N 2 :devices devices)
+              (devices (:array (:struct UDEVICE) 16
+              ))
+              (udevices (:struct UDEVICES) :N (length controllers) :devices devices)
               (uhppote (:struct :UHPPOTE) 
                         :bind      bind
                         :broadcast broadcast
@@ -144,14 +156,30 @@
                                    :controllers   (list '(405419896 "192.168.1.100") '(303986753 "192.168.1.100"))
                                    :debug          T))))
 
+(defun set-address () "" 
+   (handler-bind
+      ((uhppoted-error
+         #'(lambda (c) 
+              (format t "*** ERROR: ~a~%" (message c))
+              (invoke-restart 'ignore))))
+      (list "set-address" (uhppoted #'(lambda (u) (uhppoted-set-address u 405419896 "192.168.1.125" "255.255.255.254" "192.168.1.5"))
+                                    :bind-addr      "192.168.1.100"
+                                    :broadcast-addr "192.168.1.100"
+                                    :listen-addr    "192.168.1.100:60001"
+                                    :timeout        1
+                                    :controllers   (list '(405419896 "192.168.1.100") '(303986753 "192.168.1.100"))
+                                    :debug          T))))
+
 (defun debug () "" 
    (handler-bind
       ((uhppoted-error
          #'(lambda (c) 
               (format t "~%   *** ERROR: ~a~%~%" (message c))
               (invoke-restart 'with-warning "oh noes i can has problems"))))
-      (list "get-device" (uhppoted #'(lambda (u) (uhppoted-get-device u 405419896))
-                                   :controllers (list '(405419896 "192.168.1.101") 
-                                                      '(303986753 "192.168.1.102"))))
+      (list "set-address" (uhppoted #'(lambda (u) (uhppoted-set-address u 405419896
+                                                                          "192.168.1.125"
+                                                                          "255.255.255.254"
+                                                                          "192.168.1.5"))))
     )
 )
+

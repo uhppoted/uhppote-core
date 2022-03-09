@@ -22,6 +22,7 @@ def help():
     print("  commands")
     print("    get-devices")
     print("    get-device")
+    print("    set-device")
     print("    help")
     print()
     print("  get-devices")
@@ -32,6 +33,11 @@ def help():
     print("  get-device")
     print(
         "    Retrieves the basic device information for a single UHPPOTE controller."
+    )
+    print()
+    print("  set-address")
+    print(
+        "    Sets the controller IPv4 address, subnet mask and gateway address."
     )
     print()
     print("  help")
@@ -70,6 +76,22 @@ def get_device(u, deviceID):
         print()
 
 
+def set_address(u, deviceID, address, subnet, gateway):
+    try:
+        u.set_address(deviceID, address, subnet, gateway)
+
+        print("set-address")
+        print(f"  ID:      {deviceID}")
+        print(f"  address: {address}")
+        print(f"  subnet:  {subnet}")
+        print(f"  gateway: {gateway}")
+        print()
+
+    except Exception as e:
+        print(f" *** ERROR set-address ({e})")
+        print()
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Example CLI for the uhppote-core Python integration')
@@ -85,6 +107,7 @@ if __name__ == "__main__":
     elif cmd not in [
             'get-devices',
             'get-device',
+            'set-address',
             'all',
     ]:
         print()
@@ -108,9 +131,15 @@ if __name__ == "__main__":
             elif cmd == 'get-device':
                 get_device(u, 405419896)
 
+            elif cmd == 'set-address':
+                set_address(u, 405419896, "192.168.1.125", "255.255.255.253",
+                            "192.168.1.5")
+
             elif cmd == 'all':
                 get_devices(u)
                 get_device(u, 405419896)
+                set_address(u, 405419896, "192.168.1.125", "255.255.253",
+                            "192.168.1.5")
 
         except BaseException as x:
             print()

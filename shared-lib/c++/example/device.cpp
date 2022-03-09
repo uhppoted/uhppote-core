@@ -1,5 +1,6 @@
-#include "../include/uhppoted.hpp"
 #include <iostream>
+
+#include "device.hpp"
 
 using namespace std;
 
@@ -35,6 +36,28 @@ int getDevice(uhppoted &u, uint32_t deviceID) {
         cout << "  MAC:      " << d.MAC << endl;
         cout << "  version:  " << d.version << endl;
         cout << "  released: " << d.date << endl;
+        cout << endl;
+
+        return 0;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return -1;
+}
+
+int setAddress(uhppoted &u, uint32_t deviceID, string address, string subnet, string gateway) {
+    try {
+        u.set_address(deviceID, address, subnet, gateway);
+
+        cout << endl
+             << "set-address" << endl;
+        cout << "  ID:       " << deviceID << endl;
+        cout << "  address:  " << address << endl;
+        cout << "  subnet:   " << subnet << endl;
+        cout << "  gateway:  " << gateway << endl;
         cout << endl;
 
         return 0;

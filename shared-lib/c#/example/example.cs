@@ -38,9 +38,14 @@ public class example
                     GetDevice(u, 405419896);
                     break;
 
+                case "set-address":
+                    SetAddress(u, 405419896, "192.168.1.125", "255.255.255.254", "192.168.1.5");
+                    break;
+
                 case "all":
                     GetDevices(u);
                     GetDevice(u, 405419896);
+                    SetAddress(u, 405419896, "192.168.1.125", "255.255.255.254", "192.168.1.5");
                     break;
 
                 default:
@@ -72,6 +77,7 @@ public class example
         Console.WriteLine("  commands");
         Console.WriteLine("    get-devices");
         Console.WriteLine("    get-device");
+        Console.WriteLine("    set-address");
         Console.WriteLine("    help");
         Console.WriteLine();
         Console.WriteLine("  get-devices");
@@ -79,6 +85,9 @@ public class example
         Console.WriteLine();
         Console.WriteLine("  get-device");
         Console.WriteLine("    Retrieves the basic device information for a single UHPPOTE controller.");
+        Console.WriteLine();
+        Console.WriteLine("  set-address");
+        Console.WriteLine("    Sets the controller IPv4 address, subnet mask and gateway address.");
         Console.WriteLine();
         Console.WriteLine("  help");
         Console.WriteLine("    Displays this information.");
@@ -107,6 +116,18 @@ public class example
         Console.WriteLine(String.Format("  MAC:      {0}", device.MAC));
         Console.WriteLine(String.Format("  version:  {0}", device.version));
         Console.WriteLine(String.Format("  released: {0}", device.date));
+        Console.WriteLine();
+    }
+
+    static void SetAddress(Uhppoted u, uint deviceID, string address, string subnet, string gateway)
+    {
+        u.SetAddress(deviceID, address, subnet, gateway);
+
+        Console.WriteLine(String.Format("set-address"));
+        Console.WriteLine(String.Format("  ID:      {0}", deviceID));
+        Console.WriteLine(String.Format("  address: {0}", address));
+        Console.WriteLine(String.Format("  subnet:  {0}", subnet));
+        Console.WriteLine(String.Format("  gateway: {0}", gateway));
         Console.WriteLine();
     }
 }

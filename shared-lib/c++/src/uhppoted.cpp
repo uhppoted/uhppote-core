@@ -138,3 +138,10 @@ struct device uhppoted::get_device(uint32_t id) {
 
     return d;
 }
+
+void uhppoted::set_address(uint32_t id, std::string &address, std::string &subnet, std::string &gateway) {
+    char *err = SetAddress(u, id, (char *)address.c_str(), (char *)subnet.c_str(), (char *)gateway.c_str());
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+}

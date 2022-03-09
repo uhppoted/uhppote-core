@@ -167,6 +167,18 @@ namespace uhppoted
                               device.version,
                               device.date);
         }
+
+        [DllImport("libuhppoted.so")]
+        private static extern string SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway);
+
+        public void SetAddress(uint deviceID, string address, string subnet, string gateway)
+        {
+            string err = SetAddress(ref this.u, deviceID, address, subnet, gateway);
+            if (err != null && err != "")
+            {
+                throw new UhppotedException(err);
+            }
+        }
     }
 
     struct udevice

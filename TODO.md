@@ -3,12 +3,12 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] `set-address`
+  - [x] `set-address`
         - [x] C
-        - [ ] C++
-        - [ ] C#
-        - [ ] Python
-        - [ ] CCL
+        - [x] C++
+        - [x] Python
+        - [x] C#
+        - [x] CCL
 
   - [ ] `make`
          - [ ] Include lib Makefile in example Makefiles
@@ -18,6 +18,10 @@
   - (?) Make timeout milliseconds (or string ?)
 
   - [ ] CCL
+        - [ ] Set size of devices list
+```
+Error: First dimension is not a non-negative fixnum or NIL: (BYTE (LENGTH CONTROLLERS))
+```
         - [ ] rletz
         - [ ] free returned err pointer
               - ccl:%str-from-ptr http://ccl.clozure.com/manual/chapter12.3.html

@@ -28,6 +28,7 @@ class uhppoted {
   public:
     std::vector<uint32_t> get_devices();
     device get_device(uint32_t id);
+    void set_address(uint32_t id, std::string &address, std::string &subnet, std::string &gateway);
 
   private:
     UHPPOTE *u;

@@ -101,6 +101,18 @@ class Uhppote:
                       device.version.decode('utf-8'),
                       device.date.decode('utf-8'))
 
+    def set_address(self, deviceID, address, subnet, gateway):
+        SetAddress = lib.SetAddress
+        SetAddress.argtypes = [
+            POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p
+        ]
+        SetAddress.restype = ctypes.c_char_p
+        SetAddress.errcheck = self.errcheck
+
+        SetAddress(self._uhppote, deviceID, c_char_p(bytes(address, 'utf-8')),
+                   c_char_p(bytes(subnet, 'utf-8')),
+                   c_char_p(bytes(gateway, 'utf-8')))
+
 
 # INTERNAL TYPES
 class GoController(Structure):

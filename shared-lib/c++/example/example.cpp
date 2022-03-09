@@ -1,11 +1,11 @@
-#include "../include/uhppoted.hpp"
 #include <iostream>
+
+#include "../include/uhppoted.hpp"
+#include "device.hpp"
 
 using namespace std;
 
 void usage();
-extern int getDevices(uhppoted &);
-extern int getDevice(uhppoted &, uint32_t);
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -28,9 +28,12 @@ int main(int argc, char **argv) {
         return getDevices(u);
     } else if (cmd == "get-device") {
         return getDevice(u, 405419896);
+    } else if (cmd == "set-address") {
+        return setAddress(u, 405419896, "192.168.1.125", "255.255.254.0", "192.168.1.10");
     } else if (cmd == "all") {
         getDevices(u);
         getDevice(u, 405419896);
+        setAddress(u, 405419896, "192.168.1.125", "255.255.254.0", "192.168.1.10");
         return 0;
     }
 
@@ -47,5 +50,6 @@ void usage() {
     cout << "   Supported commands:" << endl;
     cout << "      get-devices" << endl;
     cout << "      get-device" << endl;
+    cout << "      set-address" << endl;
     cout << endl;
 }
