@@ -4,7 +4,7 @@
 
 - Shared-lib/DLL
   - [ ] `set-address`
-        - [ ] C
+        - [x] C
         - [ ] C++
         - [ ] C#
         - [ ] Python

@@ -6,7 +6,8 @@
 
 void usage();
 extern int getDevices();
-extern int getDevice();
+extern int getDevice(uint32_t);
+extern int setAddress(uint32_t, const char *, const char *, const char *);
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -27,11 +28,14 @@ int main(int argc, char **argv) {
         rc = getDevices();
     } else if (strncmp(cmd, "get-device", 10) == 0) {
         rc = getDevice(405419896);
+    } else if (strncmp(cmd, "set-address", 11) == 0) {
+        rc = setAddress(405419896, "192.168.1.125", "255.255.254.0", "192.168.1.0");
     } else if (strncmp(cmd, "all", 3) == 0) {
         rc = 0;
 
         getDevices();
         getDevice(405419896);
+        setAddress(405419896, "192.168.1.125", "255.255.254.0", "192.168.1.0");
     }
 
     teardown();
@@ -45,5 +49,6 @@ void usage() {
     printf("   Supported commands:\n");
     printf("      get-devices\n");
     printf("      get-device\n");
+    printf("      set-address\n");
     printf("\n");
 }

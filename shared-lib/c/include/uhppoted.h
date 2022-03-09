@@ -25,3 +25,4 @@ const char *errmsg();
 
 int get_devices(uint32_t **devices, int *N);
 int get_device(uint32_t id, struct device *);
+int set_address(uint32_t id, const char *address, const char *subnet, const char *gateway);

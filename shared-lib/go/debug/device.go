@@ -19,6 +19,12 @@ func getDevices(uu uhppote.IUHPPOTE, N *C.int, list *C.uint) error {
 		return fmt.Errorf("invalid argument (list) - expected valid pointer to list")
 	}
 
+	if DEBUG {
+		fmt.Printf(">>> get-devices\n")
+		fmt.Printf("    N:  %v\n", *N)
+		fmt.Println()
+	}
+
 	devices := []uint32{201020304, 303986753, 405419896}
 
 	slice := unsafe.Slice(list, *N)
@@ -38,6 +44,12 @@ func getDevices(uu uhppote.IUHPPOTE, N *C.int, list *C.uint) error {
 func getDevice(uu uhppote.IUHPPOTE, deviceID uint32, d *C.struct_Device) error {
 	if d == nil {
 		return fmt.Errorf("invalid argument (device) - expected valid pointer to Device struct")
+	}
+
+	if DEBUG {
+		fmt.Printf(">>> get-device\n")
+		fmt.Printf("    ID: %v\n", deviceID)
+		fmt.Println()
 	}
 
 	d.ID = C.ulong(deviceID)
@@ -65,6 +77,15 @@ func setAddress(uu uhppote.IUHPPOTE, deviceID uint32, address, subnet, gateway *
 	_gateway := net.ParseIP(C.GoString(gateway))
 	if _gateway == nil {
 		return fmt.Errorf("invalid IP gateway address (%v)", C.GoString(gateway))
+	}
+
+	if DEBUG {
+		fmt.Printf(">>> set-address\n")
+		fmt.Printf("    ID:      %v\n", deviceID)
+		fmt.Printf("    address: %v\n", _address)
+		fmt.Printf("    subnet:  %v\n", _subnet)
+		fmt.Printf("    gateway: %v\n", _gateway)
+		fmt.Println()
 	}
 
 	return nil

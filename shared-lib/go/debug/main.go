@@ -45,6 +45,8 @@ import (
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
 
+var DEBUG bool
+
 func main() {}
 
 //export GetDevices
@@ -137,14 +139,21 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 		}
 	}
 
-	fmt.Printf(">>> BIND:      %v\n", bind)
-	fmt.Printf(">>> BROADCAST: %v\n", broadcast)
-	fmt.Printf(">>> LISTEN:    %v\n", listen)
-	fmt.Printf(">>> TIMEOUT:   %v\n", timeout)
-	fmt.Printf(">>> DEBUG:     %v\n", debug)
+	DEBUG = debug
 
-	for _, v := range devices {
-		fmt.Printf(">>> DEVICE     %-10v %v\n", v.DeviceID, v.Address)
+	if DEBUG {
+		fmt.Printf(">>> UHPPOTE\n")
+		fmt.Printf("    bind:      %v\n", bind)
+		fmt.Printf("    broadcast: %v\n", broadcast)
+		fmt.Printf("    listen:    %v\n", listen)
+		fmt.Printf("    timeout:   %v\n", timeout)
+		fmt.Printf("    debug:     %v\n", debug)
+
+		for _, v := range devices {
+			fmt.Printf("    device     %-10v %v\n", v.DeviceID, v.Address)
+		}
+
+		fmt.Println()
 	}
 
 	return uhppote.NewUHPPOTE(bind, broadcast, listen, timeout, devices, debug), nil

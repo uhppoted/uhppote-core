@@ -170,3 +170,13 @@ int get_device(unsigned id, struct device *d) {
 
     return 0;
 }
+
+int set_address(unsigned id, const char *address, const char *subnet, const char *gateway) {
+    char *err = SetAddress(u, id, (char *)address, (char *)subnet, (char *)gateway);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}

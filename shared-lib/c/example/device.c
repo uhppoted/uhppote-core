@@ -43,3 +43,12 @@ int getDevice(uint32_t deviceID) {
 
     return 0;
 }
+
+int setAddress(uint32_t deviceID, const char *address, const char *subnet, const char *gateway) {
+    if (set_address(deviceID, address, subnet, gateway) != 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    return 0;
+}
