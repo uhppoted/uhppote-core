@@ -4,26 +4,24 @@ import "C"
 
 import (
 	"fmt"
+	"net"
 	"unsafe"
+
+	"github.com/uhppoted/uhppote-core/uhppote"
 )
 
-func getDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint) *C.char {
+func getDevices(uu uhppote.IUHPPOTE, N *C.int, list *C.uint) error {
 	if N == nil {
-		return C.CString("invalid argument (N) - expected valid pointer")
+		return fmt.Errorf("invalid argument (N) - expected valid pointer")
 	}
 
 	if list == nil {
-		return C.CString("invalid argument (list) - expected valid pointer to list")
-	}
-
-	uu, err := makeUHPPOTE(u)
-	if err != nil {
-		return C.CString(err.Error())
+		return fmt.Errorf("invalid argument (list) - expected valid pointer to list")
 	}
 
 	devices, err := uu.GetDevices()
 	if err != nil {
-		return C.CString(err.Error())
+		return err
 	}
 
 	slice := unsafe.Slice(list, *N)
@@ -40,23 +38,18 @@ func getDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint) *C.char {
 	return nil
 }
 
-func getDevice(u *C.struct_UHPPOTE, deviceID uint32, d *C.struct_Device) *C.char {
+func getDevice(uu uhppote.IUHPPOTE, deviceID uint32, d *C.struct_Device) error {
 	if d == nil {
-		return C.CString("invalid argument (device) - expected valid pointer to Device struct")
-	}
-
-	uu, err := makeUHPPOTE(u)
-	if err != nil {
-		return C.CString(err.Error())
+		return fmt.Errorf("invalid argument (device) - expected valid pointer to Device struct")
 	}
 
 	device, err := uu.GetDevice(deviceID)
 	if err != nil {
-		return C.CString(err.Error())
+		return err
 	}
 
 	if device == nil {
-		return C.CString(fmt.Errorf("No device found for %v", deviceID).Error())
+		return fmt.Errorf("No device found for %v", deviceID)
 	}
 
 	d.ID = C.ulong(deviceID)
@@ -66,6 +59,33 @@ func getDevice(u *C.struct_UHPPOTE, deviceID uint32, d *C.struct_Device) *C.char
 	d.MAC = C.CString("00:12:23:34:45:56")
 	d.version = C.CString("v8.92")
 	d.date = C.CString("2018-11-05")
+
+	return nil
+}
+
+func setAddress(uu uhppote.IUHPPOTE, deviceID uint32, address, subnet, gateway *C.char) error {
+	_address := net.ParseIP(C.GoString(address))
+	if _address == nil {
+		return fmt.Errorf("invalid IP address (%v)", C.GoString(address))
+	}
+
+	_subnet := net.ParseIP(C.GoString(subnet))
+	if _subnet == nil {
+		return fmt.Errorf("invalid IP subnet mask (%v)", C.GoString(subnet))
+	}
+
+	_gateway := net.ParseIP(C.GoString(gateway))
+	if _gateway == nil {
+		return fmt.Errorf("invalid IP gateway address (%v)", C.GoString(gateway))
+	}
+
+	if result, err := uu.SetAddress(deviceID, _address, _subnet, _gateway); err != nil {
+		return err
+	} else if result == nil {
+		return fmt.Errorf("invalid reply from device (%v)", result)
+	} else if !result.Succeeded {
+		return fmt.Errorf("failed to set device address")
+	}
 
 	return nil
 }

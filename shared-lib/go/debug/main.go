@@ -49,12 +49,35 @@ func main() {}
 
 //export GetDevices
 func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint) *C.char {
-	return getDevices(u, N, list)
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := getDevices(uu, N, list); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
 }
 
 //export GetDevice
 func GetDevice(u *C.struct_UHPPOTE, deviceID uint32, d *C.struct_Device) *C.char {
-	return getDevice(u, deviceID, d)
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := getDevice(uu, deviceID, d); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
+//export SetAddress
+func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.char) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := setAddress(uu, deviceID, addr, subnet, gateway); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
 }
 
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {

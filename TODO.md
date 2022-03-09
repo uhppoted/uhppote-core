@@ -14,9 +14,6 @@
          - [ ] Include lib Makefile in example Makefiles
          - [ ] Makefile at root of shared-lib
   
-  - [x ] Rework UHPPOTE.devices as array of struct/pointer to struct
-        - [x] Update lib/main.go
-
   - [ ] Standardize on function signature char * f(UHPPOTE *u, C.struct_XXX *returned, ...)
   - (?) Make timeout milliseconds (or string ?)
 
