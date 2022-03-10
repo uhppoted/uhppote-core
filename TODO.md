@@ -10,10 +10,15 @@
         - [ ] C#
         - [ ] CCL
 
-  - [ ] `make`
-         - [ ] Include lib Makefile in example Makefiles
-         - [ ] Makefile at root of shared-lib
-  
+  - [x] `make`
+         - [x] Makefile at root of shared-lib
+               - [x] Build libs
+               - [x] Build C example
+               - [x] Build C++ example
+               - [x] Build C# example
+               - [x] Build Python example
+               - [x] Build CCL example
+
   - [ ] Standardize on function signature char * f(UHPPOTE *u, C.struct_XXX *returned, ...)
   - (?) Make timeout milliseconds (or string ?)
 
@@ -24,7 +29,6 @@
         - [ ] free returned err pointer
               - ccl:%str-from-ptr http://ccl.clozure.com/manual/chapter12.3.html
         - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
-        - [ ] (rlet ((p (:array (:struct udevice)))))
         - [ ] `get-devices`: use unsigned-long ????
 ```
    (multiple-value-bind (devices pdevices) (make-heap-ivector max '(unsigned-byte 32))
