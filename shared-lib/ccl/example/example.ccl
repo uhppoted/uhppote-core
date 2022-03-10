@@ -104,10 +104,8 @@
     (with-cstrs ((bind      bind-addr)
                  (broadcast broadcast-addr)
                  (listen    listen-addr))
-       (rlet ((p (:struct UDEVICE))
-              (devices (:array (:struct UDEVICE) 16
-              ))
-              (udevices (:struct UDEVICES) :N (length controllers) :devices devices)
+       (%stack-block ((devices (* (length controllers) 16)))
+       (rlet ((udevices (:struct UDEVICES) :N (length controllers) :devices devices)
               (uhppote (:struct :UHPPOTE) 
                         :bind      bind
                         :broadcast broadcast
@@ -116,17 +114,16 @@
                         :devices   udevices
                         :debug     (cond (debug 1) (T 0))))
           
-          (%setf-macptr p devices)
           (loop for (id addr) in controllers
               do (progn
-                    (setf (pref p :udevice.id) id)
-                    (setf (pref p :udevice.address) (ccl::make-cstring addr))
-                    (%setf-macptr p (%inc-ptr p 16))))
+                    (setf (pref devices :udevice.id) id)
+                    (setf (pref devices :udevice.address) (ccl::make-cstring addr))
+                    (%setf-macptr devices (%inc-ptr devices 16))))
 
           (restart-case (funcall f uhppote)
              (ignore () nil)
              (use-value  (value) value)
-             (with-warning (err) (warn err))))))
+             (with-warning (err) (warn err)))))))
 
 (defun get-devices () "" 
    (handler-bind
@@ -179,7 +176,8 @@
       (list "set-address" (uhppoted #'(lambda (u) (uhppoted-set-address u 405419896
                                                                           "192.168.1.125"
                                                                           "255.255.255.254"
-                                                                          "192.168.1.5"))))
-    )
-)
+                                                                          "192.168.1.5"))
+                                      :controllers   (list '(405419896 "192.168.1.100") 
+                                                           '(303986753 "192.168.1.100"))
+                           ))))
 

@@ -3,12 +3,12 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [x] `set-address`
-        - [x] C
-        - [x] C++
-        - [x] Python
-        - [x] C#
-        - [x] CCL
+  - [ ] `get-time`
+        - [ ] C
+        - [ ] C++
+        - [ ] Python
+        - [ ] C#
+        - [ ] CCL
 
   - [ ] `make`
          - [ ] Include lib Makefile in example Makefiles
@@ -18,11 +18,9 @@
   - (?) Make timeout milliseconds (or string ?)
 
   - [ ] CCL
-        - [ ] Set size of devices list
-```
-Error: First dimension is not a non-negative fixnum or NIL: (BYTE (LENGTH CONTROLLERS))
-```
+        - [x] Set size of devices list
         - [ ] rletz
+        - [ ] use rref and pref for transcoding returned device struct
         - [ ] free returned err pointer
               - ccl:%str-from-ptr http://ccl.clozure.com/manual/chapter12.3.html
         - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
