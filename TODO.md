@@ -19,7 +19,7 @@
 
   - [ ] CCL
         - [x] Set size of devices list
-        - [ ] rletz
+        - [x] rletz
         - [ ] use rref and pref for transcoding returned device struct
         - [ ] free returned err pointer
               - ccl:%str-from-ptr http://ccl.clozure.com/manual/chapter12.3.html
