@@ -11,22 +11,17 @@
         - [ ] CCL
 
   - [ ] Standardize on function signature char * f(UHPOTE *u, C.struct_XXX *returned, ...)
-        - [ ] `get-devices`
         - [ ] `get-device`
 
   - (?) Make timeout milliseconds (or string ?)
 
   - [ ] CCL
-        - [ ] use rref and pref for transcoding returned device struct
-        - [ ] free returned err pointer
-              - ccl:%str-from-ptr http://ccl.clozure.com/manual/chapter12.3.html
-        - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
-        - [ ] `get-devices`: use unsigned-long ????
-```
-   (multiple-value-bind (devices pdevices) (make-heap-ivector max '(unsigned-byte 32))
-```
+        - [x] free returned err pointer
+        - [x] ccl:%get-cstring
         - [ ] (dispose-heap-ivector a ap)
         - [ ] free udevice cstrings
+        - [ ] use rref and pref for transcoding returned device struct
+        - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
         - [ ] Separate out `uhppoted` into it's own package
               - [ ] (in-package "uhppoted")
               - [ ] Move to its own file
@@ -37,11 +32,8 @@
         - [ ] `get-devices` (as a command line argument)
         - [ ] `get-device` (as a command line argument)
         - [ ] https://stackoverflow.com/questions/833314/compiling-binaries-with-clozure-common-lisp
-        - (?) make it a warning (??)
-        - [Probably where the extra bytes in the struct come from](https://interrupt.memfault.com/blog/c-struct-padding-initialization)
         - https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/
-        - https://lispwannabe.wordpress.com/2010/01/25/clozure-common-lisp-ffi-mini-tutorial/
-        - https://lispwannabe.wordpress.com/tag/clozure/
+        - [Probably where the extra bytes in the struct come from](https://interrupt.memfault.com/blog/c-struct-padding-initialization)
 
   - [ ] lint
   - [ ] Cross-compile
