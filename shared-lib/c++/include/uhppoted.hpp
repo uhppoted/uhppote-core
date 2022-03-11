@@ -19,6 +19,30 @@ typedef struct device {
     std::string date;
 } device;
 
+typedef struct event {
+    char timestamp[20];
+    uint32_t index;
+    uint8_t eventType;
+    bool granted;
+    uint8_t door;
+    uint8_t direction;
+    uint32_t card;
+    uint8_t reason;
+} event;
+
+typedef struct status {
+    uint32_t ID;
+    char sysdatetime[20];
+    bool doors[4];
+    bool buttons[4];
+    uint8_t relays;
+    uint8_t inputs;
+    uint8_t syserror;
+    uint32_t seqno;
+    uint8_t info;
+    event event;
+} status;
+
 class uhppoted {
   public:
     uhppoted();
@@ -29,6 +53,7 @@ class uhppoted {
     std::vector<uint32_t> get_devices();
     device get_device(uint32_t id);
     void set_address(uint32_t id, std::string &address, std::string &subnet, std::string &gateway);
+    status get_status(uint32_t id);
 
   private:
     UHPPOTE *u;

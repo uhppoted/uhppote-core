@@ -5,26 +5,18 @@
 - Shared-lib/DLL
   - [ ] `get-status`
         - [x] C
-        - [ ] C++
+        - [x] C++
         - [ ] Python
         - [ ] C#
         - [ ] CCL
 
-  - [x] `make`
-         - [x] Makefile at root of shared-lib
-               - [x] Build libs
-               - [x] Build C example
-               - [x] Build C++ example
-               - [x] Build C# example
-               - [x] Build Python example
-               - [x] Build CCL example
-
   - [ ] Standardize on function signature char * f(UHPPOTE *u, C.struct_XXX *returned, ...)
+        - [ ] `get-devices`
+        - [ ] `get-device`
+
   - (?) Make timeout milliseconds (or string ?)
 
   - [ ] CCL
-        - [x] Set size of devices list
-        - [x] rletz
         - [ ] use rref and pref for transcoding returned device struct
         - [ ] free returned err pointer
               - ccl:%str-from-ptr http://ccl.clozure.com/manual/chapter12.3.html

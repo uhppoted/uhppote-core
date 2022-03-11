@@ -69,3 +69,40 @@ int setAddress(uhppoted &u, uint32_t deviceID, string address, string subnet, st
 
     return -1;
 }
+
+int getStatus(uhppoted &u, uint32_t deviceID) {
+    try {
+        auto s = u.get_status(deviceID);
+
+        cout << endl
+             << "get-status" << endl;
+        cout << "  ID:       " << s.ID << endl;
+
+        cout << "  date/time: " << s.sysdatetime << endl;
+        cout << "  doors:     " << s.doors[0] << " " << s.doors[1] << " " << s.doors[2] << " " << s.doors[3] << endl;
+        cout << "  buttons:   " << s.buttons[0] << " " << s.buttons[1] << " " << s.buttons[2] << " " << s.buttons[3] << endl;
+        cout << "  relays:    " << showbase << hex << static_cast<int>(s.relays) << dec << endl;
+        cout << "  inputs:    " << showbase << hex << static_cast<int>(s.inputs) << dec << endl;
+        cout << "  error:     " << showbase << hex << static_cast<int>(s.syserror) << dec << endl;
+        cout << "  seq no.:   " << s.seqno << endl;
+        cout << "  info:      " << showbase << hex << static_cast<int>(s.info) << dec << endl;
+        cout << endl;
+        cout << "  event timestamp: " << s.event.timestamp << endl;
+        cout << "        index:     " << s.event.index << endl;
+        cout << "        type:      " << static_cast<int>(s.event.eventType) << endl;
+        cout << "        granted:   " << s.event.granted << endl;
+        cout << "        door:      " << static_cast<int>(s.event.door) << endl;
+        cout << "        direction: " << static_cast<int>(s.event.direction) << endl;
+        cout << "        card:      " << s.event.card << endl;
+        cout << "        reason:    " << static_cast<int>(s.event.reason) << endl;
+        cout << endl;
+
+        return 0;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return -1;
+}

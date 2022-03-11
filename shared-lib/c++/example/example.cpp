@@ -7,6 +7,10 @@ using namespace std;
 
 void usage();
 
+const uint32_t DEVICEID = 405419896;
+const controller ALPHA = {.id = 405419896, .address = "192.168.1.100"};
+const controller BETA = {.id = 303986753, .address = "192.168.1.100"};
+
 int main(int argc, char **argv) {
     if (argc < 2) {
         cerr << endl
@@ -17,23 +21,23 @@ int main(int argc, char **argv) {
     }
 
     string cmd(argv[1]);
-
-    controller alpha = {.id = 405419896, .address = "192.168.1.100"};
-    controller beta = {.id = 303986753, .address = "192.168.1.100"};
-    vector<controller> controllers = {alpha, beta};
+    vector<controller> controllers = {ALPHA, BETA};
 
     uhppoted u("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2, controllers, true);
 
     if (cmd == "get-devices") {
         return getDevices(u);
     } else if (cmd == "get-device") {
-        return getDevice(u, 405419896);
+        return getDevice(u, DEVICEID);
     } else if (cmd == "set-address") {
-        return setAddress(u, 405419896, "192.168.1.125", "255.255.254.0", "192.168.1.10");
+        return setAddress(u, DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.10");
+    } else if (cmd == "get-status") {
+        return getStatus(u, DEVICEID);
     } else if (cmd == "all") {
         getDevices(u);
-        getDevice(u, 405419896);
-        setAddress(u, 405419896, "192.168.1.125", "255.255.254.0", "192.168.1.10");
+        getDevice(u, DEVICEID);
+        setAddress(u, DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.10");
+        getStatus(u, DEVICEID);
         return 0;
     }
 
@@ -51,5 +55,6 @@ void usage() {
     cout << "      get-devices" << endl;
     cout << "      get-device" << endl;
     cout << "      set-address" << endl;
+    cout << "      get-status" << endl;
     cout << endl;
 }
