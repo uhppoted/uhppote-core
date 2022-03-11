@@ -5,8 +5,10 @@ import "C"
 import (
 	"fmt"
 	"net"
+	"time"
 	"unsafe"
 
+	"github.com/uhppoted/uhppote-core/types"
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
 
@@ -86,6 +88,66 @@ func setAddress(uu uhppote.IUHPPOTE, deviceID uint32, address, subnet, gateway *
 	} else if !result.Succeeded {
 		return fmt.Errorf("failed to set device address")
 	}
+
+	return nil
+}
+
+func getStatus(uu uhppote.IUHPPOTE, deviceID uint32, status *C.struct_Status) error {
+	if status == nil {
+		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
+	}
+
+	s, err := uu.GetStatus(deviceID)
+	if err != nil {
+		return err
+	} else if s == nil {
+		return fmt.Errorf("No status returned for %v", deviceID)
+	}
+
+	cbool := func(b bool) C.uchar {
+		if b {
+			return 1
+		} else {
+			return 0
+		}
+	}
+
+	format := func(t *types.DateTime) string {
+		if t != nil {
+			return time.Time(*t).Format("2006-01-02 15:04:05")
+		}
+
+		return ""
+	}
+
+	status.ID = C.ulong(s.SerialNumber)
+	status.sysdatetime = C.CString(format(&s.SystemDateTime))
+
+	status.doors[0] = cbool(s.DoorState[1])
+	status.doors[1] = cbool(s.DoorState[2])
+	status.doors[2] = cbool(s.DoorState[3])
+	status.doors[3] = cbool(s.DoorState[4])
+
+	status.buttons[0] = cbool(s.DoorButton[1])
+	status.buttons[1] = cbool(s.DoorButton[2])
+	status.buttons[2] = cbool(s.DoorButton[3])
+	status.buttons[3] = cbool(s.DoorButton[4])
+
+	status.relays = C.uchar(s.RelayState)
+	status.inputs = C.uchar(s.InputState)
+
+	status.syserror = C.uchar(s.SystemError)
+	status.seqno = C.uint(s.SequenceId)
+	status.info = C.uchar(s.SpecialInfo)
+
+	status.event.timestamp = C.CString(format(s.Event.Timestamp))
+	status.event.index = C.uint(s.Event.Index)
+	status.event.eventType = C.uchar(s.Event.Type)
+	status.event.granted = cbool(s.Event.Granted)
+	status.event.door = C.uchar(s.Event.Door)
+	status.event.direction = C.uchar(s.Event.Direction)
+	status.event.card = C.uint(s.Event.CardNumber)
+	status.event.reason = C.uchar(s.Event.Reason)
 
 	return nil
 }

@@ -41,8 +41,8 @@ func getDevices(uu uhppote.IUHPPOTE, N *C.int, list *C.uint) error {
 	return nil
 }
 
-func getDevice(uu uhppote.IUHPPOTE, deviceID uint32, d *C.struct_Device) error {
-	if d == nil {
+func getDevice(uu uhppote.IUHPPOTE, deviceID uint32, device *C.struct_Device) error {
+	if device == nil {
 		return fmt.Errorf("invalid argument (device) - expected valid pointer to Device struct")
 	}
 
@@ -52,13 +52,13 @@ func getDevice(uu uhppote.IUHPPOTE, deviceID uint32, d *C.struct_Device) error {
 		fmt.Println()
 	}
 
-	d.ID = C.ulong(deviceID)
-	d.address = C.CString("192.168.1.101")
-	d.subnet = C.CString("255.255.255.0")
-	d.gateway = C.CString("192.168.1.1")
-	d.MAC = C.CString("00:12:23:34:45:56")
-	d.version = C.CString("v8.92")
-	d.date = C.CString("2018-11-05")
+	device.ID = C.ulong(deviceID)
+	device.address = C.CString("192.168.1.101")
+	device.subnet = C.CString("255.255.255.0")
+	device.gateway = C.CString("192.168.1.1")
+	device.MAC = C.CString("00:12:23:34:45:56")
+	device.version = C.CString("v8.92")
+	device.date = C.CString("2018-11-05")
 
 	return nil
 }
@@ -87,6 +87,49 @@ func setAddress(uu uhppote.IUHPPOTE, deviceID uint32, address, subnet, gateway *
 		fmt.Printf("    gateway: %v\n", _gateway)
 		fmt.Println()
 	}
+
+	return nil
+}
+
+func getStatus(uu uhppote.IUHPPOTE, deviceID uint32, status *C.struct_Status) error {
+	if status == nil {
+		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
+	}
+
+	if DEBUG {
+		fmt.Printf(">>> get-status\n")
+		fmt.Printf("    ID: %v\n", deviceID)
+		fmt.Println()
+	}
+
+	status.ID = C.ulong(deviceID)
+	status.sysdatetime = C.CString("2022-03-19 15:48:32")
+
+	status.doors[0] = 1
+	status.doors[1] = 0
+	status.doors[2] = 0
+	status.doors[3] = 1
+
+	status.buttons[0] = 1
+	status.buttons[1] = 0
+	status.buttons[2] = 1
+	status.buttons[3] = 0
+
+	status.relays = 0x12
+	status.inputs = 0x34
+
+	status.syserror = 0x56
+	status.seqno = 9876
+	status.info = 253
+
+	status.event.timestamp = C.CString("2022-01-02 12:34:56")
+	status.event.index = 135
+	status.event.eventType = 0x06
+	status.event.granted = 1
+	status.event.door = 3
+	status.event.direction = 1
+	status.event.card = 8100023
+	status.event.reason = 0x15
 
 	return nil
 }

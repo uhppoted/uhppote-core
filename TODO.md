@@ -3,8 +3,8 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] `get-time`
-        - [ ] C
+  - [ ] `get-status`
+        - [x] C
         - [ ] C++
         - [ ] Python
         - [ ] C#

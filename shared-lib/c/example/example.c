@@ -4,10 +4,11 @@
 
 #include "../include/uhppoted.h"
 
+#include "device.h"
+
 void usage();
-extern int getDevices();
-extern int getDevice(uint32_t);
-extern int setAddress(uint32_t, const char *, const char *, const char *);
+
+const uint32_t DEVICEID = 405419896;
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -27,15 +28,18 @@ int main(int argc, char **argv) {
     if (strncmp(cmd, "get-devices", 11) == 0) {
         rc = getDevices();
     } else if (strncmp(cmd, "get-device", 10) == 0) {
-        rc = getDevice(405419896);
+        rc = getDevice(DEVICEID);
     } else if (strncmp(cmd, "set-address", 11) == 0) {
-        rc = setAddress(405419896, "192.168.1.125", "255.255.254.0", "192.168.1.0");
+        rc = setAddress(DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.0");
+    } else if (strncmp(cmd, "get-status", 10) == 0) {
+        rc = getStatus(DEVICEID);
     } else if (strncmp(cmd, "all", 3) == 0) {
         rc = 0;
 
         getDevices();
-        getDevice(405419896);
-        setAddress(405419896, "192.168.1.125", "255.255.254.0", "192.168.1.0");
+        getDevice(DEVICEID);
+        setAddress(DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.0");
+        getStatus(DEVICEID);
     }
 
     teardown();
@@ -50,5 +54,6 @@ void usage() {
     printf("      get-devices\n");
     printf("      get-device\n");
     printf("      set-address\n");
+    printf("      get-status\n");
     printf("\n");
 }

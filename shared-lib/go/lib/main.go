@@ -23,7 +23,7 @@ typedef struct UHPPOTE {
 	bool        debug;
 } UHPPOTE;
 
-struct Device {
+typedef struct Device {
     unsigned long ID;
 	char *address;
 	char *subnet;
@@ -31,7 +31,32 @@ struct Device {
 	char *MAC;
 	char *version;
 	char *date;
-};
+} Device;
+
+typedef struct Event {
+	char  *timestamp;
+    uint32_t index;
+	uint8_t eventType;
+	uint8_t granted;
+	uint8_t door;
+	uint8_t direction;
+	uint32_t card;
+	uint8_t reason;
+} Event;
+
+typedef struct Status {
+    unsigned long ID;
+	char *sysdatetime;
+	uint8_t  doors[4];
+	uint8_t  buttons[4];
+	uint8_t relays;
+	uint8_t inputs;
+	uint8_t syserror;
+	uint32_t seqno;
+	uint8_t info;
+	Event *event;
+} Status;
+
 */
 import "C"
 
@@ -73,6 +98,17 @@ func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.c
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
 	} else if err := setAddress(uu, deviceID, addr, subnet, gateway); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
+//export GetStatus
+func GetStatus(u *C.struct_UHPPOTE, deviceID uint32, status *C.struct_Status) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := getStatus(uu, deviceID, status); err != nil {
 		return C.CString(err.Error())
 	}
 

@@ -180,3 +180,51 @@ int set_address(unsigned id, const char *address, const char *subnet, const char
 
     return 0;
 }
+
+int get_status(unsigned id, struct status *s) {
+    struct Status status;
+    struct Event event;
+
+    status.event = &event;
+
+    char *err = GetStatus(u, id, &status);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    s->ID = status.ID;
+    snprintf(s->sysdatetime, sizeof(s->sysdatetime), "%s", status.sysdatetime);
+
+    s->doors[0] = status.doors[0];
+    s->doors[1] = status.doors[1];
+    s->doors[2] = status.doors[2];
+    s->doors[3] = status.doors[3];
+
+    s->buttons[0] = status.buttons[0];
+    s->buttons[1] = status.buttons[1];
+    s->buttons[2] = status.buttons[2];
+    s->buttons[3] = status.buttons[3];
+
+    s->relays = status.relays;
+    s->inputs = status.inputs;
+    s->syserror = status.syserror;
+    s->seqno = status.seqno;
+    s->info = status.info;
+
+    if (status.event) {
+        snprintf(s->event.timestamp, sizeof(s->event.timestamp), "%s", status.event->timestamp);
+        s->event.index = status.event->index;
+        s->event.eventType = status.event->eventType;
+        s->event.granted = status.event->granted;
+        s->event.door = status.event->door;
+        s->event.direction = status.event->direction;
+        s->event.card = status.event->card;
+        s->event.reason = status.event->reason;
+    }
+
+    free(status.sysdatetime);
+    free(event.timestamp);
+
+    return 0;
+}
