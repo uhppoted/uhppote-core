@@ -185,11 +185,15 @@ int get_status(unsigned id, struct status *s) {
     struct Status status;
     struct Event event;
 
+    status.doors = malloc(4 * sizeof(uint8_t));
+    status.buttons = malloc(4 * sizeof(uint8_t));
     status.event = &event;
 
     char *err = GetStatus(u, id, &status);
     if (err != NULL) {
         set_error(err);
+        free(status.doors);
+        free(status.buttons);
         return -1;
     }
 
@@ -209,8 +213,8 @@ int get_status(unsigned id, struct status *s) {
     s->relays = status.relays;
     s->inputs = status.inputs;
     s->syserror = status.syserror;
-    s->seqno = status.seqno;
     s->info = status.info;
+    s->seqno = status.seqno;
 
     if (status.event) {
         snprintf(s->event.timestamp, sizeof(s->event.timestamp), "%s", status.event->timestamp);
@@ -224,6 +228,8 @@ int get_status(unsigned id, struct status *s) {
     }
 
     free(status.sysdatetime);
+    free(status.doors);
+    free(status.buttons);
     free(event.timestamp);
 
     return 0;

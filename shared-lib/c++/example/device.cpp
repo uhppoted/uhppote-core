@@ -76,11 +76,19 @@ int getStatus(uhppoted &u, uint32_t deviceID) {
 
         cout << endl
              << "get-status" << endl;
-        cout << "  ID:       " << s.ID << endl;
+        cout << "  ID:        " << s.ID << endl;
 
         cout << "  date/time: " << s.sysdatetime << endl;
-        cout << "  doors:     " << s.doors[0] << " " << s.doors[1] << " " << s.doors[2] << " " << s.doors[3] << endl;
-        cout << "  buttons:   " << s.buttons[0] << " " << s.buttons[1] << " " << s.buttons[2] << " " << s.buttons[3] << endl;
+        cout << "  doors:     " << static_cast<int>(s.doors[0])
+             << " " << static_cast<int>(s.doors[1])
+             << " " << static_cast<int>(s.doors[2])
+             << " " << static_cast<int>(s.doors[3])
+             << endl;
+        cout << "  buttons:   " << static_cast<int>(s.buttons[0])
+             << " " << static_cast<int>(s.buttons[1])
+             << " " << static_cast<int>(s.buttons[2])
+             << " " << static_cast<int>(s.buttons[3])
+             << endl;
         cout << "  relays:    " << showbase << hex << static_cast<int>(s.relays) << dec << endl;
         cout << "  inputs:    " << showbase << hex << static_cast<int>(s.inputs) << dec << endl;
         cout << "  error:     " << showbase << hex << static_cast<int>(s.syserror) << dec << endl;

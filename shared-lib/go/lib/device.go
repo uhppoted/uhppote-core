@@ -123,15 +123,18 @@ func getStatus(uu uhppote.IUHPPOTE, deviceID uint32, status *C.struct_Status) er
 	status.ID = C.ulong(s.SerialNumber)
 	status.sysdatetime = C.CString(format(&s.SystemDateTime))
 
-	status.doors[0] = cbool(s.DoorState[1])
-	status.doors[1] = cbool(s.DoorState[2])
-	status.doors[2] = cbool(s.DoorState[3])
-	status.doors[3] = cbool(s.DoorState[4])
+	doors := unsafe.Slice(status.doors, 4)
+	buttons := unsafe.Slice(status.buttons, 4)
 
-	status.buttons[0] = cbool(s.DoorButton[1])
-	status.buttons[1] = cbool(s.DoorButton[2])
-	status.buttons[2] = cbool(s.DoorButton[3])
-	status.buttons[3] = cbool(s.DoorButton[4])
+	doors[0] = cbool(s.DoorState[1])
+	doors[1] = cbool(s.DoorState[2])
+	doors[2] = cbool(s.DoorState[3])
+	doors[3] = cbool(s.DoorState[4])
+
+	buttons[0] = cbool(s.DoorButton[1])
+	buttons[1] = cbool(s.DoorButton[2])
+	buttons[2] = cbool(s.DoorButton[3])
+	buttons[3] = cbool(s.DoorButton[4])
 
 	status.relays = C.uchar(s.RelayState)
 	status.inputs = C.uchar(s.InputState)

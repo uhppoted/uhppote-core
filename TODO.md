@@ -6,11 +6,11 @@
   - [ ] `get-status`
         - [x] C
         - [x] C++
-        - [ ] Python
+        - [x] Python
         - [ ] C#
         - [ ] CCL
 
-  - [ ] Standardize on function signature char * f(UHPPOTE *u, C.struct_XXX *returned, ...)
+  - [ ] Standardize on function signature char * f(UHPOTE *u, C.struct_XXX *returned, ...)
         - [ ] `get-devices`
         - [ ] `get-device`
 

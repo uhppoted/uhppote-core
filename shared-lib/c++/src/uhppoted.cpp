@@ -149,7 +149,11 @@ void uhppoted::set_address(uint32_t id, std::string &address, std::string &subne
 status uhppoted::get_status(unsigned id) {
     struct Status status;
     struct Event event;
+    vector<uint8_t> doors(4);
+    vector<uint8_t> buttons(4);
 
+    status.doors = doors.data();
+    status.buttons = buttons.data();
     status.event = &event;
 
     char *err = GetStatus(u, id, &status);
@@ -162,15 +166,15 @@ status uhppoted::get_status(unsigned id) {
     s.ID = status.ID;
     snprintf(s.sysdatetime, sizeof(s.sysdatetime), "%s", status.sysdatetime);
 
-    s.doors[0] = status.doors[0];
-    s.doors[1] = status.doors[1];
-    s.doors[2] = status.doors[2];
-    s.doors[3] = status.doors[3];
+    s.doors[0] = doors[0];
+    s.doors[1] = doors[1];
+    s.doors[2] = doors[2];
+    s.doors[3] = doors[3];
 
-    s.buttons[0] = status.buttons[0];
-    s.buttons[1] = status.buttons[1];
-    s.buttons[2] = status.buttons[2];
-    s.buttons[3] = status.buttons[3];
+    s.buttons[0] = buttons[0];
+    s.buttons[1] = buttons[1];
+    s.buttons[2] = buttons[2];
+    s.buttons[3] = buttons[3];
 
     s.relays = status.relays;
     s.inputs = status.inputs;

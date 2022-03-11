@@ -3,11 +3,14 @@ import platform
 
 from ctypes import c_bool
 from ctypes import c_char_p
+from ctypes import c_ubyte
 from ctypes import c_int
 from ctypes import c_longlong
 from ctypes import c_uint32
 from ctypes import c_ulong
+from ctypes import c_void_p
 from ctypes import pointer
+from ctypes import byref
 from ctypes import Structure
 from ctypes import POINTER
 
@@ -46,6 +49,32 @@ class Device:
     date: str
 
 
+@dataclass
+class Event:
+    timestamp: str
+    index: int
+    type: int
+    granted: bool
+    door: int
+    direction: int
+    card: int
+    reason: int
+
+
+@dataclass
+class Status:
+    ID: int
+    sysdatetime: str
+    doors: list[bool]
+    buttons: list[bool]
+    relays: int
+    inputs: int
+    syserror: int
+    seqno: int
+    info: int
+    event: Event
+
+
 class Uhppote:
     def __init__(self, uhppote=None):
         self._uhppote = None
@@ -77,7 +106,7 @@ class Uhppote:
             count = ctypes.c_int(N)
             list = (c_uint32 * N)(*[0] * N)
 
-            GetDevices(self._uhppote, ctypes.byref(count), list)
+            GetDevices(self._uhppote, byref(count), list)
 
             if count.value <= N:
                 break
@@ -92,7 +121,7 @@ class Uhppote:
 
         device = GoDevice()
 
-        GetDevice(self._uhppote, deviceID, ctypes.byref(device))
+        GetDevice(self._uhppote, deviceID, byref(device))
 
         return Device(device.ID, device.address.decode('utf-8'),
                       device.subnet.decode('utf-8'),
@@ -112,6 +141,44 @@ class Uhppote:
         SetAddress(self._uhppote, deviceID, c_char_p(bytes(address, 'utf-8')),
                    c_char_p(bytes(subnet, 'utf-8')),
                    c_char_p(bytes(gateway, 'utf-8')))
+
+    def get_status(self, deviceID):
+        GetStatus = lib.GetStatus
+        GetStatus.argtypes = [POINTER(GoUHPPOTE), c_ulong, POINTER(GoStatus)]
+        GetStatus.restype = ctypes.c_char_p
+        GetStatus.errcheck = self.errcheck
+
+        status = GoStatus()
+
+        status.doors = (c_ubyte * 4)(*[0] * 4)
+        status.buttons = (c_ubyte * 4)(*[0] * 4)
+        status.event = pointer(GoEvent())
+
+        GetStatus(self._uhppote, deviceID, ctypes.byref(status))
+
+        doors = [False, False, False, False]
+        buttons = [False, False, False, False]
+        for i in range(4):
+            if status.doors[i] != 0:
+                doors[i] = True
+
+            if status.buttons[i] != 0:
+                buttons[i] = True
+
+        event = Event(
+            status.event.contents.timestamp.decode('utf-8'),
+            status.event.contents.index,
+            status.event.contents.type,
+            status.event.contents.granted,
+            status.event.contents.door,
+            status.event.contents.direction,
+            status.event.contents.card,
+            status.event.contents.reason,
+        )
+
+        return Status(status.ID, status.sysdatetime.decode('utf-8'), doors,
+                      buttons, status.relays, status.inputs, status.syserror,
+                      status.seqno, status.info, event)
 
 
 # INTERNAL TYPES
@@ -157,4 +224,32 @@ class GoDevice(Structure):
         ('MAC', c_char_p),
         ('version', c_char_p),
         ('date', c_char_p),
+    ]
+
+
+class GoEvent(Structure):
+    _fields_ = [
+        ('timestamp', c_char_p),
+        ('index', c_uint32),
+        ('type', c_ubyte),
+        ('granted', c_bool),
+        ('door', c_ubyte),
+        ('direction', c_ubyte),
+        ('card', c_uint32),
+        ('reason', c_ubyte),
+    ]
+
+
+class GoStatus(Structure):
+    _fields_ = [
+        ('ID', c_uint32),
+        ('sysdatetime', c_char_p),
+        ('doors', POINTER(c_ubyte)),  #     uint8_t[4]
+        ('buttons', POINTER(c_ubyte)),  #     uint8_t[4]
+        ('relays', c_ubyte),
+        ('inputs', c_ubyte),
+        ('syserror', c_ubyte),
+        ('info', c_ubyte),
+        ('seqno', c_uint32),
+        ('event', POINTER(GoEvent)),
     ]

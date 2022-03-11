@@ -47,13 +47,13 @@ typedef struct Event {
 typedef struct Status {
     unsigned long ID;
 	char *sysdatetime;
-	uint8_t  doors[4];
-	uint8_t  buttons[4];
+	uint8_t  *doors;   // uint_8[4]
+	uint8_t  *buttons; // uint_8[4]
 	uint8_t relays;
 	uint8_t inputs;
 	uint8_t syserror;
-	uint32_t seqno;
 	uint8_t info;
+	uint32_t seqno;
 	Event *event;
 } Status;
 

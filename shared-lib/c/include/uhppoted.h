@@ -37,8 +37,8 @@ typedef struct status {
     uint8_t relays;
     uint8_t inputs;
     uint8_t syserror;
-    uint32_t seqno;
     uint8_t info;
+    uint32_t seqno;
     event event;
 } status;
 

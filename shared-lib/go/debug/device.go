@@ -105,22 +105,25 @@ func getStatus(uu uhppote.IUHPPOTE, deviceID uint32, status *C.struct_Status) er
 	status.ID = C.ulong(deviceID)
 	status.sysdatetime = C.CString("2022-03-19 15:48:32")
 
-	status.doors[0] = 1
-	status.doors[1] = 0
-	status.doors[2] = 0
-	status.doors[3] = 1
+	doors := unsafe.Slice(status.doors, 4)
+	buttons := unsafe.Slice(status.buttons, 4)
 
-	status.buttons[0] = 1
-	status.buttons[1] = 0
-	status.buttons[2] = 1
-	status.buttons[3] = 0
+	doors[0] = 1
+	doors[1] = 0
+	doors[2] = 0
+	doors[3] = 1
+
+	buttons[0] = 1
+	buttons[1] = 0
+	buttons[2] = 1
+	buttons[3] = 0
 
 	status.relays = 0x12
 	status.inputs = 0x34
 
 	status.syserror = 0x56
-	status.seqno = 9876
 	status.info = 253
+	status.seqno = 9876
 
 	status.event.timestamp = C.CString("2022-01-02 12:34:56")
 	status.event.index = 135
