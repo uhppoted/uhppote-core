@@ -42,6 +42,10 @@ public class example
                     SetAddress(u, 405419896, "192.168.1.125", "255.255.255.254", "192.168.1.5");
                     break;
 
+                case "get-status":
+                    GetStatus(u, 405419896);
+                    break;
+
                 case "all":
                     GetDevices(u);
                     GetDevice(u, 405419896);
@@ -78,6 +82,7 @@ public class example
         Console.WriteLine("    get-devices");
         Console.WriteLine("    get-device");
         Console.WriteLine("    set-address");
+        Console.WriteLine("    get-status");
         Console.WriteLine("    help");
         Console.WriteLine();
         Console.WriteLine("  get-devices");
@@ -88,6 +93,9 @@ public class example
         Console.WriteLine();
         Console.WriteLine("  set-address");
         Console.WriteLine("    Sets the controller IPv4 address, subnet mask and gateway address.");
+        Console.WriteLine();
+        Console.WriteLine("  get-status");
+        Console.WriteLine("    Retrieves the current device status for a single UHPPOTE controller.");
         Console.WriteLine();
         Console.WriteLine("  help");
         Console.WriteLine("    Displays this information.");
@@ -128,6 +136,32 @@ public class example
         Console.WriteLine(String.Format("  address: {0}", address));
         Console.WriteLine(String.Format("  subnet:  {0}", subnet));
         Console.WriteLine(String.Format("  gateway: {0}", gateway));
+        Console.WriteLine();
+    }
+
+    static void GetStatus(Uhppoted u, uint deviceID)
+    {
+        Status status = u.GetStatus(deviceID);
+
+        Console.WriteLine(String.Format("get-status"));
+        Console.WriteLine(String.Format("  ID:        {0}", status.ID));
+        Console.WriteLine(String.Format("  timestamp: {0}", status.sysdatetime));
+        Console.WriteLine(String.Format("  doors:     {0} {1} {2} {3}", status.doors[0], status.doors[1], status.doors[2], status.doors[3]));
+        Console.WriteLine(String.Format("  buttons:   {0} {1} {2} {3}", status.buttons[0], status.buttons[1], status.buttons[2], status.buttons[3]));
+        Console.WriteLine(String.Format("  relays:    {0:X}", status.relays));
+        Console.WriteLine(String.Format("  inputs:    {0:X}", status.inputs));
+        Console.WriteLine(String.Format("  syserror:  {0}", status.syserror));
+        Console.WriteLine(String.Format("  info:      {0:X}", status.info));
+        Console.WriteLine(String.Format("  seqno:     {0}", status.seqno));
+        Console.WriteLine(String.Format("  event timestamp: {0}", status.evt.timestamp));
+        Console.WriteLine(String.Format("        index:     {0}", status.evt.index));
+        Console.WriteLine(String.Format("        type:      {0}", status.evt.eventType));
+        Console.WriteLine(String.Format("        granted:   {0}", status.evt.granted));
+        Console.WriteLine(String.Format("        door:      {0}", status.evt.door));
+        Console.WriteLine(String.Format("        direction: {0}", status.evt.direction));
+        Console.WriteLine(String.Format("        card:      {0}", status.evt.card));
+        Console.WriteLine(String.Format("        reason:    {0}", status.evt.reason));
+
         Console.WriteLine();
     }
 }

@@ -96,6 +96,10 @@ func getStatus(uu uhppote.IUHPPOTE, deviceID uint32, status *C.struct_Status) er
 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
 	}
 
+	if status.event == nil {
+		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status.Event struct")
+	}
+
 	if DEBUG {
 		fmt.Printf(">>> get-status\n")
 		fmt.Printf("    ID: %v\n", deviceID)

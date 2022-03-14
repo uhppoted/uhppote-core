@@ -7,15 +7,18 @@
         - [x] C
         - [x] C++
         - [x] Python
-        - [ ] C#
+        - [x] C#
         - [ ] CCL
 
   - [ ] Standardize on function signature char * f(UHPOTE *u, C.struct_XXX *returned, ...)
         - [ ] `get-device`
+        - [ ] `get-status`
 
   - (?) Make timeout milliseconds (or string ?)
 
   - [ ] CCL
+        - [ ] Try using full (expanded) path for DYLD_LIBRARY_PATH
+              (maybe it can't resolve the relative path because CCL64 is installed elsewhere)
         - [x] free returned err pointer
         - [x] ccl:%get-cstring
         - [ ] (dispose-heap-ivector a ap)

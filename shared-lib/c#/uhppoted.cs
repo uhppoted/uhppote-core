@@ -43,6 +43,58 @@ namespace uhppoted
         }
     };
 
+    public class Event
+    {
+        public string timestamp;
+        public uint index;
+        public byte eventType;
+        public bool granted;
+        public byte door;
+        public byte direction;
+        public uint card;
+        public byte reason;
+
+        public Event(string timestamp, uint index, byte eventType, bool granted, byte door, byte direction, uint card, byte reason)
+        {
+            this.timestamp = timestamp;
+            this.index = index;
+            this.eventType = eventType;
+            this.granted = granted;
+            this.door = door;
+            this.direction = direction;
+            this.card = card;
+            this.reason = reason;
+        }
+    };
+
+    public class Status
+    {
+        public uint ID;
+        public string sysdatetime;
+        public byte[] doors;
+        public byte[] buttons;
+        public byte relays;
+        public byte inputs;
+        public byte syserror;
+        public byte info;
+        public uint seqno;
+        public Event evt;
+
+        public Status(uint ID, string sysdatetime, byte[] doors, byte[] buttons, byte relays, byte inputs, byte syserror, byte info, uint seqno, Event evt)
+        {
+            this.ID = ID;
+            this.sysdatetime = sysdatetime;
+            this.doors = doors;
+            this.buttons = buttons;
+            this.relays = relays;
+            this.inputs = inputs;
+            this.syserror = syserror;
+            this.info = info;
+            this.seqno = seqno;
+            this.evt = evt;
+        }
+    };
+
     public class Uhppoted : IDisposable
     {
         private UHPPOTE u = new UHPPOTE();
@@ -179,43 +231,123 @@ namespace uhppoted
                 throw new UhppotedException(err);
             }
         }
-    }
 
-    struct udevice
-    {
-        public uint ID;
-        public string address;
-    };
+        [DllImport("libuhppoted.so")]
+        private static extern string GetStatus(ref UHPPOTE u, uint deviceID, ref GoStatus status);
 
-    struct udevices
-    {
-        public uint N;
-        public IntPtr devices;  // array of udevice *
-    };
+        public Status GetStatus(uint deviceID)
+        {
+            GoStatus status = new GoStatus();
 
-    struct UHPPOTE
-    {
-        public string bind;
-        public string broadcast;
-        public string listen;
-        public int timeout;  // seconds, defaults to 5 if <= 0
-        public IntPtr devices;  // udevices * (optional list of non-local controller ID + address pairs)
-        public bool debug;
-    };
+            status.doors = Marshal.AllocHGlobal(4);
+            status.buttons = Marshal.AllocHGlobal(4);
+            status.evt = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(GoEvent)));
 
-    struct GoDevice
-    {
-        public uint ID;
-        public string address;
-        public string subnet;
-        public string gateway;
-        public string MAC;
-        public string version;
-        public string date;
-    };
+            string err = GetStatus(ref this.u, deviceID, ref status);
+            if (err != null && err != "")
+            {
+                Marshal.FreeHGlobal(status.doors);
+                Marshal.FreeHGlobal(status.buttons);
+                Marshal.FreeHGlobal(status.evt);
 
-    // Return value for interop function GetDevices - for some reason the compiler thinks it's never initialised
-    // Ref. https://stackoverflow.com/questions/3820985/suppressing-is-never-used-and-is-never-assigned-to-warnings-in-c-sharp/3821035#3821035
+                throw new UhppotedException(err);
+            }
+
+            byte[] doors = new byte[4];
+            byte[] buttons = new byte[4];
+            GoEvent evt = (GoEvent)Marshal.PtrToStructure(status.evt, typeof(GoEvent));
+
+            Marshal.Copy(status.doors, doors, 0, 4);
+            Marshal.Copy(status.buttons, buttons, 0, 4);
+
+            Event e = new Event(
+                evt.timestamp,
+                evt.index,
+                evt.eventType,
+                evt.granted != 0,
+                evt.door,
+                evt.direction,
+                evt.card,
+                evt.reason);
+
+            Marshal.FreeHGlobal(status.doors);
+            Marshal.FreeHGlobal(status.buttons);
+            Marshal.FreeHGlobal(status.evt);
+
+            return new Status(
+                status.ID,
+                status.sysdatetime,
+                doors,
+                buttons,
+                status.relays,
+                status.inputs,
+                status.syserror,
+                status.info,
+                status.seqno,
+                e);
+        }
+
+        struct udevice
+        {
+            public uint ID;
+            public string address;
+        };
+
+        struct udevices
+        {
+            public uint N;
+            public IntPtr devices;  // array of udevice *
+        };
+
+        struct UHPPOTE
+        {
+            public string bind;
+            public string broadcast;
+            public string listen;
+            public int timeout;  // seconds, defaults to 5 if <= 0
+            public IntPtr devices;  // udevices * (optional list of non-local controller ID + address pairs)
+            public bool debug;
+        };
+
+        struct GoDevice
+        {
+            public uint ID;
+            public string address;
+            public string subnet;
+            public string gateway;
+            public string MAC;
+            public string version;
+            public string date;
+        };
+
+        // Ref. https://stackoverflow.com/questions/3820985/suppressing-is-never-used-and-is-never-assigned-to-warnings-in-c-sharp/3821035#3821035
 #pragma warning disable 0649
+        struct GoEvent
+        {
+            public string timestamp;
+            public uint index;
+            public byte eventType;
+            public byte granted;
+            public byte door;
+            public byte direction;
+            public uint card;
+            public byte reason;
+        };
 #pragma warning restore 0649
+
+        struct GoStatus
+        {
+            public uint ID;
+            public string sysdatetime;
+            public IntPtr doors;
+            public IntPtr buttons;
+            public byte relays;
+            public byte inputs;
+            public byte syserror;
+            public byte info;
+            public uint seqno;
+            public IntPtr evt;
+        };
+    };
 }
+
