@@ -17,11 +17,7 @@
   - (?) Make timeout milliseconds (or string ?)
 
   - [ ] CCL
-        - [ ] Try using full (expanded) path for DYLD_LIBRARY_PATH
-              (maybe it can't resolve the relative path because CCL64 is installed elsewhere)
-        - [x] free returned err pointer
-        - [x] ccl:%get-cstring
-        - [ ] (dispose-heap-ivector a ap)
+        - [x] (dispose-heap-ivector a ap)
         - [ ] free udevice cstrings
         - [ ] use rref and pref for transcoding returned device struct
         - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)

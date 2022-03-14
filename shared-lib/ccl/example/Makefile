@@ -1,5 +1,5 @@
 LIB=../../lib
-CMD=ccl64  --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/lib")' --load example.ccl
+CMD=ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/lib")' --load example.ccl
 
 .PHONY: debug
 
