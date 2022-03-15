@@ -114,7 +114,7 @@ vector<uint32_t> uhppoted::get_devices() {
 struct device uhppoted::get_device(uint32_t id) {
     struct Device device;
 
-    char *err = GetDevice(u, id, &device);
+    char *err = GetDevice(u, &device, id);
     if (err != NULL) {
         throw uhppoted_exception(err);
     }
@@ -156,7 +156,7 @@ status uhppoted::get_status(unsigned id) {
     status.buttons = buttons.data();
     status.event = &event;
 
-    char *err = GetStatus(u, id, &status);
+    char *err = GetStatus(u, &status, id);
     if (err != NULL) {
         throw uhppoted_exception(err);
     }

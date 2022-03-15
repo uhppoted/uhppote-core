@@ -146,7 +146,7 @@ int get_devices(uint32_t **devices, int *N) {
 int get_device(unsigned id, struct device *d) {
     struct Device device;
 
-    char *err = GetDevice(u, id, &device);
+    char *err = GetDevice(u, &device, id);
     if (err != NULL) {
         set_error(err);
         return -1;
@@ -189,7 +189,7 @@ int get_status(unsigned id, struct status *s) {
     status.buttons = malloc(4 * sizeof(uint8_t));
     status.event = &event;
 
-    char *err = GetStatus(u, id, &status);
+    char *err = GetStatus(u, &status, id);
     if (err != NULL) {
         set_error(err);
         free(status.doors);

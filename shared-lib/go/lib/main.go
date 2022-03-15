@@ -83,10 +83,10 @@ func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint) *C.char {
 }
 
 //export GetDevice
-func GetDevice(u *C.struct_UHPPOTE, deviceID uint32, d *C.struct_Device) *C.char {
+func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32) *C.char {
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
-	} else if err := getDevice(uu, deviceID, d); err != nil {
+	} else if err := getDevice(uu, device, deviceID); err != nil {
 		return C.CString(err.Error())
 	}
 
@@ -105,10 +105,10 @@ func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.c
 }
 
 //export GetStatus
-func GetStatus(u *C.struct_UHPPOTE, deviceID uint32, status *C.struct_Status) *C.char {
+func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32) *C.char {
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
-	} else if err := getStatus(uu, deviceID, status); err != nil {
+	} else if err := getStatus(uu, status, deviceID); err != nil {
 		return C.CString(err.Error())
 	}
 

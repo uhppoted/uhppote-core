@@ -115,13 +115,13 @@ class Uhppote:
 
     def get_device(self, deviceID):
         GetDevice = lib.GetDevice
-        GetDevice.argtypes = [POINTER(GoUHPPOTE), c_ulong, POINTER(GoDevice)]
+        GetDevice.argtypes = [POINTER(GoUHPPOTE), POINTER(GoDevice), c_ulong]
         GetDevice.restype = ctypes.c_char_p
         GetDevice.errcheck = self.errcheck
 
         device = GoDevice()
 
-        GetDevice(self._uhppote, deviceID, byref(device))
+        GetDevice(self._uhppote, byref(device), deviceID)
 
         return Device(device.ID, device.address.decode('utf-8'),
                       device.subnet.decode('utf-8'),
@@ -144,7 +144,7 @@ class Uhppote:
 
     def get_status(self, deviceID):
         GetStatus = lib.GetStatus
-        GetStatus.argtypes = [POINTER(GoUHPPOTE), c_ulong, POINTER(GoStatus)]
+        GetStatus.argtypes = [POINTER(GoUHPPOTE), POINTER(GoStatus), c_ulong]
         GetStatus.restype = ctypes.c_char_p
         GetStatus.errcheck = self.errcheck
 
@@ -154,7 +154,7 @@ class Uhppote:
         status.buttons = (c_ubyte * 4)(*[0] * 4)
         status.event = pointer(GoEvent())
 
-        GetStatus(self._uhppote, deviceID, ctypes.byref(status))
+        GetStatus(self._uhppote, ctypes.byref(status), deviceID)
 
         doors = [False, False, False, False]
         buttons = [False, False, False, False]

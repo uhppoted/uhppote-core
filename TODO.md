@@ -10,9 +10,9 @@
         - [x] C#
         - [ ] CCL
 
-  - [ ] Standardize on function signature char * f(UHPOTE *u, C.struct_XXX *returned, ...)
-        - [ ] `get-device`
-        - [ ] `get-status`
+  - [x] Standardize on function signature char * f(UHPOTE *u, C.struct_XXX *returned, ...)
+        - [x] `get-device`
+        - [x] `get-status`
 
   - (?) Make timeout milliseconds (or string ?)
 

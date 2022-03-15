@@ -80,8 +80,8 @@
    (rletz ((device (:struct :GoDevice)))
       (with-macptrs ((err (external-call "GetDevice" 
                                          :address uhppote 
-                                         :unsigned-long device-id 
                                          :address device 
+                                         :unsigned-long device-id 
                                          :address)))
          (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
          (make-device :id      (%get-unsigned-long device)

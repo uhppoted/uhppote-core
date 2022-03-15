@@ -41,7 +41,7 @@ func getDevices(uu uhppote.IUHPPOTE, N *C.int, list *C.uint) error {
 	return nil
 }
 
-func getDevice(uu uhppote.IUHPPOTE, deviceID uint32, device *C.struct_Device) error {
+func getDevice(uu uhppote.IUHPPOTE, device *C.struct_Device, deviceID uint32) error {
 	if device == nil {
 		return fmt.Errorf("invalid argument (device) - expected valid pointer to Device struct")
 	}
@@ -91,7 +91,7 @@ func setAddress(uu uhppote.IUHPPOTE, deviceID uint32, address, subnet, gateway *
 	return nil
 }
 
-func getStatus(uu uhppote.IUHPPOTE, deviceID uint32, status *C.struct_Status) error {
+func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) error {
 	if status == nil {
 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
 	}

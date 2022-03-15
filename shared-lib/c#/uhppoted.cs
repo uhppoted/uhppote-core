@@ -199,13 +199,13 @@ namespace uhppoted
         }
 
         [DllImport("libuhppoted.so")]
-        private static extern string GetDevice(ref UHPPOTE u, uint deviceID, ref GoDevice device);
+        private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID);
 
         public Device GetDevice(uint deviceID)
         {
             GoDevice device = new GoDevice();
 
-            string err = GetDevice(ref this.u, deviceID, ref device);
+            string err = GetDevice(ref this.u, ref device, deviceID);
             if (err != null && err != "")
             {
                 throw new UhppotedException(err);
@@ -233,7 +233,7 @@ namespace uhppoted
         }
 
         [DllImport("libuhppoted.so")]
-        private static extern string GetStatus(ref UHPPOTE u, uint deviceID, ref GoStatus status);
+        private static extern string GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID);
 
         public Status GetStatus(uint deviceID)
         {
@@ -243,7 +243,7 @@ namespace uhppoted
             status.buttons = Marshal.AllocHGlobal(4);
             status.evt = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(GoEvent)));
 
-            string err = GetStatus(ref this.u, deviceID, ref status);
+            string err = GetStatus(ref this.u, ref status, deviceID);
             if (err != null && err != "")
             {
                 Marshal.FreeHGlobal(status.doors);
