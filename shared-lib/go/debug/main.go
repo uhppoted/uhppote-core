@@ -35,12 +35,12 @@ typedef struct Device {
 
 typedef struct Event {
 	char  *timestamp;
-    uint32_t index;
+    unsigned long index;
 	uint8_t eventType;
 	uint8_t granted;
 	uint8_t door;
 	uint8_t direction;
-	uint32_t card;
+	unsigned long card;
 	uint8_t reason;
 } Event;
 
@@ -53,7 +53,7 @@ typedef struct Status {
 	uint8_t inputs;
 	uint8_t syserror;
 	uint8_t info;
-	uint32_t seqno;
+	unsigned long seqno;   // Note: uint32_t causes CGO to pack the struct on a 4 byte boundary - CCL always packs on 8 byte boundaries
 	Event *event;
 } Status;
 

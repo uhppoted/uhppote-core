@@ -3,23 +3,32 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] `get-status`
+  - [x] `get-status`
         - [x] C
         - [x] C++
         - [x] Python
         - [x] C#
-        - [ ] CCL
+        - [x] CCL
 
   - [x] Standardize on function signature char * f(UHPOTE *u, C.struct_XXX *returned, ...)
         - [x] `get-device`
         - [x] `get-status`
+ 
+  - [ ] Replace uint32_t with unsigned long
+        - [ ] (PREFERABLY) explicitly set alignment `__attribute__((align(8))) complex float x;`
+          - https://medium.com/@liamkelly17/working-with-packed-c-structs-in-cgo-224a0a3b708b
+          - [padding](https://interrupt.memfault.com/blog/c-struct-padding-initialization)
+          - CGO seems to packs on 4 byte boundaries
+          - https://github.com/golang/go/wiki/cgo#struct-alignment-issues
 
   - (?) Make timeout milliseconds (or string ?)
 
   - [ ] CCL
-        - [x] (dispose-heap-ivector a ap)
         - [ ] free udevice cstrings
-        - [ ] use rref and pref for transcoding returned device struct
+        - [x] Free C strings in returned strucst
+              - `get-device`
+              - `get-status`
+        - [x] use rref and pref for transcoding returned device struct
         - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
         - [ ] Separate out `uhppoted` into it's own package
               - [ ] (in-package "uhppoted")
@@ -32,7 +41,6 @@
         - [ ] `get-device` (as a command line argument)
         - [ ] https://stackoverflow.com/questions/833314/compiling-binaries-with-clozure-common-lisp
         - https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/
-        - [Probably where the extra bytes in the struct come from](https://interrupt.memfault.com/blog/c-struct-padding-initialization)
 
   - [ ] lint
   - [ ] Cross-compile

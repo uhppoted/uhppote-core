@@ -20,6 +20,30 @@
            version
            date)
 
+(defstruct status
+           ID 
+           timestamp
+           doors
+           buttons
+           relays
+           inputs
+           syserror
+           info
+           seqno
+           event
+)
+
+(defstruct event
+           timestamp
+           index
+           type
+           granted
+           door
+           direction
+           card
+           reason
+)
+
 (def-foreign-type nil
   (:struct :UDEVICE
            (:id      :int)
@@ -39,7 +63,6 @@
            (:devices   :address)
            (:debug     :int)))
 
-
 (def-foreign-type nil
   (:struct :GoDevice
            (:id      :unsigned-long)
@@ -50,7 +73,39 @@
            (:version :address)
            (:date    :address)))
 
-(defun go-error (cstr) "Converts a 'C' char * returned by the Go FFI to a string"
+(def-foreign-type nil
+  (:struct :GoEvent
+           (:timestamp :address)
+           (:index     :unsigned-long)
+           (:type      :unsigned-byte)
+           (:granted   :unsigned-byte)
+           (:door      :unsigned-byte)
+           (:direction :unsigned-byte)
+           (:card      :unsigned-long)
+           (:reason    :unsigned-byte)
+))
+
+(def-foreign-type nil
+  (:struct :GoStatus
+           (:id        :unsigned-long)
+           (:timestamp :address)
+           (:doors     :address)
+           (:buttons   :address)
+           (:relays    :unsigned-byte)
+           (:inputs    :unsigned-byte)
+           (:syserror  :unsigned-byte)
+           (:info      :unsigned-byte)
+           (:seqno     :unsigned-long)
+           (:event     :address)
+))
+
+(defun go-error (cstr) "Converts a 'C' char * returned by the Go FFI to a string and frees the 'C' string"
+   (with-macptrs ((p cstr))
+      (%get-cstring p)
+   )
+)
+
+(defun go-string (cstr) "Converts a 'C' char * returned by the Go FFI to a string and frees the 'C' string"
    (with-macptrs ((p cstr))
       (%get-cstring p)
    )
@@ -85,13 +140,12 @@
                                          :address)))
          (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
          (make-device :id      (%get-unsigned-long device)
-                      :address (%get-cstring (%get-ptr device 8))
-                      :subnet  (%get-cstring (%get-ptr device 16))
-                      :gateway (%get-cstring (%get-ptr device 24))
-                      :MAC     (%get-cstring (%get-ptr device 32))
-                      :version (%get-cstring (%get-ptr device 40))
-                      :date    (%get-cstring (%get-ptr device 48))))))
-
+                      :address (go-string (pref device :GoDevice.address))
+                      :subnet  (go-string (pref device :GoDevice.subnet))
+                      :gateway (go-string (pref device :GoDevice.gateway))
+                      :MAC     (go-string (pref device :GoDevice.MAC))
+                      :version (go-string (pref device :GoDevice.version))
+                      :date    (go-string (pref device :GoDevice.date))))))
 
 (defun uhppoted-set-address (uhppote device-id ip-addr subnet-mask gateway-addr) ""
     (with-cstrs ((address ip-addr)
@@ -104,6 +158,46 @@
                                                        :address gateway
                                                        :address)))
           (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err))))))
+
+(defun uhppoted-get-status (uhppote device-id) ""
+   (%stack-block ((doors   (* 4 1))
+                  (buttons (* 4 1)))
+      (rletz ((event (:struct :GoEvent))
+              (status (:struct :GoStatus)
+                       :doors   doors
+                       :buttons buttons
+                       :event   event))
+         (setf (pref status :GoStatus.event) event)
+         (with-macptrs ((err (external-call "GetStatus" 
+                                            :address uhppote 
+                                            :address status
+                                            :unsigned-long device-id 
+                                            :address)))
+            (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+            (make-status :id        (%get-unsigned-long status)
+                         :timestamp (go-string (pref status :GoStatus.timestamp))
+                         :doors     (list (%get-unsigned-byte doors 0)
+                                          (%get-unsigned-byte doors 1)
+                                          (%get-unsigned-byte doors 2)
+                                          (%get-unsigned-byte doors 3))
+                         :buttons   (list (%get-unsigned-byte buttons 0)
+                                          (%get-unsigned-byte buttons 1)
+                                          (%get-unsigned-byte buttons 2)
+                                          (%get-unsigned-byte buttons 3))
+                        :relays    (pref status :GoStatus.relays)
+                        :inputs    (pref status :GoStatus.inputs)
+                        :syserror  (pref status :GoStatus.syserror)
+                        :info      (pref status :GoStatus.info)
+                        :seqno     (pref status :GoStatus.seqno)
+                        :event     (make-event :timestamp (go-string (pref event :GoEvent.timestamp))
+                                               :index     (pref event :GoEvent.index)
+                                               :type      (pref event :GoEvent.type)
+                                               :granted   (pref event :GoEvent.granted)
+                                               :door      (pref event :GoEvent.door)
+                                               :direction (pref event :GoEvent.direction)
+                                               :card      (pref event :GoEvent.card)
+                                               :reason    (pref event :GoEvent.reason)))))))
+
 
 (defun uhppoted (f &key (bind-addr "") (broadcast-addr "") (listen-addr "") (timeout 5) (controllers NIL) (debug NIL)) ""
     (with-cstrs ((bind      bind-addr)
@@ -172,18 +266,27 @@
                                     :controllers   (list '(405419896 "192.168.1.100") '(303986753 "192.168.1.100"))
                                     :debug          T))))
 
+(defun get-status () "" 
+   (handler-bind
+      ((uhppoted-error
+         #'(lambda (c) 
+              (format t "*** ERROR: ~a~%" (message c))
+              (invoke-restart 'ignore))))
+      (list "get-status" (uhppoted #'(lambda (u) (uhppoted-get-status u 405419896))
+                                   :bind-addr      "192.168.1.100"
+                                   :broadcast-addr "192.168.1.100"
+                                   :listen-addr    "192.168.1.100:60001"
+                                   :timeout        1
+                                   :controllers   (list '(405419896 "192.168.1.100") '(303986753 "192.168.1.100"))
+                                   :debug          T))))
+
 (defun debug () "" 
    (handler-bind
       ((uhppoted-error
          #'(lambda (c) 
               (format t "~%   *** ERROR: ~a~%~%" (message c))
               (invoke-restart 'with-warning "oh noes i can has problems"))))
-      (list "debug" (uhppoted #'(lambda (u) (uhppoted-set-address u 405419896
-                                                                    "192.168.1.125"
-                                                                    "255.255.255.254"
-                                                                    "192.168.1.5"))
-                                      :bind-addr      "qwerty"
-                                      :debug T
+      (list "debug" (uhppoted #'(lambda (u) (uhppoted-get-status u 405419896))
+                                            :debug T
                            ))))
-
 

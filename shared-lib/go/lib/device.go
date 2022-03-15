@@ -140,16 +140,16 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	status.inputs = C.uchar(s.InputState)
 
 	status.syserror = C.uchar(s.SystemError)
-	status.seqno = C.uint(s.SequenceId)
+	status.seqno = C.ulong(s.SequenceId)
 	status.info = C.uchar(s.SpecialInfo)
 
 	status.event.timestamp = C.CString(format(s.Event.Timestamp))
-	status.event.index = C.uint(s.Event.Index)
+	status.event.index = C.ulong(s.Event.Index)
 	status.event.eventType = C.uchar(s.Event.Type)
 	status.event.granted = cbool(s.Event.Granted)
 	status.event.door = C.uchar(s.Event.Door)
 	status.event.direction = C.uchar(s.Event.Direction)
-	status.event.card = C.uint(s.Event.CardNumber)
+	status.event.card = C.ulong(s.Event.CardNumber)
 	status.event.reason = C.uchar(s.Event.Reason)
 
 	return nil
