@@ -160,14 +160,13 @@
           (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err))))))
 
 (defun uhppoted-get-status (uhppote device-id) ""
-   (%stack-block ((doors   (* 4 1))
-                  (buttons (* 4 1)))
+   (%stack-block ((doors   4)
+                  (buttons 4))
       (rletz ((event (:struct :GoEvent))
               (status (:struct :GoStatus)
                        :doors   doors
                        :buttons buttons
                        :event   event))
-         (setf (pref status :GoStatus.event) event)
          (with-macptrs ((err (external-call "GetStatus" 
                                             :address uhppote 
                                             :address status
@@ -200,29 +199,38 @@
 
 
 (defun uhppoted (f &key (bind-addr "") (broadcast-addr "") (listen-addr "") (timeout 5) (controllers NIL) (debug NIL)) ""
-    (with-cstrs ((bind      bind-addr)
-                 (broadcast broadcast-addr)
-                 (listen    listen-addr))
+    (let ((v NIL) (cstrings ()))
        (%stack-block ((devices (* (length controllers) 16)))
        (rletz ((udevices (:struct UDEVICES) :N (length controllers) :devices devices)
                (uhppote (:struct :UHPPOTE) 
-                         :bind      bind
-                         :broadcast broadcast
-                         :listen    listen
+                         :bind      (ccl::make-cstring bind-addr)
+                         :broadcast (ccl::make-cstring broadcast-addr)
+                         :listen    (ccl::make-cstring listen-addr)
                          :timeout   timeout
                          :devices   udevices
                          :debug     (cond (debug 1) (T 0))))
+
+          (push (pref uhppote :UHPPOTE.bind)      cstrings)
+          (push (pref uhppote :UHPPOTE.broadcast) cstrings)
+          (push (pref uhppote :UHPPOTE.listen)    cstrings)
           
           (loop for (id addr) in controllers
               do (progn
                     (setf (pref devices :udevice.id) id)
                     (setf (pref devices :udevice.address) (ccl::make-cstring addr))
-                    (%setf-macptr devices (%inc-ptr devices 16))))
+                    (push (pref devices :udevice.address) cstrings)
+                    (%setf-macptr devices (%inc-ptr devices 16))
+                  ))
 
-          (restart-case (funcall f uhppote)
-             (ignore () nil)
-             (use-value  (value) value)
-             (with-warning (err) (warn err)))))))
+          (setf v (restart-case (funcall f uhppote)
+                                (ignore () nil)
+                                (use-value  (value) value)
+                                (with-warning (err) (warn err))))))
+          
+          (loop for addr in cstrings
+             do (free addr))
+          v
+))
 
 (defun get-devices () "" 
    (handler-bind

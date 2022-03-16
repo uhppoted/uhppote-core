@@ -28,7 +28,7 @@
 
   - [ ] CCL
         - [x] Use unsigned-fullword for uint32_t fields
-        - [ ] free udevice cstrings
+        - [x] free udevice cstrings
         - [x] Free C strings in returned strucst
               - `get-device`
               - `get-status`
