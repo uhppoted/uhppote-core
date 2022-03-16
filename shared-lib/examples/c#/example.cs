@@ -120,7 +120,7 @@ public class example
 
         Console.WriteLine(String.Format("get-device"));
         Console.WriteLine(String.Format("  ID:       {0}", device.ID));
-        Console.WriteLine(String.Format("  IP:       {0}  {0}  {0}", device.address, device.subnet, device.gateway));
+        Console.WriteLine(String.Format("  IP:       {0}  {1}  {2}", device.address, device.subnet, device.gateway));
         Console.WriteLine(String.Format("  MAC:      {0}", device.MAC));
         Console.WriteLine(String.Format("  version:  {0}", device.version));
         Console.WriteLine(String.Format("  released: {0}", device.date));

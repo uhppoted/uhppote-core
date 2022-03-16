@@ -1,23 +1,20 @@
 LIB=../../lib
-CMD=mono example.exe
+BINDINGS=../../bindings/c++
+CMD=./example
 
 lib: 
 	go fmt ../../go/...
 	go build -trimpath -buildmode=c-shared -o $(LIB)/lib/libuhppoted.so   ../../go/lib/...
 	go build -trimpath -buildmode=c-shared -o $(LIB)/debug/libuhppoted.so ../../go/debug/...
+	go build -trimpath -buildmode=c-shared -o $(LIB)/test/libuhppoted.so ../../go/test/...
 
 format:
-	dotnet format --include ../*.cs --folder
-	dotnet format --include *.cs --folder
+	clang-format -i *.cpp
+	clang-format -i $(BINDINGS)/src/*.cpp
+	clang-format -i $(BINDINGS)/include/*.hpp
 
 build: format
-	csc ../uhppoted.cs example.cs
-
-usage: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/lib && $(CMD)
-
-help: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/lib && $(CMD) help
+	clang -std=c++11  -o example example.cpp device.cpp $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB)/lib -lc++ -L$(LIB)/lib -luhppoted
 
 get-devices: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/lib && $(CMD) get-devices
@@ -34,7 +31,8 @@ get-status: build
 run: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/lib && $(CMD) all
 
-debug: build
+debug: format
+	clang -std=c++11  -o example example.cpp device.cpp $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB)/debug -lc++ -L$(LIB)/debug -luhppoted
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) get-devices
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) get-device
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) set-address

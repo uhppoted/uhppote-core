@@ -8,22 +8,20 @@
   - [ ] Restructure folders
         - bindings
           - [x] C
-          - [ ] C++
-          - [ ] C#
-          - [ ] Python
-          - [ ] CCL
+          - [x] C++
+          - [x] C#
+          - [x] Python
         - examples
           - [x] C
-          - [ ] C++
-          - [ ] C#
-          - [ ] Python
-          - [ ] CCL
+          - [x] C++
+          - [x] C#
+          - [x] Python
+          - [x] CCL
         - tests
           - [x] C
           - [ ] C++
           - [ ] C#
           - [ ] Python
-          - [ ] CCL
         - Use build flags and common `main`
         
   - (?) Make timeout milliseconds (or string ?)

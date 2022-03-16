@@ -4,6 +4,8 @@ import argparse
 import ctypes
 import sys
 
+sys.path.append('../../bindings/python')
+
 import uhppoted
 
 
@@ -27,16 +29,23 @@ def help():
     print("    help")
     print()
     print("  get-devices")
-    print("    Retrieves a list of UHPPOTE controller IDs findable on the local LAN.")
+    print(
+        "    Retrieves a list of UHPPOTE controller IDs findable on the local LAN."
+    )
     print()
     print("  get-device")
-    print("    Retrieves the basic device information for a single UHPPOTE controller.")
+    print(
+        "    Retrieves the basic device information for a single UHPPOTE controller."
+    )
     print()
     print("  set-address")
-    print("    Sets the controller IPv4 address, subnet mask and gateway address.")
+    print(
+        "    Sets the controller IPv4 address, subnet mask and gateway address."
+    )
     print()
     print("  get-status")
-    print("    Retrieves the controller status for a single UHPPOTE controller.")
+    print(
+        "    Retrieves the controller status for a single UHPPOTE controller.")
     print()
     print("  help")
     print("    Displays this information.")
@@ -98,7 +107,8 @@ def get_status(u, deviceID):
         print(f"  ID:        {status.ID}")
         print(f"  date/time: {status.sysdatetime}")
         print(
-            f"  doors:     {status.doors[0]} {status.doors[1]} {status.doors[2]} {status.doors[3]}")
+            f"  doors:     {status.doors[0]} {status.doors[1]} {status.doors[2]} {status.doors[3]}"
+        )
         print(
             f"  buttons:   {status.buttons[0]} {status.buttons[1]} {status.buttons[2]} {status.buttons[3]}"
         )
@@ -142,7 +152,9 @@ if __name__ == "__main__":
             'all',
     ]:
         print()
-        print(f"  ERROR: invalid command ({cmd}). Try 'help' to see all commands and options")
+        print(
+            f"  ERROR: invalid command ({cmd}). Try 'help' to see all commands and options"
+        )
         print()
 
     else:
@@ -150,8 +162,9 @@ if __name__ == "__main__":
         beta = uhppoted.Controller(303986753, "192.168.1.100")
         controllers = [alpha, beta]
 
-        u = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE('192.168.1.100', '192.168.1.255',
-                                                      '192.168.1.100:60001', 1, controllers, True))
+        u = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE(
+            '192.168.1.100', '192.168.1.255', '192.168.1.100:60001', 1,
+            controllers, True))
         try:
             if cmd == 'get-devices':
                 get_devices(u)
@@ -160,7 +173,8 @@ if __name__ == "__main__":
                 get_device(u, 405419896)
 
             elif cmd == 'set-address':
-                set_address(u, 405419896, "192.168.1.125", "255.255.255.253", "192.168.1.5")
+                set_address(u, 405419896, "192.168.1.125", "255.255.255.253",
+                            "192.168.1.5")
 
             elif cmd == 'get-status':
                 get_status(u, 405419896)
@@ -168,7 +182,8 @@ if __name__ == "__main__":
             elif cmd == 'all':
                 get_devices(u)
                 get_device(u, 405419896)
-                set_address(u, 405419896, "192.168.1.125", "255.255.253", "192.168.1.5")
+                set_address(u, 405419896, "192.168.1.125", "255.255.253",
+                            "192.168.1.5")
                 get_status(u, 405419896)
 
         except BaseException as x:
