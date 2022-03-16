@@ -9,9 +9,7 @@
 __thread char *err = NULL;
 __thread UHPPOTE *u = NULL;
 
-const char *errmsg() {
-    return err;
-}
+const char *errmsg() { return err; }
 
 /* (optional) setup for UHPPOTE network configuration. Defaults to:
  * - bind:        0.0.0.0:0
@@ -21,10 +19,13 @@ const char *errmsg() {
  * - controllers: (none)
  * - debug:       false
  *
- * NOTES: 1. https://wiki.sei.cmu.edu/confluence/display/cplusplus/EXP58-CPP.+Pass+an+object+of+the+correct+type+to+va_start
- *        2. https://www.linkedin.com/pulse/modern-c-variadic-functions-how-shoot-yourself-foot-avoid-zinin
+ * NOTES: 1.
+ * https://wiki.sei.cmu.edu/confluence/display/cplusplus/EXP58-CPP.+Pass+an+object+of+the+correct+type+to+va_start
+ *        2.
+ * https://www.linkedin.com/pulse/modern-c-variadic-functions-how-shoot-yourself-foot-avoid-zinin
  */
-void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...) {
+void setup(const char *bind, const char *broadcast, const char *listen,
+           int timeout, int debug, ...) {
     if (u != NULL) {
         teardown();
     }
@@ -66,7 +67,8 @@ void setup(const char *bind, const char *broadcast, const char *listen, int time
             controller *p = va_arg(args, controller *);
             int ix = 0;
 
-            // NTS: strdup's address because the controllers may go out of scope after the invocation of setup(..)
+            // NTS: strdup's address because the controllers may go out of scope after
+            // the invocation of setup(..)
             while (p != NULL) {
                 list[ix].id = p->id;
                 list[ix].address = strdup(p->address);
@@ -171,8 +173,10 @@ int get_device(unsigned id, struct device *d) {
     return 0;
 }
 
-int set_address(unsigned id, const char *address, const char *subnet, const char *gateway) {
-    char *err = SetAddress(u, id, (char *)address, (char *)subnet, (char *)gateway);
+int set_address(unsigned id, const char *address, const char *subnet,
+                const char *gateway) {
+    char *err =
+        SetAddress(u, id, (char *)address, (char *)subnet, (char *)gateway);
     if (err != NULL) {
         set_error(err);
         return -1;
@@ -217,7 +221,8 @@ int get_status(unsigned id, struct status *s) {
     s->seqno = status.seqno;
 
     if (status.event) {
-        snprintf(s->event.timestamp, sizeof(s->event.timestamp), "%s", status.event->timestamp);
+        snprintf(s->event.timestamp, sizeof(s->event.timestamp), "%s",
+                 status.event->timestamp);
         s->event.index = status.event->index;
         s->event.eventType = status.event->eventType;
         s->event.granted = status.event->granted;

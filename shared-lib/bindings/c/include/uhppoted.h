@@ -42,12 +42,14 @@ typedef struct status {
     event event;
 } status;
 
-void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...);
+void setup(const char *bind, const char *broadcast, const char *listen,
+           int timeout, int debug, ...);
 void teardown();
 
 const char *errmsg();
 
 int get_devices(uint32_t **devices, int *N);
 int get_device(uint32_t id, struct device *);
-int set_address(uint32_t id, const char *address, const char *subnet, const char *gateway);
+int set_address(uint32_t id, const char *address, const char *subnet,
+                const char *gateway);
 int get_status(uint32_t id, struct status *);

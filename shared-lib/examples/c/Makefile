@@ -1,4 +1,5 @@
 LIB=../../lib
+BINDINGS=../../bindings/c
 CMD=./example
 
 lib: 
@@ -8,11 +9,11 @@ lib:
 
 format:
 	clang-format -i *.c
-	clang-format -i ../src/*.c
-	clang-format -i ../include/*.h
+	clang-format -i $(BINDINGS)/src/*.c
+	clang-format -i $(BINDINGS)/include/*.h
 
 build: format
-	clang -o example example.c device.c ../src/uhppoted.c -I$(LIB)/lib -L$(LIB)/lib -luhppoted
+	clang -o example example.c device.c $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB)/lib -L$(LIB)/lib -luhppoted
 
 get-devices: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/lib && $(CMD) get-devices
@@ -30,7 +31,7 @@ run: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/lib && $(CMD) all
 
 debug: format
-	clang -o example example.c device.c ../src/uhppoted.c -I$(LIB)/debug -L$(LIB)/debug -luhppoted
+	clang -o example example.c device.c $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB)/debug -L$(LIB)/debug -luhppoted
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) get-devices
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) get-device
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) set-address

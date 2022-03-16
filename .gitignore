@@ -4,6 +4,8 @@ bin
 __pycache__
 
 shared-lib/lib
-shared-lib/c/example/example
+shared-lib/examples/c/example
 shared-lib/c++/example/example
 shared-lib/c#/example/example.exe
+
+shared-lib/test/c/test

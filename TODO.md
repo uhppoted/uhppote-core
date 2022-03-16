@@ -3,19 +3,31 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [x] `get-status`
-        - [x] C
-        - [x] C++
-        - [x] Python
-        - [x] C#
-        - [x] CCL
-
-  - [x] Standardize on function signature char * f(UHPOTE *u, C.struct_XXX *returned, ...)
-        - [x] `get-device`
-        - [x] `get-status`
- 
-  - [ ] Replace uint32_t with unsigned long
-        - [ ] (PREFERABLY) explicitly set alignment `__attribute__((align(8))) complex float x;`
+  - [ ] Restructure folders
+        - bindings
+          - [x] C
+          - [ ] C++
+          - [ ] C#
+          - [ ] Python
+          - [ ] CCL
+        - examples
+          - [x] C
+          - [ ] C++
+          - [ ] C#
+          - [ ] Python
+          - [ ] CCL
+        - tests
+          - [x] C
+          - [ ] C++
+          - [ ] C#
+          - [ ] Python
+          - [ ] CCL
+        - Use build flags and common `main`
+        
+  - [ ] Fix padding thing
+        - (?) Replace uint32_t with unsigned long
+        - [ ] Try unsigned-half-word
+        - [ ] explicitly set alignment `__attribute__((align(8))) complex float x;`
           - https://medium.com/@liamkelly17/working-with-packed-c-structs-in-cgo-224a0a3b708b
           - [padding](https://interrupt.memfault.com/blog/c-struct-padding-initialization)
           - CGO seems to packs on 4 byte boundaries

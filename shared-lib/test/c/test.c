@@ -2,9 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../include/uhppoted.h"
-
 #include "device.h"
+#include "uhppoted.h"
 
 void usage();
 
@@ -17,7 +16,7 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    int rc = -1;
+    bool ok = true;
     char *cmd = argv[1];
 
     controller alpha = {.id = 405419896, .address = "192.168.1.100"};
@@ -26,25 +25,23 @@ int main(int argc, char **argv) {
     setup("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2, true, &alpha, &beta, NULL);
 
     if (strncmp(cmd, "get-devices", 11) == 0) {
-        rc = getDevices();
+        ok = getDevices();
     } else if (strncmp(cmd, "get-device", 10) == 0) {
-        rc = getDevice(DEVICEID);
+        ok = getDevice(DEVICEID);
     } else if (strncmp(cmd, "set-address", 11) == 0) {
-        rc = setAddress(DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.0");
+        ok = setAddress(DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.0");
     } else if (strncmp(cmd, "get-status", 10) == 0) {
-        rc = getStatus(DEVICEID);
+        ok = getStatus(DEVICEID);
     } else if (strncmp(cmd, "all", 3) == 0) {
-        rc = 0;
-
-        getDevices();
-        getDevice(DEVICEID);
-        setAddress(DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.0");
-        getStatus(DEVICEID);
+        ok = getDevices() ? ok : false;
+        ok = getDevice(DEVICEID) ? ok : false;
+        ok = setAddress(DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.0") ? ok : false;
+        ok = getStatus(DEVICEID) ? ok : false;
     }
 
     teardown();
 
-    return rc;
+    return ok ? 0 : -1;
 }
 
 void usage() {
