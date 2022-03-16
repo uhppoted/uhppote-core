@@ -52,7 +52,7 @@ func getDevice(uu uhppote.IUHPPOTE, device *C.struct_Device, deviceID uint32) er
 		fmt.Println()
 	}
 
-	device.ID = C.ulong(deviceID)
+	device.ID = C.uint(deviceID)
 	device.address = C.CString("192.168.1.101")
 	device.subnet = C.CString("255.255.255.0")
 	device.gateway = C.CString("192.168.1.1")
@@ -106,7 +106,7 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		fmt.Println()
 	}
 
-	status.ID = C.ulong(deviceID)
+	status.ID = C.uint(deviceID)
 	status.sysdatetime = C.CString("2022-03-19 15:48:32")
 
 	doors := unsafe.Slice(status.doors, 4)

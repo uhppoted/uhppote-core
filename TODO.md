@@ -3,6 +3,8 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
+  - [ ] `get-time`
+  
   - [ ] Restructure folders
         - bindings
           - [x] C
@@ -24,18 +26,10 @@
           - [ ] CCL
         - Use build flags and common `main`
         
-  - [ ] Fix padding thing
-        - (?) Replace uint32_t with unsigned long
-        - [ ] Try unsigned-half-word
-        - [ ] explicitly set alignment `__attribute__((align(8))) complex float x;`
-          - https://medium.com/@liamkelly17/working-with-packed-c-structs-in-cgo-224a0a3b708b
-          - [padding](https://interrupt.memfault.com/blog/c-struct-padding-initialization)
-          - CGO seems to packs on 4 byte boundaries
-          - https://github.com/golang/go/wiki/cgo#struct-alignment-issues
-
   - (?) Make timeout milliseconds (or string ?)
 
   - [ ] CCL
+        - [x] Use unsigned-fullword for uint32_t fields
         - [ ] free udevice cstrings
         - [x] Free C strings in returned strucst
               - `get-device`
@@ -176,3 +170,6 @@
 8 . [AsyncAPI](https://www.asyncapi.coms)
      - https://modeling-languages.com/asyncapi-modeling-editor-code-generator
 9.  go-fuzz
+
+10. cgo: explicitly set alignment `__attribute__((align(8))) complex float x;`
+    -  https://github.com/golang/go/wiki/cgo#struct-alignment-issues

@@ -24,7 +24,7 @@ typedef struct UHPPOTE {
 } UHPPOTE;
 
 typedef struct Device {
-    unsigned long ID;
+    uint32_t ID;
 	char *address;
 	char *subnet;
 	char *gateway;
@@ -35,17 +35,17 @@ typedef struct Device {
 
 typedef struct Event {
 	char  *timestamp;
-    unsigned long index;
+    uint32_t index;
 	uint8_t eventType;
 	uint8_t granted;
 	uint8_t door;
 	uint8_t direction;
-	unsigned long card;
+	uint32_t card;
 	uint8_t reason;
 } Event;
 
 typedef struct Status {
-    unsigned long ID;
+    uint32_t ID;
 	char *sysdatetime;
 	uint8_t  *doors;   // uint_8[4]
 	uint8_t  *buttons; // uint_8[4]
@@ -53,7 +53,7 @@ typedef struct Status {
 	uint8_t inputs;
 	uint8_t syserror;
 	uint8_t info;
-	unsigned long seqno;   // Note: uint32_t causes CGO to pack the struct on a 4 byte boundary - CCL always packs on 8 byte boundaries
+	uint32_t seqno;
 	Event *event;
 } Status;
 
