@@ -4,22 +4,15 @@
 
 - Shared-lib/DLL
   - [ ] `get-time`
+        - [x] C
+        - [ ] C++
+        - [ ] C#
+        - [ ] Python
+        - [ ] CCL
   
   - [ ] Restructure folders
-        - bindings
-          - [x] C
-          - [x] C++
-          - [x] C#
-          - [x] Python
-        - examples
-          - [x] C
-          - [x] C++
-          - [x] C#
-          - [x] Python
-          - [x] CCL
         - tests
-          - [x] C
-          - [ ] C++
+          - [x] C++
           - [ ] C#
           - [ ] Python
         - Use build flags and common `main`
@@ -27,12 +20,8 @@
   - (?) Make timeout milliseconds (or string ?)
 
   - [ ] CCL
-        - [x] Use unsigned-fullword for uint32_t fields
-        - [x] free udevice cstrings
-        - [x] Free C strings in returned strucst
-              - `get-device`
-              - `get-status`
-        - [x] use rref and pref for transcoding returned device struct
+        - [ ] `rewind-protect`
+        - [ ] sizeof for %stack-block
         - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
         - [ ] Separate out `uhppoted` into it's own package
               - [ ] (in-package "uhppoted")

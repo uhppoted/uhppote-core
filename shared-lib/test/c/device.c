@@ -5,6 +5,8 @@
 #include "device.h"
 #include "uhppoted.h"
 
+const uint32_t DEVICEID = 405419896;
+
 bool getDevices() {
     uint32_t *devices = NULL;
     int N;
@@ -35,10 +37,10 @@ bool getDevices() {
     return ok;
 }
 
-bool getDevice(uint32_t deviceID) {
+bool getDevice() {
     struct device d;
 
-    if (get_device(deviceID, &d) != 0) {
+    if (get_device(DEVICEID, &d) != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
@@ -89,7 +91,7 @@ bool getDevice(uint32_t deviceID) {
 
 bool setAddress(uint32_t deviceID, const char *address, const char *subnet,
                 const char *gateway) {
-    if (set_address(deviceID, address, subnet, gateway) != 0) {
+    if (set_address(DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.0") != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
@@ -99,18 +101,18 @@ bool setAddress(uint32_t deviceID, const char *address, const char *subnet,
     return true;
 }
 
-bool getStatus(uint32_t deviceID) {
+bool getStatus() {
     struct status s;
 
-    if (get_status(deviceID, &s) != 0) {
+    if (get_status(DEVICEID, &s) != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
 
     bool ok = true;
 
-    if (s.ID != 405419896) {
-        printf("get-status: incorrect device ID - expected:%u, got:%u\n", 405419896, s.ID);
+    if (s.ID != DEVICEID) {
+        printf("get-status: incorrect device ID - expected:%u, got:%u\n", DEVICEID, s.ID);
         ok = false;
     }
 
@@ -199,6 +201,30 @@ bool getStatus(uint32_t deviceID) {
     if (ok) {
         printf("get-status:  ok\n");
     }
+
+    return ok;
+}
+
+bool getTime() {
+    char *datetime;
+
+    if (get_time(DEVICEID, &datetime) != 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    bool ok = true;
+
+    if (strcmp(datetime, "2022-01-02 12:34:56") != 0) {
+        printf("get-time: incorrect date/time - expected:%s, got:%s\n", "2022-01-02 12:34:56", datetime);
+        ok = false;
+    }
+
+    if (ok) {
+        printf("get-time:    ok\n");
+    }
+
+    free(datetime);
 
     return ok;
 }

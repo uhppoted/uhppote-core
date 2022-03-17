@@ -118,6 +118,17 @@ func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32) *C
 	return nil
 }
 
+//export GetTime
+func GetTime(u *C.struct_UHPPOTE, datetime **C.char, deviceID uint32) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := getTime(uu, datetime, deviceID); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 	bind := types.BindAddr{IP: []byte{0, 0, 0, 0}, Port: 0}
 	broadcast := types.BroadcastAddr{IP: []byte{255, 255, 255, 255}, Port: 60000}

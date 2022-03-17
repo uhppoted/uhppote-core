@@ -210,10 +210,6 @@
                          :devices   udevices
                          :debug     (cond (debug 1) (T 0))))
 
-          (push (pref uhppote :UHPPOTE.bind)      cstrings)
-          (push (pref uhppote :UHPPOTE.broadcast) cstrings)
-          (push (pref uhppote :UHPPOTE.listen)    cstrings)
-          
           (loop for (id addr) in controllers
               do (progn
                     (setf (pref devices :udevice.id) id)
@@ -226,8 +222,11 @@
                                 (ignore () nil)
                                 (use-value  (value) value)
                                 (with-warning (err) (warn err))))))
-          
-          (loop for addr in cstrings
+
+          (free (pref uhppote :UHPPOTE.bind))
+          (free (pref uhppote :UHPPOTE.broadcast))
+          (free (pref uhppote :UHPPOTE.listen))          
+          (loop for addr in cstrings 
              do (free addr))
           v
 ))

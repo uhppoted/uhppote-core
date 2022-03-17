@@ -33,13 +33,15 @@ int main(int argc, char **argv) {
         rc = setAddress(DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.0");
     } else if (strncmp(cmd, "get-status", 10) == 0) {
         rc = getStatus(DEVICEID);
+    } else if (strncmp(cmd, "get-time", 8) == 0) {
+        rc = getTime(DEVICEID);
     } else if (strncmp(cmd, "all", 3) == 0) {
         rc = 0;
-
-        getDevices();
-        getDevice(DEVICEID);
-        setAddress(DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.0");
-        getStatus(DEVICEID);
+        rc = getDevices() == 0 ? rc : -1;
+        rc = getDevice(DEVICEID) == 0 ? rc : -1;
+        rc = setAddress(DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.0") == 0 ? rc : -1;
+        rc = getStatus(DEVICEID) == 0 ? rc : -1;
+        rc = getTime(DEVICEID) == 0 ? rc : -1;
     }
 
     teardown();
@@ -55,5 +57,6 @@ void usage() {
     printf("      get-device\n");
     printf("      set-address\n");
     printf("      get-status\n");
+    printf("      get-time\n");
     printf("\n");
 }

@@ -1,6 +1,6 @@
 LIB=../../lib
 DLL=../../lib/test
-BINDINGS=../../bindings/c
+BINDINGS=../../bindings/c++
 CMD=./test
 
 lib: 
@@ -10,12 +10,13 @@ lib:
 	go build -trimpath -buildmode=c-shared -o $(LIB)/test/libuhppoted.so ../../go/test/...
 
 format:
-	clang-format -i *.c
-	clang-format -i $(BINDINGS)/src/*.c
-	clang-format -i $(BINDINGS)/include/*.h
+	clang-format -i *.cpp
+	clang-format -i *.hpp
+	clang-format -i $(BINDINGS)/src/*.cpp
+	clang-format -i $(BINDINGS)/include/*.hpp
 
 build: format
-	clang -o test test.c device.c $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(DLL) -L$(DLL) -luhppoted
+	clang -std=c++11  -o test test.cpp device.cpp $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(DLL) -lc++ -L$(DLL) -luhppoted
 
 get-devices: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(DLL) && $(CMD) get-devices
@@ -29,9 +30,5 @@ set-address: build
 get-status: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(DLL) && $(CMD) get-status
 
-get-time: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(DLL) && $(CMD) get-time
-
 test: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(DLL) && $(CMD) all
-

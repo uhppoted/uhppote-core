@@ -88,3 +88,21 @@ int getStatus(uint32_t deviceID) {
 
     return 0;
 }
+
+int getTime(uint32_t deviceID) {
+    char *datetime;
+
+    if (get_time(deviceID, &datetime) != 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    printf("\nget-time\n");
+    printf("  ID:        %u\n", deviceID);
+    printf("  date/time: %s\n", datetime);
+    printf("\n");
+
+    free(datetime);
+
+    return 0;
+}

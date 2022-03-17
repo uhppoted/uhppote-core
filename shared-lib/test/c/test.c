@@ -7,8 +7,6 @@
 
 void usage();
 
-const uint32_t DEVICEID = 405419896;
-
 int main(int argc, char **argv) {
     if (argc < 2) {
         printf("\n*** ERROR missing command\n\n");
@@ -27,16 +25,19 @@ int main(int argc, char **argv) {
     if (strncmp(cmd, "get-devices", 11) == 0) {
         ok = getDevices();
     } else if (strncmp(cmd, "get-device", 10) == 0) {
-        ok = getDevice(DEVICEID);
+        ok = getDevice();
     } else if (strncmp(cmd, "set-address", 11) == 0) {
-        ok = setAddress(DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.0");
+        ok = setAddress();
     } else if (strncmp(cmd, "get-status", 10) == 0) {
-        ok = getStatus(DEVICEID);
+        ok = getStatus();
+    } else if (strncmp(cmd, "get-time", 8) == 0) {
+        ok = getTime();
     } else if (strncmp(cmd, "all", 3) == 0) {
         ok = getDevices() ? ok : false;
-        ok = getDevice(DEVICEID) ? ok : false;
-        ok = setAddress(DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.0") ? ok : false;
-        ok = getStatus(DEVICEID) ? ok : false;
+        ok = getDevice() ? ok : false;
+        ok = setAddress() ? ok : false;
+        ok = getStatus() ? ok : false;
+        ok = getTime() ? ok : false;
     }
 
     teardown();
@@ -45,7 +46,7 @@ int main(int argc, char **argv) {
 }
 
 void usage() {
-    printf("Usage: example <command>\n");
+    printf("Usage: test <command>\n");
     printf("\n");
     printf("   Supported commands:\n");
     printf("      get-devices\n");

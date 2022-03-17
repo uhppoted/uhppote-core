@@ -239,3 +239,19 @@ int get_status(unsigned id, struct status *s) {
 
     return 0;
 }
+
+int get_time(unsigned id, char **t) {
+    char *datetime;
+
+    char *err = GetTime(u, &datetime, id);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    *t = strdup(datetime);
+
+    free(datetime);
+
+    return 0;
+}

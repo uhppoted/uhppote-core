@@ -53,3 +53,4 @@ int get_device(uint32_t id, struct device *);
 int set_address(uint32_t id, const char *address, const char *subnet,
                 const char *gateway);
 int get_status(uint32_t id, struct status *);
+int get_time(uint32_t id, char **);
