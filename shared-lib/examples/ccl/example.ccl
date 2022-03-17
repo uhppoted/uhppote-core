@@ -101,15 +101,15 @@
 
 (defun go-error (cstr) "Converts a 'C' char * returned by the Go FFI to a string and frees the 'C' string"
    (with-macptrs ((p cstr))
-      (%get-cstring p)
-   )
-)
+      (%get-cstring p)))
 
 (defun go-string (cstr) "Converts a 'C' char * returned by the Go FFI to a string and frees the 'C' string"
    (with-macptrs ((p cstr))
-      (%get-cstring p)
-   )
-)
+      (%get-cstring p)))
+
+(defun go-sizeof (type) "" 
+   (cond ((eq type :udevice) 16)
+         (T 0)))
 
 (defun uhppoted-get-devices (uhppote &optional (N 16)) ""
    (destructuring-bind  (p q) (uhppoted-get-devices-n uhppote N)
@@ -198,7 +198,7 @@
 
 (defun uhppoted (f &key (bind-addr "") (broadcast-addr "") (listen-addr "") (timeout 5) (controllers NIL) (debug NIL)) ""
     (let ((cstrings ()))
-       (%stack-block ((devices (* (length controllers) 16)))
+       (%stack-block ((devices (* (length controllers) (go-sizeof :udevice)   )))
        (rletz ((udevices (:struct UDEVICES) :N (length controllers) :devices devices)
                (uhppote (:struct :UHPPOTE) 
                          :bind      (ccl::make-cstring bind-addr)
@@ -292,4 +292,10 @@
       (list "debug" (uhppoted #'(lambda (u) (uhppoted-get-status u 405419896))
                                             :debug T))))
 
+
+(defun sizeof (type) "" 
+   (cond ((eq type :udevice) 16)
+         (T 0)
+   )
+)
 
