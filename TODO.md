@@ -20,8 +20,9 @@
   - (?) Make timeout milliseconds (or string ?)
 
   - [ ] CCL
-        - [ ] `rewind-protect`
+        - [x] `unwind-protect`
         - [ ] sizeof for %stack-block
+        - [ ] Replace list of cstrings with iterator on udevices
         - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
         - [ ] Separate out `uhppoted` into it's own package
               - [ ] (in-package "uhppoted")

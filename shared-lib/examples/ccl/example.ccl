@@ -117,8 +117,8 @@
              (T (uhppoted-get-devices uhppote (+ N 16))))))
 
 (defun uhppoted-get-devices-n (uhppote max) ""
-   (let ((devices '(0 NIL)))
-      (multiple-value-bind (array parray) (make-heap-ivector max '(unsigned-byte 32))
+   (multiple-value-bind (array parray) (make-heap-ivector max '(unsigned-byte 32))
+      (unwind-protect
          (rletz ((N :signed-long max))
             (with-macptrs ((err (external-call "GetDevices" 
                                                :address uhppote 
@@ -126,10 +126,8 @@
                                                :address parray 
                                                :address)))
                (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err))))
-            (setf devices (list (%get-signed-long N) array)))
-            (dispose-heap-ivector array))
-      devices))
-
+            (list (%get-signed-long N) array))
+         (dispose-heap-ivector array))))
 
 (defun uhppoted-get-device (uhppote device-id) ""
    (rletz ((device (:struct :GoDevice)))
@@ -199,7 +197,7 @@
 
 
 (defun uhppoted (f &key (bind-addr "") (broadcast-addr "") (listen-addr "") (timeout 5) (controllers NIL) (debug NIL)) ""
-    (let ((v NIL) (cstrings ()))
+    (let ((cstrings ()))
        (%stack-block ((devices (* (length controllers) 16)))
        (rletz ((udevices (:struct UDEVICES) :N (length controllers) :devices devices)
                (uhppote (:struct :UHPPOTE) 
@@ -215,21 +213,19 @@
                     (setf (pref devices :udevice.id) id)
                     (setf (pref devices :udevice.address) (ccl::make-cstring addr))
                     (push (pref devices :udevice.address) cstrings)
-                    (%setf-macptr devices (%inc-ptr devices 16))
-                  ))
+                          (%setf-macptr devices (%inc-ptr devices 16))))
 
-          (setf v (restart-case (funcall f uhppote)
-                                (ignore () nil)
-                                (use-value  (value) value)
-                                (with-warning (err) (warn err))))))
-
-          (free (pref uhppote :UHPPOTE.bind))
-          (free (pref uhppote :UHPPOTE.broadcast))
-          (free (pref uhppote :UHPPOTE.listen))          
-          (loop for addr in cstrings 
-             do (free addr))
-          v
-))
+          (unwind-protect
+             (restart-case (funcall f uhppote)
+                           (ignore () nil)
+                           (use-value  (value) value)
+                           (with-warning (err) (warn err)))
+             (progn
+                 (free (pref uhppote :UHPPOTE.bind))
+                 (free (pref uhppote :UHPPOTE.broadcast))
+                 (free (pref uhppote :UHPPOTE.listen))          
+                 (loop for addr in cstrings 
+                    do (free addr))))))))
 
 (defun get-devices () "" 
    (handler-bind
@@ -296,22 +292,4 @@
       (list "debug" (uhppoted #'(lambda (u) (uhppoted-get-status u 405419896))
                                             :debug T))))
 
-(defun uhppoted-get-status-x (uhppote device-id) ""
-   (%stack-block ((doors   (* 4 1))
-                  (buttons (* 4 1)))
-      (rletz ((event (:struct :GoEvent))
-              (status (:struct :GoStatus)
-                       :id      16909060
-                       :doors   doors
-                       :buttons buttons
-                       :seqno   84281096
-                       :event   event))
-         (setf (pref status :GoStatus.event) event)
-         (print event)
-         (with-macptrs ((err (external-call "GetStatus" 
-                                            :address uhppote 
-                                            :address status
-                                            :unsigned-long device-id 
-                                            :address)))
-            (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-          ))))
+
