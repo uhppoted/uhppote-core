@@ -22,11 +22,12 @@
   - [ ] CCL
         - [x] `unwind-protect`
         - [x] sizeof for %stack-block
+        - [ ] Separate out `uhppoted` into it's own package
+              - [x] def-package "uhppoted"
+              - [x] Move to its own file
+              - [ ] Resolve condition `message` thing
         - [ ] Replace list of cstrings with iterator on udevices
         - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
-        - [ ] Separate out `uhppoted` into it's own package
-              - [ ] (in-package "uhppoted")
-              - [ ] Move to its own file
         - [ ] Formatting 
               - https://github.com/eschulte/lisp-format
         - [ ] help

@@ -17,6 +17,9 @@ run:
 debug: 
 	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' --load example.ccl
 
+x: 
+	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' --load packages.lisp --load uhppoted.lisp --load example.lisp
+
 # usage: build
 # 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD)
 # 
