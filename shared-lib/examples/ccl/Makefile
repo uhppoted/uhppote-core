@@ -5,29 +5,25 @@ BINDINGS=../../bindings/ccl
 .PHONY: debug
 
 lib: 
-	go fmt ../../go/...
-	go build -trimpath -buildmode=c-shared -o $(LIB)/lib/libuhppoted.so   ../../go/lib/...
-	go build -trimpath -buildmode=c-shared -o $(LIB)/debug/libuhppoted.so ../../go/debug/...
-	go build -trimpath -buildmode=c-shared -o $(LIB)/test/libuhppoted.so ../../go/test/...
+	cd ../../go && make all
 
 build:
 
 run: 
-	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/lib")' \
+	GODEBUG=cgocheck=2 && \
+	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' \
 	      --load $(BINDINGS)/packages.lisp \
 	      --load ./packages.lisp  \
 	      --load $(BINDINGS)/uhppoted.lisp \
 	      --load examples.lisp
 
 debug: 
+	GODEBUG=cgocheck=2 && \
 	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' \
 	      --load $(BINDINGS)/packages.lisp \
 	      --load ./packages.lisp \
 	      --load $(BINDINGS)/uhppoted.lisp \
 	      --load examples.lisp
-
-old: 
-	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' --load example.ccl
 
 # usage: build
 # 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD)

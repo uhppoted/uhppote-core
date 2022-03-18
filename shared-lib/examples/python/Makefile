@@ -1,14 +1,11 @@
 LIB=../../lib
 GO=GODEBUG=cgocheck=2
-DLL=export DYLD_LIBRARY_PATH=$(LIB)/lib
+DLL=export DYLD_LIBRARY_PATH=$(LIB)
 WRAPPER=export PYTHONPATH=$(PYTHONPATH):..
 CMD=python example.py 
 
 lib: 
-	go fmt ../../go/...
-	go build -trimpath -buildmode=c-shared -o $(LIB)/lib/libuhppoted.so   ../../go/lib/...
-	go build -trimpath -buildmode=c-shared -o $(LIB)/debug/libuhppoted.so ../../go/debug/...
-	go build -trimpath -buildmode=c-shared -o $(LIB)/test/libuhppoted.so ../../go/test/...
+	cd ../../go && make all
 
 format:
 	yapf -ri .

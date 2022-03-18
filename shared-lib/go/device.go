@@ -1,3 +1,5 @@
+//go:build !debug && !tests
+
 package main
 
 import "C"

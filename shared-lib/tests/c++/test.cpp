@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
         ok = getTime(u) ? ok : false;
     }
 
-    return ok;
+    return ok ? 0 : -1;
 }
 
 void usage() {
