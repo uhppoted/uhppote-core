@@ -155,14 +155,3 @@
 
 10. cgo: explicitly set alignment `__attribute__((align(8))) complex float x;`
     -  https://github.com/golang/go/wiki/cgo#struct-alignment-issues
-
-
-                (let ((p (pref uhppote :UHPPOTE.devices)))
-              (loop for a from 1 to (length controllers)
-                do (progn
-                     (print p)
-                     (print (go-string (pref p :udevice.address)))
-                     (%setf-macptr p (%inc-ptr p 16))
-                    )
-                 )
-            )
