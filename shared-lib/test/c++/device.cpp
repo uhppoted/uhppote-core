@@ -4,6 +4,8 @@
 
 using namespace std;
 
+const uint32_t DEVICEID = 405419896;
+
 bool getDevices(uhppoted &u) {
     try {
         auto devices = u.get_devices();
@@ -34,9 +36,9 @@ bool getDevices(uhppoted &u) {
     return false;
 }
 
-bool getDevice(uhppoted &u, uint32_t deviceID) {
+bool getDevice(uhppoted &u) {
     try {
-        auto d = u.get_device(deviceID);
+        auto d = u.get_device(DEVICEID);
         bool ok = true;
 
         if (d.ID != 405419896) {
@@ -100,9 +102,13 @@ bool getDevice(uhppoted &u, uint32_t deviceID) {
     return false;
 }
 
-bool setAddress(uhppoted &u, uint32_t deviceID, string address, string subnet, string gateway) {
+bool setAddress(uhppoted &u) {
     try {
-        u.set_address(deviceID, address, subnet, gateway);
+        string address = "192.168.1.125";
+        string subnet = "255.255.254.0";
+        string gateway = "192.168.1.10";
+
+        u.set_address(DEVICEID, address, subnet, gateway);
 
         cout << "set-address: ok" << endl;
 
@@ -116,9 +122,9 @@ bool setAddress(uhppoted &u, uint32_t deviceID, string address, string subnet, s
     return false;
 }
 
-bool getStatus(uhppoted &u, uint32_t deviceID) {
+bool getStatus(uhppoted &u) {
     try {
-        auto s = u.get_status(deviceID);
+        auto s = u.get_status(DEVICEID);
         bool ok = true;
 
         if (s.ID != 405419896) {
@@ -228,4 +234,30 @@ bool getStatus(uhppoted &u, uint32_t deviceID) {
     }
 
     return -1;
+}
+
+bool getTime(uhppoted &u) {
+    try {
+        auto datetime = u.get_time(DEVICEID);
+        bool ok = true;
+
+        if (datetime != "2022-01-02 12:34:56") {
+            cout << "get-time: incorrect date/time - expected:"
+                 << "2022-01-02 12:34:56"
+                 << ", got:" << datetime << endl;
+            ok = false;
+        }
+
+        if (ok) {
+            cout << "get-time:    ok" << endl;
+        }
+
+        return ok;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return false;
 }

@@ -30,5 +30,8 @@ set-address: build
 get-status: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(DLL) && $(CMD) get-status
 
+get-time: build
+	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(DLL) && $(CMD) get-time
+
 test: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(DLL) && $(CMD) all

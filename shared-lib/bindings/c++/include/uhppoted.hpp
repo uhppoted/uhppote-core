@@ -57,6 +57,7 @@ class uhppoted {
     void set_address(uint32_t id, std::string &address, std::string &subnet,
                      std::string &gateway);
     status get_status(uint32_t id);
+    std::string get_time(uint32_t id);
 
   private:
     UHPPOTE *u;

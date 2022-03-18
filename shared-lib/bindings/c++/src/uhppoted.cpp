@@ -200,3 +200,18 @@ status uhppoted::get_status(unsigned id) {
 
     return s;
 }
+
+string uhppoted::get_time(uint32_t id) {
+    char *datetime;
+
+    char *err = GetTime(u, &datetime, id);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+
+    string t = string(datetime);
+
+    free(datetime);
+
+    return t;
+}

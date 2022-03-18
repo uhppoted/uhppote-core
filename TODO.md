@@ -5,7 +5,7 @@
 - Shared-lib/DLL
   - [ ] `get-time`
         - [x] C
-        - [ ] C++
+        - [x] C++
         - [ ] C#
         - [ ] Python
         - [ ] CCL
