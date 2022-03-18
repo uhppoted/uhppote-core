@@ -14,9 +14,9 @@
 
 (defpackage :examples
   (:use :common-lisp 
+        :ccl
         :uhppoted)
-  (:export debug
-           get-devices
+  (:export get-devices
            get-device
            set-address
            get-status))

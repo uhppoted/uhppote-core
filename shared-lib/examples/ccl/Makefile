@@ -1,6 +1,6 @@
 LIB=../../lib
-CMD=ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/lib")' --load example.ccl
 
+.PHONY: run
 .PHONY: debug
 
 lib: 
@@ -12,13 +12,13 @@ lib:
 build:
 
 run: 
-	$(CMD)
+	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/lib")' --load packages.lisp --load uhppoted.lisp --load examples.lisp
 
 debug: 
-	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' --load example.ccl
+	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' --load packages.lisp --load uhppoted.lisp --load examples.lisp
 
-x: 
-	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' --load packages.lisp --load uhppoted.lisp --load example.lisp
+old: 
+	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' --load example.ccl
 
 # usage: build
 # 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD)

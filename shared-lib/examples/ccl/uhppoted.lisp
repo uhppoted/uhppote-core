@@ -224,3 +224,13 @@
                                                :direction (pref event :GoEvent.direction)
                                                :card      (pref event :GoEvent.card)
                                                :reason    (pref event :GoEvent.reason)))))))
+(defun debug () "" 
+   (handler-bind
+      ((uhppoted-error
+         #'(lambda (c) 
+              (format t "~%   *** ERROR: ~a~%~%" (message c))
+              (invoke-restart 'with-warning "oh noes i can has problems"))))
+      (list "debug" (uhppoted #'(lambda (u) (uhppoted-get-status u 405419896))
+                                            :bind-addr "qwerty"
+                                            :debug T))))
+
