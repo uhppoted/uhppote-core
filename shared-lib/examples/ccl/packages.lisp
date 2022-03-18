@@ -4,11 +4,13 @@
    (:use :common-lisp
          :ccl)
    (:export uhppoted
-            uhppoted-error
             uhppoted-get-devices
             uhppoted-get-device
             uhppoted-set-address
-            uhppoted-get-status))
+            uhppoted-get-status
+            uhppoted-error
+            with-warning
+            message))
 
 (defpackage :examples
   (:use :common-lisp 
