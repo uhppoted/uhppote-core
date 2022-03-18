@@ -2,70 +2,60 @@ using System;
 
 using uhppoted;
 
-public class example
-{
-    public static void Main(string[] args)
-    {
-        if (args.Length < 1)
-        {
+public class example {
+    public static void Main(string[] args) {
+        if (args.Length < 1) {
             usage();
             return;
         }
 
         string cmd = args[0];
 
-        if (cmd == "help")
-        {
+        if (cmd == "help") {
             help();
             return;
         }
 
-        try
-        {
+        try {
             Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
-                                        new Controller(303986753, "192.168.1.100")
-                                      };
+                                         new Controller(303986753, "192.168.1.100") };
 
             Uhppoted u = new Uhppoted("192.168.1.100", "192.168.1.100:60000", "192.168.1.100:60001", 2, controllers, true);
 
-            switch (cmd)
-            {
-                case "get-devices":
-                    GetDevices(u);
-                    break;
+            switch (cmd) {
+            case "get-devices":
+                GetDevices(u);
+                break;
 
-                case "get-device":
-                    GetDevice(u, 405419896);
-                    break;
+            case "get-device":
+                GetDevice(u, 405419896);
+                break;
 
-                case "set-address":
-                    SetAddress(u, 405419896, "192.168.1.125", "255.255.255.254", "192.168.1.5");
-                    break;
+            case "set-address":
+                SetAddress(u, 405419896, "192.168.1.125", "255.255.255.254", "192.168.1.5");
+                break;
 
-                case "get-status":
-                    GetStatus(u, 405419896);
-                    break;
+            case "get-status":
+                GetStatus(u, 405419896);
+                break;
 
-                case "all":
-                    GetDevices(u);
-                    GetDevice(u, 405419896);
-                    SetAddress(u, 405419896, "192.168.1.125", "255.255.255.254", "192.168.1.5");
-                    break;
+            case "all":
+                GetDevices(u);
+                GetDevice(u, 405419896);
+                SetAddress(u, 405419896, "192.168.1.125", "255.255.255.254", "192.168.1.5");
+                break;
 
-                default:
-                    Console.WriteLine(String.Format("  *** ERROR: invalid command ({0})", cmd));
-                    break;
+            default:
+                Console.WriteLine(String.Format("  *** ERROR: invalid command ({0})", cmd));
+                break;
             }
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Console.WriteLine(String.Format("  *** ERROR: {0}", e.Message));
         }
     }
 
-    static void usage()
-    {
+    static void usage() {
         Console.WriteLine();
         Console.WriteLine("  Usage: mono example.exe <command>");
         Console.WriteLine();
@@ -73,8 +63,7 @@ public class example
         Console.WriteLine();
     }
 
-    static void help()
-    {
+    static void help() {
         Console.WriteLine();
         Console.WriteLine("Usage: python example.py <command>");
         Console.WriteLine();
@@ -102,20 +91,17 @@ public class example
         Console.WriteLine();
     }
 
-    static void GetDevices(Uhppoted u)
-    {
+    static void GetDevices(Uhppoted u) {
         uint[] list = u.GetDevices();
 
         Console.WriteLine(String.Format("get-devices ({0})", list.Length));
-        for (int i = 0; i < list.Length; i++)
-        {
+        for (int i = 0; i < list.Length; i++) {
             Console.WriteLine(String.Format("  {0}", list[i]));
         }
         Console.WriteLine();
     }
 
-    static void GetDevice(Uhppoted u, uint deviceID)
-    {
+    static void GetDevice(Uhppoted u, uint deviceID) {
         Device device = u.GetDevice(deviceID);
 
         Console.WriteLine(String.Format("get-device"));
@@ -127,8 +113,7 @@ public class example
         Console.WriteLine();
     }
 
-    static void SetAddress(Uhppoted u, uint deviceID, string address, string subnet, string gateway)
-    {
+    static void SetAddress(Uhppoted u, uint deviceID, string address, string subnet, string gateway) {
         u.SetAddress(deviceID, address, subnet, gateway);
 
         Console.WriteLine(String.Format("set-address"));
@@ -139,8 +124,7 @@ public class example
         Console.WriteLine();
     }
 
-    static void GetStatus(Uhppoted u, uint deviceID)
-    {
+    static void GetStatus(Uhppoted u, uint deviceID) {
         Status status = u.GetStatus(deviceID);
 
         Console.WriteLine(String.Format("get-status"));

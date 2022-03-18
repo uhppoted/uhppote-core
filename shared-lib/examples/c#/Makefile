@@ -1,4 +1,5 @@
 LIB=../../lib
+BINDINGS=../../bindings/c\#
 CMD=mono example.exe
 
 lib: 
@@ -8,11 +9,15 @@ lib:
 	go build -trimpath -buildmode=c-shared -o $(LIB)/test/libuhppoted.so  ../../go/test/...
 
 format:
+	clang-format -i *.cs
+	clang-format -i $(BINDINGS)/*.cs
+
+format-dotnet:
 	dotnet format --include *.cs --folder
-	dotnet format --include ../../bindings/c#/*.cs --folder
+	dotnet format --include $(BINDINGS)/*.cs --folder
 
 build: format
-	csc ../../bindings/c#/uhppoted.cs example.cs
+	csc $(BINDINGS)/uhppoted.cs example.cs
 
 usage: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/lib && $(CMD)
