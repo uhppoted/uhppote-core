@@ -1,4 +1,5 @@
 LIB=../../lib
+BINDINGS=../../bindings/ccl
 
 .PHONY: run
 .PHONY: debug
@@ -12,10 +13,18 @@ lib:
 build:
 
 run: 
-	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/lib")' --load packages.lisp --load uhppoted.lisp --load examples.lisp
+	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/lib")' \
+	      --load $(BINDINGS)/packages.lisp \
+	      --load ./packages.lisp  \
+	      --load $(BINDINGS)/uhppoted.lisp \
+	      --load examples.lisp
 
 debug: 
-	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' --load packages.lisp --load uhppoted.lisp --load examples.lisp
+	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' \
+	      --load $(BINDINGS)/packages.lisp \
+	      --load ./packages.lisp \
+	      --load $(BINDINGS)/uhppoted.lisp \
+	      --load examples.lisp
 
 old: 
 	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' --load example.ccl

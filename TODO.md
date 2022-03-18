@@ -26,8 +26,8 @@
               - [x] def-package "uhppoted"
               - [x] Move to its own file
               - [x] Resolve condition `message` thing
+              - [x] Move uhppoted.lisp to `bindings`
               - [ ] Remove examples.ccl
-              - [ ] Move uhppoted.lisp to `bindings`
         - [ ] Replace all with-cstrings with unwind-protect
         - [ ] Replace list of cstrings with iterator on udevices
         - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
