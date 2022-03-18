@@ -1,18 +1,18 @@
 (in-package :examples)
 
 (defun exec (f) "" 
-   (handler-bind
-      ((uhppoted-error
-         #'(lambda (c) 
-              (format t "*** ERROR: ~a~%" (uhppoted:message c))
-              (invoke-restart 'ignore))))
-      (uhppoted f 
-                :bind-addr      "192.168.1.100"
-                :broadcast-addr "192.168.1.100"
-                :listen-addr    "192.168.1.100:60001"
-                :timeout        1
-                :controllers    (list '(405419896 "192.168.1.100") '(303986753 "192.168.1.100"))
-                :debug          T)))
+  (handler-bind
+	((uhppoted-error
+	   #'(lambda (c) 
+		   (format t "*** ERROR: ~a~%" (uhppoted:message c))
+		   (invoke-restart 'ignore))))
+	(uhppoted f 
+			  :bind-addr      "192.168.1.100"
+			  :broadcast-addr "192.168.1.100"
+			  :listen-addr    "192.168.1.100:60001"
+			  :timeout        1
+			  :controllers    (list '(405419896 "192.168.1.100") '(303986753 "192.168.1.100"))
+			  :debug          T)))
 
 (defun get-devices () "" 
   (list "get-devices" (exec #'(lambda (u) (uhppoted-get-devices u)))))

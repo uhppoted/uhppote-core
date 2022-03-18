@@ -11,7 +11,7 @@ build:
 
 run: 
 	GODEBUG=cgocheck=2 && \
-	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' \
+	rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' \
 	      --load $(BINDINGS)/packages.lisp \
 	      --load ./packages.lisp  \
 	      --load $(BINDINGS)/uhppoted.lisp \
@@ -19,7 +19,7 @@ run:
 
 debug: 
 	GODEBUG=cgocheck=2 && \
-	ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' \
+	rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' \
 	      --load $(BINDINGS)/packages.lisp \
 	      --load ./packages.lisp \
 	      --load $(BINDINGS)/uhppoted.lisp \

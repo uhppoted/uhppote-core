@@ -20,11 +20,9 @@
   - (?) Make timeout milliseconds (or string ?)
 
   - [ ] CCL
-        - [ ] Replace all with-cstrings with unwind-protect
+        - [x] Replace all with-cstrings with unwind-protect
         - [ ] Replace list of cstrings with iterator on udevices
         - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
-        - [ ] Formatting 
-              - https://github.com/eschulte/lisp-format
         - [ ] help
         - [ ] usage
         - [ ] `get-devices` (as a command line argument)
