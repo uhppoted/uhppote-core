@@ -21,7 +21,7 @@
 
   - [ ] CCL
         - [x] Replace all with-cstrings with unwind-protect
-        - [ ] Replace list of cstrings with iterator on udevices
+        - [x] Replace list of cstrings with iterator on udevices
         - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
         - [ ] help
         - [ ] usage
@@ -155,3 +155,14 @@
 
 10. cgo: explicitly set alignment `__attribute__((align(8))) complex float x;`
     -  https://github.com/golang/go/wiki/cgo#struct-alignment-issues
+
+
+                (let ((p (pref uhppote :UHPPOTE.devices)))
+              (loop for a from 1 to (length controllers)
+                do (progn
+                     (print p)
+                     (print (go-string (pref p :udevice.address)))
+                     (%setf-macptr p (%inc-ptr p 16))
+                    )
+                 )
+            )

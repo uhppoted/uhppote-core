@@ -108,34 +108,35 @@
 		(T 0)))
 
 (defun uhppoted (f &key (bind-addr "") (broadcast-addr "") (listen-addr "") (timeout 5) (controllers NIL) (debug NIL)) ""
-  (let ((cstrings ()))
-	(%stack-block ((devices (* (length controllers) (go-sizeof :udevice)   )))
-	  (rletz ((udevices (:struct UDEVICES) :N (length controllers) :devices devices)
-			  (uhppote (:struct :UHPPOTE) 
-			            :bind      (ccl::make-cstring bind-addr)
-                        :broadcast (ccl::make-cstring broadcast-addr)
-                        :listen    (ccl::make-cstring listen-addr)
-                        :timeout   timeout
-                        :devices   udevices
-                        :debug     (cond (debug 1) (T 0))))
-        (loop for (id addr) in controllers
-		  do (progn
-			   (setf (pref devices :udevice.id) id)
-			   (setf (pref devices :udevice.address) (ccl::make-cstring addr))
-			   (push (pref devices :udevice.address) cstrings)
-			   (%setf-macptr devices (%inc-ptr devices 16))))
+  (%stack-block ((devices (* (length controllers) (go-sizeof :udevice)   )))
+    (rletz ((udevices (:struct UDEVICES) :N (length controllers) :devices devices)
+			(uhppote (:struct :UHPPOTE) 
+	                  :bind      (ccl::make-cstring bind-addr)
+                      :broadcast (ccl::make-cstring broadcast-addr)
+                      :listen    (ccl::make-cstring listen-addr)
+                      :timeout   timeout
+                      :devices   udevices
+                      :debug     (cond (debug 1) (T 0))))
+      (loop for (id addr) in controllers
+        do (progn
+		     (setf (pref devices :udevice.id) id)
+			 (setf (pref devices :udevice.address) (ccl::make-cstring addr))
+			 (%setf-macptr devices (%inc-ptr devices 16))))
 
-	    (unwind-protect
-		  (restart-case (funcall f uhppote)
-					    (ignore () nil)
-						(use-value  (value) value)
-						(with-warning (err) (warn err)))
-          (progn
-		    (free (pref uhppote :UHPPOTE.bind))
-            (free (pref uhppote :UHPPOTE.broadcast))
-            (free (pref uhppote :UHPPOTE.listen))          
-            (loop for addr in cstrings 
-			  do (free addr))))))))
+	  (unwind-protect
+	    (restart-case (funcall f uhppote)
+					  (ignore () nil)
+					  (use-value  (value) value)
+					  (with-warning (err) (warn err)))
+        (progn
+		  (free (pref uhppote :UHPPOTE.bind))
+          (free (pref uhppote :UHPPOTE.broadcast))
+          (free (pref uhppote :UHPPOTE.listen))  
+          (let ((p (pref (pref uhppote :UHPPOTE.devices) :UDEVICES.devices)))
+            (loop for a from 1 to (length controllers)
+              do (progn
+                   (free (pref p :UDEVICE.address))
+			       (%setf-macptr p (%inc-ptr p 16))))))))))
 
 (defun uhppoted-get-devices (uhppote &optional (N 16)) ""
   (destructuring-bind  (p q) (uhppoted-get-devices-n uhppote N)
@@ -231,6 +232,6 @@
 		   (format t "~%   *** ERROR: ~a~%~%" (message c))
 		   (invoke-restart 'with-warning "oh noes i can has problems"))))
 	(list "debug" (uhppoted #'(lambda (u) (uhppoted-get-status u 405419896))
-							:bind-addr "qwerty"
+                            :controllers    (list '(405419896 "192.168.1.100") '(303986753 "192.168.1.100"))
 							:debug T))))
 
