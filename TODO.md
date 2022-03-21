@@ -21,10 +21,13 @@
   - [ ] CCL
         - [x] (examples:help)
         - [x] load.lisp
+        - [ ] usage
         - [ ] `get-devices` (Makefile/as a command line argument)
         - [ ] `get-device` (Makefile/as a command line argument)
-        - [ ] https://stackoverflow.com/questions/833314/compiling-binaries-with-clozure-common-lisp
-        - https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/
+              - pass device ID to examples:get-device
+        - [ ] make executable
+              - https://stackoverflow.com/questions/833314/compiling-binaries-with-clozure-common-lisp
+              - https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/
 
   - [ ] lint
   - [ ] Cross-compile

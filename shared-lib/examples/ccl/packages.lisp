@@ -4,8 +4,7 @@
   (:use :common-lisp 
 		:ccl
 		:uhppoted)
-  (:export help
-           get-devices
+  (:export get-devices
 		   get-device
 		   set-address
 		   get-status))
