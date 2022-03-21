@@ -19,7 +19,7 @@
   - (?) Make timeout milliseconds (or string ?)
 
   - [ ] CCL
-        - [ ] (examples:help)
+        - [x] (examples:help)
         - [ ] load.lisp
         - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
         - [ ] `get-devices` (Makefile/as a command line argument)

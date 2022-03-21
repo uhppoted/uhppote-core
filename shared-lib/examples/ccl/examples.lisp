@@ -1,5 +1,12 @@
 (in-package :examples)
 
+(defun help () ""
+  (format t "~%  Examples:~%~{    ~a~^~%~}~%" '("(examples:get-devices)"
+                           "(examples:get-device)"
+                           "(examples:set-address)"
+                           "(examples:get-status)"))
+)
+
 (defun exec (f) "" 
   (handler-bind
 	((uhppoted-error
