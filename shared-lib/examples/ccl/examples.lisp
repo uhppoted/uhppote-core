@@ -1,7 +1,7 @@
 (in-package :examples)
 
 (defun help () ""
-  (format t "~%  Examples:~%~{    ~a~^~%~}~%" '("(examples:get-devices)"
+  (format t "~%  Examples:~%~{    ~a~^~%~}~%~%" '("(examples:get-devices)"
                            "(examples:get-device)"
                            "(examples:set-address)"
                            "(examples:get-status)"))

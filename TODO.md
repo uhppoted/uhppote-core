@@ -20,7 +20,7 @@
 
   - [ ] CCL
         - [x] (examples:help)
-        - [ ] load.lisp
+        - [x] load.lisp
         - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
         - [ ] `get-devices` (Makefile/as a command line argument)
         - [ ] `get-device` (Makefile/as a command line argument)
