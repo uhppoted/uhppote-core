@@ -26,7 +26,8 @@ public class Device {
     public string version;
     public string date;
 
-    public Device(uint ID, string address, string subnet, string gateway, string MAC, string version, string date) {
+    public Device(uint ID, string address, string subnet, string gateway,
+                  string MAC, string version, string date) {
         this.ID = ID;
         this.address = address;
         this.subnet = subnet;
@@ -47,7 +48,8 @@ public class Event {
     public uint card;
     public byte reason;
 
-    public Event(string timestamp, uint index, byte eventType, bool granted, byte door, byte direction, uint card, byte reason) {
+    public Event(string timestamp, uint index, byte eventType, bool granted,
+                 byte door, byte direction, uint card, byte reason) {
         this.timestamp = timestamp;
         this.index = index;
         this.eventType = eventType;
@@ -71,7 +73,9 @@ public class Status {
     public uint seqno;
     public Event evt;
 
-    public Status(uint ID, string sysdatetime, byte[] doors, byte[] buttons, byte relays, byte inputs, byte syserror, byte info, uint seqno, Event evt) {
+    public Status(uint ID, string sysdatetime, byte[] doors, byte[] buttons,
+                  byte relays, byte inputs, byte syserror, byte info, uint seqno,
+                  Event evt) {
         this.ID = ID;
         this.sysdatetime = sysdatetime;
         this.doors = doors;
@@ -88,10 +92,10 @@ public class Status {
 public class Uhppoted : IDisposable {
     private UHPPOTE u = new UHPPOTE();
 
-    public Uhppoted() {
-    }
+    public Uhppoted() {}
 
-    public Uhppoted(string bind, string broadcast, string listen, int timeout, Controller[] controllers, bool debug) {
+    public Uhppoted(string bind, string broadcast, string listen, int timeout,
+                    Controller[] controllers, bool debug) {
         this.u.bind = bind;
         this.u.broadcast = broadcast;
         this.u.listen = listen;
@@ -129,9 +133,7 @@ public class Uhppoted : IDisposable {
         this.u.devices = r;
     }
 
-    ~Uhppoted() {
-        dispose();
-    }
+    ~Uhppoted() { dispose(); }
 
     public void Dispose() {
         dispose();
@@ -151,19 +153,25 @@ public class Uhppoted : IDisposable {
     }
 
     [DllImport("libuhppoted.so")]
-    private static extern string GetDevices(ref UHPPOTE u, ref int N, uint[] list);
+    private static extern string GetDevices(ref UHPPOTE u, ref int N,
+                                            uint[] list);
 
     [DllImport("libuhppoted.so")]
-    private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID);
+    private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device,
+                                           uint deviceID);
 
     [DllImport("libuhppoted.so")]
-    private static extern string SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway);
+    private static extern string SetAddress(ref UHPPOTE u, uint deviceID,
+                                            string address, string subnet,
+                                            string gateway);
 
     [DllImport("libuhppoted.so")]
-    private static extern string GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID);
+    private static extern string GetStatus(ref UHPPOTE u, ref GoStatus status,
+                                           uint deviceID);
 
     [DllImport("libuhppoted.so")]
-    private static extern string GetTime(ref UHPPOTE u, ref string datetime, uint deviceID);
+    private static extern string GetTime(ref UHPPOTE u, ref string datetime,
+                                         uint deviceID);
 
     public uint[] GetDevices() {
         int N = 0;
@@ -196,16 +204,12 @@ public class Uhppoted : IDisposable {
             throw new UhppotedException(err);
         }
 
-        return new Device(device.ID,
-                          device.address,
-                          device.subnet,
-                          device.gateway,
-                          device.MAC,
-                          device.version,
-                          device.date);
+        return new Device(device.ID, device.address, device.subnet, device.gateway,
+                          device.MAC, device.version, device.date);
     }
 
-    public void SetAddress(uint deviceID, string address, string subnet, string gateway) {
+    public void SetAddress(uint deviceID, string address, string subnet,
+                           string gateway) {
         string err = SetAddress(ref this.u, deviceID, address, subnet, gateway);
         if (err != null && err != "") {
             throw new UhppotedException(err);
@@ -235,31 +239,17 @@ public class Uhppoted : IDisposable {
         Marshal.Copy(status.doors, doors, 0, 4);
         Marshal.Copy(status.buttons, buttons, 0, 4);
 
-        Event e = new Event(
-            evt.timestamp,
-            evt.index,
-            evt.eventType,
-            evt.granted != 0,
-            evt.door,
-            evt.direction,
-            evt.card,
-            evt.reason);
+        Event e =
+            new Event(evt.timestamp, evt.index, evt.eventType, evt.granted != 0,
+                      evt.door, evt.direction, evt.card, evt.reason);
 
         Marshal.FreeHGlobal(status.doors);
         Marshal.FreeHGlobal(status.buttons);
         Marshal.FreeHGlobal(status.evt);
 
-        return new Status(
-            status.ID,
-            status.sysdatetime,
-            doors,
-            buttons,
-            status.relays,
-            status.inputs,
-            status.syserror,
-            status.info,
-            status.seqno,
-            e);
+        return new Status(status.ID, status.sysdatetime, doors, buttons,
+                          status.relays, status.inputs, status.syserror,
+                          status.info, status.seqno, e);
     }
 
     public string GetTime(uint deviceID) {
@@ -288,7 +278,8 @@ public class Uhppoted : IDisposable {
         public string broadcast;
         public string listen;
         public int timeout;    // seconds, defaults to 5 if <= 0
-        public IntPtr devices; // udevices * (optional list of non-local controller ID + address pairs)
+        public IntPtr devices; // udevices * (optional list of non-local controller
+                               // ID + address pairs)
         public bool debug;
     };
 
@@ -302,7 +293,8 @@ public class Uhppoted : IDisposable {
         public string date;
     };
 
-    // Ref. https://stackoverflow.com/questions/3820985/suppressing-is-never-used-and-is-never-assigned-to-warnings-in-c-sharp/3821035#3821035
+    // Ref.
+    // https://stackoverflow.com/questions/3820985/suppressing-is-never-used-and-is-never-assigned-to-warnings-in-c-sharp/3821035#3821035
 #pragma warning disable 0649
     struct GoEvent {
         public string timestamp;

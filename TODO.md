@@ -12,7 +12,7 @@
   
   - [ ] Restructure folders
         - tests
-          - [ ] C#
+          - [x] C#
           - [ ] Python
           - [ ] CCL
         
@@ -22,8 +22,8 @@
         - [ ] (examples:help)
         - [ ] load.lisp
         - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
-        - [ ] `get-devices` (as a command line argument)
-        - [ ] `get-device` (as a command line argument)
+        - [ ] `get-devices` (Makefile/as a command line argument)
+        - [ ] `get-device` (Makefile/as a command line argument)
         - [ ] https://stackoverflow.com/questions/833314/compiling-binaries-with-clozure-common-lisp
         - https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/
 
