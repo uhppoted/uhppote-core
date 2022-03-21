@@ -3,6 +3,8 @@ using System;
 using uhppoted;
 
 public class example {
+    const uint DEVICEID = 405419896;
+
     public static void Main(string[] args) {
         if (args.Length < 1) {
             usage();
@@ -39,10 +41,15 @@ public class example {
                 GetStatus(u, 405419896);
                 break;
 
+            case "get-time":
+                GetTime(u, 405419896);
+                break;
+
             case "all":
                 GetDevices(u);
                 GetDevice(u, 405419896);
                 SetAddress(u, 405419896, "192.168.1.125", "255.255.255.254", "192.168.1.5");
+                GetTime(u, 405419896);
                 break;
 
             default:
@@ -72,19 +79,23 @@ public class example {
         Console.WriteLine("    get-device");
         Console.WriteLine("    set-address");
         Console.WriteLine("    get-status");
+        Console.WriteLine("    get-time");
         Console.WriteLine("    help");
         Console.WriteLine();
         Console.WriteLine("  get-devices");
         Console.WriteLine("    Retrieves a list of UHPPOTE controller IDs findable on the local LAN.");
         Console.WriteLine();
         Console.WriteLine("  get-device");
-        Console.WriteLine("    Retrieves the basic device information for a single UHPPOTE controller.");
+        Console.WriteLine("    Retrieves the basic device information for a UHPPOTE controller.");
         Console.WriteLine();
         Console.WriteLine("  set-address");
         Console.WriteLine("    Sets the controller IPv4 address, subnet mask and gateway address.");
         Console.WriteLine();
         Console.WriteLine("  get-status");
-        Console.WriteLine("    Retrieves the current device status for a single UHPPOTE controller.");
+        Console.WriteLine("    Retrieves the current device status for a UHPPOTE controller.");
+        Console.WriteLine();
+        Console.WriteLine("  get-time");
+        Console.WriteLine("    Retrieves the current date/time for a UHPPOTE controller.");
         Console.WriteLine();
         Console.WriteLine("  help");
         Console.WriteLine("    Displays this information.");
@@ -146,6 +157,14 @@ public class example {
         Console.WriteLine(String.Format("        card:      {0}", status.evt.card));
         Console.WriteLine(String.Format("        reason:    {0}", status.evt.reason));
 
+        Console.WriteLine();
+    }
+
+    static void GetTime(Uhppoted u, uint deviceID) {
+        string datetime = u.GetTime(deviceID);
+
+        Console.WriteLine(String.Format("get-time"));
+        Console.WriteLine(String.Format("  date/time: {0}", datetime));
         Console.WriteLine();
     }
 }

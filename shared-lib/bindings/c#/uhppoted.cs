@@ -153,6 +153,18 @@ public class Uhppoted : IDisposable {
     [DllImport("libuhppoted.so")]
     private static extern string GetDevices(ref UHPPOTE u, ref int N, uint[] list);
 
+    [DllImport("libuhppoted.so")]
+    private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string GetTime(ref UHPPOTE u, ref string datetime, uint deviceID);
+
     public uint[] GetDevices() {
         int N = 0;
         int count = N;
@@ -176,9 +188,6 @@ public class Uhppoted : IDisposable {
         return list;
     }
 
-    [DllImport("libuhppoted.so")]
-    private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID);
-
     public Device GetDevice(uint deviceID) {
         GoDevice device = new GoDevice();
 
@@ -196,18 +205,12 @@ public class Uhppoted : IDisposable {
                           device.date);
     }
 
-    [DllImport("libuhppoted.so")]
-    private static extern string SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway);
-
     public void SetAddress(uint deviceID, string address, string subnet, string gateway) {
         string err = SetAddress(ref this.u, deviceID, address, subnet, gateway);
         if (err != null && err != "") {
             throw new UhppotedException(err);
         }
     }
-
-    [DllImport("libuhppoted.so")]
-    private static extern string GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID);
 
     public Status GetStatus(uint deviceID) {
         GoStatus status = new GoStatus();
@@ -257,6 +260,17 @@ public class Uhppoted : IDisposable {
             status.info,
             status.seqno,
             e);
+    }
+
+    public string GetTime(uint deviceID) {
+        string datetime = "";
+
+        string err = GetTime(ref this.u, ref datetime, deviceID);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+
+        return datetime;
     }
 
     struct udevice {

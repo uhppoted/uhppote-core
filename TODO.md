@@ -6,12 +6,11 @@
   - [ ] `get-time`
         - [x] C
         - [x] C++
-        - [ ] C#
+        - [x] C#
         - [ ] Python
         - [ ] CCL
   
   - [ ] Restructure folders
-        - [x] Use build flags and common `main`
         - tests
           - [ ] C#
           - [ ] Python
@@ -20,11 +19,9 @@
   - (?) Make timeout milliseconds (or string ?)
 
   - [ ] CCL
-        - [x] Replace all with-cstrings with unwind-protect
-        - [x] Replace list of cstrings with iterator on udevices
+        - [ ] (examples:help)
+        - [ ] load.lisp
         - [(setf (paref attribs #>EGLint i) attrib)))](https://github.com/Clozure/ccl/blob/v1.12/examples/android/native-activity.lisp#L61)
-        - [ ] help
-        - [ ] usage
         - [ ] `get-devices` (as a command line argument)
         - [ ] `get-device` (as a command line argument)
         - [ ] https://stackoverflow.com/questions/833314/compiling-binaries-with-clozure-common-lisp
