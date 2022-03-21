@@ -38,59 +38,57 @@
   reason)
 
 (def-foreign-type nil
-				  (:struct :UDEVICE
-						   (:id      :int)
-						   (:address :address)))
+  (:struct :UDEVICE
+    (:id      :int)
+	(:address :address)))
 
 (def-foreign-type nil
-				  (:struct :UDEVICES
-						   (:N       :int)
-						   (:devices :address)))
+  (:struct :UDEVICES
+    (:N       :int)
+    (:devices :address)))
 
 (def-foreign-type nil
-				  (:struct :UHPPOTE
-						   (:bind      :address)
-						   (:broadcast :address)
-						   (:listen    :address)
-						   (:timeout   :int)
-						   (:devices   :address)
-						   (:debug     :int)))
+  (:struct :UHPPOTE
+    (:bind      :address)
+    (:broadcast :address)
+    (:listen    :address)
+    (:timeout   :int)
+    (:devices   :address)
+    (:debug     :int)))
 
 (def-foreign-type nil
-				  (:struct :GoDevice
-						   (:id      :unsigned-long)
-						   (:address :address)
-						   (:subnet  :address)
-						   (:gateway :address)
-						   (:MAC     :address)
-						   (:version :address)
-						   (:date    :address)))
+  (:struct :GoDevice
+    (:id      :unsigned-long)
+    (:address :address)
+    (:subnet  :address)
+    (:gateway :address)
+    (:MAC     :address)
+    (:version :address)
+    (:date    :address)))
 
 (def-foreign-type nil
-				  (:struct :GoEvent
-						   (:timestamp :address)
-						   (:index     :unsigned-fullword)
-						   (:type      :unsigned-byte)
-						   (:granted   :unsigned-byte)
-						   (:door      :unsigned-byte)
-						   (:direction :unsigned-byte)
-						   (:card      :unsigned-fullword)
-						   (:reason    :unsigned-byte)
-						   ))
+  (:struct :GoEvent
+    (:timestamp :address)
+    (:index     :unsigned-fullword)
+    (:type      :unsigned-byte)
+    (:granted   :unsigned-byte)
+    (:door      :unsigned-byte)
+    (:direction :unsigned-byte)
+    (:card      :unsigned-fullword)
+    (:reason    :unsigned-byte)))
 
 (def-foreign-type nil
-				  (:struct :GoStatus
-						   (:id        :unsigned-fullword)
-						   (:timestamp :address)
-						   (:doors     :address)
-						   (:buttons   :address)
-						   (:relays    :unsigned-byte)
-						   (:inputs    :unsigned-byte)
-						   (:syserror  :unsigned-byte)
-						   (:info      :unsigned-byte)
-						   (:seqno     :unsigned-fullword)
-						   (:event     :address)
-						   ))
+  (:struct :GoStatus
+    (:id        :unsigned-fullword)
+    (:timestamp :address)
+    (:doors     :address)
+    (:buttons   :address)
+    (:relays    :unsigned-byte)
+    (:inputs    :unsigned-byte)
+    (:syserror  :unsigned-byte)
+    (:info      :unsigned-byte)
+    (:seqno     :unsigned-fullword)
+    (:event     :address)))
 
 (define-condition uhppoted-error (error)
   ((message :initarg :message :reader message)))
@@ -138,7 +136,7 @@
                    (free (pref p :UDEVICE.address))
 			       (%setf-macptr p (%inc-ptr p 16))))))))))
 
-(defun uhppoted-get-devices (uhppote &optional (N 16)) ""
+(defun uhppoted-get-devices (uhppote &optional (N 16)) "Retrieves a list of device IDs on the local LAN"
   (destructuring-bind  (p q) (uhppoted-get-devices-n uhppote N)
 	(cond ((>= N p) (subseq q 0 p))
 		  (T (uhppoted-get-devices uhppote (+ N 16))))))
@@ -157,7 +155,7 @@
 	  (dispose-heap-ivector array))))
 
 
-(defun uhppoted-get-device (uhppote device-id) ""
+(defun uhppoted-get-device (uhppote device-id) "Retrieves the device information for a controller"
   (rletz ((device (:struct :GoDevice)))
     (with-macptrs ((err (external-call "GetDevice" 
 									   :address uhppote 
@@ -174,7 +172,7 @@
                    :date    (go-string (pref device :GoDevice.date))))))
 
 
-(defun uhppoted-set-address (uhppote device-id ip-addr subnet-mask gateway-addr) ""
+(defun uhppoted-set-address (uhppote device-id ip-addr subnet-mask gateway-addr) "Sets the IP addres, subnet mask and gateway address for a controller"
   (with-cstrs ((address ip-addr)
 			   (subnet  subnet-mask)
 			   (gateway gateway-addr))
@@ -187,7 +185,7 @@
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err))))))
 
 
-(defun uhppoted-get-status (uhppote device-id) ""
+(defun uhppoted-get-status (uhppote device-id) "Retrieves a controller status information"
   (%stack-block ((doors   4)
 				 (buttons 4))
     (rletz ((event (:struct :GoEvent))
