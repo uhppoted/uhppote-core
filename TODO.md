@@ -7,13 +7,13 @@
         - [x] C
         - [x] C++
         - [x] C#
-        - [ ] Python
+        - [x] Python
         - [ ] CCL
   
   - [ ] Restructure folders
         - tests
           - [x] C#
-          - [ ] Python
+          - [x] Python
           - [ ] CCL
         
   - (?) Make timeout milliseconds (or string ?)

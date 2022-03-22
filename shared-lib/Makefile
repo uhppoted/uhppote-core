@@ -37,6 +37,7 @@ examples:
 	make -C ./examples/ccl    -f Makefile build
 
 test: 
-	make -C ./tests/c    -f Makefile test
-	make -C ./tests/c++  -f Makefile test
-	make -C ./tests/c#   -f Makefile test
+	make -C ./tests/c      -f Makefile test
+	make -C ./tests/c++    -f Makefile test
+	make -C ./tests/c#     -f Makefile test
+	make -C ./tests/python -f Makefile test
