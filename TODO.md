@@ -3,6 +3,8 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
+  - (?) Make timeout milliseconds (or string ?)
+
   - [ ] `get-time`
         - [x] C
         - [x] C++
@@ -16,16 +18,12 @@
           - [x] Python
           - [ ] CCL
         
-  - (?) Make timeout milliseconds (or string ?)
-
   - [ ] CCL
         - [x] Pass arguments to (example:xxx)
         - [x] (usage)
         - [ ] `get-devices`: paref
         - [x] pprint returned structs
-        - [ ] make executable
-              - https://stackoverflow.com/questions/833314/compiling-binaries-with-clozure-common-lisp
-              - https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/
+        - [x] make executable
 
   - [ ] lint
   - [ ] Cross-compile
@@ -152,3 +150,7 @@
 
 10. cgo: explicitly set alignment `__attribute__((align(8))) complex float x;`
     -  https://github.com/golang/go/wiki/cgo#struct-alignment-issues
+
+### Notes
+1.  https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/
+

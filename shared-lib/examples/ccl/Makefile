@@ -1,6 +1,7 @@
 LIB=../../lib
 BINDINGS=../../bindings/ccl
-CMD=GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp --eval '(main)' 
+REPL=GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp --eval '(main)'
+CMD=./examples
 
 .PHONY: run
 .PHONY: debug
@@ -8,25 +9,30 @@ CMD=GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LI
 lib: 
 	cd ../../go && make all
 
-build:
+build: examples
+	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp --eval '(make-app)' 
 
 usage: build
-	$(CMD) -- xxx
+	$(CMD) 
 
 help: build
-	$(CMD) -- help
+	$(CMD) help
 
 get-devices: build
-	$(CMD) -- get-devices
+	$(CMD) get-devices
+	# $(REPL) -- get-devices
 
 get-device: build
-	$(CMD) -- get-device
+	$(CMD) get-device
+	# $(REPL) -- get-device
 
 set-address: build
-	$(CMD) -- set-address
+	$(CMD) set-address
+	# $(REPL) -- set-address
 
 get-status: build
-	$(CMD) -- get-status
+	$(CMD) get-status
+	# $(REPL) -- get-status
 
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp
