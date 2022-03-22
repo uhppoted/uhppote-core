@@ -26,6 +26,7 @@ def help():
     print("    get-device")
     print("    set-device")
     print("    get-status")
+    print("    get-time")
     print("    help")
     print()
     print("  get-devices")
@@ -44,8 +45,11 @@ def help():
     )
     print()
     print("  get-status")
+    print("    Retrieves a controller status.")
+    print()
+    print("  get-time")
     print(
-        "    Retrieves the controller status for a single UHPPOTE controller.")
+        "    Retrieves a controller current date/time (YYYY-MM-DD HH:mm:ss).")
     print()
     print("  help")
     print("    Displays this information.")
@@ -132,6 +136,19 @@ def get_status(u, deviceID):
         print()
 
 
+def get_time(u, deviceID):
+    try:
+        datetime = u.get_time(deviceID)
+
+        print("get-time")
+        print(f"  date/time: {datetime}")
+        print()
+
+    except Exception as e:
+        print(f" *** ERROR get-time ({e})")
+        print()
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Example CLI for the uhppote-core Python integration')
@@ -149,6 +166,7 @@ if __name__ == "__main__":
             'get-device',
             'set-address',
             'get-status',
+            'get-time',
             'all',
     ]:
         print()
@@ -179,12 +197,16 @@ if __name__ == "__main__":
             elif cmd == 'get-status':
                 get_status(u, 405419896)
 
+            elif cmd == 'get-time':
+                get_time(u, 405419896)
+
             elif cmd == 'all':
                 get_devices(u)
                 get_device(u, 405419896)
                 set_address(u, 405419896, "192.168.1.125", "255.255.253",
                             "192.168.1.5")
                 get_status(u, 405419896)
+                get_time(u, 405419896)
 
         except BaseException as x:
             print()

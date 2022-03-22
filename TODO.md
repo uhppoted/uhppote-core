@@ -21,9 +21,10 @@
   - [ ] CCL
         - [x] (examples:help)
         - [x] load.lisp
-        - [ ] usage
-        - [ ] `get-devices` (Makefile/as a command line argument)
-        - [ ] `get-device` (Makefile/as a command line argument)
+        - [ ] (usage)
+        - [x] `get-devices` (Makefile/as a command line argument)
+        - [ ] pprint returned structs
+        - [ ] `get-device`
               - pass device ID to examples:get-device
         - [ ] make executable
               - https://stackoverflow.com/questions/833314/compiling-binaries-with-clozure-common-lisp

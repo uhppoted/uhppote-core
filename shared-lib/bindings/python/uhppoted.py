@@ -180,6 +180,18 @@ class Uhppote:
                       buttons, status.relays, status.inputs, status.syserror,
                       status.seqno, status.info, event)
 
+    def get_time(self, deviceID):
+        GetTime = lib.GetTime
+        GetTime.argtypes = [POINTER(GoUHPPOTE), POINTER(c_char_p), c_ulong]
+        GetTime.restype = ctypes.c_char_p
+        GetTime.errcheck = self.errcheck
+
+        datetime = c_char_p()
+
+        GetTime(self._uhppote, byref(datetime), deviceID)
+
+        return datetime.value.decode('utf-8')
+
 
 # INTERNAL TYPES
 class GoController(Structure):

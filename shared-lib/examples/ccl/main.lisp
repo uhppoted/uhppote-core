@@ -1,6 +1,6 @@
 (load "../../bindings/ccl/packages.lisp")
-(load "packages.lisp")
 (load "../../bindings/ccl/uhppoted.lisp")
+(load "packages.lisp")
 (load "examples.lisp")
 
 (defun help () ""
@@ -10,7 +10,6 @@
                  "(set-address)"
                  "(get-status)"
 )))
-
 
 (defun get-devices () ""
   (format t "~%  get-devices:~%~{    ~a~^~%~}~%~%" (coerce (examples:get-devices) 'list)))
