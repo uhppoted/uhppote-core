@@ -1,5 +1,6 @@
 LIB=../../lib
 BINDINGS=../../bindings/ccl
+CMD=GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp --eval '(main)' 
 
 .PHONY: run
 .PHONY: debug
@@ -9,20 +10,23 @@ lib:
 
 build:
 
+usage: build
+	$(CMD) -- xxx
+
 help: build
-	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp --eval '(main)' -- help
+	$(CMD) -- help
 
 get-devices: build
-	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp --eval '(main)' -- get-devices
+	$(CMD) -- get-devices
 
 get-device: build
-	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp --eval '(main)' -- get-device
+	$(CMD) -- get-device
 
 set-address: build
-	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp --eval '(main)' -- set-address
+	$(CMD) -- set-address
 
 get-status: build
-	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp --eval '(main)' -- get-status
+	$(CMD) -- get-status
 
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp

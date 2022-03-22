@@ -20,9 +20,9 @@
 
   - [ ] CCL
         - [x] Pass arguments to (example:xxx)
-        - [ ] (usage)
+        - [x] (usage)
         - [ ] `get-devices`: paref
-        - [ ] pprint returned structs
+        - [x] pprint returned structs
         - [ ] make executable
               - https://stackoverflow.com/questions/833314/compiling-binaries-with-clozure-common-lisp
               - https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/
