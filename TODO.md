@@ -18,10 +18,9 @@
           - [x] Python
           - [ ] CCL
         
-  - [ ] CCL
+  - [x] CCL
         - [x] Pass arguments to (example:xxx)
         - [x] (usage)
-        - [ ] `get-devices`: paref
         - [x] pprint returned structs
         - [x] make executable
 
