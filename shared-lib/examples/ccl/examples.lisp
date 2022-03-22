@@ -17,11 +17,11 @@
 (defun get-devices () "" 
   (exec #'(lambda (u) (uhppoted-get-devices u))))
 
-(defun get-device () "" 
-  (exec #'(lambda (u) (uhppoted-get-device u 405419896))))
+(defun get-device (device-id) "" 
+  (exec #'(lambda (u) (uhppoted-get-device u device-id))))
 
-(defun set-address () "" 
-  (exec #'(lambda (u) (uhppoted-set-address u 405419896 "192.168.1.125" "255.255.255.254" "192.168.1.5"))))
+(defun set-address (device-id addr subnet gateway) "" 
+  (exec #'(lambda (u) (uhppoted-set-address u device-id addr subnet gateway))))
 
-(defun get-status () "" 
-  (exec #'(lambda (u) (uhppoted-get-status u 405419896))))
+(defun get-status (device-id) "" 
+  (exec #'(lambda (u) (uhppoted-get-status u device-id))))

@@ -19,13 +19,10 @@
   - (?) Make timeout milliseconds (or string ?)
 
   - [ ] CCL
-        - [x] (examples:help)
-        - [x] load.lisp
+        - [x] Pass arguments to (example:xxx)
         - [ ] (usage)
-        - [x] `get-devices` (Makefile/as a command line argument)
+        - [ ] `get-devices`: paref
         - [ ] pprint returned structs
-        - [ ] `get-device`
-              - pass device ID to examples:get-device
         - [ ] make executable
               - https://stackoverflow.com/questions/833314/compiling-binaries-with-clozure-common-lisp
               - https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/

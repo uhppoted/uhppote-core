@@ -15,13 +15,13 @@
   (format t "~%  get-devices:~%~{    ~a~^~%~}~%~%" (coerce (examples:get-devices) 'list)))
 
 (defun get-device () ""
-  (format t "  get-device:~%    ~a~%" (examples:get-device)))
+  (format t "  get-device:~%    ~a~%" (examples:get-device 405419896)))
 
 (defun set-address () ""
-  (format t "  set-address:~%    ~a~%" (examples:set-address)))
+  (format t "  set-address:~%    ~a~%" (examples:set-address 405419896 "192.168.1.125" "255.255.255.254" "192.168.1.5")))
 
 (defun get-status () ""
-  (format t "  get-status:~%    ~a~%" (examples:get-status)))
+  (format t "  get-status:~%    ~a~%" (examples:get-status 405419896)))
 
 (defun main () ""
   (loop for arg in *unprocessed-command-line-arguments*
