@@ -1,6 +1,5 @@
 LIB=../../lib
 BINDINGS=../../bindings/ccl
-REPL=GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp --eval '(main)'
 CMD=./examples
 
 .PHONY: run

@@ -17,6 +17,8 @@
           - [x] C#
           - [x] Python
           - [ ] CCL
+                - [ ] Check condition handing in tests
+                - [ ] Exit code
         
   - [x] CCL
         - [x] Pass arguments to (example:xxx)
@@ -25,6 +27,8 @@
         - [x] make executable
         - [x] Only parse command line args for executable
         - [ ] Remove 'uhppoted' prefix from `uhppoted` forms
+        - [ ] May not need the `with-macptrs` in`uhppoted` because `err` is being 
+              freed by go-error
 
   - [ ] lint
   - [ ] Cross-compile

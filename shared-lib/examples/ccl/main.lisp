@@ -39,7 +39,6 @@
   (format t "  get-time:~%    ~:w~%" (examples:get-time 405419896)))
 
 (defun main () ""
-  (print (parse-command-line))
   (let ((args (parse-command-line)))
     (loop for arg in args
        do (cond ((string= arg "get-devices") (get-devices))
