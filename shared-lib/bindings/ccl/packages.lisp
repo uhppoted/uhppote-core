@@ -8,6 +8,7 @@
 		   uhppoted-get-device
 		   uhppoted-set-address
 		   uhppoted-get-status
+		   uhppoted-get-time
 		   uhppoted-error
 		   with-warning
 		   message))

@@ -5,12 +5,12 @@
 - Shared-lib/DLL
   - (?) Make timeout milliseconds (or string ?)
 
-  - [ ] `get-time`
+  - [x] `get-time`
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
-        - [ ] CCL
+        - [x] CCL
   
   - [ ] Restructure folders
         - tests
@@ -24,6 +24,7 @@
         - [x] pprint returned structs
         - [x] make executable
         - [x] Only parse command line args for executable
+        - [ ] Remove 'uhppoted' prefix from `uhppoted` forms
 
   - [ ] lint
   - [ ] Cross-compile

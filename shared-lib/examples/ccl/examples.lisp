@@ -25,3 +25,6 @@
 
 (defun get-status (device-id) "" 
   (exec #'(lambda (u) (uhppoted-get-status u device-id))))
+
+(defun get-time (device-id) "" 
+  (exec #'(lambda (u) (uhppoted-get-time u device-id))))

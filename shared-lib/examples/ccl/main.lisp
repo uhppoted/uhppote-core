@@ -11,6 +11,7 @@
   (format t "      get-device    Retrieves the information for a UHPPOTE controller~%") 
   (format t "      set-address   Sets a controller IP address, subnet mask and gateway address~%") 
   (format t "      get-status    Retrieves a controller status~%") 
+  (format t "      get-time      Retrieves a controller date/time~%") 
   (format t "~%"))
 
 (defun help () ""
@@ -18,7 +19,9 @@
            (list "(get-devices)"
                  "(get-device)"
                  "(set-address)"
-                 "(get-status)")))
+                 "(get-status)"
+                 "(get-time)"
+                 )))
 
 (defun get-devices () ""
   (format t "~%  get-devices:~%~{    ~a~^~%~}~%~%" (coerce (examples:get-devices) 'list)))
@@ -32,6 +35,9 @@
 (defun get-status () ""
   (format t "  get-status:~%    ~:w~%" (examples:get-status 405419896)))
 
+(defun get-time () ""
+  (format t "  get-time:~%    ~:w~%" (examples:get-time 405419896)))
+
 (defun main () ""
   (print (parse-command-line))
   (let ((args (parse-command-line)))
@@ -40,6 +46,7 @@
                 ((string= arg "get-device")  (get-device))
                 ((string= arg "set-address") (set-address))
                 ((string= arg "get-status")  (get-status))
+                ((string= arg "get-time")  (get-time))
                 ((string= arg "help")        (help))
                 (t (help))))))
 

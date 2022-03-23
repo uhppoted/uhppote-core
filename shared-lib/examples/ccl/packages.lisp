@@ -7,5 +7,6 @@
   (:export get-devices
 		   get-device
 		   set-address
-		   get-status))
+		   get-status
+           get-time))
 

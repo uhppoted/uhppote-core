@@ -94,7 +94,7 @@
 
 (defun go-sizeof (type) "" 
   (cond ((eq type :udevice) 16)
-		(T 0)))
+	      (T 0)))
 
 (defun uhppoted (f &key (bind-addr "") (broadcast-addr "") (listen-addr "") (timeout 5) (controllers NIL) (debug NIL)) ""
   (%stack-block ((devices (* (length controllers) (go-sizeof :udevice)   )))
@@ -108,17 +108,17 @@
                                   :debug     (cond (debug 1) (T 0))))
       (loop for (id addr) in controllers
         do (progn
-		     (setf (pref devices :udevice.id) id)
-			 (setf (pref devices :udevice.address) (ccl::make-cstring addr))
-			 (%setf-macptr devices (%inc-ptr devices 16))))
+		         (setf (pref devices :udevice.id) id)
+			       (setf (pref devices :udevice.address) (ccl::make-cstring addr))
+			       (%setf-macptr devices (%inc-ptr devices 16))))
 
-	  (unwind-protect
-	    (restart-case (funcall f uhppote)
-					  (ignore () nil)
-					  (use-value  (value) value)
-					  (with-warning (err) (warn err)))
+	    (unwind-protect
+	      (restart-case (funcall f uhppote)
+				  (ignore () nil)
+					(use-value  (value) value)
+					(with-warning (err) (warn err)))
         (progn
-		  (free (pref uhppote :UHPPOTE.bind))
+		      (free (pref uhppote :UHPPOTE.bind))
           (free (pref uhppote :UHPPOTE.broadcast))
           (free (pref uhppote :UHPPOTE.listen))  
           (let ((p (pref (pref uhppote :UHPPOTE.devices) :UDEVICES.devices)))
@@ -141,9 +141,9 @@
 										                                    :address N 
                                                         :address parray 
                                                         :address)))
-           (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err))))
-		(list (%get-signed-long N) array))
-	  (dispose-heap-ivector array))))
+           (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+		       (list (%get-signed-long N) array)))
+	    (dispose-heap-ivector array))))
 
 
 (defun uhppoted-get-device (uhppote device-id) "Retrieves the device information for a controller"
@@ -153,13 +153,13 @@
 									                                 :unsigned-long device-id 
                                                    :address)))
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-	  (make-device :id      (%get-unsigned-long device)
-                 :address (go-string (pref device :GoDevice.address))
-				         :subnet  (go-string (pref device :GoDevice.subnet))
-                 :gateway (go-string (pref device :GoDevice.gateway))
-                 :MAC     (go-string (pref device :GoDevice.MAC))
-                 :version (go-string (pref device :GoDevice.version))
-                 :date    (go-string (pref device :GoDevice.date))))))
+	    (make-device :id      (%get-unsigned-long device)
+                   :address (go-string (pref device :GoDevice.address))
+			  	         :subnet  (go-string (pref device :GoDevice.subnet))
+                   :gateway (go-string (pref device :GoDevice.gateway))
+                   :MAC     (go-string (pref device :GoDevice.MAC))
+                   :version (go-string (pref device :GoDevice.version))
+                   :date    (go-string (pref device :GoDevice.date))))))
 
 
 (defun uhppoted-set-address (uhppote device-id ip-addr subnet-mask gateway-addr) "Sets the IP addres, subnet mask and gateway address for a controller"
@@ -211,13 +211,24 @@
 										 :card      (pref event :GoEvent.card)
 										 :reason    (pref event :GoEvent.reason)))))))
 
+
+(defun uhppoted-get-time (uhppote device-id) "Retrieves the controller datet/time"
+  (with-cstrs ((datetime  ""))
+     (with-macptrs ((err (external-call "GetTime" :address uhppote 
+                                                  :address datetime
+                                                  :unsigned-long device-id 
+                                                  :address)))
+       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+       (go-string (%get-ptr datetime)))))
+
+
 (defun debug () "" 
   (handler-bind
 	((uhppoted-error
 	   #'(lambda (c) 
 		   (format t "~%   *** ERROR: ~a~%~%" (message c))
 		   (invoke-restart 'with-warning "oh noes i can has problems"))))
-	(list "debug" (uhppoted #'(lambda (u) (uhppoted-get-status u 405419896))
+	(list "debug" (uhppoted #'(lambda (u) (uhppoted-get-time u 405419896))
                                         :controllers (list '(405419896 "192.168.1.100") '(303986753 "192.168.1.100"))
 							                          :debug T))))
 
