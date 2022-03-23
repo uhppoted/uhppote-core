@@ -20,19 +20,15 @@ help: build
 
 get-devices: build
 	$(CMD) get-devices
-	# $(REPL) -- get-devices
 
 get-device: build
 	$(CMD) get-device
-	# $(REPL) -- get-device
 
 set-address: build
 	$(CMD) set-address
-	# $(REPL) -- set-address
 
 get-status: build
 	$(CMD) get-status
-	# $(REPL) -- get-status
 
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp

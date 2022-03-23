@@ -32,33 +32,30 @@
 (defun get-status () ""
   (format t "  get-status:~%    ~:w~%" (examples:get-status 405419896)))
 
-;;;; Workaround to get command line arguments for executable. Assumes you're running it 
-;;;; as ./examples <commmand> and just treats everything after the first *command-line-argument*
-;;;; as the command(s) to be executed. Not going to work for every variation but 'good enough'
-;;;; for now.
+(defun main () ""
+  (print (parse-command-line))
+  (let ((args (parse-command-line)))
+    (loop for arg in args
+       do (cond ((string= arg "get-devices") (get-devices))
+                ((string= arg "get-device")  (get-device))
+                ((string= arg "set-address") (set-address))
+                ((string= arg "get-status")  (get-status))
+                ((string= arg "help")        (help))
+                (t (help))))))
+
+;;;; Workaround to skip command line arguments for REPL - invoking (main) in the REPL is
+;;;; peculiarly pointless so:
+;;;; - if *unproccessed-command-line-arguments* is not NIL just discard them
+;;;; - if (car *command-line-arguments*) is not (example) just discard them.
 ;;;;
 ;;;; Ref. https://github.com/Clozure/ccl/issues/177
-(defun main () ""
-  (cond (*unprocessed-command-line-arguments* (main-x *unprocessed-command-line-arguments*))
-        (t (let ((commands (parse-command-line)))
-                (cond ((eq commands NIL) (usage))
-                      (t (main-x commands)))))))
-
 (defun parse-command-line () ""
-  (cond ((eq *command-line-argument-list* NIL) ())
-        (t (cdr *command-line-argument-list*))
-  )
-)
-
-(defun main-x (commands) ""
-  (loop for arg in commands
-    do (progn
-         (cond ((string= arg "get-devices") (get-devices))
-               ((string= arg "get-device")  (get-device))
-               ((string= arg "set-address") (set-address))
-               ((string= arg "get-status")  (get-status))
-               ((string= arg "help")        (help))
-               (t (help))))))
+  (let ((args       *command-line-argument-list*)
+        (executable "examples"))
+    (cond (*unprocessed-command-line-arguments* ())
+          ((eq (search executable (car args)) NIL) ())
+          ((/= (+ (coerce (search executable (car args)) 'fixnum) (length executable)) (length (car args))) ())
+          (t (cdr args)))))
 
 (defun make-app () ""
   (save-application "examples" :toplevel-function #'main :prepend-kernel t))

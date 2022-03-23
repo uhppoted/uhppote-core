@@ -23,6 +23,7 @@
         - [x] (usage)
         - [x] pprint returned structs
         - [x] make executable
+        - [x] Only parse command line args for executable
 
   - [ ] lint
   - [ ] Cross-compile
