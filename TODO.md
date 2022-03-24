@@ -5,27 +5,20 @@
 - Shared-lib/DLL
   - (?) Make timeout milliseconds (or string ?)
 
-  - [x] `get-time`
-        - [x] C
-        - [x] C++
-        - [x] C#
-        - [x] Python
-        - [x] CCL
+  - [ ] `set-time`
+        - [ ] C
+        - [ ] C++
+        - [ ] C#
+        - [ ] Python
+        - [ ] CCL
   
   - [ ] Restructure folders
         - tests
-          - [x] C#
-          - [x] Python
           - [ ] CCL
-                - [ ] Check condition handing in tests
-                - [ ] Exit code
+                - [x] Exit code
+                - [ ] Move 'failed' condition to `tests`
         
   - [x] CCL
-        - [x] Pass arguments to (example:xxx)
-        - [x] (usage)
-        - [x] pprint returned structs
-        - [x] make executable
-        - [x] Only parse command line args for executable
         - [ ] Remove 'uhppoted' prefix from `uhppoted` forms
         - [ ] May not need the `with-macptrs` in`uhppoted` because `err` is being 
               freed by go-error

@@ -8,7 +8,7 @@ CMD=./test
 lib: 
 	cd ../../go && make all
 
-build: tests
+build: test
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp --eval '(make-app)' 
 
 usage: build
@@ -36,5 +36,5 @@ tests: build
 	$(CMD) all
 
 debug: 
-	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp
+	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp 
 

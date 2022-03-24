@@ -59,12 +59,3 @@ godoc:
 lib: format
 	go build -trimpath -buildmode=c-shared -o $(LIB)/lib/libuhppoted.so   shared-lib/go/lib/main.go
 	go build -trimpath -buildmode=c-shared -o $(LIB)/debug/libuhppoted.so shared-lib/go/debug/main.go
-
-# xxx:
-# 	docker run -it --rm \
-#   		-v $GOPATH/src/github.com/uhppoted/uhppote-core:/go/src/github.com/uhppoted/uhppote-core \
-#   		-w /go/src/github.com/uhppoted/uhppote-core \
-#   		-e CGO_ENABLED=1 \
-#   		docker.elastic.co/beats-dev/golang-crossbuild:1.17.6-darwin \
-#   		--build-cmd "ls -la /" \
-#   		-p "darwin/amd64"

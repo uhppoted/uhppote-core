@@ -4,8 +4,8 @@
   (:use :common-lisp
 		:ccl)
   (:export uhppoted
-	     uhppoted-get-devices
-	     uhppoted-get-device
+           uhppoted-get-devices
+           uhppoted-get-device
            uhppoted-set-address
            uhppoted-get-status
            uhppoted-get-time

@@ -1,5 +1,8 @@
 (in-package :tests)
 
+(define-condition failed (error)
+  ((message :initarg :message :reader message)))
+
 (defun exec (f) "" 
   (handler-bind
 	((uhppoted-error
@@ -173,9 +176,10 @@
         (datetime (exec #'(lambda (u) (uhppoted-get-time u 405419896)))))
        (if (not (equal "2022-01-02 12:34:56" datetime)) 
            (progn
-             (format t "get-time: incorrect date/time - expected:~a, got:~a~%" "2022-01-02 12:34:56" datetime)
+             (format t "get-time:    incorrect date/time - expected:~a, got:~a~%" "2022-01-02 12:34:56" datetime)
              (setf ok NIL)))
        (if ok
            (progn 
              (format t "get-time:    ok~%") 
              T))))
+
