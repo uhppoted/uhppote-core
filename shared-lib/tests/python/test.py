@@ -32,7 +32,6 @@ def get_device(u, deviceID):
     info = u.get_device(deviceID)
     ok = True
 
-    print(info)
     if info.ID != 405419896:
         print(f"get-device: incorrect device ID - expected:405419896, got:{info.ID}")
         ok = False
@@ -86,9 +85,7 @@ def get_status(u, deviceID):
         ok = False
 
     if status.sysdatetime != "2022-03-19 15:48:32":
-        print(
-            f"get-status: incorrect system date/time - expected:2022-03-19 15:48:32, got:{status.sysdatetime}"
-        )
+        print(f"get-status: incorrect system date/time - expected:2022-03-19 15:48:32, got:{status.sysdatetime}")
         ok = False
 
     if status.doors[0] != 1 or status.doors[1] != 0 or status.doors[2] != 0 or status.doors[3] != 1:
@@ -97,8 +94,7 @@ def get_status(u, deviceID):
         )
         ok = False
 
-    if status.buttons[0] != 1 or status.buttons[1] != 0 or status.buttons[2] != 1 or status.buttons[
-            3] != 0:
+    if status.buttons[0] != 1 or status.buttons[1] != 0 or status.buttons[2] != 1 or status.buttons[3] != 0:
         print(
             f"get-status: incorrect buttons state - expected:[1,0,1,0], got:[{status.buttons[0]},{status.buttons[1]},{status.buttons[2]},{status.buttons[3]}]"
         )
@@ -125,9 +121,7 @@ def get_status(u, deviceID):
         ok = False
 
     if status.event.timestamp != "2022-01-02 12:34:56":
-        print(
-            f"get-status: incorrect event timestamp - expected:2022-01-02 12:34:56, got:{status.event.timestamp}"
-        )
+        print(f"get-status: incorrect event timestamp - expected:2022-01-02 12:34:56, got:{status.event.timestamp}")
         ok = False
 
     if status.event.index != 135:
@@ -179,8 +173,7 @@ def get_time(u, deviceID):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description='Example CLI for the uhppote-core Python integration')
+    parser = argparse.ArgumentParser(description='Example CLI for the uhppote-core Python integration')
 
     parser.add_argument("command", default="all")
 
@@ -191,8 +184,8 @@ if __name__ == "__main__":
     beta = uhppoted.Controller(303986753, "192.168.1.100")
     controllers = [alpha, beta]
 
-    u = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE('192.168.1.100', '192.168.1.255',
-                                                  '192.168.1.100:60001', 1, controllers, True))
+    u = uhppoted.Uhppote(
+        uhppote=uhppoted.UHPPOTE('192.168.1.100', '192.168.1.255', '192.168.1.100:60001', 1, controllers, True))
     ok = True
 
     try:
@@ -214,8 +207,7 @@ if __name__ == "__main__":
         elif cmd == 'all':
             ok = ok if get_devices(u) else False
             ok = ok if get_device(u, 405419896) else False
-            ok = ok if set_address(u, 405419896, "192.168.1.125", "255.255.255.253",
-                                   "192.168.1.5") else False
+            ok = ok if set_address(u, 405419896, "192.168.1.125", "255.255.255.253", "192.168.1.5") else False
             ok = ok if get_status(u, 405419896) else False
             ok = ok if get_time(u, 405419896) else False
 

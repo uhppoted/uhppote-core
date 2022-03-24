@@ -106,3 +106,17 @@ int getTime(uint32_t deviceID) {
 
     return 0;
 }
+
+int setTime(uint32_t deviceID, const char *datetime) {
+    if (set_time(deviceID, (char *)datetime) != 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    printf("\nset-time\n");
+    printf("  ID:        %u\n", deviceID);
+    printf("  date/time: %s\n", datetime);
+    printf("\n");
+
+    return 0;
+}

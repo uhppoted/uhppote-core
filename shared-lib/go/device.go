@@ -53,7 +53,7 @@ func getDevice(uu uhppote.IUHPPOTE, d *C.struct_Device, deviceID uint32) error {
 	}
 
 	if device == nil {
-		return fmt.Errorf("No device found for %v", deviceID)
+		return fmt.Errorf("%v: no response to get-device", deviceID)
 	}
 
 	d.ID = C.uint(deviceID)
@@ -103,7 +103,7 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	if err != nil {
 		return err
 	} else if s == nil {
-		return fmt.Errorf("No status returned for %v", deviceID)
+		return fmt.Errorf("%v: no response to get-status", deviceID)
 	}
 
 	cbool := func(b bool) C.uchar {
@@ -168,10 +168,31 @@ func getTime(uu uhppote.IUHPPOTE, datetime **C.char, deviceID uint32) error {
 	}
 
 	if dt == nil {
-		return fmt.Errorf("No date/time returned  for %v", deviceID)
+		return fmt.Errorf("%v: no response to get-time", deviceID)
 	}
 
 	*datetime = C.CString(fmt.Sprintf("%v", dt.DateTime))
 
 	return nil
+}
+
+func setTime(uu uhppote.IUHPPOTE, deviceID uint32, datetime *C.char) error {
+	if datetime == nil {
+		return fmt.Errorf("invalid argument (datetime) - expected valid pointer to string")
+	}
+
+	if dt, err := time.Parse("2006-01-02 15:04:05", C.GoString(datetime)); err != nil {
+		return err
+	} else {
+		response, err := uu.SetTime(deviceID, dt)
+		if err != nil {
+			return err
+		}
+
+		if response == nil {
+			return fmt.Errorf("%v: no response to set-time", deviceID)
+		}
+
+		return nil
+	}
 }

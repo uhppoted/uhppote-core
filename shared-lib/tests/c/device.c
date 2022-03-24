@@ -228,3 +228,18 @@ bool getTime() {
 
     return ok;
 }
+
+bool setTime() {
+    bool ok = true;
+
+    if (set_time(DEVICEID, "2022-03-23 12:24:17") != 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    if (ok) {
+        printf("set-time:    ok\n");
+    }
+
+    return ok;
+}

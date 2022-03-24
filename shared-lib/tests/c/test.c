@@ -32,12 +32,15 @@ int main(int argc, char **argv) {
         ok = getStatus();
     } else if (strncmp(cmd, "get-time", 8) == 0) {
         ok = getTime();
+    } else if (strncmp(cmd, "set-time", 8) == 0) {
+        ok = setTime();
     } else if (strncmp(cmd, "all", 3) == 0) {
         ok = getDevices() ? ok : false;
         ok = getDevice() ? ok : false;
         ok = setAddress() ? ok : false;
         ok = getStatus() ? ok : false;
         ok = getTime() ? ok : false;
+        ok = setTime() ? ok : false;
     }
 
     teardown();

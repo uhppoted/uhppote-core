@@ -7,6 +7,7 @@ import "C"
 import (
 	"fmt"
 	"net"
+	"time"
 	"unsafe"
 
 	"github.com/uhppoted/uhppote-core/uhppote"
@@ -124,4 +125,15 @@ func getTime(uu uhppote.IUHPPOTE, datetime **C.char, deviceID uint32) error {
 	*datetime = C.CString("2022-01-02 12:34:56")
 
 	return nil
+}
+func setTime(uu uhppote.IUHPPOTE, deviceID uint32, datetime *C.char) error {
+	if datetime == nil {
+		return fmt.Errorf("invalid argument (datetime) - expected valid pointer to string")
+	}
+
+	if _, err := time.Parse("2006-01-02 15:04:05", C.GoString(datetime)); err != nil {
+		return err
+	} else {
+		return nil
+	}
 }

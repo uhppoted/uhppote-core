@@ -3,10 +3,10 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - (?) Make timeout milliseconds (or string ?)
+  - [ ] Make timeout milliseconds
 
   - [ ] `set-time`
-        - [ ] C
+        - [x] C
         - [ ] C++
         - [ ] C#
         - [ ] Python
@@ -16,7 +16,8 @@
         - tests
           - [ ] CCL
                 - [x] Exit code
-                - [ ] Move 'failed' condition to `tests`
+                - [ ] Move `failed` condition to `tests`
+                - [ ] Fix circular dependency in Makefile so that target is `test` like all the other bindings
         
   - [x] CCL
         - [ ] Remove 'uhppoted' prefix from `uhppoted` forms

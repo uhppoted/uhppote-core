@@ -255,3 +255,13 @@ int get_time(unsigned id, char **t) {
 
     return 0;
 }
+
+int set_time(unsigned id, char *datetime) {
+    char *err = SetTime(u, id, datetime);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}

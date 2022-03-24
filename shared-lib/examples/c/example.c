@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "device.h"
 #include "uhppoted.h"
@@ -35,13 +36,34 @@ int main(int argc, char **argv) {
         rc = getStatus(DEVICEID);
     } else if (strncmp(cmd, "get-time", 8) == 0) {
         rc = getTime(DEVICEID);
+    } else if (strncmp(cmd, "set-time", 8) == 0) {
+        time_t utc;
+        struct tm *local;
+        char datetime[20];
+
+        time(&utc);
+        local = localtime(&utc);
+
+        strftime(datetime, 20, "%Y-%m-%d %H:%M:%S", local);
+
+        rc = setTime(DEVICEID, datetime);
     } else if (strncmp(cmd, "all", 3) == 0) {
+        time_t utc;
+        struct tm *local;
+        char datetime[20];
+
+        time(&utc);
+        local = localtime(&utc);
+
+        strftime(datetime, 20, "%Y-%m-%d %H:%M:%S", local);
+
         rc = 0;
         rc = getDevices() == 0 ? rc : -1;
         rc = getDevice(DEVICEID) == 0 ? rc : -1;
         rc = setAddress(DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.0") == 0 ? rc : -1;
         rc = getStatus(DEVICEID) == 0 ? rc : -1;
         rc = getTime(DEVICEID) == 0 ? rc : -1;
+        rc = setTime(DEVICEID, datetime) == 0 ? rc : -1;
     }
 
     teardown();
