@@ -27,7 +27,7 @@
                     (progn
                       (format t "get-devices: incorrect device list - expected:~a, got:~a~%" '(201020304 303986753 405419896) devices))
                       (error 'failed :message  "get-devices: FAILED"))
-             (t (progn (format t "get-devices: ok~%") T)))))
+             (t (format t "get-devices: ok~%")))))
   
 
 (defun get-device () "" 
@@ -81,37 +81,37 @@
         (status (exec #'(lambda (u) (uhppoted-get-status u 405419896)))))
        (if (/= 405419896 (status-id status)) 
            (progn
-             (format t "get-status: incorrect device ID - expected:~a, got:~a~%" 405419896 (status-id status))
+             (format t "get-status:  incorrect device ID - expected:~a, got:~a~%" 405419896 (status-id status))
              (setf ok NIL)))
 
        (if (not (equal "2022-03-19 15:48:32" (status-timestamp status))) 
            (progn
-             (format t "get-status: incorrect system date/time - expected:~a, got:~a~%" "2022-03-19 15:48:32" (status-timestamp status))
+             (format t "get-status:  incorrect system date/time - expected:~a, got:~a~%" "2022-03-19 15:48:32" (status-timestamp status))
              (setf ok NIL)))
 
        (if (not (equal '(1 0 0 1) (status-doors status))) 
            (progn
-             (format t "get-status: incorrect doors state - expected:~a, got:~a~%" '(1 0 0 1) (status-doors status))
+             (format t "get-status:  incorrect doors state - expected:~a, got:~a~%" '(1 0 0 1) (status-doors status))
              (setf ok NIL)))
 
        (if (not (equal '(1 0 1 0) (status-buttons status))) 
            (progn
-             (format t "get-status: incorrect buttons state - expected:~a, got:~a~%" '(1 0 1 0) (status-buttons status))
+             (format t "get-status:  incorrect buttons state - expected:~a, got:~a~%" '(1 0 1 0) (status-buttons status))
              (setf ok NIL)))
 
        (if (/= 18 (status-relays status)) 
            (progn
-             (format t "get-status: incorrect relays state - expected:~a, got:~a~%" 18 (status-relays status))
+             (format t "get-status:  incorrect relays state - expected:~a, got:~a~%" 18 (status-relays status))
              (setf ok NIL)))
 
        (if (/= 52 (status-inputs status)) 
            (progn
-             (format t "get-status: incorrect inputs state - expected:~a, got:~a~%" 18 (status-inputs status))
+             (format t "get-status:  incorrect inputs state - expected:~a, got:~a~%" 18 (status-inputs status))
              (setf ok NIL)))
 
        (if (/= 86 (status-syserror status)) 
            (progn
-             (format t "get-status: incorrect system error - expected:~a, got:~a~%" 18 (status-syserror status))
+             (format t "get-status:  incorrect system error - expected:~a, got:~a~%" 18 (status-syserror status))
              (setf ok NIL)))
 
        (if (/= 253 (status-info status)) 
@@ -121,38 +121,38 @@
 
        (if (/= 9876 (status-seqno status)) 
            (progn
-             (format t "get-status: incorrect status sequence number - expected:~a, got:~a~%" 9876 (status-seqno status))
+             (format t "get-status:  incorrect status sequence number - expected:~a, got:~a~%" 9876 (status-seqno status))
              (setf ok NIL)))
 
        (let ((event (status-event status)))
             (if (not (equal "2022-01-02 12:34:56" (event-timestamp event))) 
                 (progn
-                  (format t "get-status: incorrect event timestamp - expected:~a, got:~a~%" "2022-01-02 12:34:56" (event-timestamp event))
+                  (format t "get-status:  incorrect event timestamp - expected:~a, got:~a~%" "2022-01-02 12:34:56" (event-timestamp event))
                   (setf ok NIL)))
 
             (if (/= 135 (event-index event)) 
                 (progn
-                  (format t "get-status: incorrect event index - expected:~a, got:~a~%" 135 (event-index event))
+                  (format t "get-status:  incorrect event index - expected:~a, got:~a~%" 135 (event-index event))
                   (setf ok NIL)))
 
             (if (/= 6 (event-type event))
                 (progn
-                  (format t "get-status: incorrect event type - expected:~a, got:~a~%" 6 (event-type event))
+                  (format t "get-status:  incorrect event type - expected:~a, got:~a~%" 6 (event-type event))
                   (setf ok NIL)))
 
             (if (/= 1 (event-granted event))
                 (progn
-                  (format t "get-status: incorrect event granted - expected:~a, got:~a~%" 1 (event-granted event))
+                  (format t "get-status:  incorrect event granted - expected:~a, got:~a~%" 1 (event-granted event))
                   (setf ok NIL)))
 
             (if (/= 3 (event-door event))
                 (progn
-                  (format t "get-status: incorrect event door - expected:~a, got:~a~%" 3 (event-door event))
+                  (format t "get-status:  incorrect event door - expected:~a, got:~a~%" 3 (event-door event))
                   (setf ok NIL)))
 
             (if (/= 1 (event-direction event))
                 (progn
-                  (format t "get-status: incorrect event direction - expected:~a, got:~a~%" 1 (event-direction event))
+                  (format t "get-status:  incorrect event direction - expected:~a, got:~a~%" 1 (event-direction event))
                   (setf ok NIL)))
 
             (if (/= 8100023 (event-card event))
@@ -162,7 +162,7 @@
 
             (if (/= 21 (event-reason event))
                 (progn
-                  (format t "get-status: incorrect event reason - expected:~a, got:~a~%" 21 (event-reason event))
+                  (format t "get-status:  incorrect event reason - expected:~a, got:~a~%" 21 (event-reason event))
                   (setf ok NIL))))
        (if ok 
           (format t "get-status:  ok~%") 

@@ -18,13 +18,14 @@
                 - [x] Exit code
                 - [x] Move `failed` condition to `tests`
                 - [x] Fix circular dependency in Makefile so that target is `test` like all the other bindings
-                - (?) Alternatives to invoke-restart
+                - [x] Cleanup handler/condition logic
                 - [ ] Validate/filter args against list of tests
         
   - [x] CCL
         - [ ] Remove 'uhppoted' prefix from `uhppoted` forms
         - [ ] May not need the `with-macptrs` in`uhppoted` because `err` is being 
               freed by go-error
+        - [ ] Double check condition handling
 
   - [ ] lint
   - [ ] Cross-compile

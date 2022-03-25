@@ -29,22 +29,24 @@
 
 
 (defun all () "Invokes all test functions with 'exit-fail' condition handler"
+  (let* ((tests '( tests:get-devices 
+                   tests:get-device 
+                   tests:set-address 
+                   tests:get-status 
+                   tests:get-time 
+                 ))
+         (result (loop for test in tests collect (all-x test))))
+        (if (some #'null result)
+            (quit -1))))
+
+(defun all-x (fn) ""
   (handler-bind
     ((tests:failed #'(lambda (err) 
                        (progn
                          (format *error-output* "~% *** ERROR: ~a~%~%" (tests:message err))
-                         (invoke-restart 'exit-fail)))))
-    
-    (restart-case (progn
-                    (tests:get-devices)
-                    (tests:get-device)
-                    (tests:set-address)
-                    (tests:get-status)
-                    (tests:get-time))
-      (ignore       ()      nil)
-      (use-value    (value) value)
-      (with-warning (err)   (warn err))
-      (exit-fail    ()      (quit -1)))))
+                         (use-value NIL)))))
+    (restart-case (progn (funcall fn) T)
+      (use-value (value) value))))
 
 
 (defun main () ""
