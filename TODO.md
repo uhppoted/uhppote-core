@@ -17,7 +17,7 @@
           - [ ] CCL
                 - [x] Exit code
                 - [x] Move `failed` condition to `tests`
-                - [ ] Fix circular dependency in Makefile so that target is `test` like all the other bindings
+                - [x] Fix circular dependency in Makefile so that target is `test` like all the other bindings
                 - (?) Alternatives to invoke-restart
                 - [ ] Validate/filter args against list of tests
         

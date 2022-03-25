@@ -21,7 +21,7 @@
   (handler-bind
     ((tests:failed #'(lambda (err) 
                      (progn
-                       (format *error-output* "~% *** ERROR: ~a~%~%" (tests:message err))
+                       (format *error-output* "~%  *** ERROR: ~a~%~%" (tests:message err))
                        (invoke-restart 'exit-fail)))))
     
     (restart-case (funcall f)

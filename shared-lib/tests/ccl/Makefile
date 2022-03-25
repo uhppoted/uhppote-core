@@ -2,13 +2,13 @@ LIB=../../lib/tests
 BINDINGS=../../bindings/ccl
 CMD=./test
 
-.PHONY: run
+.PHONY: build
 .PHONY: debug
 
 lib: 
 	cd ../../go && make all
 
-build: test
+build: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp --eval '(make-app)' 
 
 usage: build
@@ -32,7 +32,7 @@ get-status: build
 get-time: build
 	$(CMD) get-time
 
-tests: build
+test: build
 	$(CMD) all
 
 debug: 
