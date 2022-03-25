@@ -16,59 +16,50 @@
   (format t "    Defaults to running all tests~%") 
   (format t "~%"))
 
-(defun get-devices () ""
-  (if (not (tests:get-devices))
-      (error 'tests:failed :message  "get-devices: FAILED")))
 
-(defun get-device () ""
-  (if (not (tests:get-device))
-      (error 'tests:failed :message  "get-device: FAILED")))
-
-(defun set-address () ""
-  (if (not (tests:set-address))
-      (error 'tests:failed :message  "set-address: FAILED")))
-
-(defun get-status () ""
-  (if (not (tests:get-status))
-      (error 'tests:failed :message  "get-status: FAILED")))
-
-(defun get-time () ""
-  (if (not (tests:get-time))
-      (error 'tests:failed :message  "get-time: FAILED")))
-
-(defun all () ""
-  (let ((ok T))
-       (if (not (get-devices)) (setf ok NIL))
-       (if (not (get-device))  (setf ok NIL))
-       (if (not (set-address)) (setf ok NIL))
-       (if (not (get-status))  (setf ok NIL))
-       (if (not (get-time))    (setf ok NIL))
-       ok))
-
-(defun main () ""
+(defun test (f) "Invokes 'tests' function with 'exit-fail' condition handler"
   (handler-bind
     ((tests:failed #'(lambda (err) 
                      (progn
                        (format *error-output* "~% *** ERROR: ~a~%~%" (tests:message err))
                        (invoke-restart 'exit-fail)))))
+    
+    (restart-case (funcall f)
+      (exit-fail () (quit -1)))))
 
-    (restart-case 
-      (let ((args (parse-command-line)))
-        (loop for arg in args
-           do (cond ((string= arg "get-devices") (get-devices))
-                    ((string= arg "get-device")  (get-device))
-                    ((string= arg "set-address") (set-address))
-                    ((string= arg "get-status")  (get-status))
-                    ((string= arg "get-time")    (get-time))
-                    (t (all)))))
 
+(defun all () "Invokes all test functions with 'exit-fail' condition handler"
+  (handler-bind
+    ((tests:failed #'(lambda (err) 
+                       (progn
+                         (format *error-output* "~% *** ERROR: ~a~%~%" (tests:message err))
+                         (invoke-restart 'exit-fail)))))
+    
+    (restart-case (progn
+                    (tests:get-devices)
+                    (tests:get-device)
+                    (tests:set-address)
+                    (tests:get-status)
+                    (tests:get-time))
       (ignore       ()      nil)
       (use-value    (value) value)
       (with-warning (err)   (warn err))
       (exit-fail    ()      (quit -1)))))
 
+
+(defun main () ""
+  (let ((args (parse-command-line)))
+    (loop for arg in args
+      do (cond ((string= arg "get-devices") (test #'tests:get-devices))
+               ((string= arg "get-device")  (test #'tests:get-device))
+               ((string= arg "set-address") (test #'tests:set-address))
+               ((string= arg "get-status")  (test #'tests:get-status))
+               ((string= arg "get-time")    (test #'tests:get-time))
+               (t (all))))))
+
+
 ;;;; Workaround to skip command line arguments for REPL - invoking (main) in the REPL is
-;;;; peculiarly pointless so:
+;;;; particularly pointless so:
 ;;;; - if *unproccessed-command-line-arguments* is not NIL just discard them
 ;;;; - if (car *command-line-arguments*) is not (test) just discard all command line arguments.
 ;;;;
@@ -86,7 +77,7 @@
   (save-application "test" :toplevel-function #'main :prepend-kernel t))
 
 
-(defun test (f) "Invoke test function with 'warning only' condition handler"
+(defun debug (f) "Invoke test function with 'warning only' condition handler"
   (handler-bind
     ((tests:failed #'(lambda (err) 
                      (invoke-restart 'with-warning (tests:message err)))))

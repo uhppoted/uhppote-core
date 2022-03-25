@@ -16,8 +16,10 @@
         - tests
           - [ ] CCL
                 - [x] Exit code
-                - [ ] Move `failed` condition to `tests`
+                - [x] Move `failed` condition to `tests`
                 - [ ] Fix circular dependency in Makefile so that target is `test` like all the other bindings
+                - (?) Alternatives to invoke-restart
+                - [ ] Validate/filter args against list of tests
         
   - [x] CCL
         - [ ] Remove 'uhppoted' prefix from `uhppoted` forms

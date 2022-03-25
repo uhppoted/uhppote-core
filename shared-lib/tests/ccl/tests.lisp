@@ -20,9 +20,13 @@
 (defun get-devices () "" 
   (let ((devices (exec #'(lambda (u) (uhppoted-get-devices u)))))
        (cond ((/= 3 (length devices))
-                    (format t "get-devices: incorrect device count - expected:~a, got:~a~%" 3 (length devices)))
+                    (progn
+                      (format t "get-devices: incorrect device count - expected:~a, got:~a~%" 3 (length devices)))
+                      (error 'failed :message  "get-devices: FAILED"))
              ((not (equal (coerce devices 'list) '(201020304 303986753 405419896))) 
-                    (format t "get-devices: incorrect device list - expected:~a, got:~a~%" '(201020304 303986753 405419896) devices))
+                    (progn
+                      (format t "get-devices: incorrect device list - expected:~a, got:~a~%" '(201020304 303986753 405419896) devices))
+                      (error 'failed :message  "get-devices: FAILED"))
              (t (progn (format t "get-devices: ok~%") T)))))
   
 
@@ -63,20 +67,14 @@
            (progn
              (format t "get-device: incorrect device date - expected:~a, got:~a~%" "v8.92" (device-date device))
              (setf ok NIL)))
-       (if ok
-           (progn 
-             (format t "get-device:  ok~%") 
-             T))))
+       (if ok 
+          (format t "get-device:  ok~%") 
+          (error 'failed :message  "get-device: FAILED"))))
 
 
 (defun set-address () "" 
-  (let ((ok T))
-       (exec #'(lambda (u) (uhppoted-set-address u 405419896 "192.168.1.125" "255.255.255.254" "192.168.1.5")))
-       (if ok
-           (progn 
-             (format t "set-address: ok~%") 
-             T))))
-
+  (exec #'(lambda (u) (uhppoted-set-address u 405419896 "192.168.1.125" "255.255.255.254" "192.168.1.5")))
+  (format t "set-address: ok~%"))
 
 (defun get-status () "" 
   (let ((ok T)
@@ -166,10 +164,10 @@
                 (progn
                   (format t "get-status: incorrect event reason - expected:~a, got:~a~%" 21 (event-reason event))
                   (setf ok NIL))))
-       (if ok
-           (progn 
-             (format t "get-status:  ok~%") 
-             T))))
+       (if ok 
+          (format t "get-status:  ok~%") 
+          (error 'failed :message  "get-status:  FAILED"))))
+
 
 (defun get-time () "" 
   (let ((ok T)
@@ -178,8 +176,6 @@
            (progn
              (format t "get-time:    incorrect date/time - expected:~a, got:~a~%" "2022-01-02 12:34:56" datetime)
              (setf ok NIL)))
-       (if ok
-           (progn 
-             (format t "get-time:    ok~%") 
-             T))))
-
+       (if ok 
+          (format t "get-time:    ok~%")
+          (error 'failed :message  "get-time:    FAILED"))))
