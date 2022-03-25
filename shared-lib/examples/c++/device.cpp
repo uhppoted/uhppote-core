@@ -138,3 +138,23 @@ int getTime(uhppoted &u, uint32_t deviceID) {
 
     return -1;
 }
+
+int setTime(uhppoted &u, uint32_t deviceID, string datetime) {
+    try {
+        u.set_time(deviceID, datetime);
+
+        cout << endl
+             << "set-time" << endl;
+        cout << "  ID:       " << deviceID << endl;
+        cout << "  datetime: " << datetime << endl;
+        cout << endl;
+
+        return 0;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return -1;
+}

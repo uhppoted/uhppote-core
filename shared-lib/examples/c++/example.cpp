@@ -1,3 +1,4 @@
+#include <ctime>
 #include <iostream>
 
 #include "../include/uhppoted.hpp"
@@ -36,7 +37,19 @@ int main(int argc, char **argv) {
         return getStatus(u, DEVICEID);
     } else if (cmd == "get-time") {
         return getTime(u, DEVICEID);
+    } else if (cmd == "set-time") {
+        time_t now = time(nullptr);
+        char datetime[100];
+
+        strftime(datetime, sizeof(datetime), "%Y-%m-%d %H:%M:%S", localtime(&now));
+
+        return setTime(u, DEVICEID, datetime);
     } else if (cmd == "all") {
+        time_t now = time(nullptr);
+        char datetime[100];
+
+        strftime(datetime, sizeof(datetime), "%Y-%m-%d %H:%M:%S", localtime(&now));
+
         int rc = 0;
 
         rc = getDevices(u) == 0 ? rc : -1;
@@ -44,6 +57,7 @@ int main(int argc, char **argv) {
         rc = setAddress(u, DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.10") == 0 ? rc : -1;
         rc = getStatus(u, DEVICEID) == 0 ? rc : -1;
         rc = getTime(u, DEVICEID) == 0 ? rc : -1;
+        rc = setTime(u, DEVICEID, datetime) == 0 ? rc : -1;
 
         return rc;
     }

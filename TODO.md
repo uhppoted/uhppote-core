@@ -7,7 +7,7 @@
 
   - [ ] `set-time`
         - [x] C
-        - [ ] C++
+        - [x] C++
         - [ ] C#
         - [ ] Python
         - [ ] CCL

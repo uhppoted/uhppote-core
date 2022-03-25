@@ -261,3 +261,21 @@ bool getTime(uhppoted &u) {
 
     return false;
 }
+
+bool setTime(uhppoted &u) {
+    try {
+        string datetime = "2022-03-23 12:24:17";
+
+        u.set_time(DEVICEID, datetime);
+
+        cout << "set-time:    ok" << endl;
+
+        return true;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return false;
+}

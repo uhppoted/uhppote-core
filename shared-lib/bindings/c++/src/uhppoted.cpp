@@ -215,3 +215,11 @@ string uhppoted::get_time(uint32_t id) {
 
     return t;
 }
+
+void uhppoted::set_time(uint32_t id, std::string &datetime) {
+    char *err = SetTime(u, id, (char *)datetime.c_str());
+
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+}

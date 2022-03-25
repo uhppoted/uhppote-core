@@ -7,3 +7,4 @@ extern bool getDevice(uhppoted &);
 extern bool setAddress(uhppoted &);
 extern bool getStatus(uhppoted &);
 extern bool getTime(uhppoted &);
+extern bool setTime(uhppoted &);

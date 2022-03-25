@@ -24,10 +24,13 @@ set-address: build
 	$(CMD) set-address
 
 get-status: build
-	get-status
+	$(CMD) get-status
 
 get-time: build
 	$(CMD) get-time
+
+set-time: build
+	$(CMD) set-time
 
 test: build
 	$(CMD) all
