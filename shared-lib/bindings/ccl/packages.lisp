@@ -2,13 +2,14 @@
 
 (defpackage :uhppoted 
   (:use :common-lisp
-		:ccl)
+		    :ccl)
   (:export uhppoted
            uhppoted-get-devices
            uhppoted-get-device
            uhppoted-set-address
            uhppoted-get-status
            uhppoted-get-time
+           uhppoted-set-time
            uhppoted-error
            with-warning
            message

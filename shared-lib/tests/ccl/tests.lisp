@@ -179,3 +179,8 @@
        (if ok 
           (format t "get-time:    ok~%")
           (error 'failed :message  "get-time:    FAILED"))))
+
+
+(defun set-time () "" 
+  (exec #'(lambda (u) (uhppoted-set-time u 405419896 "2022-03-23 12:24:17")))
+  (format t "set-time:    ok~%"))

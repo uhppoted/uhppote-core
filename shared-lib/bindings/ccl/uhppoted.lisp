@@ -162,7 +162,7 @@
                    :date    (go-string (pref device :GoDevice.date))))))
 
 
-(defun uhppoted-set-address (uhppote device-id ip-addr subnet-mask gateway-addr) "Sets the IP addres, subnet mask and gateway address for a controller"
+(defun uhppoted-set-address (uhppote device-id ip-addr subnet-mask gateway-addr) "Sets the controller IP address, subnet mask and gateway"
   (with-cstrs ((address ip-addr)
 			   (subnet  subnet-mask)
 			   (gateway gateway-addr))
@@ -212,7 +212,7 @@
 										 :reason    (pref event :GoEvent.reason)))))))
 
 
-(defun uhppoted-get-time (uhppote device-id) "Retrieves the controller datet/time"
+(defun uhppoted-get-time (uhppote device-id) "Retrieves a controller date/time"
   (with-cstrs ((datetime  ""))
      (with-macptrs ((err (external-call "GetTime" :address uhppote 
                                                   :address datetime
@@ -220,6 +220,15 @@
                                                   :address)))
        (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
        (go-string (%get-ptr datetime)))))
+
+
+(defun uhppoted-set-time (uhppote device-id datetime) "Sets a controller date/time"
+  (with-cstrs ((dt datetime))
+    (with-macptrs ((err (external-call "SetTime" :address uhppote 
+                                                 :unsigned-long device-id 
+                                                 :address dt
+                                                 :address)))
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err))))))
 
 
 (defun debug () "" 

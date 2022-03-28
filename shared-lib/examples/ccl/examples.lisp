@@ -21,10 +21,15 @@
   (exec #'(lambda (u) (uhppoted-get-device u device-id))))
 
 (defun set-address (device-id addr subnet gateway) "" 
-  (exec #'(lambda (u) (uhppoted-set-address u device-id addr subnet gateway))))
+  (exec #'(lambda (u) (uhppoted-set-address u device-id addr subnet gateway)))
+  t)
 
 (defun get-status (device-id) "" 
   (exec #'(lambda (u) (uhppoted-get-status u device-id))))
 
 (defun get-time (device-id) "" 
   (exec #'(lambda (u) (uhppoted-get-time u device-id))))
+
+(defun set-time (device-id datetime) "" 
+  (exec #'(lambda (u) (uhppoted-set-time u device-id datetime)))
+  t)

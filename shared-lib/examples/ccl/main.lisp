@@ -12,6 +12,7 @@
   (format t "      set-address   Sets a controller IP address, subnet mask and gateway address~%") 
   (format t "      get-status    Retrieves a controller status~%") 
   (format t "      get-time      Retrieves a controller date/time~%") 
+  (format t "      set-time      Sets a controller date/time~%") 
   (format t "~%"))
 
 (defun help () ""
@@ -21,6 +22,7 @@
                  "(set-address)"
                  "(get-status)"
                  "(get-time)"
+                 "(set-time)"
                  )))
 
 (defun get-devices () ""
@@ -38,6 +40,9 @@
 (defun get-time () ""
   (format t "  get-time:~%    ~:w~%" (examples:get-time 405419896)))
 
+(defun set-time () ""
+  (format t "  set-time:~%    ~a~%" (examples:set-time 405419896 (now))))
+
 (defun main () ""
   (let ((args (parse-command-line)))
     (loop for arg in args
@@ -45,7 +50,8 @@
                 ((string= arg "get-device")  (get-device))
                 ((string= arg "set-address") (set-address))
                 ((string= arg "get-status")  (get-status))
-                ((string= arg "get-time")  (get-time))
+                ((string= arg "get-time")    (get-time))
+                ((string= arg "set-time")    (set-time))
                 ((string= arg "help")        (help))
                 (t (help))))))
 
@@ -62,6 +68,10 @@
           ((eq (search executable (car args)) NIL) ())
           ((/= (+ (coerce (search executable (car args)) 'fixnum) (length executable)) (length (car args))) ())
           (t (cdr args)))))
+
+(defun now () ""
+  (multiple-value-bind (second minute hour day month year) (get-decoded-time)
+     (format nil "~4,'0d-~2,'0d-~2,'0d ~2,'0d:~2,'0d:~2,'0d" year month day hour minute second)))
 
 (defun make-app () ""
   (save-application "examples" :toplevel-function #'main :prepend-kernel t))

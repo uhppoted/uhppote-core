@@ -12,6 +12,7 @@
   (format t "      set-address   Sets a controller IP address, subnet mask and gateway address~%") 
   (format t "      get-status    Retrieves a controller status~%") 
   (format t "      get-time      Retrieves a controller date/time~%") 
+  (format t "      set-time      Sets a controller date/time~%") 
   (format t "~%") 
   (format t "    Defaults to running all tests~%") 
   (format t "~%"))
@@ -34,6 +35,7 @@
                    tests:set-address 
                    tests:get-status 
                    tests:get-time 
+                   tests:set-time 
                  ))
          (result (loop for test in tests collect (all-x test))))
         (if (some #'null result)
@@ -57,6 +59,7 @@
                ((string= arg "set-address") (test #'tests:set-address))
                ((string= arg "get-status")  (test #'tests:get-status))
                ((string= arg "get-time")    (test #'tests:get-time))
+               ((string= arg "set-time")    (test #'tests:set-time))
                (t (all))))))
 
 

@@ -8,5 +8,6 @@
 		   get-device
 		   set-address
 		   get-status
-           get-time))
+           get-time
+           set-time))
 
