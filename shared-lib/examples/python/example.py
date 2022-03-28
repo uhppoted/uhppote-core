@@ -3,6 +3,7 @@
 import argparse
 import ctypes
 import sys
+import datetime
 
 sys.path.append('../../bindings/python')
 
@@ -27,6 +28,7 @@ def help():
     print("    set-device")
     print("    get-status")
     print("    get-time")
+    print("    set-time")
     print("    help")
     print()
     print("  get-devices")
@@ -43,6 +45,9 @@ def help():
     print()
     print("  get-time")
     print("    Retrieves a controller current date/time (YYYY-MM-DD HH:mm:ss).")
+    print()
+    print("  set-time")
+    print("    Sets a controller current date/time (YYYY-MM-DD HH:mm:ss).")
     print()
     print("  help")
     print("    Displays this information.")
@@ -103,8 +108,11 @@ def get_status(u, deviceID):
         print("get-status")
         print(f"  ID:        {status.ID}")
         print(f"  date/time: {status.sysdatetime}")
-        print(f"  doors:     {status.doors[0]} {status.doors[1]} {status.doors[2]} {status.doors[3]}")
-        print(f"  buttons:   {status.buttons[0]} {status.buttons[1]} {status.buttons[2]} {status.buttons[3]}")
+        print(
+            f"  doors:     {status.doors[0]} {status.doors[1]} {status.doors[2]} {status.doors[3]}")
+        print(
+            f"  buttons:   {status.buttons[0]} {status.buttons[1]} {status.buttons[2]} {status.buttons[3]}"
+        )
         print(f"  relays   : " + "{0:#0{1}x}".format(status.relays, 4))
         print(f"  inputs   : " + "{0:#0{1}x}".format(status.inputs, 4))
         print(f"  error    : " + "{0:#0{1}x}".format(status.syserror, 4))
@@ -138,6 +146,20 @@ def get_time(u, deviceID):
         print()
 
 
+def set_time(u, deviceID, datetime):
+    try:
+        u.set_time(deviceID, datetime)
+
+        print("set-time")
+        print(f"  ID:        {deviceID}")
+        print(f"  date/time: {datetime}")
+        print()
+
+    except Exception as e:
+        print(f" *** ERROR set-time ({e})")
+        print()
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Example CLI for the uhppote-core Python integration')
@@ -156,6 +178,7 @@ if __name__ == "__main__":
             'set-address',
             'get-status',
             'get-time',
+            'set-time',
             'all',
     ]:
         print()
@@ -185,12 +208,16 @@ if __name__ == "__main__":
             elif cmd == 'get-time':
                 get_time(u, 405419896)
 
+            elif cmd == 'set-time':
+                set_time(u, 405419896, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+
             elif cmd == 'all':
                 get_devices(u)
                 get_device(u, 405419896)
                 set_address(u, 405419896, "192.168.1.125", "255.255.253", "192.168.1.5")
                 get_status(u, 405419896)
                 get_time(u, 405419896)
+                set_time(u, 405419896, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
         except BaseException as x:
             print()

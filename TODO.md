@@ -9,8 +9,8 @@
   - [ ] `set-time`
         - [x] C
         - [x] C++
-        - [ ] C#
-        - [ ] Python
+        - [x] C#
+        - [x] Python
         - [ ] CCL
   
   - [ ] Restructure folders

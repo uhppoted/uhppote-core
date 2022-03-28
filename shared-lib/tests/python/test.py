@@ -172,6 +172,16 @@ def get_time(u, deviceID):
     return ok
 
 
+def set_time(u, deviceID, datetime):
+    u.set_time(deviceID, datetime)
+    ok = True
+
+    if ok:
+        print(f"set-time:    ok")
+
+    return ok
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Example CLI for the uhppote-core Python integration')
 
@@ -204,12 +214,16 @@ if __name__ == "__main__":
         elif cmd == 'get-time':
             ok = get_time(u, 405419896)
 
+        elif cmd == 'set-time':
+            ok = set_time(u, 405419896, '2022-03-23 12:24:17')
+
         elif cmd == 'all':
             ok = ok if get_devices(u) else False
             ok = ok if get_device(u, 405419896) else False
             ok = ok if set_address(u, 405419896, "192.168.1.125", "255.255.255.253", "192.168.1.5") else False
             ok = ok if get_status(u, 405419896) else False
             ok = ok if get_time(u, 405419896) else False
+            ok = ok if set_time(u, 405419896, '2022-03-23 12:24:17') else False
 
         if not ok:
             sys.exit(-1)

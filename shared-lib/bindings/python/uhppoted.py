@@ -79,9 +79,8 @@ class Uhppote:
     def __init__(self, uhppote=None):
         self._uhppote = None
         if uhppote:
-            self._uhppote = GoUHPPOTE(uhppote.bind, uhppote.broadcast,
-                                      uhppote.listen, uhppote.timeout,
-                                      uhppote.controllers, uhppote.debug)
+            self._uhppote = GoUHPPOTE(uhppote.bind, uhppote.broadcast, uhppote.listen,
+                                      uhppote.timeout, uhppote.controllers, uhppote.debug)
 
     @staticmethod
     def errcheck(err, func, args):
@@ -92,11 +91,7 @@ class Uhppote:
 
     def get_devices(self):
         GetDevices = lib.GetDevices
-        GetDevices.argtypes = [
-            POINTER(GoUHPPOTE),
-            POINTER(ctypes.c_int),
-            POINTER(ctypes.c_uint32)
-        ]
+        GetDevices.argtypes = [POINTER(GoUHPPOTE), POINTER(ctypes.c_int), POINTER(ctypes.c_uint32)]
         GetDevices.restype = ctypes.c_char_p
         GetDevices.errcheck = self.errcheck
 
@@ -123,24 +118,18 @@ class Uhppote:
 
         GetDevice(self._uhppote, byref(device), deviceID)
 
-        return Device(device.ID, device.address.decode('utf-8'),
-                      device.subnet.decode('utf-8'),
-                      device.gateway.decode('utf-8'),
-                      device.MAC.decode('utf-8'),
-                      device.version.decode('utf-8'),
-                      device.date.decode('utf-8'))
+        return Device(device.ID, device.address.decode('utf-8'), device.subnet.decode('utf-8'),
+                      device.gateway.decode('utf-8'), device.MAC.decode('utf-8'),
+                      device.version.decode('utf-8'), device.date.decode('utf-8'))
 
     def set_address(self, deviceID, address, subnet, gateway):
         SetAddress = lib.SetAddress
-        SetAddress.argtypes = [
-            POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p
-        ]
+        SetAddress.argtypes = [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p]
         SetAddress.restype = ctypes.c_char_p
         SetAddress.errcheck = self.errcheck
 
         SetAddress(self._uhppote, deviceID, c_char_p(bytes(address, 'utf-8')),
-                   c_char_p(bytes(subnet, 'utf-8')),
-                   c_char_p(bytes(gateway, 'utf-8')))
+                   c_char_p(bytes(subnet, 'utf-8')), c_char_p(bytes(gateway, 'utf-8')))
 
     def get_status(self, deviceID):
         GetStatus = lib.GetStatus
@@ -176,9 +165,8 @@ class Uhppote:
             status.event.contents.reason,
         )
 
-        return Status(status.ID, status.sysdatetime.decode('utf-8'), doors,
-                      buttons, status.relays, status.inputs, status.syserror,
-                      status.seqno, status.info, event)
+        return Status(status.ID, status.sysdatetime.decode('utf-8'), doors, buttons, status.relays,
+                      status.inputs, status.syserror, status.seqno, status.info, event)
 
     def get_time(self, deviceID):
         GetTime = lib.GetTime
@@ -192,6 +180,14 @@ class Uhppote:
 
         return datetime.value.decode('utf-8')
 
+    def set_time(self, deviceID, datetime):
+        SetTime = lib.SetTime
+        SetTime.argtypes = [POINTER(GoUHPPOTE), c_ulong, c_char_p]
+        SetTime.restype = ctypes.c_char_p
+        SetTime.errcheck = self.errcheck
+
+        SetTime(self._uhppote, deviceID, c_char_p(bytes(datetime, 'utf-8')))
+
 
 # INTERNAL TYPES
 class GoController(Structure):
@@ -203,9 +199,9 @@ class GoControllers(Structure):
 
 
 class GoUHPPOTE(Structure):
-    _fields_ = [('bind', c_char_p), ('broadcast', c_char_p),
-                ('listen', c_char_p), ('timeout', c_int), ('ndevices', c_int),
-                ('devices', POINTER(GoControllers)), ('debug', c_bool)]
+    _fields_ = [('bind', c_char_p), ('broadcast', c_char_p), ('listen', c_char_p),
+                ('timeout', c_int), ('ndevices', c_int), ('devices', POINTER(GoControllers)),
+                ('debug', c_bool)]
 
     def __init__(self, bind, broadcast, listen, timeout, controllers, debug):
         super(GoUHPPOTE, self).__init__()
@@ -221,8 +217,7 @@ class GoUHPPOTE(Structure):
             list = GoControllers(N, (GoController * N)())
 
             for ix, c in enumerate(controllers):
-                list.devices[ix] = GoController(
-                    c.id, c_char_p(bytes(c.address, 'utf-8')))
+                list.devices[ix] = GoController(c.id, c_char_p(bytes(c.address, 'utf-8')))
 
             self.devices = pointer(list)
 

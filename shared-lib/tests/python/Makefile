@@ -28,5 +28,8 @@ get-status: build
 get-time: build
 	$(CMD) get-time
 
+set-time: build
+	$(CMD) set-time
+
 test: build
 	$(CMD) all

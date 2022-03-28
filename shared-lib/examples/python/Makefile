@@ -28,6 +28,9 @@ get-status: build
 get-time: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-time
 
+set-time: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) set-time
+
 run: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) all
 
@@ -37,3 +40,4 @@ debug: build
 	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) set-address
 	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-status
 	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-time
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) set-time
