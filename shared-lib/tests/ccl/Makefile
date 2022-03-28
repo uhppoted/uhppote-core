@@ -11,11 +11,8 @@ lib:
 build: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp --eval '(make-app)' 
 
-usage: build
-	$(CMD) 
-
-help: build
-	$(CMD) help
+invalid: build
+	$(CMD) mystery-meat
 
 get-devices: build
 	$(CMD) get-devices
@@ -35,8 +32,11 @@ get-time: build
 set-time: build
 	$(CMD) set-time
 
-test: build
+all: build
 	$(CMD) all
+
+test: build
+	$(CMD)
 
 debug: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp 

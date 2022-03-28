@@ -1,6 +1,5 @@
 #!python
 
-import argparse
 import ctypes
 import sys
 
@@ -182,13 +181,24 @@ def set_time(u, deviceID, datetime):
     return ok
 
 
+def usage():
+    print("   Usage: python test.py <command>")
+    print()
+    print("   Supported commands:")
+    print("      get-devices")
+    print("      get-device")
+    print("      set-address")
+    print("      get-status")
+    print("      get-time")
+    print("      set-time")
+    print()
+
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Example CLI for the uhppote-core Python integration')
+    cmd = ""
 
-    parser.add_argument("command", default="all")
-
-    options = parser.parse_args()
-    cmd = options.command
+    if len(sys.argv) > 1:
+        cmd = sys.argv[1]
 
     alpha = uhppoted.Controller(405419896, "192.168.1.100")
     beta = uhppoted.Controller(303986753, "192.168.1.100")
@@ -217,13 +227,18 @@ if __name__ == "__main__":
         elif cmd == 'set-time':
             ok = set_time(u, 405419896, '2022-03-23 12:24:17')
 
-        elif cmd == 'all':
+        elif cmd == "" or cmd == 'all':
             ok = ok if get_devices(u) else False
             ok = ok if get_device(u, 405419896) else False
             ok = ok if set_address(u, 405419896, "192.168.1.125", "255.255.255.253", "192.168.1.5") else False
             ok = ok if get_status(u, 405419896) else False
             ok = ok if get_time(u, 405419896) else False
             ok = ok if set_time(u, 405419896, '2022-03-23 12:24:17') else False
+        else:
+            print()
+            print(f"   *** ERROR invalid command ({cmd})")
+            print()
+            usage()
 
         if not ok:
             sys.exit(-1)

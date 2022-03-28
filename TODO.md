@@ -6,28 +6,33 @@
   - [ ] Make timeout milliseconds
   - (?) C++ std::invoke
 
-  - [ ] `set-time`
+  - [x] `set-time`
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
         - [x] CCL
   
-  - [ ] Restructure folders
+  - [x] Restructure folders
         - tests
-          - [ ] default to 'all'
-          - [ ] CCL
+          - [x] default to 'all'
+                - [x] C
+                - [x] C++
+                - [x] C#
+                - [x] Python
+                - [x] CCL
+
+          - [x] CCL
                 - [x] Exit code
                 - [x] Move `failed` condition to `tests`
                 - [x] Fix circular dependency in Makefile so that target is `test` like all the other bindings
                 - [x] Cleanup handler/condition logic
-                - [ ] Validate/filter args against list of tests
         
   - [x] CCL
         - [x] Double check condition handling
 
   - [ ] lint
-  - [ ] Cross-compile
+  - (?) Cross-compile
         - https://github.com/elastic/golang-crossbuild
 
 - [ ] Check UHPPOTE encoding for revised Date implementation

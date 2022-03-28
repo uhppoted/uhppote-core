@@ -53,14 +53,21 @@
 
 (defun main () ""
   (let ((args (parse-command-line)))
-    (loop for arg in args
-      do (cond ((string= arg "get-devices") (test #'tests:get-devices))
-               ((string= arg "get-device")  (test #'tests:get-device))
-               ((string= arg "set-address") (test #'tests:set-address))
-               ((string= arg "get-status")  (test #'tests:get-status))
-               ((string= arg "get-time")    (test #'tests:get-time))
-               ((string= arg "set-time")    (test #'tests:set-time))
-               (t (all))))))
+    (if (not args)
+        (all)
+        (loop for arg in args
+          do (cond ((string= arg "get-devices") (test #'tests:get-devices))
+                   ((string= arg "get-device")  (test #'tests:get-device))
+                   ((string= arg "set-address") (test #'tests:set-address))
+                   ((string= arg "get-status")  (test #'tests:get-status))
+                   ((string= arg "get-time")    (test #'tests:get-time))
+                   ((string= arg "set-time")    (test #'tests:set-time))
+                   ((string= arg "all")         (all))
+                   (t (progn
+                        (format t "~%   *** ERROR invalid command (~a)~%" arg)
+                        (usage))
+                   )
+                   )))))
 
 
 ;;;; Workaround to skip command line arguments for REPL - invoking (main) in the REPL is

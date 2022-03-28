@@ -13,6 +13,9 @@ format:
 
 build: format
 
+invalid: build
+	$(CMD) mystery-meat
+
 get-devices: build
 	$(CMD) get-devices
 
@@ -31,5 +34,11 @@ get-time: build
 set-time: build
 	$(CMD) set-time
 
-test: build
+all: build
 	$(CMD) all
+
+test: build
+	$(CMD) 
+
+debug: build
+	$(CMD) mystery-meat

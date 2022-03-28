@@ -23,20 +23,17 @@ const controller ALPHA = {.id = 405419896, .address = "192.168.1.100"};
 const controller BETA = {.id = 303986753, .address = "192.168.1.100"};
 
 int main(int argc, char **argv) {
-    if (argc < 2) {
-        cerr << endl
-             << "   *** ERROR missing command" << endl
-             << endl;
-        usage();
-        return -1;
+    string cmd;
+
+    if (argc > 1) {
+        cmd = argv[1];
     }
 
-    string cmd(argv[1]);
     vector<controller> controllers = {ALPHA, BETA};
 
     uhppoted u("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2, controllers, true);
 
-    if (cmd == "all") {
+    if (cmd == "" || cmd == "all") {
         bool ok = true;
         for (auto it = tests.begin(); it != tests.end(); it++) {
             ok = it->second(u) ? ok : false;
@@ -48,7 +45,7 @@ int main(int argc, char **argv) {
     auto it = tests.find(cmd);
     if (it == tests.end()) {
         cerr << endl
-             << "   *** ERROR invalid command" << endl
+             << "   *** ERROR invalid command (" << cmd << ")" << endl
              << endl;
         usage();
         return -1;

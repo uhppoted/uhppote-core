@@ -14,6 +14,9 @@ format:
 build: format
 	clang -std=c++11  -o test test.cpp device.cpp $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB) -lc++ -L$(LIB) -luhppoted
 
+invalid: build
+	$(CMD) mystery-meat
+
 get-devices: build
 	$(CMD) get-devices
 
@@ -32,5 +35,12 @@ get-time: build
 set-time: build
 	$(CMD) set-time
 
-test: build
+all: build
 	$(CMD) all
+
+test: build
+	$(CMD)
+
+
+debug: build
+	$(CMD) mystery-meat

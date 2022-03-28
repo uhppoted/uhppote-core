@@ -6,7 +6,11 @@ public class test {
     const uint DEVICEID = 405419896;
 
     public static void Main(string[] args) {
-        string cmd = args[0];
+        string cmd = "";
+
+        if (args.Length > 0) {
+            cmd = args[0];
+        }
 
         try {
             Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -40,6 +44,7 @@ public class test {
                 ok = SetTime(u, DEVICEID, "2022-03-23 12:24:17");
                 break;
 
+            case "":
             case "all":
                 ok = GetDevices(u) ? ok : false;
                 ok = GetDevice(u, DEVICEID) ? ok : false;
@@ -50,7 +55,10 @@ public class test {
                 break;
 
             default:
+                Console.WriteLine()
                 Console.WriteLine(String.Format("  *** ERROR: invalid command ({0})", cmd));
+                Console.WriteLine()
+                usage();
                 break;
             }
 
@@ -260,5 +268,18 @@ public class test {
         Console.WriteLine("set-time:    ok");
 
         return true;
+    }
+
+    static void usage() {
+        Console.WriteLine("   Usage: test <command>");
+        Console.WriteLine();
+        Console.WriteLine("   Supported commands:");
+        Console.WriteLine("      get-devices");
+        Console.WriteLine("      get-device");
+        Console.WriteLine("      set-address");
+        Console.WriteLine("      get-status");
+        Console.WriteLine("      get-time");
+        Console.WriteLine("      set-time");
+        Console.WriteLine();
     }
 }
