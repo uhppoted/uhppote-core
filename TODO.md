@@ -11,7 +11,7 @@
         - [x] C++
         - [x] C#
         - [x] Python
-        - [ ] CCL
+        - [x] CCL
   
   - [ ] Restructure folders
         - tests
@@ -24,10 +24,7 @@
                 - [ ] Validate/filter args against list of tests
         
   - [x] CCL
-        - [ ] Remove 'uhppoted' prefix from `uhppoted` forms
-        - [ ] May not need the `with-macptrs` in`uhppoted` because `err` is being 
-              freed by go-error
-        - [ ] Double check condition handling
+        - [x] Double check condition handling
 
   - [ ] lint
   - [ ] Cross-compile

@@ -100,12 +100,12 @@
   (%stack-block ((devices (* (length controllers) (go-sizeof :udevice)   )))
     (rletz ((udevices (:struct UDEVICES) :N (length controllers) 
                                          :devices devices)
-			(uhppote (:struct :UHPPOTE) :bind      (ccl::make-cstring bind-addr)
-                                  :broadcast (ccl::make-cstring broadcast-addr)
-                                  :listen    (ccl::make-cstring listen-addr)
-                                  :timeout   timeout
-                                  :devices   udevices
-                                  :debug     (cond (debug 1) (T 0))))
+			      (uhppote (:struct :UHPPOTE) :bind      (ccl::make-cstring bind-addr)
+                                        :broadcast (ccl::make-cstring broadcast-addr)
+                                        :listen    (ccl::make-cstring listen-addr)
+                                        :timeout   timeout
+                                        :devices   udevices
+                                        :debug     (cond (debug 1) (T 0))))
       (loop for (id addr) in controllers
         do (progn
 		         (setf (pref devices :udevice.id) id)
@@ -114,9 +114,9 @@
 
 	    (unwind-protect
 	      (restart-case (funcall f uhppote)
-				  (ignore () nil)
-					(use-value  (value) value)
-					(with-warning (err) (warn err)))
+				  (ignore       ()      nil)
+					(use-value    (value) value)
+					(with-warning (err)   (warn err)))
         (progn
 		      (free (pref uhppote :UHPPOTE.bind))
           (free (pref uhppote :UHPPOTE.broadcast))
