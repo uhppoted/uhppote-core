@@ -153,25 +153,22 @@ public class Uhppoted : IDisposable {
     }
 
     [DllImport("libuhppoted.so")]
-    private static extern string GetDevices(ref UHPPOTE u, ref int N,
-                                            uint[] list);
+    private static extern string GetDevices(ref UHPPOTE u, ref int N, uint[] list);
 
     [DllImport("libuhppoted.so")]
-    private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device,
-                                           uint deviceID);
+    private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID);
 
     [DllImport("libuhppoted.so")]
-    private static extern string SetAddress(ref UHPPOTE u, uint deviceID,
-                                            string address, string subnet,
-                                            string gateway);
+    private static extern string SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway);
 
     [DllImport("libuhppoted.so")]
-    private static extern string GetStatus(ref UHPPOTE u, ref GoStatus status,
-                                           uint deviceID);
+    private static extern string GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID);
 
     [DllImport("libuhppoted.so")]
-    private static extern string GetTime(ref UHPPOTE u, ref string datetime,
-                                         uint deviceID);
+    private static extern string GetTime(ref UHPPOTE u, ref string datetime, uint deviceID);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string SetTime(ref UHPPOTE u, uint deviceID, string datetime);
 
     public uint[] GetDevices() {
         int N = 0;
@@ -261,6 +258,13 @@ public class Uhppoted : IDisposable {
         }
 
         return datetime;
+    }
+
+    public void SetTime(uint deviceID, string datetime) {
+        string err = SetTime(ref this.u, deviceID, datetime);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
     }
 
     struct udevice {

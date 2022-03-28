@@ -36,12 +36,17 @@ public class test {
                 ok = GetTime(u, DEVICEID);
                 break;
 
+            case "set-time":
+                ok = SetTime(u, DEVICEID, "2022-03-23 12:24:17");
+                break;
+
             case "all":
                 ok = GetDevices(u) ? ok : false;
                 ok = GetDevice(u, DEVICEID) ? ok : false;
                 ok = SetAddress(u, DEVICEID, "192.168.1.125", "255.255.255.254", "192.168.1.5") ? ok : false;
                 ok = GetStatus(u, DEVICEID) ? ok : false;
                 ok = GetTime(u, DEVICEID) ? ok : false;
+                ok = SetTime(u, DEVICEID, "2022-03-23 12:24:17");
                 break;
 
             default:
@@ -127,11 +132,10 @@ public class test {
 
     static bool SetAddress(Uhppoted u, uint deviceID, string address, string subnet, string gateway) {
         u.SetAddress(deviceID, address, subnet, gateway);
-        bool ok = true;
 
         Console.WriteLine("set-address: ok");
 
-        return ok;
+        return true;
     }
 
     static bool GetStatus(Uhppoted u, uint deviceID) {
@@ -248,5 +252,13 @@ public class test {
         }
 
         return ok;
+    }
+
+    static bool SetTime(Uhppoted u, uint deviceID, string datetime) {
+        u.SetTime(deviceID, datetime);
+
+        Console.WriteLine("set-time:    ok");
+
+        return true;
     }
 }

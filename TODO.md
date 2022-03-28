@@ -4,6 +4,7 @@
 
 - Shared-lib/DLL
   - [ ] Make timeout milliseconds
+  - (?) C++ std::invoke
 
   - [ ] `set-time`
         - [x] C
@@ -14,6 +15,7 @@
   
   - [ ] Restructure folders
         - tests
+          - [ ] default to 'all'
           - [ ] CCL
                 - [x] Exit code
                 - [x] Move `failed` condition to `tests`
@@ -152,6 +154,7 @@
 
 10. cgo: explicitly set alignment `__attribute__((align(8))) complex float x;`
     -  https://github.com/golang/go/wiki/cgo#struct-alignment-issues
+11. [Transpilers](http://anachronauts.club/~voidstar/log/2022-03-24-openapi-for-binfmt.gmi)
 
 ### Notes
 1.  https://stevelosh.com/blog/2021/03/small-common-lisp-cli-programs/

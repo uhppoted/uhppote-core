@@ -45,6 +45,10 @@ public class example {
                 GetTime(u, 405419896);
                 break;
 
+            case "set-time":
+                SetTime(u, 405419896, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                break;
+
             case "all":
                 GetDevices(u);
                 GetDevice(u, 405419896);
@@ -80,6 +84,7 @@ public class example {
         Console.WriteLine("    set-address");
         Console.WriteLine("    get-status");
         Console.WriteLine("    get-time");
+        Console.WriteLine("    set-time");
         Console.WriteLine("    help");
         Console.WriteLine();
         Console.WriteLine("  get-devices");
@@ -89,13 +94,16 @@ public class example {
         Console.WriteLine("    Retrieves the basic device information for a UHPPOTE controller.");
         Console.WriteLine();
         Console.WriteLine("  set-address");
-        Console.WriteLine("    Sets the controller IPv4 address, subnet mask and gateway address.");
+        Console.WriteLine("    Sets a controller IPv4 address, subnet mask and gateway address.");
         Console.WriteLine();
         Console.WriteLine("  get-status");
-        Console.WriteLine("    Retrieves the current device status for a UHPPOTE controller.");
+        Console.WriteLine("    Retrieves a controller device status.");
         Console.WriteLine();
         Console.WriteLine("  get-time");
-        Console.WriteLine("    Retrieves the current date/time for a UHPPOTE controller.");
+        Console.WriteLine("    Retrieves a controller current date/time.");
+        Console.WriteLine();
+        Console.WriteLine("  set-time");
+        Console.WriteLine("    Sets the controller current date/time.");
         Console.WriteLine();
         Console.WriteLine("  help");
         Console.WriteLine("    Displays this information.");
@@ -164,6 +172,15 @@ public class example {
         string datetime = u.GetTime(deviceID);
 
         Console.WriteLine(String.Format("get-time"));
+        Console.WriteLine(String.Format("  date/time: {0}", datetime));
+        Console.WriteLine();
+    }
+
+    static void SetTime(Uhppoted u, uint deviceID, string datetime) {
+        u.SetTime(deviceID, datetime);
+
+        Console.WriteLine(String.Format("set-time"));
+        Console.WriteLine(String.Format("  ID:        {0}", deviceID));
         Console.WriteLine(String.Format("  date/time: {0}", datetime));
         Console.WriteLine();
     }
