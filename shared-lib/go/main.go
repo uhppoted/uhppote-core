@@ -126,6 +126,17 @@ func GetTime(u *C.struct_UHPPOTE, datetime **C.char, deviceID uint32) *C.char {
 	return nil
 }
 
+//export GetListener
+func GetListener(u *C.struct_UHPPOTE, address **C.char, deviceID uint32) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := getListener(uu, address, deviceID); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
 //export SetTime
 func SetTime(u *C.struct_UHPPOTE, deviceID uint32, datetime *C.char) *C.char {
 	if uu, err := makeUHPPOTE(u); err != nil {

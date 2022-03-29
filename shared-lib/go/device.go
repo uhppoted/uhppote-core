@@ -196,3 +196,22 @@ func setTime(uu uhppote.IUHPPOTE, deviceID uint32, datetime *C.char) error {
 		return nil
 	}
 }
+
+func getListener(uu uhppote.IUHPPOTE, address **C.char, deviceID uint32) error {
+	if address == nil {
+		return fmt.Errorf("invalid argument (address) - expected valid pointer to string")
+	}
+
+	listener, err := uu.GetListener(deviceID)
+	if err != nil {
+		return err
+	}
+
+	if listener == nil {
+		return fmt.Errorf("%v: no response to get-listener", deviceID)
+	}
+
+	*address = C.CString(fmt.Sprintf("%v:%v", listener.Address.IP, listener.Address.Port))
+
+	return nil
+}

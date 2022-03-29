@@ -1,6 +1,6 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/c
-CMD=./test
+CMD=GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && ./test
 
 lib: 
 	cd ../../go && make all
@@ -14,31 +14,34 @@ build: format
 	clang -o test test.c device.c $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
 
 invalid: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) mystery-meat
+	$(CMD) mystery-meat
 
 get-devices: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-devices
+	$(CMD) get-devices
 
 get-device: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-device
+	$(CMD) get-device
 
 set-address: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) set-address
+	$(CMD) set-address
 
 get-status: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-status
+	$(CMD) get-status
 
 get-time: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-time
+	$(CMD) get-time
 
 set-time: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) set-time
+	$(CMD) set-time
+
+get-listener: build
+	$(CMD) get-listener
 
 all: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) all
+	$(CMD) all
 
 test: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD)
+	$(CMD)
 
 debug: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) mystery-meat
+	$(CMD) get-listener

@@ -6,31 +6,34 @@
   - [ ] Make timeout milliseconds
   - (?) C++ std::invoke
 
-  - [x] `set-time`
-        - [x] C
-        - [x] C++
-        - [x] C#
-        - [x] Python
-        - [x] CCL
+  - [ ] `get-listener`
+        - [ ] C
+        - [ ] C++
+        - [ ] C#
+        - [ ] Python
+        - [ ] CCL
+
+  - [ ] `set-listener`
+  - [ ] `get-door-control`
+  - [ ] `set-door-control`
+  - [ ] `get-cards`
+  - [ ] `get-card`
+  - [ ] `get-card-by-index`
+  - [ ] `put-card`
+  - [ ] `delete-card`
+  - [ ] `delete-cards`
+  - [ ] `get-event-index`
+  - [ ] `set-event-index`
+  - [ ] `get-event`
+  - [ ] `record-special-events`
+  - [ ] `open-door`
+  - [ ] `get-time-profile`
+  - [ ] `set-time-profile`
+  - [ ] `clear-time-profiles`
+  - [ ] `add-task`
+  - [ ] `refresh-tasklist`
+  - [ ] `clear-task-list`
   
-  - [x] Restructure folders
-        - tests
-          - [x] default to 'all'
-                - [x] C
-                - [x] C++
-                - [x] C#
-                - [x] Python
-                - [x] CCL
-
-          - [x] CCL
-                - [x] Exit code
-                - [x] Move `failed` condition to `tests`
-                - [x] Fix circular dependency in Makefile so that target is `test` like all the other bindings
-                - [x] Cleanup handler/condition logic
-        
-  - [x] CCL
-        - [x] Double check condition handling
-
   - [ ] lint
   - (?) Cross-compile
         - https://github.com/elastic/golang-crossbuild

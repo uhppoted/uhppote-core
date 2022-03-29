@@ -6,6 +6,7 @@
 #include "uhppoted.h"
 
 const uint32_t DEVICEID = 405419896;
+const char *OK = "%-12s  ok\n";
 
 bool getDevices() {
     uint32_t *devices = NULL;
@@ -31,7 +32,7 @@ bool getDevices() {
     free(devices);
 
     if (ok) {
-        printf("get-devices: ok\n");
+        printf(OK, "get-devices");
     }
 
     return ok;
@@ -83,7 +84,7 @@ bool getDevice() {
     }
 
     if (ok) {
-        printf("get-device:  ok\n");
+        printf(OK, "get-device");
     }
 
     return ok;
@@ -96,7 +97,7 @@ bool setAddress(uint32_t deviceID, const char *address, const char *subnet,
         return false;
     }
 
-    printf("set-address: ok\n");
+    printf(OK, "set-address");
 
     return true;
 }
@@ -199,7 +200,7 @@ bool getStatus() {
     }
 
     if (ok) {
-        printf("get-status:  ok\n");
+        printf(OK, "get-status");
     }
 
     return ok;
@@ -221,7 +222,7 @@ bool getTime() {
     }
 
     if (ok) {
-        printf("get-time:    ok\n");
+        printf(OK, "get-time");
     }
 
     free(datetime);
@@ -238,8 +239,32 @@ bool setTime() {
     }
 
     if (ok) {
-        printf("set-time:    ok\n");
+        printf(OK, "set-time");
     }
+
+    return ok;
+}
+
+bool getListener() {
+    char *listener;
+
+    if (get_listener(DEVICEID, &listener) != 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    bool ok = true;
+
+    if (strcmp(listener, "192.168.1.100:60001") != 0) {
+        printf("get-listener: incorrect listener - expected:%s, got:%s\n", "192.168.1.100:60001", listener);
+        ok = false;
+    }
+
+    if (ok) {
+        printf(OK, "get-listener");
+    }
+
+    free(listener);
 
     return ok;
 }

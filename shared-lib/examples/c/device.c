@@ -120,3 +120,21 @@ int setTime(uint32_t deviceID, const char *datetime) {
 
     return 0;
 }
+
+int getListener(uint32_t deviceID) {
+    char *listener;
+
+    if (get_listener(deviceID, &listener) != 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    printf("\nget-listener\n");
+    printf("  ID:       %u\n", deviceID);
+    printf("  listener: %s\n", listener);
+    printf("\n");
+
+    free(listener);
+
+    return 0;
+}

@@ -265,3 +265,19 @@ int set_time(unsigned id, char *datetime) {
 
     return 0;
 }
+
+int get_listener(unsigned id, char **t) {
+    char *listener;
+
+    char *err = GetListener(u, &listener, id);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    *t = strdup(listener);
+
+    free(listener);
+
+    return 0;
+}
