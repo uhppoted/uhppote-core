@@ -188,6 +188,18 @@ class Uhppote:
 
         SetTime(self._uhppote, deviceID, c_char_p(bytes(datetime, 'utf-8')))
 
+    def get_listener(self, deviceID):
+        GetListener = lib.GetListener
+        GetListener.argtypes = [POINTER(GoUHPPOTE), POINTER(c_char_p), c_ulong]
+        GetListener.restype = ctypes.c_char_p
+        GetListener.errcheck = self.errcheck
+
+        listener = c_char_p()
+
+        GetListener(self._uhppote, byref(listener), deviceID)
+
+        return listener.value.decode('utf-8')
+
 
 # INTERNAL TYPES
 class GoController(Structure):

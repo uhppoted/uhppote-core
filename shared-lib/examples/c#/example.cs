@@ -49,11 +49,17 @@ public class example {
                 SetTime(u, 405419896, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 break;
 
+            case "get-listener":
+                GetListener(u, 405419896);
+                break;
+
             case "all":
                 GetDevices(u);
                 GetDevice(u, 405419896);
                 SetAddress(u, 405419896, "192.168.1.125", "255.255.255.254", "192.168.1.5");
                 GetTime(u, 405419896);
+                SetTime(u, 405419896, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                GetListener(u, 405419896);
                 break;
 
             default:
@@ -85,6 +91,7 @@ public class example {
         Console.WriteLine("    get-status");
         Console.WriteLine("    get-time");
         Console.WriteLine("    set-time");
+        Console.WriteLine("    get-listener");
         Console.WriteLine("    help");
         Console.WriteLine();
         Console.WriteLine("  get-devices");
@@ -104,6 +111,9 @@ public class example {
         Console.WriteLine();
         Console.WriteLine("  set-time");
         Console.WriteLine("    Sets the controller current date/time.");
+        Console.WriteLine();
+        Console.WriteLine("  get-listener");
+        Console.WriteLine("    Retrieves the controller event listener address.");
         Console.WriteLine();
         Console.WriteLine("  help");
         Console.WriteLine("    Displays this information.");
@@ -182,6 +192,14 @@ public class example {
         Console.WriteLine(String.Format("set-time"));
         Console.WriteLine(String.Format("  ID:        {0}", deviceID));
         Console.WriteLine(String.Format("  date/time: {0}", datetime));
+        Console.WriteLine();
+    }
+
+    static void GetListener(Uhppoted u, uint deviceID) {
+        string listener = u.GetListener(deviceID);
+
+        Console.WriteLine(String.Format("get-listener"));
+        Console.WriteLine(String.Format("  listener: {0}", listener));
         Console.WriteLine();
     }
 }

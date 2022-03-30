@@ -44,6 +44,10 @@ public class test {
                 ok = SetTime(u, DEVICEID, "2022-03-23 12:24:17");
                 break;
 
+            case "get-listener":
+                ok = GetListener(u, DEVICEID);
+                break;
+
             case "":
             case "all":
                 ok = GetDevices(u) ? ok : false;
@@ -52,12 +56,13 @@ public class test {
                 ok = GetStatus(u, DEVICEID) ? ok : false;
                 ok = GetTime(u, DEVICEID) ? ok : false;
                 ok = SetTime(u, DEVICEID, "2022-03-23 12:24:17");
+                ok = GetListener(u, DEVICEID) ? ok : false;
                 break;
 
             default:
-                Console.WriteLine()
+                Console.WriteLine();
                 Console.WriteLine(String.Format("  *** ERROR: invalid command ({0})", cmd));
-                Console.WriteLine()
+                Console.WriteLine();
                 usage();
                 break;
             }
@@ -86,7 +91,7 @@ public class test {
         }
 
         if (ok) {
-            Console.WriteLine("get-devices: ok");
+            Console.WriteLine("get-devices   ok");
         }
 
         return ok;
@@ -132,7 +137,7 @@ public class test {
         }
 
         if (ok) {
-            Console.WriteLine("get-device:  ok");
+            Console.WriteLine("get-device    ok");
         }
 
         return ok;
@@ -141,7 +146,7 @@ public class test {
     static bool SetAddress(Uhppoted u, uint deviceID, string address, string subnet, string gateway) {
         u.SetAddress(deviceID, address, subnet, gateway);
 
-        Console.WriteLine("set-address: ok");
+        Console.WriteLine("set-address   ok");
 
         return true;
     }
@@ -240,7 +245,7 @@ public class test {
         }
 
         if (ok) {
-            Console.WriteLine("get-status:  ok");
+            Console.WriteLine("get-status    ok");
         }
 
         return ok;
@@ -256,7 +261,7 @@ public class test {
         }
 
         if (ok) {
-            Console.WriteLine("get-time:    ok");
+            Console.WriteLine("get-time      ok");
         }
 
         return ok;
@@ -265,9 +270,25 @@ public class test {
     static bool SetTime(Uhppoted u, uint deviceID, string datetime) {
         u.SetTime(deviceID, datetime);
 
-        Console.WriteLine("set-time:    ok");
+        Console.WriteLine("set-time      ok");
 
         return true;
+    }
+
+    static bool GetListener(Uhppoted u, uint deviceID) {
+        string listener = u.GetListener(deviceID);
+        bool ok = true;
+
+        if (listener != "192.168.1.100:60001") {
+            Console.WriteLine("get-listener: incorrect event listener address - expected:{0}, got:{1}", "192.168.1.100:60001", listener);
+            ok = false;
+        }
+
+        if (ok) {
+            Console.WriteLine("get-listener  ok");
+        }
+
+        return ok;
     }
 
     static void usage() {

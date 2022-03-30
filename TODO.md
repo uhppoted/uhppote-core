@@ -6,12 +6,12 @@
   - [ ] Make timeout milliseconds
   - (?) C++ std::invoke
 
-  - [ ] `get-listener`
-        - [ ] C
-        - [ ] C++
-        - [ ] C#
-        - [ ] Python
-        - [ ] CCL
+  - [x] `get-listener`
+        - [x] C
+        - [x] C++
+        - [x] C#
+        - [x] Python
+        - [x] CCL
 
   - [ ] `set-listener`
   - [ ] `get-door-control`

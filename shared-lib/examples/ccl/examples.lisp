@@ -33,3 +33,6 @@
 (defun set-time (device-id datetime) "" 
   (exec #'(lambda (u) (uhppoted-set-time u device-id datetime)))
   t)
+
+(defun get-listener (device-id) "" 
+  (exec #'(lambda (u) (uhppoted-get-listener u device-id))))

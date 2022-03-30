@@ -15,6 +15,7 @@ map<string, f> tests = {
     {"get-status", getStatus},
     {"get-time", getTime},
     {"set-time", setTime},
+    {"get-listener", getListener},
 };
 
 void usage();
@@ -58,11 +59,10 @@ void usage() {
     cout << "   Usage: test <command>" << endl;
     cout << endl;
     cout << "   Supported commands:" << endl;
-    cout << "      get-devices" << endl;
-    cout << "      get-device" << endl;
-    cout << "      set-address" << endl;
-    cout << "      get-status" << endl;
-    cout << "      get-time" << endl;
-    cout << "      set-time" << endl;
+    cout << "      all" << endl;
+
+    for (auto it = tests.begin(); it != tests.end(); it++) {
+        cout << "      " << it->first << endl;
+    }
     cout << endl;
 }

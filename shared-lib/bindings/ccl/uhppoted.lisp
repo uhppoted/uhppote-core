@@ -213,7 +213,7 @@
 
 
 (defun uhppoted-get-time (uhppote device-id) "Retrieves a controller date/time"
-  (with-cstrs ((datetime  ""))
+  (with-cstrs ((datetime ""))
      (with-macptrs ((err (external-call "GetTime" :address uhppote 
                                                   :address datetime
                                                   :unsigned-long device-id 
@@ -229,6 +229,16 @@
                                                  :address dt
                                                  :address)))
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err))))))
+
+
+(defun uhppoted-get-listener (uhppote device-id) "Retrieves the controller event listener address"
+  (with-cstrs ((listener ""))
+     (with-macptrs ((err (external-call "GetListener" :address uhppote 
+                                                      :address listener
+                                                      :unsigned-long device-id 
+                                                      :address)))
+       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+       (go-string (%get-ptr listener)))))
 
 
 (defun debug () "" 

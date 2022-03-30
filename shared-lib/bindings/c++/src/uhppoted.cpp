@@ -223,3 +223,18 @@ void uhppoted::set_time(uint32_t id, std::string &datetime) {
         throw uhppoted_exception(err);
     }
 }
+
+string uhppoted::get_listener(uint32_t id) {
+    char *listener;
+
+    char *err = GetListener(u, &listener, id);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+
+    string l = string(listener);
+
+    free(listener);
+
+    return l;
+}

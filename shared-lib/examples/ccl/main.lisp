@@ -13,6 +13,7 @@
   (format t "      get-status    Retrieves a controller status~%") 
   (format t "      get-time      Retrieves a controller date/time~%") 
   (format t "      set-time      Sets a controller date/time~%") 
+  (format t "      get-listener  Retrieves a controller's configured event listener address~%") 
   (format t "~%"))
 
 (defun help () ""
@@ -23,6 +24,7 @@
                  "(get-status)"
                  "(get-time)"
                  "(set-time)"
+                 "(get-listener)"
                  )))
 
 (defun get-devices () ""
@@ -43,16 +45,20 @@
 (defun set-time () ""
   (format t "  set-time:~%    ~a~%" (examples:set-time 405419896 (now))))
 
+(defun get-listener () ""
+  (format t "  get-listener:~%    ~:w~%" (examples:get-listener 405419896)))
+
 (defun main () ""
   (let ((args (parse-command-line)))
     (loop for arg in args
-       do (cond ((string= arg "get-devices") (get-devices))
-                ((string= arg "get-device")  (get-device))
-                ((string= arg "set-address") (set-address))
-                ((string= arg "get-status")  (get-status))
-                ((string= arg "get-time")    (get-time))
-                ((string= arg "set-time")    (set-time))
-                ((string= arg "help")        (help))
+       do (cond ((string= arg "get-devices")  (get-devices))
+                ((string= arg "get-device")   (get-device))
+                ((string= arg "set-address")  (set-address))
+                ((string= arg "get-status")   (get-status))
+                ((string= arg "get-time")     (get-time))
+                ((string= arg "set-time")     (set-time))
+                ((string= arg "get-listener") (get-listener))
+                ((string= arg "help")         (help))
                 (t (help))))))
 
 ;;;; Workaround to skip command line arguments for REPL - invoking (main) in the REPL is

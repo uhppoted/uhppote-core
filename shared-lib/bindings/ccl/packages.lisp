@@ -10,6 +10,7 @@
            uhppoted-get-status
            uhppoted-get-time
            uhppoted-set-time
+           uhppoted-get-listener
            uhppoted-error
            with-warning
            message

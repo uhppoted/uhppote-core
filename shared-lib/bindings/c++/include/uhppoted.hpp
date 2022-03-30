@@ -59,6 +59,7 @@ class uhppoted {
     status get_status(uint32_t id);
     std::string get_time(uint32_t id);
     void set_time(uint32_t id, std::string &);
+    std::string get_listener(uint32_t id);
 
   private:
     UHPPOTE *u;

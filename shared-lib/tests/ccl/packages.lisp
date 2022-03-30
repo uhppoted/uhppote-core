@@ -5,11 +5,12 @@
 		:ccl
 		:uhppoted)
   (:export get-devices
-		   get-device
-		   set-address
-		   get-status
+		       get-device
+		       set-address
+		       get-status
            get-time
            set-time
+           get-listener
            failed
            message))
 

@@ -158,3 +158,22 @@ int setTime(uhppoted &u, uint32_t deviceID, string datetime) {
 
     return -1;
 }
+
+int getListener(uhppoted &u, uint32_t deviceID) {
+    try {
+        auto listener = u.get_listener(deviceID);
+
+        cout << endl
+             << "get-listener" << endl;
+        cout << "  listener: " << listener << endl;
+        cout << endl;
+
+        return 0;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return -1;
+}

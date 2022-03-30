@@ -1,3 +1,4 @@
+#include <iomanip>
 #include <iostream>
 
 #include "device.hpp"
@@ -5,6 +6,7 @@
 using namespace std;
 
 const uint32_t DEVICEID = 405419896;
+const int W = 14;
 
 bool getDevices(uhppoted &u) {
     try {
@@ -22,7 +24,8 @@ bool getDevices(uhppoted &u) {
         }
 
         if (ok) {
-            cout << "get-devices: ok" << endl;
+            cout << setw(W) << left << "get-devices"
+                 << "ok" << endl;
         }
 
         return ok;
@@ -89,7 +92,8 @@ bool getDevice(uhppoted &u) {
         }
 
         if (ok) {
-            cout << "get-device:  ok" << endl;
+            cout << setw(W) << left << "get-device"
+                 << "ok" << endl;
         }
 
         return ok;
@@ -110,7 +114,8 @@ bool setAddress(uhppoted &u) {
 
         u.set_address(DEVICEID, address, subnet, gateway);
 
-        cout << "set-address: ok" << endl;
+        cout << setw(W) << left << "set-address"
+             << "ok" << endl;
 
         return true;
     } catch (const exception &e) {
@@ -223,7 +228,8 @@ bool getStatus(uhppoted &u) {
         }
 
         if (ok) {
-            cout << "get-status:  ok" << endl;
+            cout << setw(W) << left << "get-status"
+                 << "ok" << endl;
         }
 
         return ok;
@@ -249,7 +255,8 @@ bool getTime(uhppoted &u) {
         }
 
         if (ok) {
-            cout << "get-time:    ok" << endl;
+            cout << setw(W) << left << "get-time"
+                 << "ok" << endl;
         }
 
         return ok;
@@ -268,9 +275,37 @@ bool setTime(uhppoted &u) {
 
         u.set_time(DEVICEID, datetime);
 
-        cout << "set-time:    ok" << endl;
+        cout << setw(W) << left << "set-time"
+             << "ok" << endl;
 
         return true;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return false;
+}
+
+bool getListener(uhppoted &u) {
+    try {
+        auto listener = u.get_listener(DEVICEID);
+        bool ok = true;
+
+        if (listener != "192.168.1.100:60001") {
+            cout << "get-listener: incorrect listener - expected:"
+                 << "192.168.1.100:60001"
+                 << ", got:" << listener << endl;
+            ok = false;
+        }
+
+        if (ok) {
+            cout << setw(W) << left << "get-listener"
+                 << "ok" << endl;
+        }
+
+        return ok;
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl

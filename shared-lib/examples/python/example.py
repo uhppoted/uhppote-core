@@ -29,6 +29,7 @@ def help():
     print("    get-status")
     print("    get-time")
     print("    set-time")
+    print("    get-listener")
     print("    help")
     print()
     print("  get-devices")
@@ -48,6 +49,9 @@ def help():
     print()
     print("  set-time")
     print("    Sets a controller current date/time (YYYY-MM-DD HH:mm:ss).")
+    print()
+    print("  get-listener")
+    print("    Retrieves the configured event listener addres for a controller.")
     print()
     print("  help")
     print("    Displays this information.")
@@ -160,6 +164,19 @@ def set_time(u, deviceID, datetime):
         print()
 
 
+def get_listener(u, deviceID):
+    try:
+        listener = u.get_listener(deviceID)
+
+        print("get-listener")
+        print(f"  listener: {listener}")
+        print()
+
+    except Exception as e:
+        print(f" *** ERROR get-listener ({e})")
+        print()
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Example CLI for the uhppote-core Python integration')
@@ -179,6 +196,7 @@ if __name__ == "__main__":
             'get-status',
             'get-time',
             'set-time',
+            'get-listener',
             'all',
     ]:
         print()
@@ -211,6 +229,9 @@ if __name__ == "__main__":
             elif cmd == 'set-time':
                 set_time(u, 405419896, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
+            elif cmd == 'get-listener':
+                get_listener(u, 405419896)
+
             elif cmd == 'all':
                 get_devices(u)
                 get_device(u, 405419896)
@@ -218,6 +239,7 @@ if __name__ == "__main__":
                 get_status(u, 405419896)
                 get_time(u, 405419896)
                 set_time(u, 405419896, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                get_listener(u, 405419896)
 
         except BaseException as x:
             print()

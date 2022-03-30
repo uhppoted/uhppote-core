@@ -13,6 +13,7 @@
   (format t "      get-status    Retrieves a controller status~%") 
   (format t "      get-time      Retrieves a controller date/time~%") 
   (format t "      set-time      Sets a controller date/time~%") 
+  (format t "      get-listener  Retrieves a controller's configurd event listener address~%") 
   (format t "~%") 
   (format t "    Defaults to running all tests~%") 
   (format t "~%"))
@@ -36,6 +37,7 @@
                    tests:get-status 
                    tests:get-time 
                    tests:set-time 
+                   tests:get-listener
                  ))
          (result (loop for test in tests collect (all-x test))))
         (if (some #'null result)
@@ -56,13 +58,14 @@
     (if (not args)
         (all)
         (loop for arg in args
-          do (cond ((string= arg "get-devices") (test #'tests:get-devices))
-                   ((string= arg "get-device")  (test #'tests:get-device))
-                   ((string= arg "set-address") (test #'tests:set-address))
-                   ((string= arg "get-status")  (test #'tests:get-status))
-                   ((string= arg "get-time")    (test #'tests:get-time))
-                   ((string= arg "set-time")    (test #'tests:set-time))
-                   ((string= arg "all")         (all))
+          do (cond ((string= arg "get-devices")  (test #'tests:get-devices))
+                   ((string= arg "get-device")   (test #'tests:get-device))
+                   ((string= arg "set-address")  (test #'tests:set-address))
+                   ((string= arg "get-status")   (test #'tests:get-status))
+                   ((string= arg "get-time")     (test #'tests:get-time))
+                   ((string= arg "set-time")     (test #'tests:set-time))
+                   ((string= arg "get-listener") (test #'tests:get-listener))
+                   ((string= arg "all")          (all))
                    (t (progn
                         (format t "~%   *** ERROR invalid command (~a)~%" arg)
                         (usage))

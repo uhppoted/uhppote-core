@@ -44,6 +44,8 @@ int main(int argc, char **argv) {
         strftime(datetime, sizeof(datetime), "%Y-%m-%d %H:%M:%S", localtime(&now));
 
         return setTime(u, DEVICEID, datetime);
+    } else if (cmd == "get-listener") {
+        return getListener(u, DEVICEID);
     } else if (cmd == "all") {
         time_t now = time(nullptr);
         char datetime[100];
@@ -58,6 +60,7 @@ int main(int argc, char **argv) {
         rc = getStatus(u, DEVICEID) == 0 ? rc : -1;
         rc = getTime(u, DEVICEID) == 0 ? rc : -1;
         rc = setTime(u, DEVICEID, datetime) == 0 ? rc : -1;
+        rc = getListener(u, DEVICEID) == 0 ? rc : -1;
 
         return rc;
     }
@@ -78,5 +81,7 @@ void usage() {
     cout << "      set-address" << endl;
     cout << "      get-status" << endl;
     cout << "      get-time" << endl;
+    cout << "      set-time" << endl;
+    cout << "      get-listener" << endl;
     cout << endl;
 }

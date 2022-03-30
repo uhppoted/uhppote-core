@@ -7,6 +7,20 @@ sys.path.append('../../bindings/python')
 
 import uhppoted
 
+DEVICEID = 405419896
+
+
+def tests():
+    return {
+        'get-devices': get_devices,
+        'get-device': get_device,
+        'set-address': set_address,
+        'get-status': get_status,
+        'get-time': get_time,
+        'set-time': set_time,
+        'get-listener': get_listener,
+    }
+
 
 def get_devices(u):
     devices = u.get_devices()
@@ -22,13 +36,13 @@ def get_devices(u):
         ok = False
 
     if ok:
-        print(f"get-devices: ok")
+        print(f"get-devices   ok")
 
     return ok
 
 
-def get_device(u, deviceID):
-    info = u.get_device(deviceID)
+def get_device(u):
+    info = u.get_device(DEVICEID)
     ok = True
 
     if info.ID != 405419896:
@@ -60,23 +74,23 @@ def get_device(u, deviceID):
         ok = False
 
     if ok:
-        print(f"get-device:  ok")
+        print(f"get-device    ok")
 
     return ok
 
 
-def set_address(u, deviceID, address, subnet, gateway):
-    u.set_address(deviceID, address, subnet, gateway)
+def set_address(u):
+    u.set_address(DEVICEID, "192.168.1.125", "255.255.255.253", "192.168.1.5")
     ok = True
 
     if ok:
-        print(f"set-address: ok")
+        print(f"set-address   ok")
 
     return ok
 
 
-def get_status(u, deviceID):
-    status = u.get_status(deviceID)
+def get_status(u):
+    status = u.get_status(DEVICEID)
     ok = True
 
     if status.ID != 405419896:
@@ -152,13 +166,13 @@ def get_status(u, deviceID):
         ok = False
 
     if ok:
-        print(f"get-status:  ok")
+        print(f"get-status    ok")
 
     return ok
 
 
-def get_time(u, deviceID):
-    datetime = u.get_time(deviceID)
+def get_time(u):
+    datetime = u.get_time(DEVICEID)
     ok = True
 
     if datetime != "2022-01-02 12:34:56":
@@ -166,17 +180,31 @@ def get_time(u, deviceID):
         ok = False
 
     if ok:
-        print(f"get-time:    ok")
+        print(f"get-time      ok")
 
     return ok
 
 
-def set_time(u, deviceID, datetime):
-    u.set_time(deviceID, datetime)
+def set_time(u):
+    u.set_time(DEVICEID, '2022-03-23 12:24:17')
     ok = True
 
     if ok:
-        print(f"set-time:    ok")
+        print(f"set-time      ok")
+
+    return ok
+
+
+def get_listener(u):
+    listener = u.get_listener(DEVICEID)
+    ok = True
+
+    if listener != "192.168.1.100:60001":
+        print(f"get-time: incorrect event listener - expected:192.168.1.100:60001, got:{listener}")
+        ok = False
+
+    if ok:
+        print(f"get-listener  ok")
 
     return ok
 
@@ -185,12 +213,9 @@ def usage():
     print("   Usage: python test.py <command>")
     print()
     print("   Supported commands:")
-    print("      get-devices")
-    print("      get-device")
-    print("      set-address")
-    print("      get-status")
-    print("      get-time")
-    print("      set-time")
+    print("      all")
+    for k in tests():
+        print(f"      {k}")
     print()
 
 
@@ -209,31 +234,13 @@ if __name__ == "__main__":
     ok = True
 
     try:
-        if cmd == 'get-devices':
-            ok = ok if get_devices(u) else False
-
-        elif cmd == 'get-device':
-            ok = ok if get_device(u, 405419896) else False
-
-        elif cmd == 'set-address':
-            ok = set_address(u, 405419896, "192.168.1.125", "255.255.255.253", "192.168.1.5")
-
-        elif cmd == 'get-status':
-            ok = get_status(u, 405419896)
-
-        elif cmd == 'get-time':
-            ok = get_time(u, 405419896)
-
-        elif cmd == 'set-time':
-            ok = set_time(u, 405419896, '2022-03-23 12:24:17')
+        if cmd in tests():
+            ok = ok if tests()[cmd](u) else False
 
         elif cmd == "" or cmd == 'all':
-            ok = ok if get_devices(u) else False
-            ok = ok if get_device(u, 405419896) else False
-            ok = ok if set_address(u, 405419896, "192.168.1.125", "255.255.255.253", "192.168.1.5") else False
-            ok = ok if get_status(u, 405419896) else False
-            ok = ok if get_time(u, 405419896) else False
-            ok = ok if set_time(u, 405419896, '2022-03-23 12:24:17') else False
+            for _, f in tests().items():
+                ok = ok if f(u) else False
+
         else:
             print()
             print(f"   *** ERROR invalid command ({cmd})")

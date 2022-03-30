@@ -170,6 +170,9 @@ public class Uhppoted : IDisposable {
     [DllImport("libuhppoted.so")]
     private static extern string SetTime(ref UHPPOTE u, uint deviceID, string datetime);
 
+    [DllImport("libuhppoted.so")]
+    private static extern string GetListener(ref UHPPOTE u, ref string listener, uint deviceID);
+
     public uint[] GetDevices() {
         int N = 0;
         int count = N;
@@ -258,6 +261,17 @@ public class Uhppoted : IDisposable {
         }
 
         return datetime;
+    }
+
+    public string GetListener(uint deviceID) {
+        string listener = "";
+
+        string err = GetListener(ref this.u, ref listener, deviceID);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+
+        return listener;
     }
 
     public void SetTime(uint deviceID, string datetime) {
