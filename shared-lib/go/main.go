@@ -18,7 +18,7 @@ typedef struct UHPPOTE {
 	const char *bind;
 	const char *broadcast;
 	const char *listen;
-	int         timeout;  // seconds
+	int         timeout;  // milliseconds
 	udevices   *devices;  // (optional) list of non-local devices
 	bool        debug;
 } UHPPOTE;
@@ -182,7 +182,7 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 		}
 
 		if u.timeout > 0 {
-			timeout = time.Duration(u.timeout) * time.Second
+			timeout = time.Duration(u.timeout) * time.Millisecond
 		}
 
 		debug = bool(u.debug)

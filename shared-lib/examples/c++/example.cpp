@@ -24,8 +24,7 @@ int main(int argc, char **argv) {
     string cmd(argv[1]);
     vector<controller> controllers = {ALPHA, BETA};
 
-    uhppoted u("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2,
-               controllers, true);
+    uhppoted u("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2500, controllers, true);
 
     if (cmd == "get-devices") {
         return getDevices(u);

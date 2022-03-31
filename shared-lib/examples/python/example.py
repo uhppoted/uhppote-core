@@ -209,7 +209,7 @@ if __name__ == "__main__":
         controllers = [alpha, beta]
 
         u = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE('192.168.1.100', '192.168.1.255',
-                                                      '192.168.1.100:60001', 1, controllers, True))
+                                                      '192.168.1.100:60001', 2500, controllers, True))
         try:
             if cmd == 'get-devices':
                 get_devices(u)

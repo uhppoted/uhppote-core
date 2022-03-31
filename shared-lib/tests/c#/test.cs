@@ -16,7 +16,7 @@ public class test {
             Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
                                          new Controller(303986753, "192.168.1.100") };
 
-            Uhppoted u = new Uhppoted("192.168.1.100", "192.168.1.100:60000", "192.168.1.100:60001", 2, controllers, true);
+            Uhppoted u = new Uhppoted("192.168.1.100", "192.168.1.100:60000", "192.168.1.100:60001", 2500, controllers, true);
             bool ok = true;
 
             switch (cmd) {

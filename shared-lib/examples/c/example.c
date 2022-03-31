@@ -23,8 +23,7 @@ int main(int argc, char **argv) {
     controller alpha = {.id = 405419896, .address = "192.168.1.100"};
     controller beta = {.id = 303986753, .address = "192.168.1.100"};
 
-    setup("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2,
-          true, &alpha, &beta, NULL);
+    setup("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2500, true, &alpha, &beta, NULL);
 
     if (strcmp(cmd, "") == 0 || strncmp(cmd, "all", 3) == 0) {
         rc = all();
