@@ -5,14 +5,16 @@
 - Shared-lib/DLL
   - [x] Make timeout milliseconds
   - (?) C++ std::invoke
+  - (?) Display/all order
   - (?) CCL DOLIST 
+  - [ ] CCL examples 'all'
 
-  - [ ] `set-listener`
-        - [ ] C
-        - [ ] C++
-        - [ ] C#
-        - [ ] Python
-        - [ ] CCL
+  - [x] `set-listener`
+        - [x] C
+        - [x] C++
+        - [x] C#
+        - [x] Python
+        - [x] CCL
 
   - [ ] `get-door-control`
   - [ ] `set-door-control`

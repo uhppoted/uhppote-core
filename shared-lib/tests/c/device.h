@@ -9,3 +9,4 @@ extern bool getStatus();
 extern bool getTime();
 extern bool setTime();
 extern bool getListener();
+extern bool setListener();

@@ -11,6 +11,7 @@
            uhppoted-get-time
            uhppoted-set-time
            uhppoted-get-listener
+           uhppoted-set-listener
            uhppoted-error
            with-warning
            message

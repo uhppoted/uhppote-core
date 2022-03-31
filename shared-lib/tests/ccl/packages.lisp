@@ -11,6 +11,7 @@
            get-time
            set-time
            get-listener
+           set-listener
            failed
            message))
 

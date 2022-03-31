@@ -30,6 +30,7 @@ def help():
     print("    get-time")
     print("    set-time")
     print("    get-listener")
+    print("    set-listener")
     print("    help")
     print()
     print("  get-devices")
@@ -51,7 +52,10 @@ def help():
     print("    Sets a controller current date/time (YYYY-MM-DD HH:mm:ss).")
     print()
     print("  get-listener")
-    print("    Retrieves the configured event listener addres for a controller.")
+    print("    Retrieves a controller's configured event listener address.")
+    print()
+    print("  set-listener")
+    print("    Configures a controller's event listener address and port.")
     print()
     print("  help")
     print("    Displays this information.")
@@ -177,6 +181,20 @@ def get_listener(u, deviceID):
         print()
 
 
+def set_listener(u, deviceID, listener):
+    try:
+        u.set_listener(deviceID, listener)
+
+        print("set-listener")
+        print(f"  ID:             {deviceID}")
+        print(f"  event listener: {listener}")
+        print()
+
+    except Exception as e:
+        print(f" *** ERROR set-time ({e})")
+        print()
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Example CLI for the uhppote-core Python integration')
@@ -197,6 +215,7 @@ if __name__ == "__main__":
             'get-time',
             'set-time',
             'get-listener',
+            'set-listener',
             'all',
     ]:
         print()
@@ -208,8 +227,8 @@ if __name__ == "__main__":
         beta = uhppoted.Controller(303986753, "192.168.1.100")
         controllers = [alpha, beta]
 
-        u = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE('192.168.1.100', '192.168.1.255',
-                                                      '192.168.1.100:60001', 2500, controllers, True))
+        u = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE(
+            '192.168.1.100', '192.168.1.255', '192.168.1.100:60001', 2500, controllers, True))
         try:
             if cmd == 'get-devices':
                 get_devices(u)
@@ -232,14 +251,18 @@ if __name__ == "__main__":
             elif cmd == 'get-listener':
                 get_listener(u, 405419896)
 
+            elif cmd == 'set-listener':
+                set_listener(u, 405419896, "192.168.1.100:60001")
+
             elif cmd == 'all':
                 get_devices(u)
                 get_device(u, 405419896)
-                set_address(u, 405419896, "192.168.1.125", "255.255.253", "192.168.1.5")
+                set_address(u, 405419896, "192.168.1.125", "255.255.255.253", "192.168.1.5")
                 get_status(u, 405419896)
                 get_time(u, 405419896)
-                set_time(u, 405419896, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                set_time(u, 405419896, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
                 get_listener(u, 405419896)
+                set_listener(u, 405419896, "192.168.1.100:60001")
 
         except BaseException as x:
             print()

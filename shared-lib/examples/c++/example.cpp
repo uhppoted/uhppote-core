@@ -45,6 +45,8 @@ int main(int argc, char **argv) {
         return setTime(u, DEVICEID, datetime);
     } else if (cmd == "get-listener") {
         return getListener(u, DEVICEID);
+    } else if (cmd == "set-listener") {
+        return setListener(u, DEVICEID, "192.168.1.100:60001");
     } else if (cmd == "all") {
         time_t now = time(nullptr);
         char datetime[100];
@@ -60,6 +62,7 @@ int main(int argc, char **argv) {
         rc = getTime(u, DEVICEID) == 0 ? rc : -1;
         rc = setTime(u, DEVICEID, datetime) == 0 ? rc : -1;
         rc = getListener(u, DEVICEID) == 0 ? rc : -1;
+        rc = setListener(u, DEVICEID, "192.168.1.100:60001") == 0 ? rc : -1;
 
         return rc;
     }

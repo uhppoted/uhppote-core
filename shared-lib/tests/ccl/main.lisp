@@ -14,6 +14,7 @@
   (format t "      get-time      Retrieves a controller date/time~%") 
   (format t "      set-time      Sets a controller date/time~%") 
   (format t "      get-listener  Retrieves a controller's configurd event listener address~%") 
+  (format t "      set-listener  Sets a controller's configurd event listener address and port~%") 
   (format t "~%") 
   (format t "    Defaults to running all tests~%") 
   (format t "~%"))
@@ -38,6 +39,7 @@
                    tests:get-time 
                    tests:set-time 
                    tests:get-listener
+                   tests:set-listener
                  ))
          (result (loop for test in tests collect (all-x test))))
         (if (some #'null result)
@@ -65,6 +67,7 @@
                    ((string= arg "get-time")     (test #'tests:get-time))
                    ((string= arg "set-time")     (test #'tests:set-time))
                    ((string= arg "get-listener") (test #'tests:get-listener))
+                   ((string= arg "set-listener") (test #'tests:set-listener))
                    ((string= arg "all")          (all))
                    (t (progn
                         (format t "~%   *** ERROR invalid command (~a)~%" arg)

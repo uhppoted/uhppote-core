@@ -9,3 +9,4 @@ extern int getStatus(uhppoted &, uint32_t);
 extern int getTime(uhppoted &, uint32_t);
 extern int setTime(uhppoted &, uint32_t, std::string);
 extern int getListener(uhppoted &, uint32_t);
+extern int setListener(uhppoted &, uint32_t, std::string);

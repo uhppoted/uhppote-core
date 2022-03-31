@@ -23,6 +23,7 @@ const test tests[] = {
     {.name = "get-time", .fn = getTime},
     {.name = "set-time", .fn = setTime},
     {.name = "get-listener", .fn = getListener},
+    {.name = "set-listener", .fn = setListener},
 };
 
 int main(int argc, char **argv) {
@@ -71,7 +72,7 @@ bool all() {
         ok = t.fn() ? ok : false;
     }
 
-    return ok ? 0 : -1;
+    return ok;
 }
 
 void usage() {

@@ -241,6 +241,15 @@
        (go-string (%get-ptr listener)))))
 
 
+(defun uhppoted-set-listener (uhppote device-id listener) "Sets a controller's event listener address and port"
+  (with-cstrs ((addr listener))
+    (with-macptrs ((err (external-call "SetListener" :address uhppote 
+                                                     :unsigned-long device-id 
+                                                     :address addr
+                                                     :address)))
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err))))))
+
+
 (defun debug () "" 
   (handler-bind
 	((uhppoted-error

@@ -1,9 +1,21 @@
 using System;
+using System.Collections.Generic;
 
 using uhppoted;
 
 public class test {
     const uint DEVICEID = 405419896;
+
+    static SortedDictionary<string, Func<Uhppoted, bool>> tests = new SortedDictionary<string, Func<Uhppoted, bool>> {
+        { "get-devices", GetDevices },
+        { "get-device", GetDevice },
+        { "set-address", SetAddress },
+        { "get-status", GetStatus },
+        { "get-time", GetTime },
+        { "set-time", SetTime },
+        { "get-listener", GetListener },
+        { "set-listener", SetListener },
+    };
 
     public static void Main(string[] args) {
         string cmd = "";
@@ -19,52 +31,17 @@ public class test {
             Uhppoted u = new Uhppoted("192.168.1.100", "192.168.1.100:60000", "192.168.1.100:60001", 2500, controllers, true);
             bool ok = true;
 
-            switch (cmd) {
-            case "get-devices":
-                ok = GetDevices(u);
-                break;
+            if (cmd == "" || cmd == "all") {
+                ok = All(u);
+            } else if (tests.ContainsKey(cmd)) {
+                ok = tests[cmd](u);
+            } else {
+                ok = false;
 
-            case "get-device":
-                ok = GetDevice(u, DEVICEID);
-                break;
-
-            case "set-address":
-                ok = SetAddress(u, DEVICEID, "192.168.1.125", "255.255.255.254", "192.168.1.5");
-                break;
-
-            case "get-status":
-                ok = GetStatus(u, DEVICEID);
-                break;
-
-            case "get-time":
-                ok = GetTime(u, DEVICEID);
-                break;
-
-            case "set-time":
-                ok = SetTime(u, DEVICEID, "2022-03-23 12:24:17");
-                break;
-
-            case "get-listener":
-                ok = GetListener(u, DEVICEID);
-                break;
-
-            case "":
-            case "all":
-                ok = GetDevices(u) ? ok : false;
-                ok = GetDevice(u, DEVICEID) ? ok : false;
-                ok = SetAddress(u, DEVICEID, "192.168.1.125", "255.255.255.254", "192.168.1.5") ? ok : false;
-                ok = GetStatus(u, DEVICEID) ? ok : false;
-                ok = GetTime(u, DEVICEID) ? ok : false;
-                ok = SetTime(u, DEVICEID, "2022-03-23 12:24:17");
-                ok = GetListener(u, DEVICEID) ? ok : false;
-                break;
-
-            default:
                 Console.WriteLine();
-                Console.WriteLine(String.Format("  *** ERROR: invalid command ({0})", cmd));
+                Console.WriteLine(String.Format("   *** ERROR: invalid command ({0})", cmd));
                 Console.WriteLine();
                 usage();
-                break;
             }
 
             if (!ok) {
@@ -74,6 +51,16 @@ public class test {
             Console.WriteLine(String.Format("  *** ERROR: {0}", e.Message));
             Environment.Exit(-1);
         }
+    }
+
+    static bool All(Uhppoted u) {
+        bool ok = true;
+
+        foreach (var t in tests) {
+            ok = t.Value(u) ? ok : false;
+        }
+
+        return ok;
     }
 
     static bool GetDevices(Uhppoted u) {
@@ -97,8 +84,8 @@ public class test {
         return ok;
     }
 
-    static bool GetDevice(Uhppoted u, uint deviceID) {
-        Device device = u.GetDevice(deviceID);
+    static bool GetDevice(Uhppoted u) {
+        Device device = u.GetDevice(DEVICEID);
         bool ok = true;
 
         if (device.ID != 405419896) {
@@ -143,16 +130,16 @@ public class test {
         return ok;
     }
 
-    static bool SetAddress(Uhppoted u, uint deviceID, string address, string subnet, string gateway) {
-        u.SetAddress(deviceID, address, subnet, gateway);
+    static bool SetAddress(Uhppoted u) {
+        u.SetAddress(DEVICEID, "192.168.1.125", "255.255.255.254", "192.168.1.5");
 
         Console.WriteLine("set-address   ok");
 
         return true;
     }
 
-    static bool GetStatus(Uhppoted u, uint deviceID) {
-        Status status = u.GetStatus(deviceID);
+    static bool GetStatus(Uhppoted u) {
+        Status status = u.GetStatus(DEVICEID);
         bool ok = true;
 
         if (status.ID != 405419896) {
@@ -251,8 +238,8 @@ public class test {
         return ok;
     }
 
-    static bool GetTime(Uhppoted u, uint deviceID) {
-        string datetime = u.GetTime(deviceID);
+    static bool GetTime(Uhppoted u) {
+        string datetime = u.GetTime(DEVICEID);
         bool ok = true;
 
         if (datetime != "2022-01-02 12:34:56") {
@@ -267,16 +254,16 @@ public class test {
         return ok;
     }
 
-    static bool SetTime(Uhppoted u, uint deviceID, string datetime) {
-        u.SetTime(deviceID, datetime);
+    static bool SetTime(Uhppoted u) {
+        u.SetTime(DEVICEID, "2022-03-23 12:24:17");
 
         Console.WriteLine("set-time      ok");
 
         return true;
     }
 
-    static bool GetListener(Uhppoted u, uint deviceID) {
-        string listener = u.GetListener(deviceID);
+    static bool GetListener(Uhppoted u) {
+        string listener = u.GetListener(DEVICEID);
         bool ok = true;
 
         if (listener != "192.168.1.100:60001") {
@@ -291,16 +278,26 @@ public class test {
         return ok;
     }
 
+    static bool SetListener(Uhppoted u) {
+        u.SetListener(DEVICEID, "192.168.1.100:60001");
+
+        Console.WriteLine("set-listener  ok");
+
+        return true;
+    }
+
     static void usage() {
         Console.WriteLine("   Usage: test <command>");
         Console.WriteLine();
         Console.WriteLine("   Supported commands:");
-        Console.WriteLine("      get-devices");
-        Console.WriteLine("      get-device");
-        Console.WriteLine("      set-address");
-        Console.WriteLine("      get-status");
-        Console.WriteLine("      get-time");
-        Console.WriteLine("      set-time");
+        Console.WriteLine("      all");
+
+        foreach (var t in tests) {
+            Console.WriteLine("      {0}", t.Key);
+        }
+
+        Console.WriteLine();
+        Console.WriteLine("   Defaults to 'all'");
         Console.WriteLine();
     }
 }

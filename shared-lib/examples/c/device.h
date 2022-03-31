@@ -7,3 +7,4 @@ extern int getStatus(uint32_t);
 extern int getTime(uint32_t);
 extern int setTime(uint32_t, const char *);
 extern int getListener(uint32_t);
+extern int setListener(uint32_t, const char *);

@@ -138,3 +138,17 @@ int getListener(uint32_t deviceID) {
 
     return 0;
 }
+
+int setListener(uint32_t deviceID, const char *listener) {
+    if (set_listener(deviceID, (char *)listener) != 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    printf("\nset-listener\n");
+    printf("  ID:             %u\n", deviceID);
+    printf("  event listener: %s\n", listener);
+    printf("\n");
+
+    return 0;
+}

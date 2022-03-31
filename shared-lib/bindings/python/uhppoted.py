@@ -200,6 +200,14 @@ class Uhppote:
 
         return listener.value.decode('utf-8')
 
+    def set_listener(self, deviceID, listener):
+        SetListener = lib.SetListener
+        SetListener.argtypes = [POINTER(GoUHPPOTE), c_ulong, c_char_p]
+        SetListener.restype = ctypes.c_char_p
+        SetListener.errcheck = self.errcheck
+
+        SetListener(self._uhppote, deviceID, c_char_p(bytes(listener, 'utf-8')))
+
 
 # INTERNAL TYPES
 class GoController(Structure):

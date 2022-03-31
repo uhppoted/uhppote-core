@@ -281,3 +281,13 @@ int get_listener(unsigned id, char **t) {
 
     return 0;
 }
+
+int set_listener(unsigned id, char *listener) {
+    char *err = SetListener(u, id, listener);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}

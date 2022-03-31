@@ -238,3 +238,11 @@ string uhppoted::get_listener(uint32_t id) {
 
     return l;
 }
+
+void uhppoted::set_listener(uint32_t id, std::string &listener) {
+    char *err = SetListener(u, id, (char *)listener.c_str());
+
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+}

@@ -177,3 +177,23 @@ int getListener(uhppoted &u, uint32_t deviceID) {
 
     return -1;
 }
+
+int setListener(uhppoted &u, uint32_t deviceID, string listener) {
+    try {
+        u.set_listener(deviceID, listener);
+
+        cout << endl
+             << "set-listener" << endl;
+        cout << "  ID:             " << deviceID << endl;
+        cout << "  event listener: " << listener << endl;
+        cout << endl;
+
+        return 0;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return -1;
+}

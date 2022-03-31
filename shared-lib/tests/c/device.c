@@ -268,3 +268,18 @@ bool getListener() {
 
     return ok;
 }
+
+bool setListener() {
+    bool ok = true;
+
+    if (set_listener(DEVICEID, "192.168.1.100:60001") != 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    if (ok) {
+        printf(OK, "set-listener");
+    }
+
+    return ok;
+}

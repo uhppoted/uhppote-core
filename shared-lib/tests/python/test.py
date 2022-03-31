@@ -19,6 +19,7 @@ def tests():
         'get-time': get_time,
         'set-time': set_time,
         'get-listener': get_listener,
+        'set-listener': set_listener,
     }
 
 
@@ -205,6 +206,16 @@ def get_listener(u):
 
     if ok:
         print(f"get-listener  ok")
+
+    return ok
+
+
+def set_listener(u):
+    u.set_listener(DEVICEID, '192.168.1.100:60001')
+    ok = True
+
+    if ok:
+        print(f"set-listener  ok")
 
     return ok
 

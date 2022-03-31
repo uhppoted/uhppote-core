@@ -38,6 +38,9 @@ set-time: build
 get-listener: build
 	$(CMD) get-listener
 
+set-listener: build
+	$(CMD) set-listener
+
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp
 

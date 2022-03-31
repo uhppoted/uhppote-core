@@ -36,3 +36,7 @@
 
 (defun get-listener (device-id) "" 
   (exec #'(lambda (u) (uhppoted-get-listener u device-id))))
+
+(defun set-listener (device-id listener) "" 
+  (exec #'(lambda (u) (uhppoted-set-listener u device-id listener)))
+  t)

@@ -10,5 +10,6 @@
 		   get-status
            get-time
            set-time
-           get-listener))
+           get-listener
+           set-listener))
 

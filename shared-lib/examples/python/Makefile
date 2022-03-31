@@ -13,6 +13,9 @@ format:
 
 build: format
 
+invalid: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) mystery-meat
+
 get-devices: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-devices
 
@@ -34,14 +37,14 @@ set-time: build
 get-listener: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-listener
 
-run: build
+set-listener: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) set-listener
+
+all: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) all
 
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-devices
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-device
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) set-address
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-status
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-time
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) set-time
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-listener
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) set-listener
+
+debug-all: build
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) all

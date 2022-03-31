@@ -9,3 +9,4 @@ extern bool getStatus(uhppoted &);
 extern bool getTime(uhppoted &);
 extern bool setTime(uhppoted &);
 extern bool getListener(uhppoted &);
+extern bool setListener(uhppoted &);

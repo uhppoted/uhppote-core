@@ -50,6 +50,8 @@ int main(int argc, char **argv) {
         rc = setTime(DEVICEID, datetime);
     } else if (strncmp(cmd, "get-listener", 12) == 0) {
         rc = getListener(DEVICEID);
+    } else if (strncmp(cmd, "set-listener", 12) == 0) {
+        rc = setListener(DEVICEID, "192.168.1.100:60001");
     } else {
         printf("\n   *** ERROR missing command\n\n");
         usage();
@@ -81,6 +83,7 @@ int all() {
     rc = getTime(DEVICEID) == 0 ? rc : -1;
     rc = setTime(DEVICEID, datetime) == 0 ? rc : -1;
     rc = getListener(DEVICEID) == 0 ? rc : -1;
+    rc = setListener(DEVICEID, "192.168.1.100:60001") == 0 ? rc : -1;
 
     return rc;
 }
@@ -96,5 +99,6 @@ void usage() {
     printf("      get-time\n");
     printf("      set-time\n");
     printf("      get-listener\n");
+    printf("      set-listener\n");
     printf("\n");
 }

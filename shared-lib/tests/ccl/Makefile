@@ -35,6 +35,9 @@ set-time: build
 get-listener: build
 	$(CMD) get-listener
 
+set-listener: build
+	$(CMD) set-listener
+
 all: build
 	$(CMD) all
 

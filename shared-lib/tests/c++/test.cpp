@@ -16,6 +16,7 @@ map<string, f> tests = {
     {"get-time", getTime},
     {"set-time", setTime},
     {"get-listener", getListener},
+    {"set-listener", setListener},
 };
 
 void usage();

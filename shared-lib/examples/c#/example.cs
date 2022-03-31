@@ -53,6 +53,10 @@ public class example {
                 GetListener(u, 405419896);
                 break;
 
+            case "set-listener":
+                SetListener(u, 405419896, "192.168.1.100:60001");
+                break;
+
             case "all":
                 GetDevices(u);
                 GetDevice(u, 405419896);
@@ -60,6 +64,7 @@ public class example {
                 GetTime(u, 405419896);
                 SetTime(u, 405419896, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 GetListener(u, 405419896);
+                SetListener(u, 405419896, "192.168.1.100:60001");
                 break;
 
             default:
@@ -200,6 +205,15 @@ public class example {
 
         Console.WriteLine(String.Format("get-listener"));
         Console.WriteLine(String.Format("  listener: {0}", listener));
+        Console.WriteLine();
+    }
+
+    static void SetListener(Uhppoted u, uint deviceID, string listener) {
+        u.SetListener(deviceID, listener);
+
+        Console.WriteLine(String.Format("set-listener"));
+        Console.WriteLine(String.Format("  ID:             {0}", deviceID));
+        Console.WriteLine(String.Format("  event listener: {0}", listener));
         Console.WriteLine();
     }
 }

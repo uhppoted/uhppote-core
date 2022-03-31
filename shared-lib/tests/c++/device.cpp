@@ -314,3 +314,22 @@ bool getListener(uhppoted &u) {
 
     return false;
 }
+
+bool setListener(uhppoted &u) {
+    try {
+        string listener = "192.168.1.100:60001";
+
+        u.set_listener(DEVICEID, listener);
+
+        cout << setw(W) << left << "set-listener"
+             << "ok" << endl;
+
+        return true;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return false;
+}

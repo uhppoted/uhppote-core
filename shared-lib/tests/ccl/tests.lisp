@@ -196,3 +196,8 @@
        (if ok 
           (format t "get-listener  ok~%")
           (error 'failed :message  "get-listener  FAILED"))))
+
+
+(defun set-listener () "" 
+  (exec #'(lambda (u) (uhppoted-set-listener u 405419896 "192.168.1.100:60001")))
+  (format t "set-listener  ok~%"))

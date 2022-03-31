@@ -14,6 +14,7 @@
   (format t "      get-time      Retrieves a controller date/time~%") 
   (format t "      set-time      Sets a controller date/time~%") 
   (format t "      get-listener  Retrieves a controller's configured event listener address~%") 
+  (format t "      set-listener  Sets a controller event listener address and port~%") 
   (format t "~%"))
 
 (defun help () ""
@@ -25,6 +26,7 @@
                  "(get-time)"
                  "(set-time)"
                  "(get-listener)"
+                 "(set-listener)"
                  )))
 
 (defun get-devices () ""
@@ -48,6 +50,9 @@
 (defun get-listener () ""
   (format t "  get-listener:~%    ~:w~%" (examples:get-listener 405419896)))
 
+(defun set-listener () ""
+  (format t "  set-listener:~%  ~a~%" (examples:set-listener 405419896 "192.168.1.100:60001")))
+
 (defun main () ""
   (let ((args (parse-command-line)))
     (loop for arg in args
@@ -58,6 +63,7 @@
                 ((string= arg "get-time")     (get-time))
                 ((string= arg "set-time")     (set-time))
                 ((string= arg "get-listener") (get-listener))
+                ((string= arg "set-listener") (set-listener))
                 ((string= arg "help")         (help))
                 (t (help))))))
 

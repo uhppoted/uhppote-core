@@ -182,3 +182,17 @@ func getListener(uu uhppote.IUHPPOTE, address **C.char, deviceID uint32) error {
 
 	return nil
 }
+
+func setListener(uu uhppote.IUHPPOTE, deviceID uint32, listener *C.char) error {
+	if listener == nil {
+		return fmt.Errorf("invalid argument (listener) - expected valid pointer to string")
+	}
+
+	if address, err := net.ResolveUDPAddr("udp", C.GoString(listener)); err != nil {
+		return err
+	} else if address == nil || address.IP.To4() == nil {
+		return fmt.Errorf("Invalid UDP address: %v", listener)
+	}
+
+	return nil
+}
