@@ -57,6 +57,10 @@ public class example {
                 SetListener(u, 405419896, "192.168.1.100:60001");
                 break;
 
+            case "get-door-control":
+                GetDoorControl(u, 405419896, 4);
+                break;
+
             case "all":
                 GetDevices(u);
                 GetDevice(u, 405419896);
@@ -65,6 +69,7 @@ public class example {
                 SetTime(u, 405419896, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                 GetListener(u, 405419896);
                 SetListener(u, 405419896, "192.168.1.100:60001");
+                GetDoorControl(u, 405419896, 4);
                 break;
 
             default:
@@ -97,6 +102,7 @@ public class example {
         Console.WriteLine("    get-time");
         Console.WriteLine("    set-time");
         Console.WriteLine("    get-listener");
+        Console.WriteLine("    get-door-control");
         Console.WriteLine("    help");
         Console.WriteLine();
         Console.WriteLine("  get-devices");
@@ -119,6 +125,12 @@ public class example {
         Console.WriteLine();
         Console.WriteLine("  get-listener");
         Console.WriteLine("    Retrieves the controller event listener address.");
+        Console.WriteLine();
+        Console.WriteLine("  set-listener");
+        Console.WriteLine("    Sets the controller event listener address and port.");
+        Console.WriteLine();
+        Console.WriteLine("  get-door-control");
+        Console.WriteLine("    Retrieves the controller door control state and door open delay.");
         Console.WriteLine();
         Console.WriteLine("  help");
         Console.WriteLine("    Displays this information.");
@@ -214,6 +226,17 @@ public class example {
         Console.WriteLine(String.Format("set-listener"));
         Console.WriteLine(String.Format("  ID:             {0}", deviceID));
         Console.WriteLine(String.Format("  event listener: {0}", listener));
+        Console.WriteLine();
+    }
+
+    static void GetDoorControl(Uhppoted u, uint deviceID, byte door) {
+        DoorControl control = u.GetDoorControl(deviceID, door);
+
+        Console.WriteLine(String.Format("get-door-control"));
+        Console.WriteLine(String.Format("  ID:      {0}", deviceID));
+        Console.WriteLine(String.Format("  door:    {0}", door));
+        Console.WriteLine(String.Format("  control: {0}", control.control));
+        Console.WriteLine(String.Format("  delay:   {0}", control.delay));
         Console.WriteLine();
     }
 }

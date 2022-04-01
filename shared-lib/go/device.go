@@ -47,22 +47,22 @@ func getDevice(uu uhppote.IUHPPOTE, d *C.struct_Device, deviceID uint32) error {
 		return fmt.Errorf("invalid argument (device) - expected valid pointer to Device struct")
 	}
 
-	device, err := uu.GetDevice(deviceID)
+	response, err := uu.GetDevice(deviceID)
 	if err != nil {
 		return err
 	}
 
-	if device == nil {
+	if response == nil {
 		return fmt.Errorf("%v: no response to get-device", deviceID)
 	}
 
 	d.ID = C.uint(deviceID)
-	d.address = C.CString("192.168.1.101")
-	d.subnet = C.CString("255.255.255.0")
-	d.gateway = C.CString("192.168.1.1")
-	d.MAC = C.CString("00:12:23:34:45:56")
-	d.version = C.CString("v8.92")
-	d.date = C.CString("2018-11-05")
+	d.address = C.CString(fmt.Sprintf("%v", response.IpAddress))
+	d.subnet = C.CString(fmt.Sprintf("%v", response.SubnetMask))
+	d.gateway = C.CString(fmt.Sprintf("%v", response.Gateway))
+	d.MAC = C.CString(fmt.Sprintf("%v", response.MacAddress))
+	d.version = C.CString(fmt.Sprintf("%v", response.Version))
+	d.date = C.CString(fmt.Sprintf("%v", response.Date))
 
 	return nil
 }
@@ -83,11 +83,11 @@ func setAddress(uu uhppote.IUHPPOTE, deviceID uint32, address, subnet, gateway *
 		return fmt.Errorf("invalid IP gateway address (%v)", C.GoString(gateway))
 	}
 
-	if result, err := uu.SetAddress(deviceID, _address, _subnet, _gateway); err != nil {
+	if response, err := uu.SetAddress(deviceID, _address, _subnet, _gateway); err != nil {
 		return err
-	} else if result == nil {
-		return fmt.Errorf("invalid reply from device (%v)", result)
-	} else if !result.Succeeded {
+	} else if response == nil {
+		return fmt.Errorf("invalid reply from device (%v)", response)
+	} else if !response.Succeeded {
 		return fmt.Errorf("failed to set device address")
 	}
 
@@ -99,10 +99,10 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
 	}
 
-	s, err := uu.GetStatus(deviceID)
+	response, err := uu.GetStatus(deviceID)
 	if err != nil {
 		return err
-	} else if s == nil {
+	} else if response == nil {
 		return fmt.Errorf("%v: no response to get-status", deviceID)
 	}
 
@@ -122,37 +122,37 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		return ""
 	}
 
-	status.ID = C.uint(s.SerialNumber)
-	status.sysdatetime = C.CString(format(&s.SystemDateTime))
+	status.ID = C.uint(response.SerialNumber)
+	status.sysdatetime = C.CString(format(&response.SystemDateTime))
 
 	doors := unsafe.Slice(status.doors, 4)
 	buttons := unsafe.Slice(status.buttons, 4)
 
-	doors[0] = cbool(s.DoorState[1])
-	doors[1] = cbool(s.DoorState[2])
-	doors[2] = cbool(s.DoorState[3])
-	doors[3] = cbool(s.DoorState[4])
+	doors[0] = cbool(response.DoorState[1])
+	doors[1] = cbool(response.DoorState[2])
+	doors[2] = cbool(response.DoorState[3])
+	doors[3] = cbool(response.DoorState[4])
 
-	buttons[0] = cbool(s.DoorButton[1])
-	buttons[1] = cbool(s.DoorButton[2])
-	buttons[2] = cbool(s.DoorButton[3])
-	buttons[3] = cbool(s.DoorButton[4])
+	buttons[0] = cbool(response.DoorButton[1])
+	buttons[1] = cbool(response.DoorButton[2])
+	buttons[2] = cbool(response.DoorButton[3])
+	buttons[3] = cbool(response.DoorButton[4])
 
-	status.relays = C.uchar(s.RelayState)
-	status.inputs = C.uchar(s.InputState)
+	status.relays = C.uchar(response.RelayState)
+	status.inputs = C.uchar(response.InputState)
 
-	status.syserror = C.uchar(s.SystemError)
-	status.seqno = C.uint(s.SequenceId)
-	status.info = C.uchar(s.SpecialInfo)
+	status.syserror = C.uchar(response.SystemError)
+	status.seqno = C.uint(response.SequenceId)
+	status.info = C.uchar(response.SpecialInfo)
 
-	status.event.timestamp = C.CString(format(s.Event.Timestamp))
-	status.event.index = C.uint(s.Event.Index)
-	status.event.eventType = C.uchar(s.Event.Type)
-	status.event.granted = cbool(s.Event.Granted)
-	status.event.door = C.uchar(s.Event.Door)
-	status.event.direction = C.uchar(s.Event.Direction)
-	status.event.card = C.uint(s.Event.CardNumber)
-	status.event.reason = C.uchar(s.Event.Reason)
+	status.event.timestamp = C.CString(format(response.Event.Timestamp))
+	status.event.index = C.uint(response.Event.Index)
+	status.event.eventType = C.uchar(response.Event.Type)
+	status.event.granted = cbool(response.Event.Granted)
+	status.event.door = C.uchar(response.Event.Door)
+	status.event.direction = C.uchar(response.Event.Direction)
+	status.event.card = C.uint(response.Event.CardNumber)
+	status.event.reason = C.uchar(response.Event.Reason)
 
 	return nil
 }
@@ -162,16 +162,14 @@ func getTime(uu uhppote.IUHPPOTE, datetime **C.char, deviceID uint32) error {
 		return fmt.Errorf("invalid argument (datetime) - expected valid pointer to string")
 	}
 
-	dt, err := uu.GetTime(deviceID)
+	response, err := uu.GetTime(deviceID)
 	if err != nil {
 		return err
-	}
-
-	if dt == nil {
+	} else if response == nil {
 		return fmt.Errorf("%v: no response to get-time", deviceID)
 	}
 
-	*datetime = C.CString(fmt.Sprintf("%v", dt.DateTime))
+	*datetime = C.CString(fmt.Sprintf("%v", response.DateTime))
 
 	return nil
 }
@@ -187,9 +185,7 @@ func setTime(uu uhppote.IUHPPOTE, deviceID uint32, datetime *C.char) error {
 		response, err := uu.SetTime(deviceID, dt)
 		if err != nil {
 			return err
-		}
-
-		if response == nil {
+		} else if response == nil {
 			return fmt.Errorf("%v: no response to set-time", deviceID)
 		}
 
@@ -197,21 +193,19 @@ func setTime(uu uhppote.IUHPPOTE, deviceID uint32, datetime *C.char) error {
 	}
 }
 
-func getListener(uu uhppote.IUHPPOTE, address **C.char, deviceID uint32) error {
-	if address == nil {
+func getListener(uu uhppote.IUHPPOTE, listener **C.char, deviceID uint32) error {
+	if listener == nil {
 		return fmt.Errorf("invalid argument (address) - expected valid pointer to string")
 	}
 
-	listener, err := uu.GetListener(deviceID)
+	response, err := uu.GetListener(deviceID)
 	if err != nil {
 		return err
-	}
-
-	if listener == nil {
+	} else if response == nil {
 		return fmt.Errorf("%v: no response to get-listener", deviceID)
 	}
 
-	*address = C.CString(fmt.Sprintf("%v:%v", listener.Address.IP, listener.Address.Port))
+	*listener = C.CString(fmt.Sprintf("%v:%v", response.Address.IP, response.Address.Port))
 
 	return nil
 }
@@ -232,6 +226,24 @@ func setListener(uu uhppote.IUHPPOTE, deviceID uint32, listener *C.char) error {
 			return fmt.Errorf("%v: no response to set-listener", deviceID)
 		}
 	}
+
+	return nil
+}
+
+func getDoorControl(uu uhppote.IUHPPOTE, control *C.struct_DoorControl, deviceID uint32, door uint8) error {
+	if control == nil {
+		return fmt.Errorf("invalid argument (device) - expected valid pointer to DoorControl struct")
+	}
+
+	response, err := uu.GetDoorControlState(deviceID, door)
+	if err != nil {
+		return err
+	} else if response == nil {
+		return fmt.Errorf("%v: no response to get-door-control-state", deviceID)
+	}
+
+	control.control = C.uchar(response.ControlState)
+	control.delay = C.uchar(response.Delay)
 
 	return nil
 }

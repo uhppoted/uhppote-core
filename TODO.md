@@ -3,20 +3,18 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [x] Make timeout milliseconds
+  - [ ] CCL examples 'all'
   - (?) C++ std::invoke
   - (?) Display/all order
   - (?) CCL DOLIST 
-  - [ ] CCL examples 'all'
 
-  - [x] `set-listener`
+  - [x] `get-door-control`
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
         - [x] CCL
 
-  - [ ] `get-door-control`
   - [ ] `set-door-control`
   - [ ] `get-cards`
   - [ ] `get-card`

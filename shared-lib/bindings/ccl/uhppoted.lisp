@@ -34,6 +34,10 @@
                  card
                  reason)
 
+(defstruct door-control control
+                        delay)
+
+
 (def-foreign-type nil
   (:struct :UDEVICE (:id      :int)
 	                  (:address :address)))
@@ -80,6 +84,11 @@
                      (:info      :unsigned-byte)
                      (:seqno     :unsigned-fullword)
                      (:event     :address)))
+
+(def-foreign-type nil
+  (:struct :GoDoorControl (:control :unsigned-byte)
+                          (:delay   :unsigned-byte)))
+
 
 (define-condition uhppoted-error (error)
   ((message :initarg :message :reader message)))
@@ -249,6 +258,17 @@
                                                      :address)))
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err))))))
 
+
+(defun uhppoted-get-door-control (uhppote device-id door) "Retrieves the door control state and open delay for a controller"
+  (rletz ((control (:struct :GoDoorControl)))
+    (with-macptrs ((err (external-call "GetDoorControl" :address uhppote 
+                                                        :address control 
+                                                        :unsigned-long device-id 
+                                                        :unsigned-byte door
+                                                        :address)))
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+      (make-door-control :control (pref control :GoDoorControl.control)
+                         :delay   (pref control :GoDoorControl.delay)))))
 
 (defun debug () "" 
   (handler-bind

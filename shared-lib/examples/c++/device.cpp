@@ -197,3 +197,25 @@ int setListener(uhppoted &u, uint32_t deviceID, string listener) {
 
     return -1;
 }
+
+int getDoorControl(uhppoted &u, uint32_t deviceID, uint8_t door) {
+    try {
+        auto d = u.get_door_control(deviceID, door);
+
+        cout << endl
+             << "get-door-control" << endl;
+        cout << "  ID:      " << deviceID << endl;
+        cout << "  door:    " << static_cast<int>(door) << endl;
+        cout << "  control: " << static_cast<int>(d.control) << endl;
+        cout << "  delay:   " << static_cast<int>(d.delay) << endl;
+        cout << endl;
+
+        return 0;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return -1;
+}

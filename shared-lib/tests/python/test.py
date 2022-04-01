@@ -8,6 +8,7 @@ sys.path.append('../../bindings/python')
 import uhppoted
 
 DEVICEID = 405419896
+DOOR = 4
 
 
 def tests():
@@ -20,6 +21,7 @@ def tests():
         'set-time': set_time,
         'get-listener': get_listener,
         'set-listener': set_listener,
+        'get-door-control': get_door_control,
     }
 
 
@@ -37,7 +39,7 @@ def get_devices(u):
         ok = False
 
     if ok:
-        print(f"get-devices   ok")
+        print(f"get-devices       ok")
 
     return ok
 
@@ -75,7 +77,7 @@ def get_device(u):
         ok = False
 
     if ok:
-        print(f"get-device    ok")
+        print(f"get-device        ok")
 
     return ok
 
@@ -85,7 +87,7 @@ def set_address(u):
     ok = True
 
     if ok:
-        print(f"set-address   ok")
+        print(f"set-address       ok")
 
     return ok
 
@@ -167,7 +169,7 @@ def get_status(u):
         ok = False
 
     if ok:
-        print(f"get-status    ok")
+        print(f"get-status        ok")
 
     return ok
 
@@ -181,7 +183,7 @@ def get_time(u):
         ok = False
 
     if ok:
-        print(f"get-time      ok")
+        print(f"get-time          ok")
 
     return ok
 
@@ -191,7 +193,7 @@ def set_time(u):
     ok = True
 
     if ok:
-        print(f"set-time      ok")
+        print(f"set-time          ok")
 
     return ok
 
@@ -205,7 +207,7 @@ def get_listener(u):
         ok = False
 
     if ok:
-        print(f"get-listener  ok")
+        print(f"get-listener      ok")
 
     return ok
 
@@ -215,7 +217,25 @@ def set_listener(u):
     ok = True
 
     if ok:
-        print(f"set-listener  ok")
+        print(f"set-listener      ok")
+
+    return ok
+
+
+def get_door_control(u):
+    control = u.get_door_control(DEVICEID, DOOR)
+    ok = True
+
+    if control.control != 3:
+        print(f"get-door-control: incorrect door control state - expected:3, got:{control.control}")
+        ok = False
+
+    if control.delay != 7:
+        print(f"get-door-control: incorrect door open delay - expected:7, got:{control.delay}")
+        ok = False
+
+    if ok:
+        print(f"get-door-control  ok")
 
     return ok
 

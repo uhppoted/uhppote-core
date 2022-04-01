@@ -40,11 +40,14 @@ get-listener: build
 set-listener: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) set-listener
 
+get-door-control: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-door-control
+
 all: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) all
 
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) set-listener
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-door-control
 
 debug-all: build
 	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) all

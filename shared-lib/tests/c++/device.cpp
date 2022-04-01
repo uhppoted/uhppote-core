@@ -6,7 +6,8 @@
 using namespace std;
 
 const uint32_t DEVICEID = 405419896;
-const int W = 14;
+const uint8_t DOOR = 4;
+const int W = 18;
 
 bool getDevices(uhppoted &u) {
     try {
@@ -161,22 +162,22 @@ bool getStatus(uhppoted &u) {
         }
 
         if (s.relays != 0x12) {
-            cout << "get-status: incorrect relay state - expected:" << 0x12 << ", got:" << s.relays << endl;
+            cout << "get-status: incorrect relay state - expected:" << 0x12 << ", got:" << static_cast<int>(s.relays) << endl;
             ok = false;
         }
 
         if (s.inputs != 0x34) {
-            cout << "get-status: incorrect inputs state - expected:" << 0x34 << ", got:" << s.inputs << endl;
+            cout << "get-status: incorrect inputs state - expected:" << 0x34 << ", got:" << static_cast<int>(s.inputs) << endl;
             ok = false;
         }
 
         if (s.syserror != 0x56) {
-            cout << "get-status: incorrect system error - expected:" << 0x56 << ", got:" << s.syserror << endl;
+            cout << "get-status: incorrect system error - expected:" << 0x56 << ", got:" << static_cast<int>(s.syserror) << endl;
             ok = false;
         }
 
         if (s.info != 253) {
-            cout << "get-status: incorrect special info - expected:" << 253 << ", got:" << s.info << endl;
+            cout << "get-status: incorrect special info - expected:" << 253 << ", got:" << static_cast<int>(s.info) << endl;
             ok = false;
         }
 
@@ -198,22 +199,22 @@ bool getStatus(uhppoted &u) {
         }
 
         if (s.event.eventType != 6) {
-            cout << "get-status: incorrect event type - expected:" << 6 << ", got:" << s.event.eventType << endl;
+            cout << "get-status: incorrect event type - expected:" << 6 << ", got:" << static_cast<int>(s.event.eventType) << endl;
             ok = false;
         }
 
         if (s.event.granted != 1) {
-            cout << "get-status: incorrect event granted - expected:" << 1 << ", got:" << s.event.granted << endl;
+            cout << "get-status: incorrect event granted - expected:" << 1 << ", got:" << static_cast<int>(s.event.granted) << endl;
             ok = false;
         }
 
         if (s.event.door != 3) {
-            cout << "get-status: incorrect event door - expected:" << 3 << ", got:" << s.event.door << endl;
+            cout << "get-status: incorrect event door - expected:" << 3 << ", got:" << static_cast<int>(s.event.door) << endl;
             ok = false;
         }
 
         if (s.event.direction != 1) {
-            cout << "get-status: incorrect event direction - expected:" << 1 << ", got:" << s.event.direction << endl;
+            cout << "get-status: incorrect event direction - expected:" << 1 << ", got:" << static_cast<int>(s.event.direction) << endl;
             ok = false;
         }
 
@@ -223,7 +224,7 @@ bool getStatus(uhppoted &u) {
         }
 
         if (s.event.reason != 21) {
-            cout << "get-status: incorrect event reason - expected:" << 21 << ", got:" << s.event.reason << endl;
+            cout << "get-status: incorrect event reason - expected:" << 21 << ", got:" << static_cast<int>(s.event.reason) << endl;
             ok = false;
         }
 
@@ -325,6 +326,36 @@ bool setListener(uhppoted &u) {
              << "ok" << endl;
 
         return true;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return false;
+}
+
+bool getDoorControl(uhppoted &u) {
+    try {
+        auto d = u.get_door_control(DEVICEID, DOOR);
+        bool ok = true;
+
+        if (d.control != 3) {
+            cout << "get-door-control: incorrect control state - expected:" << 3 << ", got:" << static_cast<int>(d.control) << endl;
+            ok = false;
+        }
+
+        if (d.delay != 7) {
+            cout << "get-door-control: incorrect delay - expected:" << 7 << ", got:" << static_cast<int>(d.delay) << endl;
+            ok = false;
+        }
+
+        if (ok) {
+            cout << setw(W) << left << "get-door-control"
+                 << "ok" << endl;
+        }
+
+        return ok;
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl

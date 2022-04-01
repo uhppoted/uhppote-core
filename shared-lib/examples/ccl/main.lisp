@@ -7,14 +7,15 @@
   (format t "~%  Usage: ./examples <command>~%") 
   (format t "~%") 
   (format t "    Supported commands:~%") 
-  (format t "      get-devices   Retrieves a list of devices on the local LAN~%") 
-  (format t "      get-device    Retrieves the information for a UHPPOTE controller~%") 
-  (format t "      set-address   Sets a controller IP address, subnet mask and gateway address~%") 
-  (format t "      get-status    Retrieves a controller status~%") 
-  (format t "      get-time      Retrieves a controller date/time~%") 
-  (format t "      set-time      Sets a controller date/time~%") 
-  (format t "      get-listener  Retrieves a controller's configured event listener address~%") 
-  (format t "      set-listener  Sets a controller event listener address and port~%") 
+  (format t "      get-devices       Retrieves a list of devices on the local LAN~%") 
+  (format t "      get-device        Retrieves the information for a UHPPOTE controller~%") 
+  (format t "      set-address       Sets a controller IP address, subnet mask and gateway address~%") 
+  (format t "      get-status        Retrieves a controller status~%") 
+  (format t "      get-time          Retrieves a controller date/time~%") 
+  (format t "      set-time          Sets a controller date/time~%") 
+  (format t "      get-listener      Retrieves a controller's configured event listener address~%") 
+  (format t "      set-listener      Sets a controller event listener address and port~%") 
+  (format t "      get-door-control  Retrieves the door control state and open delay for a controller door~%") 
   (format t "~%"))
 
 (defun help () ""
@@ -27,7 +28,8 @@
                  "(set-time)"
                  "(get-listener)"
                  "(set-listener)"
-                 )))
+                 "(get-door-control)"
+           )))
 
 (defun get-devices () ""
   (format t "~%  get-devices:~%~{    ~a~^~%~}~%~%" (coerce (examples:get-devices) 'list)))
@@ -53,18 +55,22 @@
 (defun set-listener () ""
   (format t "  set-listener:~%  ~a~%" (examples:set-listener 405419896 "192.168.1.100:60001")))
 
+(defun get-door-control () ""
+  (format t "  get-door-control:~%    ~:w~%" (examples:get-door-control 405419896 4)))
+
 (defun main () ""
   (let ((args (parse-command-line)))
     (loop for arg in args
-       do (cond ((string= arg "get-devices")  (get-devices))
-                ((string= arg "get-device")   (get-device))
-                ((string= arg "set-address")  (set-address))
-                ((string= arg "get-status")   (get-status))
-                ((string= arg "get-time")     (get-time))
-                ((string= arg "set-time")     (set-time))
-                ((string= arg "get-listener") (get-listener))
-                ((string= arg "set-listener") (set-listener))
-                ((string= arg "help")         (help))
+       do (cond ((string= arg "get-devices")      (get-devices))
+                ((string= arg "get-device")       (get-device))
+                ((string= arg "set-address")      (set-address))
+                ((string= arg "get-status")       (get-status))
+                ((string= arg "get-time")         (get-time))
+                ((string= arg "set-time")         (set-time))
+                ((string= arg "get-listener")     (get-listener))
+                ((string= arg "set-listener")     (set-listener))
+                ((string= arg "get-door-control") (get-door-control))
+                ((string= arg "help")             (help))
                 (t (help))))))
 
 ;;;; Workaround to skip command line arguments for REPL - invoking (main) in the REPL is

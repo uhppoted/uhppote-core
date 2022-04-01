@@ -38,6 +38,9 @@ get-listener: build
 set-listener: build
 	$(CMD) set-listener
 
+get-door-control: build
+	$(CMD) get-door-control
+
 all: build
 	$(CMD) all
 

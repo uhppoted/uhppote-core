@@ -57,6 +57,11 @@ typedef struct Status {
 	Event *event;
 } Status;
 
+typedef struct DoorControl {
+    uint8_t control;
+    uint8_t delay;
+} DoorControl;
+
 */
 import "C"
 
@@ -153,6 +158,17 @@ func SetListener(u *C.struct_UHPPOTE, deviceID uint32, listener *C.char) *C.char
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
 	} else if err := setListener(uu, deviceID, listener); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
+//export GetDoorControl
+func GetDoorControl(u *C.struct_UHPPOTE, control *C.struct_DoorControl, deviceID uint32, door uint8) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := getDoorControl(uu, control, deviceID, door); err != nil {
 		return C.CString(err.Error())
 	}
 

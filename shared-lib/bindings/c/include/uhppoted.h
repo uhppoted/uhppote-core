@@ -42,10 +42,13 @@ typedef struct status {
     event event;
 } status;
 
-void setup(const char *bind, const char *broadcast, const char *listen,
-           int timeout, int debug, ...);
-void teardown();
+typedef struct door_control {
+    uint8_t control;
+    uint8_t delay;
+} door_control;
 
+void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...);
+void teardown();
 const char *errmsg();
 
 int get_devices(uint32_t **devices, int *N);
@@ -57,3 +60,4 @@ int get_time(uint32_t id, char **);
 int set_time(uint32_t id, char *);
 int get_listener(uint32_t id, char **);
 int set_listener(uint32_t id, char *);
+int get_door_control(uint32_t id, uint8_t door, struct door_control *);

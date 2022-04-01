@@ -10,6 +10,7 @@ int all();
 void usage();
 
 const uint32_t DEVICEID = 405419896;
+const uint8_t DOOR = 4;
 
 int main(int argc, char **argv) {
     char *cmd = "";
@@ -52,6 +53,8 @@ int main(int argc, char **argv) {
         rc = getListener(DEVICEID);
     } else if (strncmp(cmd, "set-listener", 12) == 0) {
         rc = setListener(DEVICEID, "192.168.1.100:60001");
+    } else if (strncmp(cmd, "get-door-control", 16) == 0) {
+        rc = getDoorControl(DEVICEID, DOOR);
     } else {
         printf("\n   *** ERROR missing command\n\n");
         usage();
@@ -84,6 +87,7 @@ int all() {
     rc = setTime(DEVICEID, datetime) == 0 ? rc : -1;
     rc = getListener(DEVICEID) == 0 ? rc : -1;
     rc = setListener(DEVICEID, "192.168.1.100:60001") == 0 ? rc : -1;
+    rc = getDoorControl(DEVICEID, DOOR) == 0 ? rc : -1;
 
     return rc;
 }
@@ -100,5 +104,6 @@ void usage() {
     printf("      set-time\n");
     printf("      get-listener\n");
     printf("      set-listener\n");
+    printf("      get-door-control\n");
     printf("\n");
 }

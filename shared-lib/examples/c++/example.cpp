@@ -9,6 +9,7 @@ using namespace std;
 void usage();
 
 const uint32_t DEVICEID = 405419896;
+const uint8_t DOOR = 4;
 const controller ALPHA = {.id = 405419896, .address = "192.168.1.100"};
 const controller BETA = {.id = 303986753, .address = "192.168.1.100"};
 
@@ -47,6 +48,8 @@ int main(int argc, char **argv) {
         return getListener(u, DEVICEID);
     } else if (cmd == "set-listener") {
         return setListener(u, DEVICEID, "192.168.1.100:60001");
+    } else if (cmd == "get-door-control") {
+        return getDoorControl(u, DEVICEID, DOOR);
     } else if (cmd == "all") {
         time_t now = time(nullptr);
         char datetime[100];
@@ -63,6 +66,7 @@ int main(int argc, char **argv) {
         rc = setTime(u, DEVICEID, datetime) == 0 ? rc : -1;
         rc = getListener(u, DEVICEID) == 0 ? rc : -1;
         rc = setListener(u, DEVICEID, "192.168.1.100:60001") == 0 ? rc : -1;
+        rc = getDoorControl(u, DEVICEID, DOOR) == 0 ? rc : -1;
 
         return rc;
     }
@@ -85,5 +89,6 @@ void usage() {
     cout << "      get-time" << endl;
     cout << "      set-time" << endl;
     cout << "      get-listener" << endl;
+    cout << "      get-door-control" << endl;
     cout << endl;
 }

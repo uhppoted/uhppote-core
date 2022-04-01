@@ -40,3 +40,6 @@
 (defun set-listener (device-id listener) "" 
   (exec #'(lambda (u) (uhppoted-set-listener u device-id listener)))
   t)
+
+(defun get-door-control (device-id door) "" 
+  (exec #'(lambda (u) (uhppoted-get-door-control u device-id door))))

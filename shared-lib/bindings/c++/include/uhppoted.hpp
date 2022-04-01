@@ -43,6 +43,11 @@ typedef struct status {
     event event;
 } status;
 
+typedef struct door_control {
+    uint8_t control;
+    uint8_t delay;
+} door_control;
+
 class uhppoted {
   public:
     uhppoted();
@@ -61,6 +66,7 @@ class uhppoted {
     void set_time(uint32_t id, std::string &);
     std::string get_listener(uint32_t id);
     void set_listener(uint32_t id, std::string &);
+    door_control get_door_control(uint32_t id, uint8_t door);
 
   private:
     UHPPOTE *u;

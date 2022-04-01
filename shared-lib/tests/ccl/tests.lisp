@@ -27,7 +27,7 @@
                     (progn
                       (format t "get-devices: incorrect device list - expected:~a, got:~a~%" '(201020304 303986753 405419896) devices))
                       (error 'failed :message  "get-devices: FAILED"))
-             (t (format t "get-devices   ok~%")))))
+             (t (format t "get-devices       ok~%")))))
   
 
 (defun get-device () "" 
@@ -68,13 +68,14 @@
              (format t "get-device: incorrect device date - expected:~a, got:~a~%" "v8.92" (device-date device))
              (setf ok NIL)))
        (if ok 
-          (format t "get-device    ok~%") 
+          (format t "get-device        ok~%") 
           (error 'failed :message  "get-device: FAILED"))))
 
 
 (defun set-address () "" 
   (exec #'(lambda (u) (uhppoted-set-address u 405419896 "192.168.1.125" "255.255.255.254" "192.168.1.5")))
-  (format t "set-address   ok~%"))
+  (format t "set-address       ok~%"))
+
 
 (defun get-status () "" 
   (let ((ok T)
@@ -165,7 +166,7 @@
                   (format t "get-status:  incorrect event reason - expected:~a, got:~a~%" 21 (event-reason event))
                   (setf ok NIL))))
        (if ok 
-          (format t "get-status    ok~%") 
+          (format t "get-status        ok~%") 
           (error 'failed :message  "get-status:  FAILED"))))
 
 
@@ -177,13 +178,13 @@
              (format t "get-time:    incorrect date/time - expected:~a, got:~a~%" "2022-01-02 12:34:56" datetime)
              (setf ok NIL)))
        (if ok 
-          (format t "get-time      ok~%")
+          (format t "get-time          ok~%")
           (error 'failed :message  "get-time:    FAILED"))))
 
 
 (defun set-time () "" 
   (exec #'(lambda (u) (uhppoted-set-time u 405419896 "2022-03-23 12:24:17")))
-  (format t "set-time      ok~%"))
+  (format t "set-time          ok~%"))
 
 
 (defun get-listener () "" 
@@ -194,10 +195,28 @@
              (format t "get-time:    incorrect event listener address - expected:~a, got:~a~%" "192.168.1.100:60001" listener)
              (setf ok NIL)))
        (if ok 
-          (format t "get-listener  ok~%")
+          (format t "get-listener      ok~%")
           (error 'failed :message  "get-listener  FAILED"))))
 
 
 (defun set-listener () "" 
   (exec #'(lambda (u) (uhppoted-set-listener u 405419896 "192.168.1.100:60001")))
-  (format t "set-listener  ok~%"))
+  (format t "set-listener      ok~%"))
+
+
+(defun get-door-control () "" 
+  (let ((ok T)
+        (control (exec #'(lambda (u) (uhppoted-get-door-control u 405419896 4)))))
+       (if (/= 3 (door-control-control control)) 
+           (progn
+             (format t "get-door-control: incorrect door control state - expected:~a, got:~a~%" 3 (door-control-control control))
+             (setf ok NIL)))
+
+       (if (/= 7 (door-control-delay control)) 
+           (progn
+             (format t "get-door-control: incorrect door open delay - expected:~a, got:~a~%" 7 (door-control-delay control))
+             (setf ok NIL)))
+
+       (if ok 
+          (format t "get-door-control  ok~%") 
+          (error 'failed :message  "get-door-control: FAILED"))))

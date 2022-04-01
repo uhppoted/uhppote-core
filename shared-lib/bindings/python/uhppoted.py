@@ -75,6 +75,12 @@ class Status:
     event: Event
 
 
+@dataclass
+class DoorControl:
+    control: int
+    delay: int
+
+
 class Uhppote:
     def __init__(self, uhppote=None):
         self._uhppote = None
@@ -208,6 +214,18 @@ class Uhppote:
 
         SetListener(self._uhppote, deviceID, c_char_p(bytes(listener, 'utf-8')))
 
+    def get_door_control(self, deviceID, door):
+        GetDoorControl = lib.GetDoorControl
+        GetDoorControl.argtypes = [POINTER(GoUHPPOTE), POINTER(GoDoorControl), c_ulong, c_ubyte]
+        GetDoorControl.restype = ctypes.c_char_p
+        GetDoorControl.errcheck = self.errcheck
+
+        control = GoDoorControl()
+
+        GetDoorControl(self._uhppote, byref(control), deviceID, door)
+
+        return DoorControl(control.control, control.delay)
+
 
 # INTERNAL TYPES
 class GoController(Structure):
@@ -279,4 +297,11 @@ class GoStatus(Structure):
         ('info', c_ubyte),
         ('seqno', c_uint32),
         ('event', POINTER(GoEvent)),
+    ]
+
+
+class GoDoorControl(Structure):
+    _fields_ = [
+        ('control', c_ubyte),
+        ('delay', c_ubyte),
     ]

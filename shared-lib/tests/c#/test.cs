@@ -5,6 +5,8 @@ using uhppoted;
 
 public class test {
     const uint DEVICEID = 405419896;
+    const byte DOOR = 4;
+    const string FMT = "{0, -16}  {1}";
 
     static SortedDictionary<string, Func<Uhppoted, bool>> tests = new SortedDictionary<string, Func<Uhppoted, bool>> {
         { "get-devices", GetDevices },
@@ -15,6 +17,7 @@ public class test {
         { "set-time", SetTime },
         { "get-listener", GetListener },
         { "set-listener", SetListener },
+        { "get-door-control", GetDoorControl },
     };
 
     public static void Main(string[] args) {
@@ -78,7 +81,7 @@ public class test {
         }
 
         if (ok) {
-            Console.WriteLine("get-devices   ok");
+            Console.WriteLine(String.Format(FMT, "get-devices", "ok"));
         }
 
         return ok;
@@ -124,7 +127,7 @@ public class test {
         }
 
         if (ok) {
-            Console.WriteLine("get-device    ok");
+            Console.WriteLine(String.Format(FMT, "get-device", "ok"));
         }
 
         return ok;
@@ -133,7 +136,7 @@ public class test {
     static bool SetAddress(Uhppoted u) {
         u.SetAddress(DEVICEID, "192.168.1.125", "255.255.255.254", "192.168.1.5");
 
-        Console.WriteLine("set-address   ok");
+        Console.WriteLine(String.Format(FMT, "set-address", "ok"));
 
         return true;
     }
@@ -232,7 +235,7 @@ public class test {
         }
 
         if (ok) {
-            Console.WriteLine("get-status    ok");
+            Console.WriteLine(String.Format(FMT, "get-status", "ok"));
         }
 
         return ok;
@@ -248,7 +251,7 @@ public class test {
         }
 
         if (ok) {
-            Console.WriteLine("get-time      ok");
+            Console.WriteLine(String.Format(FMT, "get-time", "ok"));
         }
 
         return ok;
@@ -257,7 +260,7 @@ public class test {
     static bool SetTime(Uhppoted u) {
         u.SetTime(DEVICEID, "2022-03-23 12:24:17");
 
-        Console.WriteLine("set-time      ok");
+        Console.WriteLine(String.Format(FMT, "set-time", "ok"));
 
         return true;
     }
@@ -272,7 +275,7 @@ public class test {
         }
 
         if (ok) {
-            Console.WriteLine("get-listener  ok");
+            Console.WriteLine(String.Format(FMT, "get-listener", "ok"));
         }
 
         return ok;
@@ -281,9 +284,30 @@ public class test {
     static bool SetListener(Uhppoted u) {
         u.SetListener(DEVICEID, "192.168.1.100:60001");
 
-        Console.WriteLine("set-listener  ok");
+        Console.WriteLine(String.Format(FMT, "set-listener", "ok"));
 
         return true;
+    }
+
+    static bool GetDoorControl(Uhppoted u) {
+        DoorControl control = u.GetDoorControl(DEVICEID, DOOR);
+        bool ok = true;
+
+        if (control.control != 3) {
+            Console.WriteLine("get-door-control: incorrect door control state - expected:{0}, got:{1}", 3, control.control);
+            ok = false;
+        }
+
+        if (control.delay != 7) {
+            Console.WriteLine("get-door-control: incorrect door open delay - expected:{0}, got:{1}", 7, control.delay);
+            ok = false;
+        }
+
+        if (ok) {
+            Console.WriteLine(String.Format(FMT, "get-door-control", "ok"));
+        }
+
+        return ok;
     }
 
     static void usage() {

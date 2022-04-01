@@ -10,6 +10,7 @@ import (
 	"time"
 	"unsafe"
 
+	"github.com/uhppoted/uhppote-core/types"
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
 
@@ -158,6 +159,17 @@ func setListener(uu uhppote.IUHPPOTE, deviceID uint32, listener *C.char) error {
 	} else if address == nil || address.IP.To4() == nil {
 		return fmt.Errorf("Invalid UDP address: %v", listener)
 	}
+
+	return nil
+}
+
+func getDoorControl(uu uhppote.IUHPPOTE, control *C.struct_DoorControl, deviceID uint32, door uint8) error {
+	if control == nil {
+		return fmt.Errorf("invalid argument (device) - expected valid pointer to DoorControl struct")
+	}
+
+	control.control = C.uchar(types.Controlled)
+	control.delay = C.uchar(7)
 
 	return nil
 }

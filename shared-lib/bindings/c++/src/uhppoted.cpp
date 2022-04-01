@@ -246,3 +246,19 @@ void uhppoted::set_listener(uint32_t id, std::string &listener) {
         throw uhppoted_exception(err);
     }
 }
+
+struct door_control uhppoted::get_door_control(uint32_t id, uint8_t door) {
+    struct DoorControl control;
+
+    char *err = GetDoorControl(u, &control, id, door);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+
+    struct door_control d;
+
+    d.control = control.control;
+    d.delay = control.delay;
+
+    return d;
+}

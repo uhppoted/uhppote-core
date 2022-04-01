@@ -6,7 +6,8 @@
 #include "uhppoted.h"
 
 const uint32_t DEVICEID = 405419896;
-const char *OK = "%-12s  ok\n";
+const uint8_t DOOR = 4;
+const char *OK = "%-16s  ok\n";
 
 bool getDevices() {
     uint32_t *devices = NULL;
@@ -279,6 +280,33 @@ bool setListener() {
 
     if (ok) {
         printf(OK, "set-listener");
+    }
+
+    return ok;
+}
+
+bool getDoorControl() {
+    struct door_control d;
+
+    if (get_door_control(DEVICEID, DOOR, &d) != 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    bool ok = true;
+
+    if (d.control != 3) {
+        printf("get-door-control: incorrect door control state - expected:%u, got:%u\n", 3, d.control);
+        ok = false;
+    }
+
+    if (d.delay != 7) {
+        printf("get-door-control: incorrect door control delay - expected:%u, got:%u\n", 7, d.delay);
+        ok = false;
+    }
+
+    if (ok) {
+        printf(OK, "get-door-control");
     }
 
     return ok;

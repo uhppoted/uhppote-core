@@ -89,6 +89,16 @@ public class Status {
     }
 };
 
+public class DoorControl {
+    public byte control;
+    public byte delay;
+
+    public DoorControl(byte control, byte delay) {
+        this.control = control;
+        this.delay = delay;
+    }
+};
+
 public class Uhppoted : IDisposable {
     private UHPPOTE u = new UHPPOTE();
 
@@ -175,6 +185,9 @@ public class Uhppoted : IDisposable {
 
     [DllImport("libuhppoted.so")]
     private static extern string SetListener(ref UHPPOTE u, uint deviceID, string listener);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string GetDoorControl(ref UHPPOTE u, ref GoDoorControl c, uint deviceID, byte door);
 
     public uint[] GetDevices() {
         int N = 0;
@@ -291,6 +304,17 @@ public class Uhppoted : IDisposable {
         }
     }
 
+    public DoorControl GetDoorControl(uint deviceID, byte door) {
+        GoDoorControl control = new GoDoorControl();
+
+        string err = GetDoorControl(ref this.u, ref control, deviceID, door);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+
+        return new DoorControl(control.control, control.delay);
+    }
+
     struct udevice {
         public uint ID;
         public string address;
@@ -347,6 +371,11 @@ public class Uhppoted : IDisposable {
         public byte info;
         public uint seqno;
         public IntPtr evt;
+    };
+
+    struct GoDoorControl {
+        public byte control;
+        public byte delay;
     };
 };
 }

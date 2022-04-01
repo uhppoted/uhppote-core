@@ -8,3 +8,4 @@ extern int getTime(uint32_t);
 extern int setTime(uint32_t, const char *);
 extern int getListener(uint32_t);
 extern int setListener(uint32_t, const char *);
+extern int getDoorControl(uint32_t,uint8_t);

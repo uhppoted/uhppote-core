@@ -145,7 +145,7 @@ int get_devices(uint32_t **devices, int *N) {
     }
 }
 
-int get_device(unsigned id, struct device *d) {
+int get_device(uint32_t id, struct device *d) {
     struct Device device;
 
     char *err = GetDevice(u, &device, id);
@@ -173,7 +173,7 @@ int get_device(unsigned id, struct device *d) {
     return 0;
 }
 
-int set_address(unsigned id, const char *address, const char *subnet,
+int set_address(uint32_t id, const char *address, const char *subnet,
                 const char *gateway) {
     char *err =
         SetAddress(u, id, (char *)address, (char *)subnet, (char *)gateway);
@@ -185,7 +185,7 @@ int set_address(unsigned id, const char *address, const char *subnet,
     return 0;
 }
 
-int get_status(unsigned id, struct status *s) {
+int get_status(uint32_t id, struct status *s) {
     struct Status status;
     struct Event event;
 
@@ -240,7 +240,7 @@ int get_status(unsigned id, struct status *s) {
     return 0;
 }
 
-int get_time(unsigned id, char **t) {
+int get_time(uint32_t id, char **t) {
     char *datetime;
 
     char *err = GetTime(u, &datetime, id);
@@ -256,7 +256,7 @@ int get_time(unsigned id, char **t) {
     return 0;
 }
 
-int set_time(unsigned id, char *datetime) {
+int set_time(uint32_t id, char *datetime) {
     char *err = SetTime(u, id, datetime);
     if (err != NULL) {
         set_error(err);
@@ -266,7 +266,7 @@ int set_time(unsigned id, char *datetime) {
     return 0;
 }
 
-int get_listener(unsigned id, char **t) {
+int get_listener(uint32_t id, char **t) {
     char *listener;
 
     char *err = GetListener(u, &listener, id);
@@ -282,12 +282,27 @@ int get_listener(unsigned id, char **t) {
     return 0;
 }
 
-int set_listener(unsigned id, char *listener) {
+int set_listener(uint32_t id, char *listener) {
     char *err = SetListener(u, id, listener);
     if (err != NULL) {
         set_error(err);
         return -1;
     }
+
+    return 0;
+}
+
+int get_door_control(uint32_t id, uint8_t door, struct door_control *c) {
+    struct DoorControl control;
+
+    char *err = GetDoorControl(u, &control, id, door);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    c->control = control.control;
+    c->delay = control.delay;
 
     return 0;
 }

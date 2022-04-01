@@ -31,6 +31,7 @@ def help():
     print("    set-time")
     print("    get-listener")
     print("    set-listener")
+    print("    get-door-control")
     print("    help")
     print()
     print("  get-devices")
@@ -56,6 +57,9 @@ def help():
     print()
     print("  set-listener")
     print("    Configures a controller's event listener address and port.")
+    print()
+    print("  get-door-control")
+    print("    Retrieves the control state and open delay for a controller door.")
     print()
     print("  help")
     print("    Displays this information.")
@@ -195,6 +199,22 @@ def set_listener(u, deviceID, listener):
         print()
 
 
+def get_door_control(u, deviceID, door):
+    try:
+        control = u.get_door_control(deviceID, door)
+
+        print("get-door-control")
+        print(f"  ID:      {deviceID}")
+        print(f"  door:    {door}")
+        print(f"  control: {control.control}")
+        print(f"  delay:   {control.delay}")
+        print()
+
+    except Exception as e:
+        print(f" *** ERROR get-door-control ({e})")
+        print()
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Example CLI for the uhppote-core Python integration')
@@ -216,6 +236,7 @@ if __name__ == "__main__":
             'set-time',
             'get-listener',
             'set-listener',
+            'get-door-control',
             'all',
     ]:
         print()
@@ -254,6 +275,9 @@ if __name__ == "__main__":
             elif cmd == 'set-listener':
                 set_listener(u, 405419896, "192.168.1.100:60001")
 
+            elif cmd == 'get-door-control':
+                get_door_control(u, 405419896, 4)
+
             elif cmd == 'all':
                 get_devices(u)
                 get_device(u, 405419896)
@@ -263,6 +287,7 @@ if __name__ == "__main__":
                 set_time(u, 405419896, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
                 get_listener(u, 405419896)
                 set_listener(u, 405419896, "192.168.1.100:60001")
+                get_door_control(u, 405419896, 4)
 
         except BaseException as x:
             print()

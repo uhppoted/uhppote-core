@@ -12,6 +12,7 @@
            set-time
            get-listener
            set-listener
+           get-door-control
            failed
            message))
 

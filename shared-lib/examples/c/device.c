@@ -152,3 +152,21 @@ int setListener(uint32_t deviceID, const char *listener) {
 
     return 0;
 }
+
+int getDoorControl(uint32_t deviceID, uint8_t door) {
+    struct door_control control;
+
+    if (get_door_control(deviceID, door, &control) != 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    printf("\nget-door-control\n");
+    printf("  ID:      %u\n", deviceID);
+    printf("  door:    %u\n", door);
+    printf("  control: %u\n", control.control);
+    printf("  delay:   %u\n", control.delay);
+    printf("\n");
+
+    return 0;
+}
