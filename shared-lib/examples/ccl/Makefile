@@ -44,7 +44,13 @@ set-listener: build
 get-door-control: build
 	$(CMD) get-door-control
 
-run: 
+all: build
+	$(CMD) all
+
+run: build
+	$(CMD)
+
+repl: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp
 
 debug: 

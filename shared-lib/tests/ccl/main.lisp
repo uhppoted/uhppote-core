@@ -74,9 +74,7 @@
                    ((string= arg "all")              (all))
                    (t (progn
                         (format t "~%   *** ERROR invalid command (~a)~%" arg)
-                        (usage))
-                   )
-                   )))))
+                        (usage))))))))
 
 
 ;;;; Workaround to skip command line arguments for REPL - invoking (main) in the REPL is

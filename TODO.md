@@ -3,7 +3,7 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] CCL examples 'all'
+  - [x] CCL examples 'all'
   - (?) C++ std::invoke
   - (?) Display/all order
   - (?) CCL DOLIST 
