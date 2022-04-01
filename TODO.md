@@ -3,11 +3,6 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [x] CCL examples 'all'
-  - (?) C++ std::invoke
-  - (?) Display/all order
-  - (?) CCL DOLIST 
-
   - [x] `get-door-control`
         - [x] C
         - [x] C++
@@ -33,6 +28,18 @@
   - [ ] `add-task`
   - [ ] `refresh-tasklist`
   - [ ] `clear-task-list`
+
+  - [x] CCL examples 'all'
+  - (?) C++ std::invoke
+  - (?) Display/all order
+  - (?) CCL DOLIST 
+  - [ ] CCL test failure format
+```
+set-address       ok
+get-status        ok
+get-time:    incorrect date/time - expected:2022-01-02 12:34:56, got:2022-01-02 12:34:56
+```
+
   
   - [ ] lint
   - (?) Cross-compile

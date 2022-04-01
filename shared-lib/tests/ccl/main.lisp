@@ -3,22 +3,30 @@
 (load "packages.lisp")
 (load "tests.lisp")
 
+
+(defun commands () "Returns a list of the commands and their associated functions"
+  (list '("get-devices"      tests:get-devices)
+        '("get-device"       tests:get-device)
+        '("set-address"      tests:set-address)
+        '("get-status"       tests:get-status)
+        '("get-time"         tests:get-time)
+        '("set-time"         tests:set-time)
+        '("get-listener"     tests:get-listener)
+        '("set-listener"     tests:set-listener)
+        '("get-door-control" tests:get-door-control)
+))
+
+
 (defun usage () ""
-  (format t "~%  Usage: ./test <command>~%") 
-  (format t "~%") 
-  (format t "    Supported commands:~%") 
-  (format t "      get-devices      Retrieves a list of devices on the local LAN~%") 
-  (format t "      get-device       Retrieves the information for a UHPPOTE controller~%") 
-  (format t "      set-address      Sets a controller IP address, subnet mask and gateway address~%") 
-  (format t "      get-status       Retrieves a controller status~%") 
-  (format t "      get-time         Retrieves a controller date/time~%") 
-  (format t "      set-time         Sets a controller date/time~%") 
-  (format t "      get-listener     Retrieves a controller's configurd event listener address~%") 
-  (format t "      set-listener     Sets a controller's configurd event listener address and port~%") 
-  (format t "      get-door-control Retrieves the door control state and open delay for a controller door~%") 
-  (format t "~%") 
-  (format t "    Defaults to running all tests~%") 
-  (format t "~%"))
+  (let ((ll (commands)))
+       (format t "~%  Usage: ./test <command>~%") 
+       (format t "~%") 
+       (format t "    Supported commands:~%") 
+       (loop for cmd in ll
+          do (format t "      ~a~%" (first cmd)))
+       (format t "~%") 
+       (format t "    Defaults to running all tests~%") 
+       (format t "~%")))
 
 
 (defun test (f) "Invokes 'tests' function with 'exit-fail' condition handler"
@@ -32,50 +40,38 @@
       (exit-fail () (quit -1)))))
 
 
-(defun all () "Invokes all test functions with 'exit-fail' condition handler"
-  (let* ((tests '( tests:get-devices 
-                   tests:get-device 
-                   tests:set-address 
-                   tests:get-status 
-                   tests:get-time 
-                   tests:set-time 
-                   tests:get-listener
-                   tests:set-listener
-                   tests:get-door-control
-                 ))
-         (result (loop for test in tests collect (all-x test))))
-        (if (some #'null result)
-            (quit -1))))
-
-(defun all-x (fn) ""
-  (handler-bind
-    ((tests:failed #'(lambda (err) 
-                       (progn
-                         (format *error-output* "~% *** ERROR: ~a~%~%" (tests:message err))
-                         (use-value NIL)))))
-    (restart-case (progn (funcall fn) T)
-      (use-value (value) value))))
+(defun all () "Invokes all test functions, exiting with -1 if any them failed"
+  (let* ((tests (commands)))
+    (handler-bind
+      ((tests:failed #'(lambda (err) 
+                         (progn
+                           (format *error-output* "~% *** ERROR: ~a~%~%" (tests:message err))
+                           (use-value NIL)))))
+      (if (some #'null 
+                (loop for test in tests 
+                  collect (restart-case 
+                            (progn 
+                              (funcall (second test)) 
+                              t)
+                            (use-value (value) value))))
+          (quit -1)))))
 
 
 (defun main () ""
-  (let ((args (parse-command-line)))
-    (if (not args)
-        (all)
-        (loop for arg in args
-          do (cond ((string= arg "get-devices")      (test #'tests:get-devices))
-                   ((string= arg "get-device")       (test #'tests:get-device))
-                   ((string= arg "set-address")      (test #'tests:set-address))
-                   ((string= arg "get-status")       (test #'tests:get-status))
-                   ((string= arg "get-time")         (test #'tests:get-time))
-                   ((string= arg "set-time")         (test #'tests:set-time))
-                   ((string= arg "get-listener")     (test #'tests:get-listener))
-                   ((string= arg "set-listener")     (test #'tests:set-listener))
-                   ((string= arg "get-door-control") (test #'tests:get-door-control))
-                   ((string= arg "all")              (all))
-                   (t (progn
-                        (format t "~%   *** ERROR invalid command (~a)~%" arg)
-                        (usage))))))))
+  (let* ((ll (commands))
+         (args (parse-command-line))
+         (arg  (if args (first args) "all")))
+    (if (string= arg "all") 
+        (all))
+        (block single-command
+          (loop for cmd in ll
+            do (if (string= arg (first cmd))
+                   (progn
+                     (test (second cmd))
+                     (return-from single-command))))
 
+          (format *error-output* "~%   *** ERROR invalid command (~a)~%" arg)
+          (usage))))
 
 ;;;; Workaround to skip command line arguments for REPL - invoking (main) in the REPL is
 ;;;; particularly pointless so:
