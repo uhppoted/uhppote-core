@@ -32,6 +32,7 @@ def help():
     print("    get-listener")
     print("    set-listener")
     print("    get-door-control")
+    print("    set-door-control")
     print("    help")
     print()
     print("  get-devices")
@@ -60,6 +61,9 @@ def help():
     print()
     print("  get-door-control")
     print("    Retrieves the control state and open delay for a controller door.")
+    print()
+    print("  set-door-control")
+    print("    Sets the control mode and delay for a controller door.")
     print()
     print("  help")
     print("    Displays this information.")
@@ -204,14 +208,48 @@ def get_door_control(u, deviceID, door):
         control = u.get_door_control(deviceID, door)
 
         print("get-door-control")
-        print(f"  ID:      {deviceID}")
-        print(f"  door:    {door}")
-        print(f"  control: {control.control}")
-        print(f"  delay:   {control.delay}")
+        print(f"  ID:    {deviceID}")
+        print(f"  door:  {door}")
+
+        if control.mode == 1:
+            print(f"  mode:  normally open")
+        elif control.mode == 2:
+            print(f"  mode:  normally closed")
+        elif control.mode == 3:
+            print(f"  mode:  controlled")
+        else:
+            print(f"  mode:  ???")
+
+        print(f"  delay: {control.delay}")
         print()
 
     except Exception as e:
         print(f" *** ERROR get-door-control ({e})")
+        print()
+
+
+def set_door_control(u, deviceID, door, mode, delay):
+    try:
+        u.set_door_control(deviceID, door, mode, delay)
+
+        print("set-door-control")
+        print(f"  ID:    {deviceID}")
+        print(f"  door:  {door}")
+
+        if mode == 1:
+            print(f"  mode:  normally open")
+        elif mode == 2:
+            print(f"  mode:  normally closed")
+        elif mode == 3:
+            print(f"  mode:  controlled")
+        else:
+            print(f"  mode:  ???")
+
+        print(f"  delay: {delay}")
+        print()
+
+    except Exception as e:
+        print(f" *** ERROR set-door-control ({e})")
         print()
 
 
@@ -228,6 +266,7 @@ if __name__ == "__main__":
         help()
 
     elif cmd not in [
+            'all',
             'get-devices',
             'get-device',
             'set-address',
@@ -237,7 +276,7 @@ if __name__ == "__main__":
             'get-listener',
             'set-listener',
             'get-door-control',
-            'all',
+            'set-door-control',
     ]:
         print()
         print(f"  ERROR: invalid command ({cmd}). Try 'help' to see all commands and options")
@@ -278,6 +317,9 @@ if __name__ == "__main__":
             elif cmd == 'get-door-control':
                 get_door_control(u, 405419896, 4)
 
+            elif cmd == 'set-door-control':
+                set_door_control(u, 405419896, 4, 1, 9)
+
             elif cmd == 'all':
                 get_devices(u)
                 get_device(u, 405419896)
@@ -288,6 +330,7 @@ if __name__ == "__main__":
                 get_listener(u, 405419896)
                 set_listener(u, 405419896, "192.168.1.100:60001")
                 get_door_control(u, 405419896, 4)
+                set_door_control(u, 405419896, 4, 1, 9)
 
         except BaseException as x:
             print()

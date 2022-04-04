@@ -11,3 +11,4 @@ extern bool setTime();
 extern bool getListener();
 extern bool setListener();
 extern bool getDoorControl();
+extern bool setDoorControl();

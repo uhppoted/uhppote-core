@@ -22,6 +22,7 @@ def tests():
         'get-listener': get_listener,
         'set-listener': set_listener,
         'get-door-control': get_door_control,
+        'set-door-control': set_door_control,
     }
 
 
@@ -226,8 +227,8 @@ def get_door_control(u):
     control = u.get_door_control(DEVICEID, DOOR)
     ok = True
 
-    if control.control != 3:
-        print(f"get-door-control: incorrect door control state - expected:3, got:{control.control}")
+    if control.mode != 3:
+        print(f"get-door-control: incorrect door control mode - expected:3, got:{control.mode}")
         ok = False
 
     if control.delay != 7:
@@ -238,6 +239,15 @@ def get_door_control(u):
         print(f"get-door-control  ok")
 
     return ok
+
+
+def set_door_control(u):
+    u.set_door_control(DEVICEID, DOOR, 2, 6)
+
+    if ok:
+        print(f"set-door-control  ok")
+
+    return True
 
 
 def usage():

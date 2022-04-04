@@ -4,20 +4,30 @@ using System.Collections.Generic;
 using uhppoted;
 
 public class test {
+    public string command;
+    public Func<Uhppoted, bool> fn;
+
+    public test(string command, Func<Uhppoted, bool> fn) {
+        this.command = command;
+        this.fn = fn;
+    }
+};
+
+public class Test {
     const uint DEVICEID = 405419896;
     const byte DOOR = 4;
-    const string FMT = "{0, -16}  {1}";
 
-    static SortedDictionary<string, Func<Uhppoted, bool>> tests = new SortedDictionary<string, Func<Uhppoted, bool>> {
-        { "get-devices", GetDevices },
-        { "get-device", GetDevice },
-        { "set-address", SetAddress },
-        { "get-status", GetStatus },
-        { "get-time", GetTime },
-        { "set-time", SetTime },
-        { "get-listener", GetListener },
-        { "set-listener", SetListener },
-        { "get-door-control", GetDoorControl },
+    static test[] tests = {
+        new test("get-devices", GetDevices),
+        new test("get-device", GetDevice),
+        new test("set-address", SetAddress),
+        new test("get-status", GetStatus),
+        new test("get-time", GetTime),
+        new test("set-time", SetTime),
+        new test("get-listener", GetListener),
+        new test("set-listener", SetListener),
+        new test("get-door-control", GetDoorControl),
+        new test("set-door-control", SetDoorControl),
     };
 
     public static void Main(string[] args) {
@@ -32,14 +42,19 @@ public class test {
                                          new Controller(303986753, "192.168.1.100") };
 
             Uhppoted u = new Uhppoted("192.168.1.100", "192.168.1.100:60000", "192.168.1.100:60001", 2500, controllers, true);
-            bool ok = true;
 
             if (cmd == "" || cmd == "all") {
-                ok = All(u);
-            } else if (tests.ContainsKey(cmd)) {
-                ok = tests[cmd](u);
+                if (All(u)) {
+                    return;
+                }
             } else {
-                ok = false;
+                foreach (var t in tests) {
+                    if (t.command == cmd) {
+                        if (t.fn(u)) {
+                            return;
+                        }
+                    }
+                }
 
                 Console.WriteLine();
                 Console.WriteLine(String.Format("   *** ERROR: invalid command ({0})", cmd));
@@ -47,9 +62,7 @@ public class test {
                 usage();
             }
 
-            if (!ok) {
-                Environment.Exit(-1);
-            }
+            Environment.Exit(-1);
         } catch (Exception e) {
             Console.WriteLine(String.Format("  *** ERROR: {0}", e.Message));
             Environment.Exit(-1);
@@ -60,7 +73,7 @@ public class test {
         bool ok = true;
 
         foreach (var t in tests) {
-            ok = t.Value(u) ? ok : false;
+            ok = t.fn(u) ? ok : false;
         }
 
         return ok;
@@ -80,11 +93,7 @@ public class test {
             ok = false;
         }
 
-        if (ok) {
-            Console.WriteLine(String.Format(FMT, "get-devices", "ok"));
-        }
-
-        return ok;
+        return result("get-devices", ok);
     }
 
     static bool GetDevice(Uhppoted u) {
@@ -126,19 +135,13 @@ public class test {
             ok = false;
         }
 
-        if (ok) {
-            Console.WriteLine(String.Format(FMT, "get-device", "ok"));
-        }
-
-        return ok;
+        return result("get-device", ok);
     }
 
     static bool SetAddress(Uhppoted u) {
         u.SetAddress(DEVICEID, "192.168.1.125", "255.255.255.254", "192.168.1.5");
 
-        Console.WriteLine(String.Format(FMT, "set-address", "ok"));
-
-        return true;
+        return result("set-address", true);
     }
 
     static bool GetStatus(Uhppoted u) {
@@ -234,11 +237,7 @@ public class test {
             ok = false;
         }
 
-        if (ok) {
-            Console.WriteLine(String.Format(FMT, "get-status", "ok"));
-        }
-
-        return ok;
+        return result("get-status", ok);
     }
 
     static bool GetTime(Uhppoted u) {
@@ -250,19 +249,13 @@ public class test {
             ok = false;
         }
 
-        if (ok) {
-            Console.WriteLine(String.Format(FMT, "get-time", "ok"));
-        }
-
-        return ok;
+        return result("get-time", ok);
     }
 
     static bool SetTime(Uhppoted u) {
         u.SetTime(DEVICEID, "2022-03-23 12:24:17");
 
-        Console.WriteLine(String.Format(FMT, "set-time", "ok"));
-
-        return true;
+        return result("set-time", true);
     }
 
     static bool GetListener(Uhppoted u) {
@@ -274,27 +267,21 @@ public class test {
             ok = false;
         }
 
-        if (ok) {
-            Console.WriteLine(String.Format(FMT, "get-listener", "ok"));
-        }
-
-        return ok;
+        return result("get-listener", ok);
     }
 
     static bool SetListener(Uhppoted u) {
         u.SetListener(DEVICEID, "192.168.1.100:60001");
 
-        Console.WriteLine(String.Format(FMT, "set-listener", "ok"));
-
-        return true;
+        return result("set-listener", true);
     }
 
     static bool GetDoorControl(Uhppoted u) {
         DoorControl control = u.GetDoorControl(DEVICEID, DOOR);
         bool ok = true;
 
-        if (control.control != 3) {
-            Console.WriteLine("get-door-control: incorrect door control state - expected:{0}, got:{1}", 3, control.control);
+        if (control.mode != 3) {
+            Console.WriteLine("get-door-control: incorrect door control mode - expected:{0}, got:{1}", 3, control.mode);
             ok = false;
         }
 
@@ -303,8 +290,18 @@ public class test {
             ok = false;
         }
 
+        return result("get-door-control", ok);
+    }
+
+    static bool SetDoorControl(Uhppoted u) {
+        u.SetDoorControl(DEVICEID, DOOR, ControlModes.NormallyClosed, 6);
+
+        return result("set-door-control", true);
+    }
+
+    static bool result(string test, bool ok) {
         if (ok) {
-            Console.WriteLine(String.Format(FMT, "get-door-control", "ok"));
+            Console.WriteLine(String.Format("{0, -16}  {1}", test, "ok"));
         }
 
         return ok;
@@ -317,7 +314,7 @@ public class test {
         Console.WriteLine("      all");
 
         foreach (var t in tests) {
-            Console.WriteLine("      {0}", t.Key);
+            Console.WriteLine("      {0}", t.command);
         }
 
         Console.WriteLine();

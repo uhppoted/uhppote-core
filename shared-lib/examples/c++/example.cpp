@@ -50,6 +50,8 @@ int main(int argc, char **argv) {
         return setListener(u, DEVICEID, "192.168.1.100:60001");
     } else if (cmd == "get-door-control") {
         return getDoorControl(u, DEVICEID, DOOR);
+    } else if (cmd == "set-door-control") {
+        return setDoorControl(u, DEVICEID, DOOR, NORMALLY_OPEN, 9);
     } else if (cmd == "all") {
         time_t now = time(nullptr);
         char datetime[100];
@@ -67,6 +69,7 @@ int main(int argc, char **argv) {
         rc = getListener(u, DEVICEID) == 0 ? rc : -1;
         rc = setListener(u, DEVICEID, "192.168.1.100:60001") == 0 ? rc : -1;
         rc = getDoorControl(u, DEVICEID, DOOR) == 0 ? rc : -1;
+        rc = setDoorControl(u, DEVICEID, DOOR, NORMALLY_OPEN, 9) == 0 ? rc : -1;
 
         return rc;
     }
@@ -90,5 +93,6 @@ void usage() {
     cout << "      set-time" << endl;
     cout << "      get-listener" << endl;
     cout << "      get-door-control" << endl;
+    cout << "      set-door-control" << endl;
     cout << endl;
 }

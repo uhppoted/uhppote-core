@@ -301,8 +301,18 @@ int get_door_control(uint32_t id, uint8_t door, struct door_control *c) {
         return -1;
     }
 
-    c->control = control.control;
+    c->mode = control.mode;
     c->delay = control.delay;
+
+    return 0;
+}
+
+int set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay) {
+    char *err = SetDoorControl(u, id, door, mode, delay);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
 
     return 0;
 }

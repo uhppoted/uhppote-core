@@ -34,7 +34,7 @@
                  card
                  reason)
 
-(defstruct door-control control
+(defstruct door-control mode
                         delay)
 
 
@@ -86,8 +86,8 @@
                      (:event     :address)))
 
 (def-foreign-type nil
-  (:struct :GoDoorControl (:control :unsigned-byte)
-                          (:delay   :unsigned-byte)))
+  (:struct :GoDoorControl (:mode  :unsigned-byte)
+                          (:delay :unsigned-byte)))
 
 
 (define-condition uhppoted-error (error)
@@ -267,8 +267,19 @@
                                                         :unsigned-byte door
                                                         :address)))
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-      (make-door-control :control (pref control :GoDoorControl.control)
-                         :delay   (pref control :GoDoorControl.delay)))))
+      (make-door-control :mode  (pref control :GoDoorControl.mode)
+                         :delay (pref control :GoDoorControl.delay)))))
+
+
+(defun uhppoted-set-door-control (uhppote device-id door mode delay) "Sets the control mode and delay for a controller door"
+    (with-macptrs ((err (external-call "SetDoorControl" :address uhppote 
+                                                        :unsigned-long device-id 
+                                                        :unsigned-byte door
+                                                        :unsigned-byte mode
+                                                        :unsigned-byte delay
+                                                        :address)))
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+
 
 (defun debug () "" 
   (handler-bind

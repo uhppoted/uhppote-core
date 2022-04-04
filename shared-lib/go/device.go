@@ -242,8 +242,19 @@ func getDoorControl(uu uhppote.IUHPPOTE, control *C.struct_DoorControl, deviceID
 		return fmt.Errorf("%v: no response to get-door-control-state", deviceID)
 	}
 
-	control.control = C.uchar(response.ControlState)
+	control.mode = C.uchar(response.ControlState)
 	control.delay = C.uchar(response.Delay)
+
+	return nil
+}
+
+func setDoorControl(uu uhppote.IUHPPOTE, deviceID uint32, door uint8, mode types.ControlState, delay uint8) error {
+	response, err := uu.SetDoorControlState(deviceID, door, mode, delay)
+	if err != nil {
+		return err
+	} else if response == nil {
+		return fmt.Errorf("%v: no response to set-door-control-state", deviceID)
+	}
 
 	return nil
 }

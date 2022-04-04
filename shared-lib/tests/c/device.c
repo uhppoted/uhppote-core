@@ -9,6 +9,14 @@ const uint32_t DEVICEID = 405419896;
 const uint8_t DOOR = 4;
 const char *OK = "%-16s  ok\n";
 
+bool result(char *test, bool ok) {
+    if (ok) {
+        printf("%-16s  ok\n", test);
+    }
+
+    return ok;
+}
+
 bool getDevices() {
     uint32_t *devices = NULL;
     int N;
@@ -32,11 +40,7 @@ bool getDevices() {
 
     free(devices);
 
-    if (ok) {
-        printf(OK, "get-devices");
-    }
-
-    return ok;
+    return result("get-devices", ok);
 }
 
 bool getDevice() {
@@ -84,11 +88,7 @@ bool getDevice() {
         ok = false;
     }
 
-    if (ok) {
-        printf(OK, "get-device");
-    }
-
-    return ok;
+    return result("get-device", ok);
 }
 
 bool setAddress(uint32_t deviceID, const char *address, const char *subnet,
@@ -98,9 +98,7 @@ bool setAddress(uint32_t deviceID, const char *address, const char *subnet,
         return false;
     }
 
-    printf(OK, "set-address");
-
-    return true;
+    return result("set-address", true);
 }
 
 bool getStatus() {
@@ -200,11 +198,7 @@ bool getStatus() {
         ok = false;
     }
 
-    if (ok) {
-        printf(OK, "get-status");
-    }
-
-    return ok;
+    return result("get-status", ok);
 }
 
 bool getTime() {
@@ -222,28 +216,18 @@ bool getTime() {
         ok = false;
     }
 
-    if (ok) {
-        printf(OK, "get-time");
-    }
-
     free(datetime);
 
-    return ok;
+    return result("get-time", ok);
 }
 
 bool setTime() {
-    bool ok = true;
-
     if (set_time(DEVICEID, "2022-03-23 12:24:17") != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
 
-    if (ok) {
-        printf(OK, "set-time");
-    }
-
-    return ok;
+    return result("set-time", true);
 }
 
 bool getListener() {
@@ -261,28 +245,18 @@ bool getListener() {
         ok = false;
     }
 
-    if (ok) {
-        printf(OK, "get-listener");
-    }
-
     free(listener);
 
-    return ok;
+    return result("get-listener", ok);
 }
 
 bool setListener() {
-    bool ok = true;
-
     if (set_listener(DEVICEID, "192.168.1.100:60001") != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
 
-    if (ok) {
-        printf(OK, "set-listener");
-    }
-
-    return ok;
+    return result("set-listener", true);
 }
 
 bool getDoorControl() {
@@ -295,8 +269,8 @@ bool getDoorControl() {
 
     bool ok = true;
 
-    if (d.control != 3) {
-        printf("get-door-control: incorrect door control state - expected:%u, got:%u\n", 3, d.control);
+    if (d.mode != 3) {
+        printf("get-door-control: incorrect door control mode - expected:%u, got:%u\n", 3, d.mode);
         ok = false;
     }
 
@@ -305,9 +279,14 @@ bool getDoorControl() {
         ok = false;
     }
 
-    if (ok) {
-        printf(OK, "get-door-control");
+    return result("get-door-control", ok);
+}
+
+bool setDoorControl() {
+    if (set_door_control(DEVICEID, DOOR, NORMALLY_CLOSED, 6) != 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
     }
 
-    return ok;
+    return result("set-door-control", true);
 }

@@ -55,6 +55,8 @@ int main(int argc, char **argv) {
         rc = setListener(DEVICEID, "192.168.1.100:60001");
     } else if (strncmp(cmd, "get-door-control", 16) == 0) {
         rc = getDoorControl(DEVICEID, DOOR);
+    } else if (strncmp(cmd, "set-door-control", 16) == 0) {
+        rc = setDoorControl(DEVICEID, DOOR, NORMALLY_OPEN, 9);
     } else {
         printf("\n   *** ERROR missing command\n\n");
         usage();
@@ -88,6 +90,7 @@ int all() {
     rc = getListener(DEVICEID) == 0 ? rc : -1;
     rc = setListener(DEVICEID, "192.168.1.100:60001") == 0 ? rc : -1;
     rc = getDoorControl(DEVICEID, DOOR) == 0 ? rc : -1;
+    rc = setDoorControl(DEVICEID, DOOR, NORMALLY_OPEN, 9) == 0 ? rc : -1;
 
     return rc;
 }
@@ -105,5 +108,6 @@ void usage() {
     printf("      get-listener\n");
     printf("      set-listener\n");
     printf("      get-door-control\n");
+    printf("      set-door-control\n");
     printf("\n");
 }

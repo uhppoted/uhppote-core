@@ -12,5 +12,6 @@
            set-time
            get-listener
            set-listener
-           get-door-control))
+           get-door-control
+           set-door-control))
 

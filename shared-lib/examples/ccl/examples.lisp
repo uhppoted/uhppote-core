@@ -43,3 +43,7 @@
 
 (defun get-door-control (device-id door) "" 
   (exec #'(lambda (u) (uhppoted-get-door-control u device-id door))))
+
+(defun set-door-control (device-id door mode delay) "" 
+  (exec #'(lambda (u) (uhppoted-set-door-control u device-id door mode delay)))
+  t)

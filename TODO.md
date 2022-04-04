@@ -3,14 +3,21 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [x] `get-door-control`
+  - [ ] Make tests order fixed
+        - [x] C
+        - [x] C++
+        - [x] C#
+              - use Array::Find
+        - [x] Python
+        - [x] CCL
+
+  - [x] `set-door-control`
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
         - [x] CCL
 
-  - [ ] `set-door-control`
   - [ ] `get-cards`
   - [ ] `get-card`
   - [ ] `get-card-by-index`
@@ -29,9 +36,10 @@
   - [ ] `refresh-tasklist`
   - [ ] `clear-task-list`
 
-  - [x] CCL examples 'all'
+  - [ ] python: constants for ControlMode
+  - [ ] CCL: constants + strings for ControlMode
+  - (?) Default to all examples (or at least make behaviour consistent)
   - (?) C++ std::invoke
-  - (?) Display/all order
   - (?) CCL DOLIST 
   - [ ] CCL test failure format
 ```
@@ -39,6 +47,8 @@ set-address       ok
 get-status        ok
 get-time:    incorrect date/time - expected:2022-01-02 12:34:56, got:2022-01-02 12:34:56
 ```
+  - [ ] CCL simplify main loop with `thereis`
+        https://gigamonkeys.com/book/loop-for-black-belts.html
 
   
   - [ ] lint

@@ -3,6 +3,10 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#define NORMALLY_OPEN 1
+#define NORMALLY_CLOSED 2
+#define CONTROLLED 3
+
 typedef struct controller {
     uint32_t id;
     const char *address;
@@ -43,7 +47,7 @@ typedef struct status {
 } status;
 
 typedef struct door_control {
-    uint8_t control;
+    uint8_t mode;
     uint8_t delay;
 } door_control;
 
@@ -61,3 +65,4 @@ int set_time(uint32_t id, char *);
 int get_listener(uint32_t id, char **);
 int set_listener(uint32_t id, char *);
 int get_door_control(uint32_t id, uint8_t door, struct door_control *);
+int set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay);

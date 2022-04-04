@@ -8,7 +8,12 @@ using namespace std;
 
 typedef bool (*f)(uhppoted &);
 
-map<string, f> tests = {
+typedef struct test {
+    string command;
+    f fn;
+} test;
+
+vector<test> tests = {
     {"get-devices", getDevices},
     {"get-device", getDevice},
     {"set-address", setAddress},
@@ -18,6 +23,7 @@ map<string, f> tests = {
     {"get-listener", getListener},
     {"set-listener", setListener},
     {"get-door-control", getDoorControl},
+    {"set-door-control", setDoorControl},
 };
 
 void usage();
@@ -39,22 +45,23 @@ int main(int argc, char **argv) {
     if (cmd == "" || cmd == "all") {
         bool ok = true;
         for (auto it = tests.begin(); it != tests.end(); it++) {
-            ok = it->second(u) ? ok : false;
+            ok = it->fn(u) ? ok : false;
         }
 
         return ok ? 0 : -1;
     }
 
-    auto it = tests.find(cmd);
-    if (it == tests.end()) {
-        cerr << endl
-             << "   *** ERROR invalid command (" << cmd << ")" << endl
-             << endl;
-        usage();
-        return -1;
+    for (auto it = tests.begin(); it != tests.end(); it++) {
+        if (it->command == cmd) {
+            return it->fn(u) ? 0 : -1;
+        }
     }
 
-    return it->second(u) ? 0 : -1;
+    cerr << endl
+         << "   *** ERROR invalid command (" << cmd << ")" << endl
+         << endl;
+    usage();
+    return -1;
 }
 
 void usage() {
@@ -64,7 +71,7 @@ void usage() {
     cout << "      all" << endl;
 
     for (auto it = tests.begin(); it != tests.end(); it++) {
-        cout << "      " << it->first << endl;
+        cout << "      " << it->command << endl;
     }
     cout << endl;
 }

@@ -150,6 +150,12 @@ func getTime(uu uhppote.IUHPPOTE, datetime **C.char, deviceID uint32) error {
 		return fmt.Errorf("invalid argument (datetime) - expected valid pointer to string")
 	}
 
+	if DEBUG {
+		fmt.Printf(">>> get-time\n")
+		fmt.Printf("    ID: %v\n", deviceID)
+		fmt.Println()
+	}
+
 	*datetime = C.CString("2022-01-02 12:34:56")
 
 	return nil
@@ -165,7 +171,7 @@ func setTime(uu uhppote.IUHPPOTE, deviceID uint32, datetime *C.char) error {
 	} else {
 		if DEBUG {
 			fmt.Printf(">>> set-time\n")
-			fmt.Printf("    ID: %v\n", deviceID)
+			fmt.Printf("    ID:        %v\n", deviceID)
 			fmt.Printf("    date/time: %v\n", dt.Format("2006-01-02 15:04:05"))
 			fmt.Println()
 		}
@@ -177,6 +183,12 @@ func setTime(uu uhppote.IUHPPOTE, deviceID uint32, datetime *C.char) error {
 func getListener(uu uhppote.IUHPPOTE, address **C.char, deviceID uint32) error {
 	if address == nil {
 		return fmt.Errorf("invalid argument (address) - expected valid pointer to string")
+	}
+
+	if DEBUG {
+		fmt.Printf(">>> get-listener\n")
+		fmt.Printf("    ID: %v\n", deviceID)
+		fmt.Println()
 	}
 
 	*address = C.CString("192.168.1.100:60001")
@@ -193,6 +205,11 @@ func setListener(uu uhppote.IUHPPOTE, deviceID uint32, listener *C.char) error {
 		return err
 	} else if address == nil || address.IP.To4() == nil {
 		return fmt.Errorf("Invalid UDP address: %v", listener)
+	} else if DEBUG {
+		fmt.Printf(">>> set-listener\n")
+		fmt.Printf("    ID:       %v\n", deviceID)
+		fmt.Printf("    listener: %v\n", address.IP.To4())
+		fmt.Println()
 	}
 
 	return nil
@@ -203,8 +220,28 @@ func getDoorControl(uu uhppote.IUHPPOTE, control *C.struct_DoorControl, deviceID
 		return fmt.Errorf("invalid argument (device) - expected valid pointer to DoorControl struct")
 	}
 
-	control.control = C.uchar(types.Controlled)
+	if DEBUG {
+		fmt.Printf(">>> get-door-control\n")
+		fmt.Printf("    ID:   %v\n", deviceID)
+		fmt.Printf("    door: %v\n", door)
+		fmt.Println()
+	}
+
+	control.mode = C.uchar(types.Controlled)
 	control.delay = C.uchar(7)
+
+	return nil
+}
+
+func setDoorControl(uu uhppote.IUHPPOTE, deviceID uint32, door uint8, mode types.ControlState, delay uint8) error {
+	if DEBUG {
+		fmt.Printf(">>> set-door-control\n")
+		fmt.Printf("    ID:    %v\n", deviceID)
+		fmt.Printf("    door:  %v\n", door)
+		fmt.Printf("    mode:  %v\n", mode)
+		fmt.Printf("    delay: %v\n", delay)
+		fmt.Println()
+	}
 
 	return nil
 }

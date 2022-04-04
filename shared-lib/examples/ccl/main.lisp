@@ -16,6 +16,7 @@
   (format t "      get-listener      Retrieves a controller's configured event listener address~%") 
   (format t "      set-listener      Sets a controller event listener address and port~%") 
   (format t "      get-door-control  Retrieves the door control state and open delay for a controller door~%") 
+  (format t "      set-door-control  Sets the control mode and delay for a controller door~%") 
   (format t "~%"))
 
 (defun help () ""
@@ -29,6 +30,7 @@
                  "(get-listener)"
                  "(set-listener)"
                  "(get-door-control)"
+                 "(set-door-control)"
            )))
 
 (defun get-devices () ""
@@ -58,6 +60,9 @@
 (defun get-door-control () ""
   (format t "  get-door-control:~%    ~:w~%~%" (examples:get-door-control 405419896 4)))
 
+(defun set-door-control () ""
+  (format t "  set-door-control:~%    ~:w~%~%" (examples:set-door-control 405419896 4 1 9)))
+
 (defun all () "Executes all examples with a 'warning' condition handler"
   (get-devices)
   (get-device)
@@ -67,7 +72,8 @@
   (set-time)
   (get-listener)
   (set-listener)
-  (get-door-control))
+  (get-door-control)
+  (set-door-control))
 
 (defun main () ""
   (let ((args (parse-command-line)))
@@ -83,6 +89,7 @@
                    ((string= arg "get-listener")     (get-listener))
                    ((string= arg "set-listener")     (set-listener))
                    ((string= arg "get-door-control") (get-door-control))
+                   ((string= arg "set-door-control") (set-door-control))
                    ((string= arg "all")              (all))
                    ((string= arg "help")             (help))
                    (t (help)))))))

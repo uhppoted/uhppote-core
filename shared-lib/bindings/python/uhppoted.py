@@ -77,7 +77,7 @@ class Status:
 
 @dataclass
 class DoorControl:
-    control: int
+    mode: int
     delay: int
 
 
@@ -225,6 +225,14 @@ class Uhppote:
         GetDoorControl(self._uhppote, byref(control), deviceID, door)
 
         return DoorControl(control.control, control.delay)
+
+    def set_door_control(self, deviceID, door, mode, delay):
+        SetDoorControl = lib.SetDoorControl
+        SetDoorControl.argtypes = [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ubyte, c_ubyte]
+        SetDoorControl.restype = ctypes.c_char_p
+        SetDoorControl.errcheck = self.errcheck
+
+        SetDoorControl(self._uhppote, deviceID, door, mode, delay)
 
 
 # INTERNAL TYPES

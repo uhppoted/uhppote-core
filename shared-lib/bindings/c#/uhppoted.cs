@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 namespace uhppoted {
+
 public class Controller {
     public uint ID;
     public string address;
@@ -90,13 +91,19 @@ public class Status {
 };
 
 public class DoorControl {
-    public byte control;
+    public byte mode;
     public byte delay;
 
-    public DoorControl(byte control, byte delay) {
-        this.control = control;
+    public DoorControl(byte mode, byte delay) {
+        this.mode = mode;
         this.delay = delay;
     }
+};
+
+public static class ControlModes {
+    public const byte NormallyOpen = 1;
+    public const byte NormallyClosed = 2;
+    public const byte Controlled = 3;
 };
 
 public class Uhppoted : IDisposable {
@@ -188,6 +195,9 @@ public class Uhppoted : IDisposable {
 
     [DllImport("libuhppoted.so")]
     private static extern string GetDoorControl(ref UHPPOTE u, ref GoDoorControl c, uint deviceID, byte door);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string SetDoorControl(ref UHPPOTE u, uint deviceID, byte door, byte mode, byte delay);
 
     public uint[] GetDevices() {
         int N = 0;
@@ -314,6 +324,15 @@ public class Uhppoted : IDisposable {
 
         return new DoorControl(control.control, control.delay);
     }
+
+    public void SetDoorControl(uint deviceID, byte door, byte mode, byte delay) {
+        string err = SetDoorControl(ref this.u, deviceID, door, mode, delay);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+    }
+
+    // INTERNAL structs for DLL
 
     struct udevice {
         public uint ID;

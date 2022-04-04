@@ -7,7 +7,14 @@ using namespace std;
 
 const uint32_t DEVICEID = 405419896;
 const uint8_t DOOR = 4;
-const int W = 18;
+
+bool result(string test, bool ok) {
+    if (ok) {
+        cout << setw(18) << left << test << "ok" << endl;
+    }
+
+    return ok;
+}
 
 bool getDevices(uhppoted &u) {
     try {
@@ -24,13 +31,7 @@ bool getDevices(uhppoted &u) {
             ok = false;
         }
 
-        if (ok) {
-            cout << setw(W) << left << "get-devices"
-                 << "ok" << endl;
-        }
-
-        return ok;
-
+        return result("get-devices", ok);
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -92,12 +93,7 @@ bool getDevice(uhppoted &u) {
             ok = false;
         }
 
-        if (ok) {
-            cout << setw(W) << left << "get-device"
-                 << "ok" << endl;
-        }
-
-        return ok;
+        return result("get-device", ok);
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -115,10 +111,7 @@ bool setAddress(uhppoted &u) {
 
         u.set_address(DEVICEID, address, subnet, gateway);
 
-        cout << setw(W) << left << "set-address"
-             << "ok" << endl;
-
-        return true;
+        return result("set-address", true);
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -228,12 +221,7 @@ bool getStatus(uhppoted &u) {
             ok = false;
         }
 
-        if (ok) {
-            cout << setw(W) << left << "get-status"
-                 << "ok" << endl;
-        }
-
-        return ok;
+        return result("get-status", ok);
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -255,12 +243,7 @@ bool getTime(uhppoted &u) {
             ok = false;
         }
 
-        if (ok) {
-            cout << setw(W) << left << "get-time"
-                 << "ok" << endl;
-        }
-
-        return ok;
+        return result("get-time", ok);
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -276,10 +259,7 @@ bool setTime(uhppoted &u) {
 
         u.set_time(DEVICEID, datetime);
 
-        cout << setw(W) << left << "set-time"
-             << "ok" << endl;
-
-        return true;
+        return result("set-time", true);
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -301,12 +281,7 @@ bool getListener(uhppoted &u) {
             ok = false;
         }
 
-        if (ok) {
-            cout << setw(W) << left << "get-listener"
-                 << "ok" << endl;
-        }
-
-        return ok;
+        return result("get-listener", ok);
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -322,10 +297,7 @@ bool setListener(uhppoted &u) {
 
         u.set_listener(DEVICEID, listener);
 
-        cout << setw(W) << left << "set-listener"
-             << "ok" << endl;
-
-        return true;
+        return result("set-listener", true);
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -340,8 +312,8 @@ bool getDoorControl(uhppoted &u) {
         auto d = u.get_door_control(DEVICEID, DOOR);
         bool ok = true;
 
-        if (d.control != 3) {
-            cout << "get-door-control: incorrect control state - expected:" << 3 << ", got:" << static_cast<int>(d.control) << endl;
+        if (d.mode != 3) {
+            cout << "get-door-control: incorrect control mode - expected:" << 3 << ", got:" << static_cast<int>(d.mode) << endl;
             ok = false;
         }
 
@@ -350,12 +322,21 @@ bool getDoorControl(uhppoted &u) {
             ok = false;
         }
 
-        if (ok) {
-            cout << setw(W) << left << "get-door-control"
-                 << "ok" << endl;
-        }
+        return result("get-door-control", ok);
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
 
-        return ok;
+    return false;
+}
+
+bool setDoorControl(uhppoted &u) {
+    try {
+        u.set_door_control(DEVICEID, DOOR, NORMALLY_CLOSED, 6);
+
+        return result("set-door-control", true);
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl

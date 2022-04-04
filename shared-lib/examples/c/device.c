@@ -162,10 +162,60 @@ int getDoorControl(uint32_t deviceID, uint8_t door) {
     }
 
     printf("\nget-door-control\n");
-    printf("  ID:      %u\n", deviceID);
-    printf("  door:    %u\n", door);
-    printf("  control: %u\n", control.control);
-    printf("  delay:   %u\n", control.delay);
+    printf("  ID:    %u\n", deviceID);
+    printf("  door:  %u\n", door);
+
+    switch (control.mode) {
+    case NORMALLY_OPEN:
+        printf("  mode:  %s\n", "normally open");
+        break;
+
+    case NORMALLY_CLOSED:
+        printf("  mode:  %s\n", "normally closed");
+        break;
+
+    case CONTROLLED:
+        printf("  mode:  %s\n", "controlled");
+        break;
+
+    default:
+        printf("  mode:  %s\n", "???");
+    }
+
+    printf("  delay: %us\n", control.delay);
+    printf("\n");
+
+    return 0;
+}
+
+int setDoorControl(uint32_t deviceID, uint8_t door, uint8_t mode, uint8_t delay) {
+    if (set_door_control(deviceID, door, mode, delay) != 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    printf("\nset-door-control\n");
+    printf("  ID:    %u\n", deviceID);
+    printf("  door:  %u\n", door);
+
+    switch (mode) {
+    case NORMALLY_OPEN:
+        printf("  mode:  %s\n", "normally open");
+        break;
+
+    case NORMALLY_CLOSED:
+        printf("  mode:  %s\n", "normally closed");
+        break;
+
+    case CONTROLLED:
+        printf("  mode:  %s\n", "controlled");
+        break;
+
+    default:
+        printf("  mode:  %s\n", "???");
+    }
+
+    printf("  delay: %us\n", delay);
     printf("\n");
 
     return 0;

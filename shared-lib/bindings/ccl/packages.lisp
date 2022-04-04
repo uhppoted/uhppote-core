@@ -13,6 +13,7 @@
            uhppoted-get-listener
            uhppoted-set-listener
            uhppoted-get-door-control
+           uhppoted-set-door-control
            uhppoted-error
            with-warning
            message
@@ -45,6 +46,6 @@
            event-card
            event-reason
 
-           door-control-control
+           door-control-mode
            door-control-delay))
 

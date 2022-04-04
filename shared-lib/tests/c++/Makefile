@@ -44,6 +44,9 @@ set-listener: build
 get-door-control: build
 	$(CMD) get-door-control
 
+set-door-control: build
+	$(CMD) set-door-control
+
 all: build
 	$(CMD) all
 

@@ -207,9 +207,9 @@
 (defun get-door-control () "" 
   (let ((ok T)
         (control (exec #'(lambda (u) (uhppoted-get-door-control u 405419896 4)))))
-       (if (/= 3 (door-control-control control)) 
+       (if (/= 3 (door-control-mode control)) 
            (progn
-             (format t "get-door-control: incorrect door control state - expected:~a, got:~a~%" 3 (door-control-control control))
+             (format t "get-door-control: incorrect door control mode - expected:~a, got:~a~%" 3 (door-control-mode control))
              (setf ok NIL)))
 
        (if (/= 7 (door-control-delay control)) 
@@ -220,3 +220,8 @@
        (if ok 
           (format t "get-door-control  ok~%") 
           (error 'failed :message  "get-door-control: FAILED"))))
+
+
+(defun set-door-control () "" 
+  (exec #'(lambda (u) (uhppoted-set-door-control u 405419896 4 2 6)))
+  (format t "set-door-control  ok~%"))

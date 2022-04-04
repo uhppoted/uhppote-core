@@ -4,6 +4,10 @@
 #include <string>
 #include <vector>
 
+#define NORMALLY_OPEN 1
+#define NORMALLY_CLOSED 2
+#define CONTROLLED 3
+
 typedef struct controller {
     uint32_t id;
     std::string address;
@@ -44,7 +48,7 @@ typedef struct status {
 } status;
 
 typedef struct door_control {
-    uint8_t control;
+    uint8_t mode;
     uint8_t delay;
 } door_control;
 
@@ -67,6 +71,7 @@ class uhppoted {
     std::string get_listener(uint32_t id);
     void set_listener(uint32_t id, std::string &);
     door_control get_door_control(uint32_t id, uint8_t door);
+    void set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay);
 
   private:
     UHPPOTE *u;

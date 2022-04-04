@@ -61,6 +61,10 @@ public class example {
                 GetDoorControl(u, 405419896, 4);
                 break;
 
+            case "set-door-control":
+                SetDoorControl(u, 405419896, 4, ControlModes.NormallyOpen, 9);
+                break;
+
             case "all":
                 GetDevices(u);
                 GetDevice(u, 405419896);
@@ -70,6 +74,7 @@ public class example {
                 GetListener(u, 405419896);
                 SetListener(u, 405419896, "192.168.1.100:60001");
                 GetDoorControl(u, 405419896, 4);
+                SetDoorControl(u, 405419896, 4, ControlModes.NormallyOpen, 9);
                 break;
 
             default:
@@ -103,6 +108,7 @@ public class example {
         Console.WriteLine("    set-time");
         Console.WriteLine("    get-listener");
         Console.WriteLine("    get-door-control");
+        Console.WriteLine("    set-door-control");
         Console.WriteLine("    help");
         Console.WriteLine();
         Console.WriteLine("  get-devices");
@@ -131,6 +137,9 @@ public class example {
         Console.WriteLine();
         Console.WriteLine("  get-door-control");
         Console.WriteLine("    Retrieves the controller door control state and door open delay.");
+        Console.WriteLine();
+        Console.WriteLine("  set-door-control");
+        Console.WriteLine("    Sets the control mode and delay for a controller door.");
         Console.WriteLine();
         Console.WriteLine("  help");
         Console.WriteLine("    Displays this information.");
@@ -235,8 +244,55 @@ public class example {
         Console.WriteLine(String.Format("get-door-control"));
         Console.WriteLine(String.Format("  ID:      {0}", deviceID));
         Console.WriteLine(String.Format("  door:    {0}", door));
-        Console.WriteLine(String.Format("  control: {0}", control.control));
+
+        switch (control.mode) {
+        case ControlModes.NormallyOpen:
+            Console.WriteLine(String.Format("  mode:    {0}", "normally open"));
+            break;
+
+        case ControlModes.NormallyClosed:
+            Console.WriteLine(String.Format("  mode:    {0}", "normally closed"));
+            break;
+
+        case ControlModes.Controlled:
+            Console.WriteLine(String.Format("  mode:    {0}", "controlled"));
+            break;
+
+        default:
+            Console.WriteLine(String.Format("  mode:    {0}", "???"));
+            break;
+        }
+
         Console.WriteLine(String.Format("  delay:   {0}", control.delay));
+        Console.WriteLine();
+    }
+
+    static void SetDoorControl(Uhppoted u, uint deviceID, byte door, byte mode, byte delay) {
+        u.SetDoorControl(deviceID, door, mode, delay);
+
+        Console.WriteLine(String.Format("set-door-control"));
+        Console.WriteLine(String.Format("  ID:      {0}", deviceID));
+        Console.WriteLine(String.Format("  door:    {0}", door));
+
+        switch (mode) {
+        case ControlModes.NormallyOpen:
+            Console.WriteLine(String.Format("  mode:    {0}", "normally open"));
+            break;
+
+        case ControlModes.NormallyClosed:
+            Console.WriteLine(String.Format("  mode:    {0}", "normally closed"));
+            break;
+
+        case ControlModes.Controlled:
+            Console.WriteLine(String.Format("  mode:    {0}", "controlled"));
+            break;
+
+        default:
+            Console.WriteLine(String.Format("  mode:    {0}", "???"));
+            break;
+        }
+
+        Console.WriteLine(String.Format("  delay:   {0}", delay));
         Console.WriteLine();
     }
 }

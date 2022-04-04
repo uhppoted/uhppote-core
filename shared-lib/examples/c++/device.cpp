@@ -206,8 +206,74 @@ int getDoorControl(uhppoted &u, uint32_t deviceID, uint8_t door) {
              << "get-door-control" << endl;
         cout << "  ID:      " << deviceID << endl;
         cout << "  door:    " << static_cast<int>(door) << endl;
-        cout << "  control: " << static_cast<int>(d.control) << endl;
+
+        switch (d.mode) {
+        case NORMALLY_OPEN:
+            cout << "  mode: "
+                 << "normally open" << endl;
+            break;
+
+        case NORMALLY_CLOSED:
+            cout << "  mode: "
+                 << "normally closed" << endl;
+            break;
+
+        case CONTROLLED:
+            cout << "  mode: "
+                 << "controlled" << endl;
+            break;
+
+        default:
+            cout << "  mode: "
+                 << "???" << endl;
+            break;
+        }
+
         cout << "  delay:   " << static_cast<int>(d.delay) << endl;
+        cout << endl;
+
+        return 0;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return -1;
+}
+
+int setDoorControl(uhppoted &u, uint32_t deviceID, uint8_t door, uint8_t mode, uint8_t delay) {
+    try {
+        u.set_door_control(deviceID, door, mode, delay);
+
+        cout << endl
+             << "set-door-control" << endl;
+        cout << "  ID:      " << deviceID << endl;
+        cout << "  door:    " << static_cast<int>(door) << endl;
+
+        switch (mode) {
+        case NORMALLY_OPEN:
+            cout << "  mode: "
+                 << "normally open" << endl;
+            break;
+
+        case NORMALLY_CLOSED:
+            cout << "  mode: "
+                 << "normally closed" << endl;
+            break;
+
+        case CONTROLLED:
+            cout << "  mode: "
+                 << "controlled" << endl;
+            break;
+
+        default:
+            cout << "  mode: "
+                 << "???" << endl;
+            break;
+        }
+
+        cout << "  delay:   " << static_cast<int>(delay) << endl;
         cout << endl;
 
         return 0;

@@ -14,6 +14,7 @@
         '("get-listener"     tests:get-listener)
         '("set-listener"     tests:set-listener)
         '("get-door-control" tests:get-door-control)
+        '("set-door-control" tests:set-door-control)
 ))
 
 
@@ -62,7 +63,7 @@
          (args (parse-command-line))
          (arg  (if args (first args) "all")))
     (if (string= arg "all") 
-        (all))
+        (all)
         (block single-command
           (loop for cmd in ll
             do (if (string= arg (first cmd))
@@ -71,7 +72,7 @@
                      (return-from single-command))))
 
           (format *error-output* "~%   *** ERROR invalid command (~a)~%" arg)
-          (usage))))
+          (usage)))))
 
 ;;;; Workaround to skip command line arguments for REPL - invoking (main) in the REPL is
 ;;;; particularly pointless so:

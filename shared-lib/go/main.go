@@ -58,7 +58,7 @@ typedef struct Status {
 } Status;
 
 typedef struct DoorControl {
-    uint8_t control;
+    uint8_t mode;
     uint8_t delay;
 } DoorControl;
 
@@ -73,6 +73,8 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
+
+var DEBUG bool
 
 func main() {}
 
@@ -175,6 +177,17 @@ func GetDoorControl(u *C.struct_UHPPOTE, control *C.struct_DoorControl, deviceID
 	return nil
 }
 
+//export SetDoorControl
+func SetDoorControl(u *C.struct_UHPPOTE, deviceID uint32, door uint8, mode uint8, delay uint8) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := setDoorControl(uu, deviceID, door, types.ControlState(mode), delay); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 	bind := types.BindAddr{IP: []byte{0, 0, 0, 0}, Port: 0}
 	broadcast := types.BroadcastAddr{IP: []byte{255, 255, 255, 255}, Port: 60000}
@@ -231,6 +244,8 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 			}
 		}
 	}
+
+	DEBUG = debug
 
 	return uhppote.NewUHPPOTE(bind, broadcast, listen, timeout, devices, debug), nil
 }

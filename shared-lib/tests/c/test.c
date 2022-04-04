@@ -25,6 +25,7 @@ const test tests[] = {
     {.name = "get-listener", .fn = getListener},
     {.name = "set-listener", .fn = setListener},
     {.name = "get-door-control", .fn = getDoorControl},
+    {.name = "set-door-control", .fn = setDoorControl},
 };
 
 int main(int argc, char **argv) {

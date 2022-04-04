@@ -168,8 +168,12 @@ func getDoorControl(uu uhppote.IUHPPOTE, control *C.struct_DoorControl, deviceID
 		return fmt.Errorf("invalid argument (device) - expected valid pointer to DoorControl struct")
 	}
 
-	control.control = C.uchar(types.Controlled)
+	control.mode = C.uchar(types.Controlled)
 	control.delay = C.uchar(7)
 
+	return nil
+}
+
+func setDoorControl(uu uhppote.IUHPPOTE, deviceID uint32, door uint8, mode types.ControlState, delay uint8) error {
 	return nil
 }
