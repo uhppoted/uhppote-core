@@ -269,3 +269,14 @@ void uhppoted::set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t
         throw uhppoted_exception(err);
     }
 }
+
+int uhppoted::get_cards(uint32_t id) {
+    int N;
+
+    char *err = GetCards(u, &N, id);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+
+    return N;
+}

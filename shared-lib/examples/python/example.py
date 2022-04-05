@@ -14,7 +14,18 @@ def usage():
     print()
     print("  Usage: python example.py <command>")
     print()
-    print("         python example.py help for a list of commands")
+    print("  commands")
+    print("    get-devices")
+    print("    get-device")
+    print("    set-device")
+    print("    get-status")
+    print("    get-time")
+    print("    set-time")
+    print("    get-listener")
+    print("    set-listener")
+    print("    get-door-control")
+    print("    set-door-control")
+    print("    get-cards")
     print()
 
 
@@ -33,6 +44,7 @@ def help():
     print("    set-listener")
     print("    get-door-control")
     print("    set-door-control")
+    print("    get-cards")
     print("    help")
     print()
     print("  get-devices")
@@ -64,6 +76,9 @@ def help():
     print()
     print("  set-door-control")
     print("    Sets the control mode and delay for a controller door.")
+    print()
+    print("  get-cards")
+    print("    Retrieves the number of cards stored on a controller.")
     print()
     print("  help")
     print("    Displays this information.")
@@ -253,6 +268,20 @@ def set_door_control(u, deviceID, door, mode, delay):
         print()
 
 
+def get_cards(u, deviceID):
+    try:
+        cards = u.get_cards(deviceID)
+
+        print("get-cards")
+        print(f"  ID:    {deviceID}")
+        print(f"  cards: {cards}")
+        print()
+
+    except Exception as e:
+        print(f" *** ERROR get_cards ({e})")
+        print()
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description='Example CLI for the uhppote-core Python integration')
@@ -264,23 +293,6 @@ if __name__ == "__main__":
 
     if cmd == "help":
         help()
-
-    elif cmd not in [
-            'all',
-            'get-devices',
-            'get-device',
-            'set-address',
-            'get-status',
-            'get-time',
-            'set-time',
-            'get-listener',
-            'set-listener',
-            'get-door-control',
-            'set-door-control',
-    ]:
-        print()
-        print(f"  ERROR: invalid command ({cmd}). Try 'help' to see all commands and options")
-        print()
 
     else:
         alpha = uhppoted.Controller(405419896, "192.168.1.100")
@@ -320,17 +332,13 @@ if __name__ == "__main__":
             elif cmd == 'set-door-control':
                 set_door_control(u, 405419896, 4, 1, 9)
 
-            elif cmd == 'all':
-                get_devices(u)
-                get_device(u, 405419896)
-                set_address(u, 405419896, "192.168.1.125", "255.255.255.253", "192.168.1.5")
-                get_status(u, 405419896)
-                get_time(u, 405419896)
-                set_time(u, 405419896, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-                get_listener(u, 405419896)
-                set_listener(u, 405419896, "192.168.1.100:60001")
-                get_door_control(u, 405419896, 4)
-                set_door_control(u, 405419896, 4, 1, 9)
+            elif cmd == 'get-cards':
+                get_cards(u, 405419896)
+
+            else:
+                print()
+                print(f"  ERROR: invalid command ({cmd})")
+                usage()
 
         except BaseException as x:
             print()

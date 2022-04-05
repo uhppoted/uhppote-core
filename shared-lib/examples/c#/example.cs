@@ -13,11 +13,6 @@ public class example {
 
         string cmd = args[0];
 
-        if (cmd == "help") {
-            help();
-            return;
-        }
-
         try {
             Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
                                          new Controller(303986753, "192.168.1.100") };
@@ -65,20 +60,14 @@ public class example {
                 SetDoorControl(u, 405419896, 4, ControlModes.NormallyOpen, 9);
                 break;
 
-            case "all":
-                GetDevices(u);
-                GetDevice(u, 405419896);
-                SetAddress(u, 405419896, "192.168.1.125", "255.255.255.254", "192.168.1.5");
-                GetTime(u, 405419896);
-                SetTime(u, 405419896, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                GetListener(u, 405419896);
-                SetListener(u, 405419896, "192.168.1.100:60001");
-                GetDoorControl(u, 405419896, 4);
-                SetDoorControl(u, 405419896, 4, ControlModes.NormallyOpen, 9);
+            case "get-cards":
+                GetCards(u, 405419896);
                 break;
 
             default:
+                Console.WriteLine();
                 Console.WriteLine(String.Format("  *** ERROR: invalid command ({0})", cmd));
+                usage();
                 break;
             }
 
@@ -91,14 +80,6 @@ public class example {
         Console.WriteLine();
         Console.WriteLine("  Usage: mono example.exe <command>");
         Console.WriteLine();
-        Console.WriteLine("         mono example.exe help for a list of commands");
-        Console.WriteLine();
-    }
-
-    static void help() {
-        Console.WriteLine();
-        Console.WriteLine("Usage: python example.py <command>");
-        Console.WriteLine();
         Console.WriteLine("  commands");
         Console.WriteLine("    get-devices");
         Console.WriteLine("    get-device");
@@ -109,7 +90,7 @@ public class example {
         Console.WriteLine("    get-listener");
         Console.WriteLine("    get-door-control");
         Console.WriteLine("    set-door-control");
-        Console.WriteLine("    help");
+        Console.WriteLine("    get-cards");
         Console.WriteLine();
         Console.WriteLine("  get-devices");
         Console.WriteLine("    Retrieves a list of UHPPOTE controller IDs findable on the local LAN.");
@@ -141,8 +122,8 @@ public class example {
         Console.WriteLine("  set-door-control");
         Console.WriteLine("    Sets the control mode and delay for a controller door.");
         Console.WriteLine();
-        Console.WriteLine("  help");
-        Console.WriteLine("    Displays this information.");
+        Console.WriteLine("  get-cards");
+        Console.WriteLine("    Retrieves the number of cards stored on a controller.");
         Console.WriteLine();
     }
 
@@ -293,6 +274,15 @@ public class example {
         }
 
         Console.WriteLine(String.Format("  delay:   {0}", delay));
+        Console.WriteLine();
+    }
+
+    static void GetCards(Uhppoted u, uint deviceID) {
+        int cards = u.GetCards(deviceID);
+
+        Console.WriteLine(String.Format("get-cards"));
+        Console.WriteLine(String.Format("  ID:    {0}", deviceID));
+        Console.WriteLine(String.Format("  cards: {0}", cards));
         Console.WriteLine();
     }
 }

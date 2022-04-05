@@ -281,6 +281,16 @@
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
 
 
+(defun uhppoted-get-cards (uhppote device-id) "Retrieves the number of cards stored on a controller"
+  (rletz ((N :signed-long 0))
+         (with-macptrs ((err (external-call "GetCards" :address uhppote 
+                                                       :address N 
+                                                       :unsigned-long device-id 
+                                                       :address)))
+          (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+          (%get-signed-long N))))
+
+
 (defun debug () "" 
   (handler-bind
 	((uhppoted-error

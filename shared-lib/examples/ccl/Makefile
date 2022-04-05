@@ -14,8 +14,8 @@ build: examples
 usage: build
 	$(CMD) 
 
-help: build
-	$(CMD) help
+invalid: build
+	$(CMD) mystery-meat
 
 get-devices: build
 	$(CMD) get-devices
@@ -47,13 +47,10 @@ get-door-control: build
 set-door-control: build
 	$(CMD) set-door-control
 
-all: build
-	$(CMD) all
+get-cards: build
+	$(CMD) get-cards
 
-run: build
-	$(CMD)
-
-repl: 
+run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp
 
 debug: 

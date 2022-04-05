@@ -4,21 +4,23 @@
 
 - Shared-lib/DLL
   - [ ] Make tests order fixed
-        - [x] C
-        - [x] C++
-        - [x] C#
+        - [ ] C#
               - use Array::Find
-        - [x] Python
-        - [x] CCL
 
-  - [x] `set-door-control`
+  - [x] No 'all' for examples
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
         - [x] CCL
 
-  - [ ] `get-cards`
+  - [x] `get-cards`
+        - [x] C
+        - [x] C++
+        - [x] C#
+        - [x] Python
+        - [x] CCL
+
   - [ ] `get-card`
   - [ ] `get-card-by-index`
   - [ ] `put-card`
@@ -36,9 +38,13 @@
   - [ ] `refresh-tasklist`
   - [ ] `clear-task-list`
 
+  - [ ] Extend examples to use command line args
+        - [ ] Brief usage() list commands
+        - [ ] 'help' lists commands + descriptions
+        - [ ] Python usage()
+  - [ ] Tests usage + help
   - [ ] python: constants for ControlMode
   - [ ] CCL: constants + strings for ControlMode
-  - (?) Default to all examples (or at least make behaviour consistent)
   - (?) C++ std::invoke
   - (?) CCL DOLIST 
   - [ ] CCL test failure format

@@ -4,34 +4,39 @@
 (load "examples.lisp")
 
 (defun usage () ""
-  (format t "~%  Usage: ./examples <command>~%") 
-  (format t "~%") 
-  (format t "    Supported commands:~%") 
-  (format t "      get-devices       Retrieves a list of devices on the local LAN~%") 
-  (format t "      get-device        Retrieves the information for a UHPPOTE controller~%") 
-  (format t "      set-address       Sets a controller IP address, subnet mask and gateway address~%") 
-  (format t "      get-status        Retrieves a controller status~%") 
-  (format t "      get-time          Retrieves a controller date/time~%") 
-  (format t "      set-time          Sets a controller date/time~%") 
-  (format t "      get-listener      Retrieves a controller's configured event listener address~%") 
-  (format t "      set-listener      Sets a controller event listener address and port~%") 
-  (format t "      get-door-control  Retrieves the door control state and open delay for a controller door~%") 
-  (format t "      set-door-control  Sets the control mode and delay for a controller door~%") 
-  (format t "~%"))
+  (format t "~%   Usage: ./examples <command>~%") 
+  (format t "~%   Suppported commands:~%~{     ~a~^~%~}~%~%" 
+           (list "get-devices"
+                 "get-device"
+                 "set-address"
+                 "get-status"
+                 "get-time"
+                 "set-time"
+                 "get-listener"
+                 "set-listener"
+                 "get-door-control"
+                 "set-door-control"
+                 "get-cards"
+           )))
+
 
 (defun help () ""
-  (format t "~%  Examples:~%~{    ~a~^~%~}~%~%" 
-           (list "(get-devices)"
-                 "(get-device)"
-                 "(set-address)"
-                 "(get-status)"
-                 "(get-time)"
-                 "(set-time)"
-                 "(get-listener)"
-                 "(set-listener)"
-                 "(get-door-control)"
-                 "(set-door-control)"
-           )))
+  (format t "~%   Usage: ./examples <command>~%") 
+  (format t "~%") 
+  (format t "   Supported commands:~%") 
+  (format t "~%") 
+  (format t "   get-devices       Retrieves a list of devices on the local LAN~%") 
+  (format t "   get-device        Retrieves the information for a UHPPOTE controller~%") 
+  (format t "   set-address       Sets a controller IP address, subnet mask and gateway address~%") 
+  (format t "   get-status        Retrieves a controller status~%") 
+  (format t "   get-time          Retrieves a controller date/time~%") 
+  (format t "   set-time          Sets a controller date/time~%") 
+  (format t "   get-listener      Retrieves a controller's configured event listener address~%") 
+  (format t "   set-listener      Sets a controller event listener address and port~%") 
+  (format t "   get-door-control  Retrieves the door control state and open delay for a controller door~%") 
+  (format t "   set-door-control  Sets the control mode and delay for a controller door~%") 
+  (format t "   get-cards         Retrieves the number of cards stored on a controller~%") 
+  (format t "~%"))
 
 (defun get-devices () ""
   (format t "~%  get-devices:~%~{    ~a~^~%~}~%~%" (coerce (examples:get-devices) 'list)))
@@ -63,22 +68,13 @@
 (defun set-door-control () ""
   (format t "  set-door-control:~%    ~:w~%~%" (examples:set-door-control 405419896 4 1 9)))
 
-(defun all () "Executes all examples with a 'warning' condition handler"
-  (get-devices)
-  (get-device)
-  (set-address)
-  (get-status)
-  (get-time)
-  (set-time)
-  (get-listener)
-  (set-listener)
-  (get-door-control)
-  (set-door-control))
+(defun get-cards () ""
+  (format t "  get-cards:~%    ~:w~%~%" (examples:get-cards 405419896)))
 
 (defun main () ""
   (let ((args (parse-command-line)))
     (if (not args)
-        (all)
+        (usage)
         (loop for arg in args
           do (cond ((string= arg "get-devices")      (get-devices))
                    ((string= arg "get-device")       (get-device))
@@ -90,9 +86,11 @@
                    ((string= arg "set-listener")     (set-listener))
                    ((string= arg "get-door-control") (get-door-control))
                    ((string= arg "set-door-control") (set-door-control))
-                   ((string= arg "all")              (all))
+                   ((string= arg "get-cards")        (get-cards))
                    ((string= arg "help")             (help))
-                   (t (help)))))))
+                   (t (progn
+                        (format t "~%   *** ERROR: invalid command (~a)~%"  arg) 
+                        (usage))))))))
 
 ;;;; Workaround to skip command line arguments for REPL - invoking (main) in the REPL is
 ;;;; peculiarly pointless so:

@@ -47,3 +47,6 @@
 (defun set-door-control (device-id door mode delay) "" 
   (exec #'(lambda (u) (uhppoted-set-door-control u device-id door mode delay)))
   t)
+
+(defun get-cards (device-id) "" 
+  (exec #'(lambda (u) (uhppoted-get-cards u device-id))))

@@ -1,18 +1,19 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/c++
 CMD=GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && ./test
+SRC=test.cpp device.cpp cards.cpp
 
 lib: 
 	cd ../../go && make all
 
-format:
+format: $(SRC)
 	clang-format -i *.cpp
 	clang-format -i *.hpp
 	clang-format -i $(BINDINGS)/src/*.cpp
 	clang-format -i $(BINDINGS)/include/*.hpp
 
 build: format
-	clang -std=c++11  -o test test.cpp device.cpp $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB) -lc++ -L$(LIB) -luhppoted
+	clang -std=c++11 $(SRC) -o test  $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB) -lc++ -L$(LIB) -luhppoted
 
 invalid: build
 	$(CMD) mystery-meat
@@ -47,12 +48,14 @@ get-door-control: build
 set-door-control: build
 	$(CMD) set-door-control
 
+get-cards: build
+	$(CMD) get-cards
+
 all: build
 	$(CMD) all
 
 test: build
 	$(CMD)
 
-
 debug: build
-	$(CMD) mystery-meat
+	$(CMD) get-cards

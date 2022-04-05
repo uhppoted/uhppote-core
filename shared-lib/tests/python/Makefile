@@ -46,6 +46,9 @@ get-door-control: build
 set-door-control: build
 	$(CMD) set-door-control
 
+get-cards: build
+	$(CMD) get-cards
+
 all: build
 	$(CMD) all
 
@@ -53,4 +56,4 @@ test: build
 	$(CMD) 
 
 debug: build
-	$(CMD) mystery-meat
+	$(CMD) get-cards

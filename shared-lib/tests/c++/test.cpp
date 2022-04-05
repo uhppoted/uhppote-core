@@ -1,7 +1,9 @@
+#include <iomanip>
 #include <iostream>
 #include <map>
 
 #include "../include/uhppoted.hpp"
+#include "cards.hpp"
 #include "device.hpp"
 
 using namespace std;
@@ -24,12 +26,24 @@ vector<test> tests = {
     {"set-listener", setListener},
     {"get-door-control", getDoorControl},
     {"set-door-control", setDoorControl},
+    {"get-cards", getCards},
 };
 
-void usage();
+extern const uint32_t DEVICEID = 405419896;
+extern const uint8_t DOOR = 4;
+
+extern bool result(string test, bool ok) {
+    if (ok) {
+        cout << setw(18) << left << test << "ok" << endl;
+    }
+
+    return ok;
+}
 
 const controller ALPHA = {.id = 405419896, .address = "192.168.1.100"};
 const controller BETA = {.id = 303986753, .address = "192.168.1.100"};
+
+void usage();
 
 int main(int argc, char **argv) {
     string cmd;

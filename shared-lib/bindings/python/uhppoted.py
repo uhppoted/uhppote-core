@@ -234,6 +234,18 @@ class Uhppote:
 
         SetDoorControl(self._uhppote, deviceID, door, mode, delay)
 
+    def get_cards(self, deviceID):
+        GetCards = lib.GetCards
+        GetCards.argtypes = [POINTER(GoUHPPOTE), POINTER(c_int), c_ulong]
+        GetCards.restype = ctypes.c_char_p
+        GetCards.errcheck = self.errcheck
+
+        cards = ctypes.c_int(0)
+
+        GetCards(self._uhppote, byref(cards), deviceID)
+
+        return cards.value
+
 
 # INTERNAL TYPES
 class GoController(Structure):

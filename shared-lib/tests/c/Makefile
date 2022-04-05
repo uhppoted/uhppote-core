@@ -1,17 +1,17 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/c
 CMD=GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && ./test
-
+SRC=test.c device.c cards.c
 lib: 
 	cd ../../go && make all
 
-format:
+format: $(SRC)
 	clang-format -i *.c
 	clang-format -i $(BINDINGS)/src/*.c
 	clang-format -i $(BINDINGS)/include/*.h
 
 build: format
-	clang -o test test.c device.c $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
+	clang -o test $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
 
 invalid: build
 	$(CMD) mystery-meat
@@ -45,6 +45,9 @@ get-door-control: build
 
 set-door-control: build
 	$(CMD) set-door-control
+
+get-cards: build
+	$(CMD) get-cards
 
 all: build
 	$(CMD) all

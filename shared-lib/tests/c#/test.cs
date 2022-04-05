@@ -28,6 +28,7 @@ public class Test {
         new test("set-listener", SetListener),
         new test("get-door-control", GetDoorControl),
         new test("set-door-control", SetDoorControl),
+        new test("get-cards", GetCards),
     };
 
     public static void Main(string[] args) {
@@ -297,6 +298,18 @@ public class Test {
         u.SetDoorControl(DEVICEID, DOOR, ControlModes.NormallyClosed, 6);
 
         return result("set-door-control", true);
+    }
+
+    static bool GetCards(Uhppoted u) {
+        int cards = u.GetCards(DEVICEID);
+        bool ok = true;
+
+        if (cards != 39) {
+            Console.WriteLine("get-cards: incorrect card count - expected:{0}, got:{1}", 39, cards);
+            ok = false;
+        }
+
+        return result("get-cards", ok);
     }
 
     static bool result(string test, bool ok) {

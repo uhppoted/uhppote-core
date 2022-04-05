@@ -73,6 +73,8 @@ class uhppoted {
     door_control get_door_control(uint32_t id, uint8_t door);
     void set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay);
 
+    int get_cards(uint32_t id);
+
   private:
     UHPPOTE *u;
 };

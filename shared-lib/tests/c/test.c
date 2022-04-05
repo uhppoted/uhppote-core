@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "cards.h"
 #include "device.h"
 #include "uhppoted.h"
 
@@ -15,6 +16,17 @@ typedef struct test {
     f fn;
 } test;
 
+const uint32_t DEVICEID = 405419896;
+const uint8_t DOOR = 4;
+
+bool result(char *test, bool ok) {
+    if (ok) {
+        printf("%-16s  ok\n", test);
+    }
+
+    return ok;
+}
+
 const test tests[] = {
     {.name = "get-devices", .fn = getDevices},
     {.name = "get-device", .fn = getDevice},
@@ -26,6 +38,7 @@ const test tests[] = {
     {.name = "set-listener", .fn = setListener},
     {.name = "get-door-control", .fn = getDoorControl},
     {.name = "set-door-control", .fn = setDoorControl},
+    {.name = "get-cards", .fn = getCards},
 };
 
 int main(int argc, char **argv) {

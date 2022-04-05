@@ -5,16 +5,9 @@
 
 using namespace std;
 
-const uint32_t DEVICEID = 405419896;
-const uint8_t DOOR = 4;
-
-bool result(string test, bool ok) {
-    if (ok) {
-        cout << setw(18) << left << test << "ok" << endl;
-    }
-
-    return ok;
-}
+extern const uint32_t DEVICEID;
+extern const uint8_t DOOR;
+extern bool result(string test, bool ok);
 
 bool getDevices(uhppoted &u) {
     try {

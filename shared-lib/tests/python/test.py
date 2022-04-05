@@ -23,6 +23,7 @@ def tests():
         'set-listener': set_listener,
         'get-door-control': get_door_control,
         'set-door-control': set_door_control,
+        'get-cards': get_cards,
     }
 
 
@@ -204,7 +205,7 @@ def get_listener(u):
     ok = True
 
     if listener != "192.168.1.100:60001":
-        print(f"get-time: incorrect event listener - expected:192.168.1.100:60001, got:{listener}")
+        print(f"get-listener: incorrect event listener - expected:192.168.1.100:60001, got:{listener}")
         ok = False
 
     if ok:
@@ -248,6 +249,20 @@ def set_door_control(u):
         print(f"set-door-control  ok")
 
     return True
+
+
+def get_cards(u):
+    cards = u.get_cards(DEVICEID)
+    ok = True
+
+    if cards != 39:
+        print(f"get-cards: incorrect card count - expected:39, got:{cards}")
+        ok = False
+
+    if ok:
+        print(f"get-cards         ok")
+
+    return ok
 
 
 def usage():

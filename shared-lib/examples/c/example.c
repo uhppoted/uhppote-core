@@ -3,22 +3,22 @@
 #include <string.h>
 #include <time.h>
 
+#include "cards.h"
 #include "device.h"
 #include "uhppoted.h"
 
-int all();
 void usage();
 
 const uint32_t DEVICEID = 405419896;
 const uint8_t DOOR = 4;
 
 int main(int argc, char **argv) {
-    char *cmd = "";
-
-    if (argc > 1) {
-        cmd = argv[1];
+    if (argc < 2) {
+        usage();
+        return -1;
     }
 
+    char *cmd = argv[1];
     int rc = -1;
 
     controller alpha = {.id = 405419896, .address = "192.168.1.100"};
@@ -26,9 +26,7 @@ int main(int argc, char **argv) {
 
     setup("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2500, true, &alpha, &beta, NULL);
 
-    if (strcmp(cmd, "") == 0 || strncmp(cmd, "all", 3) == 0) {
-        rc = all();
-    } else if (strncmp(cmd, "get-devices", 11) == 0) {
+    if (strncmp(cmd, "get-devices", 11) == 0) {
         rc = getDevices();
     } else if (strncmp(cmd, "get-device", 10) == 0) {
         rc = getDevice(DEVICEID);
@@ -57,40 +55,15 @@ int main(int argc, char **argv) {
         rc = getDoorControl(DEVICEID, DOOR);
     } else if (strncmp(cmd, "set-door-control", 16) == 0) {
         rc = setDoorControl(DEVICEID, DOOR, NORMALLY_OPEN, 9);
+    } else if (strncmp(cmd, "get-cards", 16) == 0) {
+        rc = getCards(argc, argv);
     } else {
-        printf("\n   *** ERROR missing command\n\n");
+        printf("\n   *** ERROR invalid command (%s)\n\n", cmd);
         usage();
         rc = -1;
     }
 
     teardown();
-
-    return rc;
-}
-
-int all() {
-    int rc = -1;
-
-    time_t utc;
-    struct tm *local;
-    char datetime[20];
-
-    time(&utc);
-    local = localtime(&utc);
-
-    strftime(datetime, 20, "%Y-%m-%d %H:%M:%S", local);
-
-    rc = 0;
-    rc = getDevices() == 0 ? rc : -1;
-    rc = getDevice(DEVICEID) == 0 ? rc : -1;
-    rc = setAddress(DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.0") == 0 ? rc : -1;
-    rc = getStatus(DEVICEID) == 0 ? rc : -1;
-    rc = getTime(DEVICEID) == 0 ? rc : -1;
-    rc = setTime(DEVICEID, datetime) == 0 ? rc : -1;
-    rc = getListener(DEVICEID) == 0 ? rc : -1;
-    rc = setListener(DEVICEID, "192.168.1.100:60001") == 0 ? rc : -1;
-    rc = getDoorControl(DEVICEID, DOOR) == 0 ? rc : -1;
-    rc = setDoorControl(DEVICEID, DOOR, NORMALLY_OPEN, 9) == 0 ? rc : -1;
 
     return rc;
 }
@@ -109,5 +82,6 @@ void usage() {
     printf("      set-listener\n");
     printf("      get-door-control\n");
     printf("      set-door-control\n");
+    printf("      get-cards\n");
     printf("\n");
 }

@@ -225,3 +225,16 @@
 (defun set-door-control () "" 
   (exec #'(lambda (u) (uhppoted-set-door-control u 405419896 4 2 6)))
   (format t "set-door-control  ok~%"))
+
+
+(defun get-cards () "" 
+  (let ((ok T)
+        (cards (exec #'(lambda (u) (uhppoted-get-cards u 405419896)))))
+       (if (not (equal 39 cards)) 
+           (progn
+             (format t "get-cards:    incorrect card count - expected:~a, got:~a~%" 39 cards)
+             (setf ok NIL)))
+       (if ok 
+          (format t "get-cards         ok~%")
+          (error 'failed :message  "get-cards     FAILED"))))
+

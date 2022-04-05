@@ -4,6 +4,9 @@
 
 using namespace std;
 
+extern const uint32_t DEVICEID;
+extern const uint8_t DOOR;
+
 int getDevices(uhppoted &u) {
     try {
         auto devices = u.get_devices();

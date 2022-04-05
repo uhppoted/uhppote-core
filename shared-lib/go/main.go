@@ -188,6 +188,17 @@ func SetDoorControl(u *C.struct_UHPPOTE, deviceID uint32, door uint8, mode uint8
 	return nil
 }
 
+//export GetCards
+func GetCards(u *C.struct_UHPPOTE, N *C.int, deviceID uint32) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := getCards(uu, N, deviceID); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 	bind := types.BindAddr{IP: []byte{0, 0, 0, 0}, Port: 0}
 	broadcast := types.BroadcastAddr{IP: []byte{255, 255, 255, 255}, Port: 60000}

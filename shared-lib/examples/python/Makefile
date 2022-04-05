@@ -13,6 +13,9 @@ format:
 
 build: format
 
+usage: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD)
+
 invalid: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) mystery-meat
 
@@ -46,11 +49,9 @@ get-door-control: build
 set-door-control: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) set-door-control
 
-all: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) all
+get-cards: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-cards
 
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) set-door-control
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-cards
 
-debug-all: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) all

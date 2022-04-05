@@ -44,6 +44,9 @@ get-door-control: build
 set-door-control: build
 	$(CMD) set-door-control
 
+get-cards: build
+	$(CMD) get-cards
+
 all: build
 	$(CMD) all
 

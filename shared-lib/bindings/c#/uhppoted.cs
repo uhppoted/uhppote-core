@@ -199,6 +199,9 @@ public class Uhppoted : IDisposable {
     [DllImport("libuhppoted.so")]
     private static extern string SetDoorControl(ref UHPPOTE u, uint deviceID, byte door, byte mode, byte delay);
 
+    [DllImport("libuhppoted.so")]
+    private static extern string GetCards(ref UHPPOTE u, ref int N, uint deviceID);
+
     public uint[] GetDevices() {
         int N = 0;
         int count = N;
@@ -330,6 +333,17 @@ public class Uhppoted : IDisposable {
         if (err != null && err != "") {
             throw new UhppotedException(err);
         }
+    }
+
+    public int GetCards(uint deviceID) {
+        int N = 0;
+
+        string err = GetCards(ref this.u, ref N, deviceID);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+
+        return N;
     }
 
     // INTERNAL structs for DLL

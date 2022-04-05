@@ -5,17 +5,9 @@
 #include "device.h"
 #include "uhppoted.h"
 
-const uint32_t DEVICEID = 405419896;
-const uint8_t DOOR = 4;
-const char *OK = "%-16s  ok\n";
-
-bool result(char *test, bool ok) {
-    if (ok) {
-        printf("%-16s  ok\n", test);
-    }
-
-    return ok;
-}
+extern const uint32_t DEVICEID;
+extern const uint8_t DOOR;
+extern bool result(char *test, bool ok);
 
 bool getDevices() {
     uint32_t *devices = NULL;

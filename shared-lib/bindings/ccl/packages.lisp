@@ -14,6 +14,7 @@
            uhppoted-set-listener
            uhppoted-get-door-control
            uhppoted-set-door-control
+           uhppoted-get-cards
            uhppoted-error
            with-warning
            message

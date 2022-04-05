@@ -13,5 +13,6 @@
            get-listener
            set-listener
            get-door-control
-           set-door-control))
+           set-door-control
+           get-cards))
 

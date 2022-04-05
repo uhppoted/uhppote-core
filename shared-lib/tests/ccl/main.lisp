@@ -15,6 +15,7 @@
         '("set-listener"     tests:set-listener)
         '("get-door-control" tests:get-door-control)
         '("set-door-control" tests:set-door-control)
+        '("get-cards"        tests:get-cards)
 ))
 
 

@@ -316,3 +316,16 @@ int set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay) {
 
     return 0;
 }
+
+int get_cards(uint32_t id, int *N) {
+    int cards;
+    char *err = GetCards(u, &cards, id);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    *N = cards;
+
+    return 0;
+}
