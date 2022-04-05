@@ -17,6 +17,9 @@ public class Test {
     const uint DEVICEID = 405419896;
     const byte DOOR = 4;
 
+    static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
+                                        new Controller(303986753, "192.168.1.100") };
+
     static test[] tests = {
         new test("get-devices", GetDevices),
         new test("get-device", GetDevice),
@@ -33,37 +36,40 @@ public class Test {
 
     public static void Main(string[] args) {
         string cmd = "";
-
         if (args.Length > 0) {
             cmd = args[0];
         }
 
         try {
-            Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
-                                         new Controller(303986753, "192.168.1.100") };
-
             Uhppoted u = new Uhppoted("192.168.1.100", "192.168.1.100:60000", "192.168.1.100:60001", 2500, controllers, true);
 
+            // ... all/default
             if (cmd == "" || cmd == "all") {
-                if (All(u)) {
-                    return;
-                }
-            } else {
-                foreach (var t in tests) {
-                    if (t.command == cmd) {
-                        if (t.fn(u)) {
-                            return;
-                        }
-                    }
+                if (!All(u)) {
+                    Environment.Exit(-1);
                 }
 
-                Console.WriteLine();
-                Console.WriteLine(String.Format("   *** ERROR: invalid command ({0})", cmd));
-                Console.WriteLine();
-                usage();
+                return;
             }
 
+            // ... named test
+            test t = Array.Find(tests, v => v.command == cmd);
+            if (t != null) {
+                if (!t.fn(u)) {
+                    Environment.Exit(-1);
+                }
+
+                return;
+            }
+
+            // ... invalid command
+            Console.WriteLine();
+            Console.WriteLine(String.Format("   *** ERROR: invalid command ({0})", cmd));
+            Console.WriteLine();
+
+            usage();
             Environment.Exit(-1);
+
         } catch (Exception e) {
             Console.WriteLine(String.Format("  *** ERROR: {0}", e.Message));
             Environment.Exit(-1);
@@ -324,7 +330,6 @@ public class Test {
         Console.WriteLine("   Usage: test <command>");
         Console.WriteLine();
         Console.WriteLine("   Supported commands:");
-        Console.WriteLine("      all");
 
         foreach (var t in tests) {
             Console.WriteLine("      {0}", t.command);

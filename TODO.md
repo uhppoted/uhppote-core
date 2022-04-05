@@ -3,8 +3,8 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] Make tests order fixed
-        - [ ] C#
+  - [x] Make tests order fixed
+        - [x] C#
               - use Array::Find
 
   - [x] No 'all' for examples
