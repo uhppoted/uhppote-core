@@ -165,7 +165,7 @@ status uhppoted::get_status(unsigned id) {
     struct status s;
 
     s.ID = status.ID;
-    snprintf(s.sysdatetime, sizeof(s.sysdatetime), "%s", status.sysdatetime);
+    s.sysdatetime = status.sysdatetime;
 
     s.doors[0] = doors[0];
     s.doors[1] = doors[1];
@@ -184,8 +184,7 @@ status uhppoted::get_status(unsigned id) {
     s.info = status.info;
 
     if (status.event) {
-        snprintf(s.event.timestamp, sizeof(s.event.timestamp), "%s",
-                 status.event->timestamp);
+        s.event.timestamp = status.event->timestamp;
         s.event.index = status.event->index;
         s.event.eventType = status.event->eventType;
         s.event.granted = status.event->granted;
@@ -279,4 +278,29 @@ int uhppoted::get_cards(uint32_t id) {
     }
 
     return N;
+}
+
+card uhppoted::get_card(uint32_t id, uint32_t card_number) {
+    Card card;
+
+    vector<uint8_t> doors(4);
+
+    card.doors = doors.data();
+
+    char *err = GetCard(u, &card, id, card_number);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+
+    struct card c;
+
+    c.card_number = card.card_number;
+    c.from = card.from;
+    c.to = card.to;
+    c.doors[0] = card.doors[0];
+    c.doors[1] = card.doors[1];
+    c.doors[2] = card.doors[2];
+    c.doors[3] = card.doors[3];
+
+    return c;
 }

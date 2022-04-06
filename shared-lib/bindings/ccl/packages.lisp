@@ -15,6 +15,7 @@
            uhppoted-get-door-control
            uhppoted-set-door-control
            uhppoted-get-cards
+           uhppoted-get-card
            uhppoted-error
            with-warning
            message
@@ -48,5 +49,11 @@
            event-reason
 
            door-control-mode
-           door-control-delay))
+           door-control-delay
+
+           card-card-number
+           card-from
+           card-to
+           card-doors
+           ))
 

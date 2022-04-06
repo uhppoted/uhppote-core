@@ -221,8 +221,7 @@ int get_status(uint32_t id, struct status *s) {
     s->seqno = status.seqno;
 
     if (status.event) {
-        snprintf(s->event.timestamp, sizeof(s->event.timestamp), "%s",
-                 status.event->timestamp);
+        snprintf(s->event.timestamp, sizeof(s->event.timestamp), "%s", status.event->timestamp);
         s->event.index = status.event->index;
         s->event.eventType = status.event->eventType;
         s->event.granted = status.event->granted;
@@ -326,6 +325,34 @@ int get_cards(uint32_t id, int *N) {
     }
 
     *N = cards;
+
+    return 0;
+}
+
+int get_card(uint32_t id, uint32_t card_number, card *c) {
+    struct Card card;
+
+    card.doors = malloc(4 * sizeof(uint8_t));
+
+    char *err = GetCard(u, &card, id, card_number);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    c->card_number = card.card_number;
+
+    snprintf(c->from, sizeof(c->from), "%s", card.from);
+    snprintf(c->to, sizeof(c->to), "%s", card.to);
+
+    c->doors[0] = card.doors[0];
+    c->doors[1] = card.doors[1];
+    c->doors[2] = card.doors[2];
+    c->doors[3] = card.doors[3];
+
+    free(card.from);
+    free(card.to);
+    free(card.doors);
 
     return 0;
 }

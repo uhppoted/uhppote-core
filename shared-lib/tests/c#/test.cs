@@ -15,6 +15,7 @@ public class test {
 
 public class Test {
     const uint DEVICEID = 405419896;
+    const uint CARDID = 8165538;
     const byte DOOR = 4;
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -32,6 +33,7 @@ public class Test {
         new test("get-door-control", GetDoorControl),
         new test("set-door-control", SetDoorControl),
         new test("get-cards", GetCards),
+        new test("get-card", GetCard),
     };
 
     public static void Main(string[] args) {
@@ -316,6 +318,48 @@ public class Test {
         }
 
         return result("get-cards", ok);
+    }
+
+    static bool GetCard(Uhppoted u) {
+        Card card = u.GetCard(DEVICEID, CARDID);
+        bool ok = true;
+
+        if (card.cardNumber != 8165538) {
+            Console.WriteLine("get-card: incorrect card number - expected:{0}, got:{1}", 8165538, card.cardNumber);
+            ok = false;
+        }
+
+        if (card.from != "2022-01-01") {
+            Console.WriteLine("get-card: incorrect 'from' date - expected:{0}, got:{1}", "2022-01-01", card.from);
+            ok = false;
+        }
+
+        if (card.to != "2022-12-31") {
+            Console.WriteLine("get-card: incorrect 'to' date - expected:{0}, got:{1}", "2022-12-31", card.to);
+            ok = false;
+        }
+
+        if (card.doors[0] != 0) {
+            Console.WriteLine("get-card: incorrect doors[1] - expected:{0}, got:{1}", 0, card.doors[0]);
+            ok = false;
+        }
+
+        if (card.doors[1] != 1) {
+            Console.WriteLine("get-card: incorrect doors[2] - expected:{0}, got:{1}", 1, card.doors[1]);
+            ok = false;
+        }
+
+        if (card.doors[2] != 31) {
+            Console.WriteLine("get-card: incorrect doors[3] - expected:{0}, got:{1}", 31, card.doors[2]);
+            ok = false;
+        }
+
+        if (card.doors[3] != 75) {
+            Console.WriteLine("get-card: incorrect doors[4] - expected:{0}, got:{1}", 75, card.doors[3]);
+            ok = false;
+        }
+
+        return result("get-card", ok);
     }
 
     static bool result(string test, bool ok) {

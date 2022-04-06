@@ -50,3 +50,7 @@
 
 (defun get-cards (device-id) "" 
   (exec #'(lambda (u) (uhppoted-get-cards u device-id))))
+
+(defun get-card (device-id card-number) "" 
+  (exec #'(lambda (u) (uhppoted-get-card u device-id card-number))))
+

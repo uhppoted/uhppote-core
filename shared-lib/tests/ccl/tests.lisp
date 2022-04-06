@@ -238,3 +238,31 @@
           (format t "get-cards         ok~%")
           (error 'failed :message  "get-cards     FAILED"))))
 
+
+(defun get-card () "" 
+  (let ((ok T)
+        (card (exec #'(lambda (u) (uhppoted-get-card u 405419896 8165538)))))
+       (if (not (equal 8165538 (card-card-number card))) 
+           (progn
+             (format t "get-card:     incorrect card number - expected:~a, got:~a~%" 8165538 (card-card-number card))
+             (setf ok NIL)))
+
+       (if (not (string= "2022-01-01" (card-from card))) 
+           (progn
+             (format t "get-card:     incorrect card 'from' date - expected:~a, got:~a~%" "2022-01-01" (card-from card))
+             (setf ok NIL)))
+
+       (if (not (string= "2022-12-31" (card-to card))) 
+           (progn
+             (format t "get-card:     incorrect card 'to' date - expected:~a, got:~a~%" "2022-12-31" (card-to card))
+             (setf ok NIL)))
+
+       (if (not (equal '(0 1 31 75) (card-doors card))) 
+           (progn
+             (format t "get-card:     incorrect card doors - expected:~a, got:~a~%" '(0 1 31 75) (card-doors card))
+             (setf ok NIL)))
+
+       (if ok 
+          (format t "get-card          ok~%")
+          (error 'failed :message  "get-card     FAILED"))))
+

@@ -10,22 +10,32 @@ sys.path.append('../../bindings/python')
 import uhppoted
 
 
+def commands():
+    return {
+        'get-devices': None,
+        'get-device': None,
+        'set-address': None,
+        'get-status': None,
+        'get-time': None,
+        'set-time': None,
+        'get-listener': None,
+        'set-listener': None,
+        'get-door-control': None,
+        'set-door-control': None,
+        'get-cards': None,
+        'get-card': None,
+    }
+
+
 def usage():
     print()
     print("  Usage: python example.py <command>")
     print()
-    print("  commands")
-    print("    get-devices")
-    print("    get-device")
-    print("    set-device")
-    print("    get-status")
-    print("    get-time")
-    print("    set-time")
-    print("    get-listener")
-    print("    set-listener")
-    print("    get-door-control")
-    print("    set-door-control")
-    print("    get-cards")
+    print("  Supported commands:")
+
+    for cmd, _ in commands().items():
+        print(f"    {cmd}")
+
     print()
 
 
@@ -79,6 +89,9 @@ def help():
     print()
     print("  get-cards")
     print("    Retrieves the number of cards stored on a controller.")
+    print()
+    print("  get-card")
+    print("    Retrieves the card detail for card number from a controller.")
     print()
     print("  help")
     print("    Displays this information.")
@@ -282,14 +295,32 @@ def get_cards(u, deviceID):
         print()
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description='Example CLI for the uhppote-core Python integration')
+def get_card(u, deviceID, cardNumber):
+    try:
+        card = u.get_card(deviceID, cardNumber)
 
-    parser.add_argument("command", default="help")
+        print("get-card")
+        print(f"  ID:           {deviceID}")
+        print(f"  card-number:  {card.cardNumber}")
+        print(f"       from:    {card.start}")
+        print(f"       to:      {card.end}")
+        print(f"       door[1]: {card.doors[0]}")
+        print(f"       door[2]: {card.doors[1]}")
+        print(f"       door[3]: {card.doors[2]}")
+        print(f"       door[4]: {card.doors[3]}")
+        print()
 
-    options = parser.parse_args()
-    cmd = options.command
+    except Exception as e:
+        print(f" *** ERROR get_card ({e})")
+        print()
+
+
+def main():
+    if len(sys.argv) < 2:
+        usage()
+        return -1
+
+    cmd = sys.argv[1]
 
     if cmd == "help":
         help()
@@ -335,6 +366,9 @@ if __name__ == "__main__":
             elif cmd == 'get-cards':
                 get_cards(u, 405419896)
 
+            elif cmd == 'get-card':
+                get_card(u, 405419896, 8000001)
+
             else:
                 print()
                 print(f"  ERROR: invalid command ({cmd})")
@@ -346,3 +380,7 @@ if __name__ == "__main__":
             print()
 
             sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

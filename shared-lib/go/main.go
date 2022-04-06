@@ -62,6 +62,13 @@ typedef struct DoorControl {
     uint8_t delay;
 } DoorControl;
 
+typedef struct Card {
+    uint32_t card_number;
+    char* from;
+    char* to;
+	uint8_t *doors; // uint_8[4]
+} Card;
+
 */
 import "C"
 
@@ -193,6 +200,17 @@ func GetCards(u *C.struct_UHPPOTE, N *C.int, deviceID uint32) *C.char {
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
 	} else if err := getCards(uu, N, deviceID); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
+//export GetCard
+func GetCard(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, cardNumber uint32) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := getCard(uu, card, deviceID, cardNumber); err != nil {
 		return C.CString(err.Error())
 	}
 

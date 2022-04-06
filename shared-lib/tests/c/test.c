@@ -17,6 +17,7 @@ typedef struct test {
 } test;
 
 const uint32_t DEVICEID = 405419896;
+const uint32_t CARDID = 8165538;
 const uint8_t DOOR = 4;
 
 bool result(char *test, bool ok) {
@@ -39,6 +40,7 @@ const test tests[] = {
     {.name = "get-door-control", .fn = getDoorControl},
     {.name = "set-door-control", .fn = setDoorControl},
     {.name = "get-cards", .fn = getCards},
+    {.name = "get-card", .fn = getCard},
 };
 
 int main(int argc, char **argv) {

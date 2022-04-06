@@ -50,6 +50,9 @@ set-door-control: build
 get-cards: build
 	$(CMD) get-cards
 
+get-card: build
+	$(CMD) get-card
+
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp
 

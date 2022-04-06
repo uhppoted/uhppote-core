@@ -52,6 +52,9 @@ set-door-control: build
 get-cards: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-cards
 
+get-card: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-card
+
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-cards
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-card
 

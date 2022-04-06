@@ -15,6 +15,7 @@
            get-door-control
            set-door-control
            get-cards
+           get-card
            failed
            message))
 

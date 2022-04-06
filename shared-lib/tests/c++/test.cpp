@@ -27,9 +27,11 @@ vector<test> tests = {
     {"get-door-control", getDoorControl},
     {"set-door-control", setDoorControl},
     {"get-cards", getCards},
+    {"get-card", getCard},
 };
 
 extern const uint32_t DEVICEID = 405419896;
+extern const uint32_t CARDID = 8198765;
 extern const uint8_t DOOR = 4;
 
 extern bool result(string test, bool ok) {

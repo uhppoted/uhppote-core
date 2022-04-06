@@ -37,6 +37,11 @@
 (defstruct door-control mode
                         delay)
 
+(defstruct card card-number 
+                from
+                to
+                doors)
+
 
 (def-foreign-type nil
   (:struct :UDEVICE (:id      :int)
@@ -88,6 +93,12 @@
 (def-foreign-type nil
   (:struct :GoDoorControl (:mode  :unsigned-byte)
                           (:delay :unsigned-byte)))
+
+(def-foreign-type nil
+  (:struct :GoCard (:card-number :unsigned-fullword)
+                   (:from        :address)
+                   (:to          :address)
+                   (:doors     :address)))
 
 
 (define-condition uhppoted-error (error)
@@ -289,6 +300,24 @@
                                                        :address)))
           (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
           (%get-signed-long N))))
+
+
+(defun uhppoted-get-card (uhppote device-id card-number) "Retrieves card detail for a card stored on controller"
+  (%stack-block ((doors   4))
+    (rletz ((card (:struct :GoCard) :doors   doors))
+      (with-macptrs ((err (external-call "GetCard" :address uhppote 
+                                                   :address card
+                                                   :unsigned-long device-id 
+                                                   :unsigned-long card-number
+                                                   :address)))
+        (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+        (make-card :card-number (%get-unsigned-long (pref card :GoCard.card-number))
+                   :from        (go-string (pref card :GoCard.from))
+                   :to          (go-string (pref card :GoCard.to))
+                   :doors       (list (%get-unsigned-byte doors 0)
+                                      (%get-unsigned-byte doors 1)
+                                      (%get-unsigned-byte doors 2)
+                                      (%get-unsigned-byte doors 3)))))))
 
 
 (defun debug () "" 

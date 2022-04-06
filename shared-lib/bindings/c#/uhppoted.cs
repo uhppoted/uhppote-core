@@ -106,6 +106,20 @@ public static class ControlModes {
     public const byte Controlled = 3;
 };
 
+public class Card {
+    public uint cardNumber;
+    public string from;
+    public string to;
+    public byte[] doors;
+
+    public Card(uint cardNumber, string from, string to, byte[] doors) {
+        this.cardNumber = cardNumber;
+        this.from = from;
+        this.to = to;
+        this.doors = doors;
+    }
+};
+
 public class Uhppoted : IDisposable {
     private UHPPOTE u = new UHPPOTE();
 
@@ -201,6 +215,9 @@ public class Uhppoted : IDisposable {
 
     [DllImport("libuhppoted.so")]
     private static extern string GetCards(ref UHPPOTE u, ref int N, uint deviceID);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string GetCard(ref UHPPOTE u, ref GoCard card, uint deviceID, uint cardNumber);
 
     public uint[] GetDevices() {
         int N = 0;
@@ -346,6 +363,26 @@ public class Uhppoted : IDisposable {
         return N;
     }
 
+    public Card GetCard(uint deviceID, uint cardNumber) {
+        GoCard card = new GoCard();
+
+        card.doors = Marshal.AllocHGlobal(4);
+
+        string err = GetCard(ref this.u, ref card, deviceID, cardNumber);
+        if (err != null && err != "") {
+            Marshal.FreeHGlobal(card.doors);
+
+            throw new UhppotedException(err);
+        }
+
+        byte[] doors = new byte[4];
+
+        Marshal.Copy(card.doors, doors, 0, 4);
+        Marshal.FreeHGlobal(card.doors);
+
+        return new Card(card.cardNumber, card.from, card.to, doors);
+    }
+
     // INTERNAL structs for DLL
 
     struct udevice {
@@ -409,6 +446,13 @@ public class Uhppoted : IDisposable {
     struct GoDoorControl {
         public byte control;
         public byte delay;
+    };
+
+    struct GoCard {
+        public uint cardNumber;
+        public string from;
+        public string to;
+        public IntPtr doors;
     };
 };
 }

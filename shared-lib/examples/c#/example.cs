@@ -2,8 +2,31 @@ using System;
 
 using uhppoted;
 
+public class command {
+    public string cmd;
+
+    public command(string cmd) {
+        this.cmd = cmd;
+    }
+};
+
 public class example {
     const uint DEVICEID = 405419896;
+
+    static command[] commands = {
+        new command("get-devices"),
+        new command("get-device"),
+        new command("set-address"),
+        new command("get-status"),
+        new command("get-time"),
+        new command("set-time"),
+        new command("get-listener"),
+        new command("set-listener"),
+        new command("get-door-control"),
+        new command("set-door-control"),
+        new command("get-cards"),
+        new command("get-card"),
+    };
 
     public static void Main(string[] args) {
         if (args.Length < 1) {
@@ -64,6 +87,10 @@ public class example {
                 GetCards(u, 405419896);
                 break;
 
+            case "get-card":
+                GetCard(u, 405419896, 8000001);
+                break;
+
             default:
                 Console.WriteLine();
                 Console.WriteLine(String.Format("  *** ERROR: invalid command ({0})", cmd));
@@ -77,6 +104,19 @@ public class example {
     }
 
     static void usage() {
+        Console.WriteLine();
+        Console.WriteLine("  Usage: mono example.exe <command>");
+        Console.WriteLine();
+        Console.WriteLine("  Supported commands");
+
+        foreach (command c in commands) {
+            Console.WriteLine("    {0}", c.cmd);
+        }
+
+        Console.WriteLine();
+    }
+
+    static void help() {
         Console.WriteLine();
         Console.WriteLine("  Usage: mono example.exe <command>");
         Console.WriteLine();
@@ -283,6 +323,21 @@ public class example {
         Console.WriteLine(String.Format("get-cards"));
         Console.WriteLine(String.Format("  ID:    {0}", deviceID));
         Console.WriteLine(String.Format("  cards: {0}", cards));
+        Console.WriteLine();
+    }
+
+    static void GetCard(Uhppoted u, uint deviceID, uint cardNumber) {
+        Card card = u.GetCard(deviceID, cardNumber);
+
+        Console.WriteLine(String.Format("get-card"));
+        Console.WriteLine(String.Format("  ID:           {0}", deviceID));
+        Console.WriteLine(String.Format("  card number:  {0}", card.cardNumber));
+        Console.WriteLine(String.Format("       from:    {0}", card.from));
+        Console.WriteLine(String.Format("       to:      {0}", card.to));
+        Console.WriteLine(String.Format("       door[1]: {0}", card.doors[0]));
+        Console.WriteLine(String.Format("       door[2]: {0}", card.doors[1]));
+        Console.WriteLine(String.Format("       door[3]: {0}", card.doors[2]));
+        Console.WriteLine(String.Format("       door[4]: {0}", card.doors[3]));
         Console.WriteLine();
     }
 }

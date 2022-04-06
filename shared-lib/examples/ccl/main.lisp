@@ -17,6 +17,7 @@
                  "get-door-control"
                  "set-door-control"
                  "get-cards"
+                 "get-card"
            )))
 
 
@@ -36,6 +37,7 @@
   (format t "   get-door-control  Retrieves the door control state and open delay for a controller door~%") 
   (format t "   set-door-control  Sets the control mode and delay for a controller door~%") 
   (format t "   get-cards         Retrieves the number of cards stored on a controller~%") 
+  (format t "   get-card          Retrieves the card detail for a card stored on a controller~%") 
   (format t "~%"))
 
 (defun get-devices () ""
@@ -71,6 +73,9 @@
 (defun get-cards () ""
   (format t "  get-cards:~%    ~:w~%~%" (examples:get-cards 405419896)))
 
+(defun get-card () ""
+  (format t "  get-card:~%    ~:w~%~%" (examples:get-card 405419896 8000001)))
+
 (defun main () ""
   (let ((args (parse-command-line)))
     (if (not args)
@@ -87,6 +92,7 @@
                    ((string= arg "get-door-control") (get-door-control))
                    ((string= arg "set-door-control") (set-door-control))
                    ((string= arg "get-cards")        (get-cards))
+                   ((string= arg "get-card")         (get-card))
                    ((string= arg "help")             (help))
                    (t (progn
                         (format t "~%   *** ERROR: invalid command (~a)~%"  arg) 

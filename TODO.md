@@ -3,25 +3,20 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [x] Make tests order fixed
-        - [x] C#
-              - use Array::Find
-
-  - [x] No 'all' for examples
+  - [ ] `usage` for examples
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
         - [x] CCL
 
-  - [x] `get-cards`
+  - [x] `get-card`
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
         - [x] CCL
 
-  - [ ] `get-card`
   - [ ] `get-card-by-index`
   - [ ] `put-card`
   - [ ] `delete-card`
@@ -38,23 +33,26 @@
   - [ ] `refresh-tasklist`
   - [ ] `clear-task-list`
 
+  - [ ] Tests usage + help
   - [ ] Extend examples to use command line args
         - [ ] Brief usage() list commands
         - [ ] 'help' lists commands + descriptions
         - [ ] Python usage()
-  - [ ] Tests usage + help
-  - [ ] python: constants for ControlMode
-  - [ ] CCL: constants + strings for ControlMode
-  - (?) C++ std::invoke
-  - (?) CCL DOLIST 
-  - [ ] CCL test failure format
+  - [ ] C++ 
+        - std::invoke
+  - [ ] python: 
+        - constants for ControlMode
+        - https://martinheinz.dev/blog/70
+  - [ ] CCL
+        - constants + strings for ControlMode
+        - DOLIST
+        - simplify main loop with `thereis` (https://gigamonkeys.com/book/loop-for-black-belts.html)
+        - test failure format
 ```
 set-address       ok
 get-status        ok
 get-time:    incorrect date/time - expected:2022-01-02 12:34:56, got:2022-01-02 12:34:56
 ```
-  - [ ] CCL simplify main loop with `thereis`
-        https://gigamonkeys.com/book/loop-for-black-belts.html
 
   
   - [ ] lint

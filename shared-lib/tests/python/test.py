@@ -8,6 +8,7 @@ sys.path.append('../../bindings/python')
 import uhppoted
 
 DEVICEID = 405419896
+CARDID = 8165538
 DOOR = 4
 
 
@@ -24,6 +25,7 @@ def tests():
         'get-door-control': get_door_control,
         'set-door-control': set_door_control,
         'get-cards': get_cards,
+        'get-card': get_card,
     }
 
 
@@ -261,6 +263,44 @@ def get_cards(u):
 
     if ok:
         print(f"get-cards         ok")
+
+    return ok
+
+
+def get_card(u):
+    card = u.get_card(DEVICEID, CARDID)
+    ok = True
+
+    if card.cardNumber != 8165538:
+        print(f"get-card: incorrect card number - expected:8165538, got:{card.cardNumber}")
+        ok = False
+
+    if card.start != '2022-01-01':
+        print(f"get-card: incorrect 'from' date - expected:2022-01-01, got:{card.start}")
+        ok = False
+
+    if card.end != '2022-12-31':
+        print(f"get-card: incorrect 'to' date - expected:2022-12-31, got:{card.end}")
+        ok = False
+
+    if card.doors[0] != 0:
+        print(f"get-card: incorrect door[1] - expected:0, got:{card.doors[0]}")
+        ok = False
+
+    if card.doors[1] != 1:
+        print(f"get-card: incorrect door[2] - expected:1, got:{card.doors[1]}")
+        ok = False
+
+    if card.doors[2] != 31:
+        print(f"get-card: incorrect door[3] - expected:31, got:{card.doors[2]}")
+        ok = False
+
+    if card.doors[3] != 75:
+        print(f"get-card: incorrect door[42] - expected:75, got:{card.doors[3]}")
+        ok = False
+
+    if ok:
+        print(f"get-card          ok")
 
     return ok
 

@@ -24,7 +24,7 @@ typedef struct device {
 } device;
 
 typedef struct event {
-    char timestamp[20];
+    std::string timestamp;
     uint32_t index;
     uint8_t eventType;
     bool granted;
@@ -36,7 +36,7 @@ typedef struct event {
 
 typedef struct status {
     uint32_t ID;
-    char sysdatetime[20];
+    std::string sysdatetime;
     uint8_t doors[4];
     uint8_t buttons[4];
     uint8_t relays;
@@ -51,6 +51,13 @@ typedef struct door_control {
     uint8_t mode;
     uint8_t delay;
 } door_control;
+
+typedef struct card {
+    uint32_t card_number;
+    std::string from;
+    std::string to;
+    uint8_t doors[4];
+} card;
 
 class uhppoted {
   public:
@@ -74,6 +81,7 @@ class uhppoted {
     void set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay);
 
     int get_cards(uint32_t id);
+    card get_card(uint32_t id, uint32_t card_number);
 
   private:
     UHPPOTE *u;

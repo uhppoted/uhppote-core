@@ -2,9 +2,8 @@
 
 package main
 
-import "C"
-
 import (
+	"C"
 	"fmt"
 	"net"
 	"time"
@@ -50,9 +49,7 @@ func getDevice(uu uhppote.IUHPPOTE, d *C.struct_Device, deviceID uint32) error {
 	response, err := uu.GetDevice(deviceID)
 	if err != nil {
 		return err
-	}
-
-	if response == nil {
+	} else if response == nil {
 		return fmt.Errorf("%v: no response to get-device", deviceID)
 	}
 

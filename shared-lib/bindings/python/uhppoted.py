@@ -81,6 +81,14 @@ class DoorControl:
     delay: int
 
 
+@dataclass
+class Card:
+    cardNumber: int
+    start: str
+    end: str
+    doors: list[int]
+
+
 class Uhppote:
     def __init__(self, uhppote=None):
         self._uhppote = None
@@ -246,6 +254,25 @@ class Uhppote:
 
         return cards.value
 
+    def get_card(self, deviceID, cardNumber):
+        GetCard = lib.GetCard
+        GetCard.argtypes = [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]
+        GetCard.restype = ctypes.c_char_p
+        GetCard.errcheck = self.errcheck
+
+        card = GoCard()
+
+        card.doors = (c_ubyte * 4)(*[0] * 4)
+
+        GetCard(self._uhppote, byref(card), deviceID, cardNumber)
+
+        doors = [0, 0, 0, 0]
+
+        for i in range(4):
+            doors[i] = card.doors[i]
+
+        return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors)
+
 
 # INTERNAL TYPES
 class GoController(Structure):
@@ -309,8 +336,8 @@ class GoStatus(Structure):
     _fields_ = [
         ('ID', c_uint32),
         ('sysdatetime', c_char_p),
-        ('doors', POINTER(c_ubyte)),  #     uint8_t[4]
-        ('buttons', POINTER(c_ubyte)),  #     uint8_t[4]
+        ('doors', POINTER(c_ubyte)),  # uint8_t[4]
+        ('buttons', POINTER(c_ubyte)),  # uint8_t[4]
         ('relays', c_ubyte),
         ('inputs', c_ubyte),
         ('syserror', c_ubyte),
@@ -324,4 +351,13 @@ class GoDoorControl(Structure):
     _fields_ = [
         ('control', c_ubyte),
         ('delay', c_ubyte),
+    ]
+
+
+class GoCard(Structure):
+    _fields_ = [
+        ('cardNumber', c_uint32),
+        ('start', c_char_p),
+        ('end', c_char_p),
+        ('doors', POINTER(c_ubyte)),  # uint8_t[4]
     ]

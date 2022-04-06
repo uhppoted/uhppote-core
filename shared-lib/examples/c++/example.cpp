@@ -10,10 +10,32 @@ using namespace std;
 void usage();
 
 extern const uint32_t DEVICEID = 405419896;
+extern const uint32_t CARDID = 8000001;
 extern const uint8_t DOOR = 4;
 
 const controller ALPHA = {.id = 405419896, .address = "192.168.1.100"};
 const controller BETA = {.id = 303986753, .address = "192.168.1.100"};
+
+typedef int(f)(int, char **a);
+
+typedef struct command {
+    string cmd;
+    f fn;
+} command;
+
+const vector<command> commands = {
+    {.cmd = "get-devices"},
+    {.cmd = "get-device"},
+    {.cmd = "set-address"},
+    {.cmd = "get-status"},
+    {.cmd = "get-time"},
+    {.cmd = "set-time"},
+    {.cmd = "get-listener"},
+    {.cmd = "get-door-control"},
+    {.cmd = "set-door-control"},
+    {.cmd = "get-cards"},
+    {.cmd = "get-card"},
+};
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -53,6 +75,8 @@ int main(int argc, char **argv) {
         return setDoorControl(u, DEVICEID, DOOR, NORMALLY_OPEN, 9);
     } else if (cmd == "get-cards") {
         return getCards(u, argc, argv);
+    } else if (cmd == "get-card") {
+        return getCard(u, argc, argv);
     }
 
     cerr << endl
@@ -68,15 +92,10 @@ void usage() {
     cout << "   Usage: example <command>" << endl;
     cout << endl;
     cout << "   Supported commands:" << endl;
-    cout << "      get-devices" << endl;
-    cout << "      get-device" << endl;
-    cout << "      set-address" << endl;
-    cout << "      get-status" << endl;
-    cout << "      get-time" << endl;
-    cout << "      set-time" << endl;
-    cout << "      get-listener" << endl;
-    cout << "      get-door-control" << endl;
-    cout << "      set-door-control" << endl;
-    cout << "      get-cards" << endl;
+
+    for (auto it = commands.begin(); it != commands.end(); it++) {
+        cout << "      " << it->cmd << endl;
+    }
+
     cout << endl;
 }

@@ -11,6 +11,29 @@ void usage();
 
 const uint32_t DEVICEID = 405419896;
 const uint8_t DOOR = 4;
+const uint32_t CARDID = 8000001;
+
+typedef int(f)(int, char **a);
+
+typedef struct command {
+    char *cmd;
+    f *fn;
+} command;
+
+const command commands[] = {
+    {.cmd = "get-devices"},
+    {.cmd = "get-device"},
+    {.cmd = "set-address"},
+    {.cmd = "get-status"},
+    {.cmd = "get-time"},
+    {.cmd = "set-time"},
+    {.cmd = "get-listener"},
+    {.cmd = "set-listener"},
+    {.cmd = "get-door-control"},
+    {.cmd = "set-door-control"},
+    {.cmd = "get-cards"},
+    {.cmd = "get-card"},
+};
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -57,6 +80,8 @@ int main(int argc, char **argv) {
         rc = setDoorControl(DEVICEID, DOOR, NORMALLY_OPEN, 9);
     } else if (strncmp(cmd, "get-cards", 16) == 0) {
         rc = getCards(argc, argv);
+    } else if (strncmp(cmd, "get-card", 15) == 0) {
+        rc = getCard(argc, argv);
     } else {
         printf("\n   *** ERROR invalid command (%s)\n\n", cmd);
         usage();
@@ -69,19 +94,16 @@ int main(int argc, char **argv) {
 }
 
 void usage() {
+    int N = sizeof(commands) / sizeof(command);
+
+    printf("\n");
     printf("   Usage: example <command>\n");
     printf("\n");
     printf("   Supported commands:\n");
-    printf("      get-devices\n");
-    printf("      get-device\n");
-    printf("      set-address\n");
-    printf("      get-status\n");
-    printf("      get-time\n");
-    printf("      set-time\n");
-    printf("      get-listener\n");
-    printf("      set-listener\n");
-    printf("      get-door-control\n");
-    printf("      set-door-control\n");
-    printf("      get-cards\n");
+
+    for (int i = 0; i < N; i++) {
+        printf("      %s\n", commands[i].cmd);
+    }
+
     printf("\n");
 }
