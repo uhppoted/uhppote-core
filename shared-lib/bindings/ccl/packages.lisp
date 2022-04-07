@@ -16,6 +16,7 @@
            uhppoted-set-door-control
            uhppoted-get-cards
            uhppoted-get-card
+           uhppoted-get-card-by-index
            uhppoted-error
            with-warning
            message

@@ -5,7 +5,7 @@
 #include "device.h"
 #include "uhppoted.h"
 
-extern const uint32_t DEVICEID;
+extern const uint32_t DEVICE_ID;
 extern const uint8_t DOOR;
 extern bool result(char *test, bool ok);
 
@@ -38,7 +38,7 @@ bool getDevices() {
 bool getDevice() {
     struct device d;
 
-    if (get_device(DEVICEID, &d) != 0) {
+    if (get_device(DEVICE_ID, &d) != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
@@ -85,7 +85,7 @@ bool getDevice() {
 
 bool setAddress(uint32_t deviceID, const char *address, const char *subnet,
                 const char *gateway) {
-    if (set_address(DEVICEID, "192.168.1.125", "255.255.254.0", "192.168.1.0") != 0) {
+    if (set_address(DEVICE_ID, "192.168.1.125", "255.255.254.0", "192.168.1.0") != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
@@ -96,15 +96,15 @@ bool setAddress(uint32_t deviceID, const char *address, const char *subnet,
 bool getStatus() {
     struct status s;
 
-    if (get_status(DEVICEID, &s) != 0) {
+    if (get_status(DEVICE_ID, &s) != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
 
     bool ok = true;
 
-    if (s.ID != DEVICEID) {
-        printf("get-status: incorrect device ID - expected:%u, got:%u\n", DEVICEID, s.ID);
+    if (s.ID != DEVICE_ID) {
+        printf("get-status: incorrect device ID - expected:%u, got:%u\n", DEVICE_ID, s.ID);
         ok = false;
     }
 
@@ -196,7 +196,7 @@ bool getStatus() {
 bool getTime() {
     char *datetime;
 
-    if (get_time(DEVICEID, &datetime) != 0) {
+    if (get_time(DEVICE_ID, &datetime) != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
@@ -214,7 +214,7 @@ bool getTime() {
 }
 
 bool setTime() {
-    if (set_time(DEVICEID, "2022-03-23 12:24:17") != 0) {
+    if (set_time(DEVICE_ID, "2022-03-23 12:24:17") != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
@@ -225,7 +225,7 @@ bool setTime() {
 bool getListener() {
     char *listener;
 
-    if (get_listener(DEVICEID, &listener) != 0) {
+    if (get_listener(DEVICE_ID, &listener) != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
@@ -243,7 +243,7 @@ bool getListener() {
 }
 
 bool setListener() {
-    if (set_listener(DEVICEID, "192.168.1.100:60001") != 0) {
+    if (set_listener(DEVICE_ID, "192.168.1.100:60001") != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
@@ -254,7 +254,7 @@ bool setListener() {
 bool getDoorControl() {
     struct door_control d;
 
-    if (get_door_control(DEVICEID, DOOR, &d) != 0) {
+    if (get_door_control(DEVICE_ID, DOOR, &d) != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
@@ -275,7 +275,7 @@ bool getDoorControl() {
 }
 
 bool setDoorControl() {
-    if (set_door_control(DEVICEID, DOOR, NORMALLY_CLOSED, 6) != 0) {
+    if (set_door_control(DEVICE_ID, DOOR, NORMALLY_CLOSED, 6) != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }

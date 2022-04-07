@@ -16,13 +16,14 @@ typedef struct test {
     f fn;
 } test;
 
-const uint32_t DEVICEID = 405419896;
-const uint32_t CARDID = 8165538;
+const uint32_t DEVICE_ID = 405419896;
+const uint32_t CARD_ID = 8165538;
+const uint32_t CARD_INDEX = 7;
 const uint8_t DOOR = 4;
 
 bool result(char *test, bool ok) {
     if (ok) {
-        printf("%-16s  ok\n", test);
+        printf("%-17s  ok\n", test);
     }
 
     return ok;
@@ -41,6 +42,7 @@ const test tests[] = {
     {.name = "set-door-control", .fn = setDoorControl},
     {.name = "get-cards", .fn = getCards},
     {.name = "get-card", .fn = getCard},
+    {.name = "get-card-by-index", .fn = getCardByIndex},
 };
 
 int main(int argc, char **argv) {

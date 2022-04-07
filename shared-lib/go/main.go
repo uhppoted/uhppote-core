@@ -217,6 +217,17 @@ func GetCard(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, cardNumb
 	return nil
 }
 
+//export GetCardByIndex
+func GetCardByIndex(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, index uint32) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := getCardByIndex(uu, card, deviceID, index); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 	bind := types.BindAddr{IP: []byte{0, 0, 0, 0}, Port: 0}
 	broadcast := types.BroadcastAddr{IP: []byte{255, 255, 255, 255}, Port: 60000}

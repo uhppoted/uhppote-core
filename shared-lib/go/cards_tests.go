@@ -38,3 +38,22 @@ func getCard(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, cardNumb
 
 	return nil
 }
+
+func getCardByIndex(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, index uint32) error {
+	if card == nil {
+		return fmt.Errorf("invalid argument (card) - expected valid pointer")
+	}
+
+	card.card_number = C.uint(8165538)
+	card.from = C.CString("2022-01-01")
+	card.to = C.CString("2022-12-31")
+
+	doors := unsafe.Slice(card.doors, 4)
+
+	doors[0] = 0
+	doors[1] = 1
+	doors[2] = 31
+	doors[3] = 75
+
+	return nil
+}

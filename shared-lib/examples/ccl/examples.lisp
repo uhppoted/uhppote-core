@@ -54,3 +54,5 @@
 (defun get-card (device-id card-number) "" 
   (exec #'(lambda (u) (uhppoted-get-card u device-id card-number))))
 
+(defun get-card-by-index (device-id index) "" 
+  (exec #'(lambda (u) (uhppoted-get-card-by-index u device-id index))))

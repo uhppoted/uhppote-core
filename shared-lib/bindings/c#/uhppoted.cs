@@ -219,6 +219,9 @@ public class Uhppoted : IDisposable {
     [DllImport("libuhppoted.so")]
     private static extern string GetCard(ref UHPPOTE u, ref GoCard card, uint deviceID, uint cardNumber);
 
+    [DllImport("libuhppoted.so")]
+    private static extern string GetCardByIndex(ref UHPPOTE u, ref GoCard card, uint deviceID, uint index);
+
     public uint[] GetDevices() {
         int N = 0;
         int count = N;
@@ -369,6 +372,26 @@ public class Uhppoted : IDisposable {
         card.doors = Marshal.AllocHGlobal(4);
 
         string err = GetCard(ref this.u, ref card, deviceID, cardNumber);
+        if (err != null && err != "") {
+            Marshal.FreeHGlobal(card.doors);
+
+            throw new UhppotedException(err);
+        }
+
+        byte[] doors = new byte[4];
+
+        Marshal.Copy(card.doors, doors, 0, 4);
+        Marshal.FreeHGlobal(card.doors);
+
+        return new Card(card.cardNumber, card.from, card.to, doors);
+    }
+
+    public Card GetCardByIndex(uint deviceID, uint index) {
+        GoCard card = new GoCard();
+
+        card.doors = Marshal.AllocHGlobal(4);
+
+        string err = GetCardByIndex(ref this.u, ref card, deviceID, index);
         if (err != null && err != "") {
             Marshal.FreeHGlobal(card.doors);
 

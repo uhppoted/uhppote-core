@@ -3,21 +3,20 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] `usage` for examples
+  - [x] `help` for examples
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
         - [x] CCL
 
-  - [x] `get-card`
+  - [x] `get-card-by-index`
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
         - [x] CCL
 
-  - [ ] `get-card-by-index`
   - [ ] `put-card`
   - [ ] `delete-card`
   - [ ] `delete-cards`
@@ -33,10 +32,9 @@
   - [ ] `refresh-tasklist`
   - [ ] `clear-task-list`
 
-  - [ ] Tests usage + help
+  - [ ] Tests usage
   - [ ] Extend examples to use command line args
         - [ ] Brief usage() list commands
-        - [ ] 'help' lists commands + descriptions
         - [ ] Python usage()
   - [ ] C++ 
         - std::invoke

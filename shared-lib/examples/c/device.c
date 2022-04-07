@@ -4,6 +4,8 @@
 #include "device.h"
 #include "uhppoted.h"
 
+extern uint32_t DEVICE_ID;
+
 int getDevices() {
     uint32_t *devices = NULL;
     int N;
@@ -26,7 +28,8 @@ int getDevices() {
     return 0;
 }
 
-int getDevice(uint32_t deviceID) {
+int getDevice(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
     struct device d;
 
     if (get_device(deviceID, &d) != 0) {

@@ -7,8 +7,9 @@ sys.path.append('../../bindings/python')
 
 import uhppoted
 
-DEVICEID = 405419896
-CARDID = 8165538
+DEVICE_ID = 405419896
+CARD_ID = 8165538
+CARD_INDEX = 7
 DOOR = 4
 
 
@@ -26,6 +27,7 @@ def tests():
         'set-door-control': set_door_control,
         'get-cards': get_cards,
         'get-card': get_card,
+        'get-card-by-index': get_card_by_index,
     }
 
 
@@ -49,7 +51,7 @@ def get_devices(u):
 
 
 def get_device(u):
-    info = u.get_device(DEVICEID)
+    info = u.get_device(DEVICE_ID)
     ok = True
 
     if info.ID != 405419896:
@@ -87,7 +89,7 @@ def get_device(u):
 
 
 def set_address(u):
-    u.set_address(DEVICEID, "192.168.1.125", "255.255.255.253", "192.168.1.5")
+    u.set_address(DEVICE_ID, "192.168.1.125", "255.255.255.253", "192.168.1.5")
     ok = True
 
     if ok:
@@ -97,7 +99,7 @@ def set_address(u):
 
 
 def get_status(u):
-    status = u.get_status(DEVICEID)
+    status = u.get_status(DEVICE_ID)
     ok = True
 
     if status.ID != 405419896:
@@ -179,7 +181,7 @@ def get_status(u):
 
 
 def get_time(u):
-    datetime = u.get_time(DEVICEID)
+    datetime = u.get_time(DEVICE_ID)
     ok = True
 
     if datetime != "2022-01-02 12:34:56":
@@ -193,7 +195,7 @@ def get_time(u):
 
 
 def set_time(u):
-    u.set_time(DEVICEID, '2022-03-23 12:24:17')
+    u.set_time(DEVICE_ID, '2022-03-23 12:24:17')
     ok = True
 
     if ok:
@@ -203,7 +205,7 @@ def set_time(u):
 
 
 def get_listener(u):
-    listener = u.get_listener(DEVICEID)
+    listener = u.get_listener(DEVICE_ID)
     ok = True
 
     if listener != "192.168.1.100:60001":
@@ -217,7 +219,7 @@ def get_listener(u):
 
 
 def set_listener(u):
-    u.set_listener(DEVICEID, '192.168.1.100:60001')
+    u.set_listener(DEVICE_ID, '192.168.1.100:60001')
     ok = True
 
     if ok:
@@ -227,7 +229,7 @@ def set_listener(u):
 
 
 def get_door_control(u):
-    control = u.get_door_control(DEVICEID, DOOR)
+    control = u.get_door_control(DEVICE_ID, DOOR)
     ok = True
 
     if control.mode != 3:
@@ -245,7 +247,7 @@ def get_door_control(u):
 
 
 def set_door_control(u):
-    u.set_door_control(DEVICEID, DOOR, 2, 6)
+    u.set_door_control(DEVICE_ID, DOOR, 2, 6)
 
     if ok:
         print(f"set-door-control  ok")
@@ -254,7 +256,7 @@ def set_door_control(u):
 
 
 def get_cards(u):
-    cards = u.get_cards(DEVICEID)
+    cards = u.get_cards(DEVICE_ID)
     ok = True
 
     if cards != 39:
@@ -268,7 +270,7 @@ def get_cards(u):
 
 
 def get_card(u):
-    card = u.get_card(DEVICEID, CARDID)
+    card = u.get_card(DEVICE_ID, CARD_ID)
     ok = True
 
     if card.cardNumber != 8165538:
@@ -301,6 +303,44 @@ def get_card(u):
 
     if ok:
         print(f"get-card          ok")
+
+    return ok
+
+
+def get_card_by_index(u):
+    card = u.get_card_by_index(DEVICE_ID, CARD_INDEX)
+    ok = True
+
+    if card.cardNumber != 8165538:
+        print(f"get-card_by_index: incorrect card number - expected:8165538, got:{card.cardNumber}")
+        ok = False
+
+    if card.start != '2022-01-01':
+        print(f"get-card_by_index: incorrect 'from' date - expected:2022-01-01, got:{card.start}")
+        ok = False
+
+    if card.end != '2022-12-31':
+        print(f"get-card_by_index: incorrect 'to' date - expected:2022-12-31, got:{card.end}")
+        ok = False
+
+    if card.doors[0] != 0:
+        print(f"get-card_by_index: incorrect door[1] - expected:0, got:{card.doors[0]}")
+        ok = False
+
+    if card.doors[1] != 1:
+        print(f"get-card_by_index: incorrect door[2] - expected:1, got:{card.doors[1]}")
+        ok = False
+
+    if card.doors[2] != 31:
+        print(f"get-card_by_index: incorrect door[3] - expected:31, got:{card.doors[2]}")
+        ok = False
+
+    if card.doors[3] != 75:
+        print(f"get-card_by_index: incorrect door[42] - expected:75, got:{card.doors[3]}")
+        ok = False
+
+    if ok:
+        print(f"get-card_by_index ok")
 
     return ok
 

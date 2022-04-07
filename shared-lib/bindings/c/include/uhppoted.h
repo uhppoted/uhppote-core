@@ -58,7 +58,6 @@ typedef struct card {
     uint8_t doors[4];
 } card;
 
-
 void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...);
 void teardown();
 const char *errmsg();
@@ -77,3 +76,4 @@ int set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay);
 
 int get_cards(uint32_t id, int *N);
 int get_card(uint32_t id, uint32_t card_number, card *card);
+int get_card_by_index(uint32_t id, uint32_t index, card *card);

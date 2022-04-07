@@ -15,5 +15,6 @@
            get-door-control
            set-door-control
            get-cards
-           get-card))
+           get-card
+           get-card-by-index))
 

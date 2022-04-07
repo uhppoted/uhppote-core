@@ -3,42 +3,36 @@
 (load "packages.lisp")
 (load "examples.lisp")
 
-(defun usage () ""
-  (format t "~%   Usage: ./examples <command>~%") 
-  (format t "~%   Suppported commands:~%~{     ~a~^~%~}~%~%" 
-           (list "get-devices"
-                 "get-device"
-                 "set-address"
-                 "get-status"
-                 "get-time"
-                 "set-time"
-                 "get-listener"
-                 "set-listener"
-                 "get-door-control"
-                 "set-door-control"
-                 "get-cards"
-                 "get-card"
-           )))
+(defun commands () ""
+  (list '("get-devices"       "Retrieves a list of UHPPOTE controller IDs findable on the local LAN.")
+        '("get-device"        "Retrieves the basic device information for a single UHPPOTE controller.")
+        '("set-address"       "Sets the controller IPv4 address, subnet mask and gateway address.")
+        '("get-status"        "Retrieves a controller status.")
+        '("get-time"          "Retrieves a controller current date/time (YYYY-MM-DD HH:mm:ss).")
+        '("set-time"          "Sets a controller current date/time (YYYY-MM-DD HH:mm:ss).")
+        '("get-listener"      "Retrieves a controller's configured event listener address.")
+        '("set-listener"      "Configures a controller's event listener address and port.")
+        '("get-door-control"  "Retrieves the control state and open delay for a controller door.")
+        '("set-door-control"  "Sets the control mode and delay for a controller door.")
+        '("get-cards"         "Retrieves the number of cards stored on a controller.")
+        '("get-card"          "Retrieves the card detail for card number from a controller.")
+        '("get-card-by-index" "Retrieves the card detail for the card stored at an index on a controller.")))
 
+(defun usage () ""
+  (let ((cmds (commands)))
+    (format t "~%   Usage: ./examples <command>~%")   
+    (format t "~%   Suppported commands:~%")
+    (loop for cmd in cmds
+      do (format t "     ~a~%" (first cmd)))
+    (format t "~%")))
 
 (defun help () ""
-  (format t "~%   Usage: ./examples <command>~%") 
-  (format t "~%") 
-  (format t "   Supported commands:~%") 
-  (format t "~%") 
-  (format t "   get-devices       Retrieves a list of devices on the local LAN~%") 
-  (format t "   get-device        Retrieves the information for a UHPPOTE controller~%") 
-  (format t "   set-address       Sets a controller IP address, subnet mask and gateway address~%") 
-  (format t "   get-status        Retrieves a controller status~%") 
-  (format t "   get-time          Retrieves a controller date/time~%") 
-  (format t "   set-time          Sets a controller date/time~%") 
-  (format t "   get-listener      Retrieves a controller's configured event listener address~%") 
-  (format t "   set-listener      Sets a controller event listener address and port~%") 
-  (format t "   get-door-control  Retrieves the door control state and open delay for a controller door~%") 
-  (format t "   set-door-control  Sets the control mode and delay for a controller door~%") 
-  (format t "   get-cards         Retrieves the number of cards stored on a controller~%") 
-  (format t "   get-card          Retrieves the card detail for a card stored on a controller~%") 
-  (format t "~%"))
+  (let ((cmds (commands)))
+    (format t "~%   Usage: ./examples <command>~%")   
+    (format t "~%   Commands:~%")
+    (loop for cmd in cmds
+      do (format t "     ~17,a ~a~%" (first cmd) (second cmd)))
+    (format t "~%")))
 
 (defun get-devices () ""
   (format t "~%  get-devices:~%~{    ~a~^~%~}~%~%" (coerce (examples:get-devices) 'list)))
@@ -76,24 +70,28 @@
 (defun get-card () ""
   (format t "  get-card:~%    ~:w~%~%" (examples:get-card 405419896 8000001)))
 
+(defun get-card-by-index () ""
+  (format t "  get-card-byindex:~% ~:w~%~%" (examples:get-card-by-index 405419896 7)))
+
 (defun main () ""
   (let ((args (parse-command-line)))
     (if (not args)
         (usage)
         (loop for arg in args
-          do (cond ((string= arg "get-devices")      (get-devices))
-                   ((string= arg "get-device")       (get-device))
-                   ((string= arg "set-address")      (set-address))
-                   ((string= arg "get-status")       (get-status))
-                   ((string= arg "get-time")         (get-time))
-                   ((string= arg "set-time")         (set-time))
-                   ((string= arg "get-listener")     (get-listener))
-                   ((string= arg "set-listener")     (set-listener))
-                   ((string= arg "get-door-control") (get-door-control))
-                   ((string= arg "set-door-control") (set-door-control))
-                   ((string= arg "get-cards")        (get-cards))
-                   ((string= arg "get-card")         (get-card))
-                   ((string= arg "help")             (help))
+          do (cond ((string= arg "help")              (help))
+                   ((string= arg "get-devices")       (get-devices))
+                   ((string= arg "get-device")        (get-device))
+                   ((string= arg "set-address")       (set-address))
+                   ((string= arg "get-status")        (get-status))
+                   ((string= arg "get-time")          (get-time))
+                   ((string= arg "set-time")          (set-time))
+                   ((string= arg "get-listener")      (get-listener))
+                   ((string= arg "set-listener")      (set-listener))
+                   ((string= arg "get-door-control")  (get-door-control))
+                   ((string= arg "set-door-control")  (set-door-control))
+                   ((string= arg "get-cards")         (get-cards))
+                   ((string= arg "get-card")          (get-card))
+                   ((string= arg "get-card-by-index") (get-card-by-index))
                    (t (progn
                         (format t "~%   *** ERROR: invalid command (~a)~%"  arg) 
                         (usage))))))))

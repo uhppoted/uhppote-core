@@ -320,6 +320,24 @@
                                       (%get-unsigned-byte doors 3)))))))
 
 
+(defun uhppoted-get-card-by-index (uhppote device-id index) "Retrieves card detail for the card stored at an index on controller"
+  (%stack-block ((doors   4))
+    (rletz ((card (:struct :GoCard) :doors   doors))
+      (with-macptrs ((err (external-call "GetCardByIndex" :address uhppote 
+                                                   :address card
+                                                   :unsigned-long device-id 
+                                                   :unsigned-long index
+                                                   :address)))
+        (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+        (make-card :card-number (%get-unsigned-long (pref card :GoCard.card-number))
+                   :from        (go-string (pref card :GoCard.from))
+                   :to          (go-string (pref card :GoCard.to))
+                   :doors       (list (%get-unsigned-byte doors 0)
+                                      (%get-unsigned-byte doors 1)
+                                      (%get-unsigned-byte doors 2)
+                                      (%get-unsigned-byte doors 3)))))))
+
+
 (defun debug () "" 
   (handler-bind
 	((uhppoted-error

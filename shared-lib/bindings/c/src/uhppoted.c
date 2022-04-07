@@ -356,3 +356,31 @@ int get_card(uint32_t id, uint32_t card_number, card *c) {
 
     return 0;
 }
+
+int get_card_by_index(uint32_t id, uint32_t index, card *c) {
+    struct Card card;
+
+    card.doors = malloc(4 * sizeof(uint8_t));
+
+    char *err = GetCardByIndex(u, &card, id, index);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    c->card_number = card.card_number;
+
+    snprintf(c->from, sizeof(c->from), "%s", card.from);
+    snprintf(c->to, sizeof(c->to), "%s", card.to);
+
+    c->doors[0] = card.doors[0];
+    c->doors[1] = card.doors[1];
+    c->doors[2] = card.doors[2];
+    c->doors[3] = card.doors[3];
+
+    free(card.from);
+    free(card.to);
+    free(card.doors);
+
+    return 0;
+}

@@ -12,18 +12,45 @@ import uhppoted
 
 def commands():
     return {
-        'get-devices': None,
-        'get-device': None,
-        'set-address': None,
-        'get-status': None,
-        'get-time': None,
-        'set-time': None,
-        'get-listener': None,
-        'set-listener': None,
-        'get-door-control': None,
-        'set-door-control': None,
-        'get-cards': None,
-        'get-card': None,
+        'get-devices': {
+            'help': "Retrieves a list of UHPPOTE controller IDs findable on the local LAN.",
+        },
+        'get-device': {
+            'help': "Retrieves the basic device information for a single UHPPOTE controller.",
+        },
+        'set-address': {
+            'help': "Sets the controller IPv4 address, subnet mask and gateway address.",
+        },
+        'get-status': {
+            'help': "Retrieves a controller status.",
+        },
+        'get-time': {
+            'help': "Retrieves a controller current date/time (YYYY-MM-DD HH:mm:ss).",
+        },
+        'set-time': {
+            'help': "Sets a controller current date/time (YYYY-MM-DD HH:mm:ss).",
+        },
+        'get-listener': {
+            'help': "Retrieves a controller's configured event listener address.",
+        },
+        'set-listener': {
+            'help': "Configures a controller's event listener address and port.",
+        },
+        'get-door-control': {
+            'help': "Retrieves the control state and open delay for a controller door.",
+        },
+        'set-door-control': {
+            'help': "Sets the control mode and delay for a controller door.",
+        },
+        'get-cards': {
+            'help': "Retrieves the number of cards stored on a controller.",
+        },
+        'get-card': {
+            'help': "Retrieves the card detail for card number from a controller.",
+        },
+        'get-card-by-index': {
+            'help': "Retrieves the card detail for the card stored at an index on a controller.",
+        },
     }
 
 
@@ -43,58 +70,11 @@ def help():
     print()
     print("Usage: python example.py <command>")
     print()
-    print("  commands")
-    print("    get-devices")
-    print("    get-device")
-    print("    set-device")
-    print("    get-status")
-    print("    get-time")
-    print("    set-time")
-    print("    get-listener")
-    print("    set-listener")
-    print("    get-door-control")
-    print("    set-door-control")
-    print("    get-cards")
-    print("    help")
-    print()
-    print("  get-devices")
-    print("    Retrieves a list of UHPPOTE controller IDs findable on the local LAN.")
-    print()
-    print("  get-device")
-    print("    Retrieves the basic device information for a single UHPPOTE controller.")
-    print()
-    print("  set-address")
-    print("    Sets the controller IPv4 address, subnet mask and gateway address.")
-    print()
-    print("  get-status")
-    print("    Retrieves a controller status.")
-    print()
-    print("  get-time")
-    print("    Retrieves a controller current date/time (YYYY-MM-DD HH:mm:ss).")
-    print()
-    print("  set-time")
-    print("    Sets a controller current date/time (YYYY-MM-DD HH:mm:ss).")
-    print()
-    print("  get-listener")
-    print("    Retrieves a controller's configured event listener address.")
-    print()
-    print("  set-listener")
-    print("    Configures a controller's event listener address and port.")
-    print()
-    print("  get-door-control")
-    print("    Retrieves the control state and open delay for a controller door.")
-    print()
-    print("  set-door-control")
-    print("    Sets the control mode and delay for a controller door.")
-    print()
-    print("  get-cards")
-    print("    Retrieves the number of cards stored on a controller.")
-    print()
-    print("  get-card")
-    print("    Retrieves the card detail for card number from a controller.")
-    print()
-    print("  help")
-    print("    Displays this information.")
+    print("  Commands")
+
+    for cmd, v in commands().items():
+        print(f"    {cmd:<17}  {v['help']}")
+
     print()
 
 
@@ -295,12 +275,33 @@ def get_cards(u, deviceID):
         print()
 
 
-def get_card(u, deviceID, cardNumber):
+def get_card_by_index(u, deviceID, cardNumber):
     try:
         card = u.get_card(deviceID, cardNumber)
 
         print("get-card")
         print(f"  ID:           {deviceID}")
+        print(f"  card-number:  {card.cardNumber}")
+        print(f"       from:    {card.start}")
+        print(f"       to:      {card.end}")
+        print(f"       door[1]: {card.doors[0]}")
+        print(f"       door[2]: {card.doors[1]}")
+        print(f"       door[3]: {card.doors[2]}")
+        print(f"       door[4]: {card.doors[3]}")
+        print()
+
+    except Exception as e:
+        print(f" *** ERROR get_card ({e})")
+        print()
+
+
+def get_card_by_index(u, deviceID, index):
+    try:
+        card = u.get_card_by_index(deviceID, index)
+
+        print("get-card-by-index")
+        print(f"  ID:           {deviceID}")
+        print(f"  index:        {index}")
         print(f"  card-number:  {card.cardNumber}")
         print(f"       from:    {card.start}")
         print(f"       to:      {card.end}")
@@ -368,6 +369,9 @@ def main():
 
             elif cmd == 'get-card':
                 get_card(u, 405419896, 8000001)
+
+            elif cmd == 'get-card-by-index':
+                get_card_by_index(u, 405419896, 7)
 
             else:
                 print()

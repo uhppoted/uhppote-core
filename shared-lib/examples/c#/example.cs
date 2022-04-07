@@ -4,9 +4,11 @@ using uhppoted;
 
 public class command {
     public string cmd;
+    public string help;
 
-    public command(string cmd) {
+    public command(string cmd, string help) {
         this.cmd = cmd;
+        this.help = help;
     }
 };
 
@@ -14,18 +16,32 @@ public class example {
     const uint DEVICEID = 405419896;
 
     static command[] commands = {
-        new command("get-devices"),
-        new command("get-device"),
-        new command("set-address"),
-        new command("get-status"),
-        new command("get-time"),
-        new command("set-time"),
-        new command("get-listener"),
-        new command("set-listener"),
-        new command("get-door-control"),
-        new command("set-door-control"),
-        new command("get-cards"),
-        new command("get-card"),
+        new command("get-devices",
+                    "Retrieves a list of UHPPOTE controller IDs findable on the local LAN."),
+        new command("get-device",
+                    "Retrieves the basic device information for a single UHPPOTE controller."),
+        new command("set-address",
+                    "Sets the controller IPv4 address, subnet mask and gateway address."),
+        new command("get-status",
+                    "Retrieves a controller status."),
+        new command("get-time",
+                    "Retrieves a controller current date/time (YYYY-MM-DD HH:mm:ss)."),
+        new command("set-time",
+                    "Sets a controller current date/time (YYYY-MM-DD HH:mm:ss)."),
+        new command("get-listener",
+                    "Retrieves a controller's configured event listener address."),
+        new command("set-listener",
+                    "Configures a controller's event listener address and port."),
+        new command("get-door-control",
+                    "Retrieves the control state and open delay for a controller door."),
+        new command("set-door-control",
+                    "Sets the control mode and delay for a controller door."),
+        new command("get-cards",
+                    "Retrieves the number of cards stored on a controller."),
+        new command("get-card",
+                    "Retrieves the card detail for card number from a controller."),
+        new command("get-card-by-index",
+                    "Retrieves the card detail for the card stored at an index on a controller."),
     };
 
     public static void Main(string[] args) {
@@ -43,6 +59,10 @@ public class example {
             Uhppoted u = new Uhppoted("192.168.1.100", "192.168.1.100:60000", "192.168.1.100:60001", 2500, controllers, true);
 
             switch (cmd) {
+            case "help":
+                help();
+                break;
+
             case "get-devices":
                 GetDevices(u);
                 break;
@@ -91,6 +111,10 @@ public class example {
                 GetCard(u, 405419896, 8000001);
                 break;
 
+            case "get-card-by-index":
+                GetCardByIndex(u, 405419896, 7);
+                break;
+
             default:
                 Console.WriteLine();
                 Console.WriteLine(String.Format("  *** ERROR: invalid command ({0})", cmd));
@@ -120,50 +144,12 @@ public class example {
         Console.WriteLine();
         Console.WriteLine("  Usage: mono example.exe <command>");
         Console.WriteLine();
-        Console.WriteLine("  commands");
-        Console.WriteLine("    get-devices");
-        Console.WriteLine("    get-device");
-        Console.WriteLine("    set-address");
-        Console.WriteLine("    get-status");
-        Console.WriteLine("    get-time");
-        Console.WriteLine("    set-time");
-        Console.WriteLine("    get-listener");
-        Console.WriteLine("    get-door-control");
-        Console.WriteLine("    set-door-control");
-        Console.WriteLine("    get-cards");
-        Console.WriteLine();
-        Console.WriteLine("  get-devices");
-        Console.WriteLine("    Retrieves a list of UHPPOTE controller IDs findable on the local LAN.");
-        Console.WriteLine();
-        Console.WriteLine("  get-device");
-        Console.WriteLine("    Retrieves the basic device information for a UHPPOTE controller.");
-        Console.WriteLine();
-        Console.WriteLine("  set-address");
-        Console.WriteLine("    Sets a controller IPv4 address, subnet mask and gateway address.");
-        Console.WriteLine();
-        Console.WriteLine("  get-status");
-        Console.WriteLine("    Retrieves a controller device status.");
-        Console.WriteLine();
-        Console.WriteLine("  get-time");
-        Console.WriteLine("    Retrieves a controller current date/time.");
-        Console.WriteLine();
-        Console.WriteLine("  set-time");
-        Console.WriteLine("    Sets the controller current date/time.");
-        Console.WriteLine();
-        Console.WriteLine("  get-listener");
-        Console.WriteLine("    Retrieves the controller event listener address.");
-        Console.WriteLine();
-        Console.WriteLine("  set-listener");
-        Console.WriteLine("    Sets the controller event listener address and port.");
-        Console.WriteLine();
-        Console.WriteLine("  get-door-control");
-        Console.WriteLine("    Retrieves the controller door control state and door open delay.");
-        Console.WriteLine();
-        Console.WriteLine("  set-door-control");
-        Console.WriteLine("    Sets the control mode and delay for a controller door.");
-        Console.WriteLine();
-        Console.WriteLine("  get-cards");
-        Console.WriteLine("    Retrieves the number of cards stored on a controller.");
+        Console.WriteLine("  Commands");
+
+        foreach (command c in commands) {
+            Console.WriteLine("    {0,-17}  {1}", c.cmd, c.help);
+        }
+
         Console.WriteLine();
     }
 
@@ -331,6 +317,22 @@ public class example {
 
         Console.WriteLine(String.Format("get-card"));
         Console.WriteLine(String.Format("  ID:           {0}", deviceID));
+        Console.WriteLine(String.Format("  card number:  {0}", card.cardNumber));
+        Console.WriteLine(String.Format("       from:    {0}", card.from));
+        Console.WriteLine(String.Format("       to:      {0}", card.to));
+        Console.WriteLine(String.Format("       door[1]: {0}", card.doors[0]));
+        Console.WriteLine(String.Format("       door[2]: {0}", card.doors[1]));
+        Console.WriteLine(String.Format("       door[3]: {0}", card.doors[2]));
+        Console.WriteLine(String.Format("       door[4]: {0}", card.doors[3]));
+        Console.WriteLine();
+    }
+
+    static void GetCardByIndex(Uhppoted u, uint deviceID, uint index) {
+        Card card = u.GetCardByIndex(deviceID, 7);
+
+        Console.WriteLine(String.Format("get-card-by-index"));
+        Console.WriteLine(String.Format("  ID:           {0}", deviceID));
+        Console.WriteLine(String.Format("  index:        {0}", index));
         Console.WriteLine(String.Format("  card number:  {0}", card.cardNumber));
         Console.WriteLine(String.Format("       from:    {0}", card.from));
         Console.WriteLine(String.Format("       to:      {0}", card.to));

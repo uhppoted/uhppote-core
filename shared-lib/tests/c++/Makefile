@@ -54,6 +54,9 @@ get-cards: build
 get-card: build
 	$(CMD) get-card
 
+get-card-by-index: build
+	$(CMD) get-card-by-index
+
 all: build
 	$(CMD) all
 

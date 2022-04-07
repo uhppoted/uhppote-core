@@ -5,18 +5,19 @@
 
 
 (defun commands () "Returns a list of the commands and their associated functions"
-  (list '("get-devices"      tests:get-devices)
-        '("get-device"       tests:get-device)
-        '("set-address"      tests:set-address)
-        '("get-status"       tests:get-status)
-        '("get-time"         tests:get-time)
-        '("set-time"         tests:set-time)
-        '("get-listener"     tests:get-listener)
-        '("set-listener"     tests:set-listener)
-        '("get-door-control" tests:get-door-control)
-        '("set-door-control" tests:set-door-control)
-        '("get-cards"        tests:get-cards)
-        '("get-card"         tests:get-card)
+  (list '("get-devices"       tests:get-devices)
+        '("get-device"        tests:get-device)
+        '("set-address"       tests:set-address)
+        '("get-status"        tests:get-status)
+        '("get-time"          tests:get-time)
+        '("set-time"          tests:set-time)
+        '("get-listener"      tests:get-listener)
+        '("set-listener"      tests:set-listener)
+        '("get-door-control"  tests:get-door-control)
+        '("set-door-control"  tests:set-door-control)
+        '("get-cards"         tests:get-cards)
+        '("get-card"          tests:get-card)
+        '("get-card-by-index" tests:get-card-by-index)
 ))
 
 

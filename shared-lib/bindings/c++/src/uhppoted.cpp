@@ -304,3 +304,28 @@ card uhppoted::get_card(uint32_t id, uint32_t card_number) {
 
     return c;
 }
+
+card uhppoted::get_card_by_index(uint32_t id, uint32_t index) {
+    Card card;
+
+    vector<uint8_t> doors(4);
+
+    card.doors = doors.data();
+
+    char *err = GetCardByIndex(u, &card, id, index);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+
+    struct card c;
+
+    c.card_number = card.card_number;
+    c.from = card.from;
+    c.to = card.to;
+    c.doors[0] = card.doors[0];
+    c.doors[1] = card.doors[1];
+    c.doors[2] = card.doors[2];
+    c.doors[3] = card.doors[3];
+
+    return c;
+}

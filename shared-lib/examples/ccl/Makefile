@@ -14,6 +14,9 @@ build: examples
 usage: build
 	$(CMD) 
 
+help: build
+	$(CMD) help
+
 invalid: build
 	$(CMD) mystery-meat
 
@@ -52,6 +55,9 @@ get-cards: build
 
 get-card: build
 	$(CMD) get-card
+
+get-card-by-index: build
+	$(CMD) get-card-by-index
 
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp

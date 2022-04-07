@@ -4,3 +4,4 @@
 
 extern bool getCards();
 extern bool getCard();
+extern bool getCardByIndex();

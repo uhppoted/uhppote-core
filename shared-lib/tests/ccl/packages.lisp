@@ -16,6 +16,7 @@
            set-door-control
            get-cards
            get-card
+           get-card-by-index
            failed
            message))
 

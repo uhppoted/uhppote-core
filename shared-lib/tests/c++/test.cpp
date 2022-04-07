@@ -28,10 +28,12 @@ vector<test> tests = {
     {"set-door-control", setDoorControl},
     {"get-cards", getCards},
     {"get-card", getCard},
+    {"get-card-by-index", getCardByIndex},
 };
 
-extern const uint32_t DEVICEID = 405419896;
-extern const uint32_t CARDID = 8198765;
+extern const uint32_t DEVICE_ID = 405419896;
+extern const uint32_t CARD_ID = 8198765;
+extern const uint32_t CARD_INDEX = 7;
 extern const uint8_t DOOR = 4;
 
 extern bool result(string test, bool ok) {

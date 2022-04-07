@@ -273,6 +273,25 @@ class Uhppote:
 
         return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors)
 
+    def get_card_by_index(self, deviceID, index):
+        GetCardByIndex = lib.GetCardByIndex
+        GetCardByIndex.argtypes = [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]
+        GetCardByIndex.restype = ctypes.c_char_p
+        GetCardByIndex.errcheck = self.errcheck
+
+        card = GoCard()
+
+        card.doors = (c_ubyte * 4)(*[0] * 4)
+
+        GetCardByIndex(self._uhppote, byref(card), deviceID, index)
+
+        doors = [0, 0, 0, 0]
+
+        for i in range(4):
+            doors[i] = card.doors[i]
+
+        return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors)
+
 
 # INTERNAL TYPES
 class GoController(Structure):

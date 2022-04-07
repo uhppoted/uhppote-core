@@ -16,6 +16,9 @@ build: format
 usage: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD)
 
+help: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) help
+
 invalid: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) mystery-meat
 
@@ -55,6 +58,9 @@ get-cards: build
 get-card: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-card
 
+get-card-by-index: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-card-by-index
+
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-card
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-card-by-index
 

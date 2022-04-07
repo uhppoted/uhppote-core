@@ -4,7 +4,7 @@
 
 using namespace std;
 
-extern const uint32_t DEVICEID;
+extern const uint32_t DEVICE_ID;
 extern const uint8_t DOOR;
 
 int getDevices(uhppoted &u) {
@@ -28,7 +28,9 @@ int getDevices(uhppoted &u) {
     return -1;
 }
 
-int getDevice(uhppoted &u, uint32_t deviceID) {
+int getDevice(uhppoted &u, int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+
     try {
         auto d = u.get_device(deviceID);
 

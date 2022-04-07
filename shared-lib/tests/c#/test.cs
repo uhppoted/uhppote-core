@@ -14,8 +14,9 @@ public class test {
 };
 
 public class Test {
-    const uint DEVICEID = 405419896;
-    const uint CARDID = 8165538;
+    const uint DEVICE_ID = 405419896;
+    const uint CARD_ID = 8165538;
+    const uint CARD_INDEX = 7;
     const byte DOOR = 4;
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -34,6 +35,7 @@ public class Test {
         new test("set-door-control", SetDoorControl),
         new test("get-cards", GetCards),
         new test("get-card", GetCard),
+        new test("get-card-by-index", GetCardByIndex),
     };
 
     public static void Main(string[] args) {
@@ -106,7 +108,7 @@ public class Test {
     }
 
     static bool GetDevice(Uhppoted u) {
-        Device device = u.GetDevice(DEVICEID);
+        Device device = u.GetDevice(DEVICE_ID);
         bool ok = true;
 
         if (device.ID != 405419896) {
@@ -148,13 +150,13 @@ public class Test {
     }
 
     static bool SetAddress(Uhppoted u) {
-        u.SetAddress(DEVICEID, "192.168.1.125", "255.255.255.254", "192.168.1.5");
+        u.SetAddress(DEVICE_ID, "192.168.1.125", "255.255.255.254", "192.168.1.5");
 
         return result("set-address", true);
     }
 
     static bool GetStatus(Uhppoted u) {
-        Status status = u.GetStatus(DEVICEID);
+        Status status = u.GetStatus(DEVICE_ID);
         bool ok = true;
 
         if (status.ID != 405419896) {
@@ -250,7 +252,7 @@ public class Test {
     }
 
     static bool GetTime(Uhppoted u) {
-        string datetime = u.GetTime(DEVICEID);
+        string datetime = u.GetTime(DEVICE_ID);
         bool ok = true;
 
         if (datetime != "2022-01-02 12:34:56") {
@@ -262,13 +264,13 @@ public class Test {
     }
 
     static bool SetTime(Uhppoted u) {
-        u.SetTime(DEVICEID, "2022-03-23 12:24:17");
+        u.SetTime(DEVICE_ID, "2022-03-23 12:24:17");
 
         return result("set-time", true);
     }
 
     static bool GetListener(Uhppoted u) {
-        string listener = u.GetListener(DEVICEID);
+        string listener = u.GetListener(DEVICE_ID);
         bool ok = true;
 
         if (listener != "192.168.1.100:60001") {
@@ -280,13 +282,13 @@ public class Test {
     }
 
     static bool SetListener(Uhppoted u) {
-        u.SetListener(DEVICEID, "192.168.1.100:60001");
+        u.SetListener(DEVICE_ID, "192.168.1.100:60001");
 
         return result("set-listener", true);
     }
 
     static bool GetDoorControl(Uhppoted u) {
-        DoorControl control = u.GetDoorControl(DEVICEID, DOOR);
+        DoorControl control = u.GetDoorControl(DEVICE_ID, DOOR);
         bool ok = true;
 
         if (control.mode != 3) {
@@ -303,13 +305,13 @@ public class Test {
     }
 
     static bool SetDoorControl(Uhppoted u) {
-        u.SetDoorControl(DEVICEID, DOOR, ControlModes.NormallyClosed, 6);
+        u.SetDoorControl(DEVICE_ID, DOOR, ControlModes.NormallyClosed, 6);
 
         return result("set-door-control", true);
     }
 
     static bool GetCards(Uhppoted u) {
-        int cards = u.GetCards(DEVICEID);
+        int cards = u.GetCards(DEVICE_ID);
         bool ok = true;
 
         if (cards != 39) {
@@ -321,7 +323,7 @@ public class Test {
     }
 
     static bool GetCard(Uhppoted u) {
-        Card card = u.GetCard(DEVICEID, CARDID);
+        Card card = u.GetCard(DEVICE_ID, CARD_ID);
         bool ok = true;
 
         if (card.cardNumber != 8165538) {
@@ -362,9 +364,51 @@ public class Test {
         return result("get-card", ok);
     }
 
+    static bool GetCardByIndex(Uhppoted u) {
+        Card card = u.GetCardByIndex(DEVICE_ID, CARD_INDEX);
+        bool ok = true;
+
+        if (card.cardNumber != 8165538) {
+            Console.WriteLine("get-card-by-index: incorrect card number - expected:{0}, got:{1}", 8165538, card.cardNumber);
+            ok = false;
+        }
+
+        if (card.from != "2022-01-01") {
+            Console.WriteLine("get-card: incorrect 'from' date - expected:{0}, got:{1}", "2022-01-01", card.from);
+            ok = false;
+        }
+
+        if (card.to != "2022-12-31") {
+            Console.WriteLine("get-card-by-index: incorrect 'to' date - expected:{0}, got:{1}", "2022-12-31", card.to);
+            ok = false;
+        }
+
+        if (card.doors[0] != 0) {
+            Console.WriteLine("get-card-by-index: incorrect doors[1] - expected:{0}, got:{1}", 0, card.doors[0]);
+            ok = false;
+        }
+
+        if (card.doors[1] != 1) {
+            Console.WriteLine("get-card-by-index: incorrect doors[2] - expected:{0}, got:{1}", 1, card.doors[1]);
+            ok = false;
+        }
+
+        if (card.doors[2] != 31) {
+            Console.WriteLine("get-card-by-index: incorrect doors[3] - expected:{0}, got:{1}", 31, card.doors[2]);
+            ok = false;
+        }
+
+        if (card.doors[3] != 75) {
+            Console.WriteLine("get-card-by-index: incorrect doors[4] - expected:{0}, got:{1}", 75, card.doors[3]);
+            ok = false;
+        }
+
+        return result("get-card-by-index", ok);
+    }
+
     static bool result(string test, bool ok) {
         if (ok) {
-            Console.WriteLine(String.Format("{0, -16}  {1}", test, "ok"));
+            Console.WriteLine(String.Format("{0, -17}  {1}", test, "ok"));
         }
 
         return ok;

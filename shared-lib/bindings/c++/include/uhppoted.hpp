@@ -82,6 +82,7 @@ class uhppoted {
 
     int get_cards(uint32_t id);
     card get_card(uint32_t id, uint32_t card_number);
+    card get_card_by_index(uint32_t id, uint32_t index);
 
   private:
     UHPPOTE *u;

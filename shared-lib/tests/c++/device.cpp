@@ -5,8 +5,9 @@
 
 using namespace std;
 
-extern const uint32_t DEVICEID;
+extern const uint32_t DEVICE_ID;
 extern const uint8_t DOOR;
+
 extern bool result(string test, bool ok);
 
 bool getDevices(uhppoted &u) {
@@ -36,7 +37,7 @@ bool getDevices(uhppoted &u) {
 
 bool getDevice(uhppoted &u) {
     try {
-        auto d = u.get_device(DEVICEID);
+        auto d = u.get_device(DEVICE_ID);
         bool ok = true;
 
         if (d.ID != 405419896) {
@@ -102,7 +103,7 @@ bool setAddress(uhppoted &u) {
         string subnet = "255.255.254.0";
         string gateway = "192.168.1.10";
 
-        u.set_address(DEVICEID, address, subnet, gateway);
+        u.set_address(DEVICE_ID, address, subnet, gateway);
 
         return result("set-address", true);
     } catch (const exception &e) {
@@ -116,7 +117,7 @@ bool setAddress(uhppoted &u) {
 
 bool getStatus(uhppoted &u) {
     try {
-        auto s = u.get_status(DEVICEID);
+        auto s = u.get_status(DEVICE_ID);
         bool ok = true;
 
         if (s.ID != 405419896) {
@@ -226,7 +227,7 @@ bool getStatus(uhppoted &u) {
 
 bool getTime(uhppoted &u) {
     try {
-        auto datetime = u.get_time(DEVICEID);
+        auto datetime = u.get_time(DEVICE_ID);
         bool ok = true;
 
         if (datetime != "2022-01-02 12:34:56") {
@@ -250,7 +251,7 @@ bool setTime(uhppoted &u) {
     try {
         string datetime = "2022-03-23 12:24:17";
 
-        u.set_time(DEVICEID, datetime);
+        u.set_time(DEVICE_ID, datetime);
 
         return result("set-time", true);
     } catch (const exception &e) {
@@ -264,7 +265,7 @@ bool setTime(uhppoted &u) {
 
 bool getListener(uhppoted &u) {
     try {
-        auto listener = u.get_listener(DEVICEID);
+        auto listener = u.get_listener(DEVICE_ID);
         bool ok = true;
 
         if (listener != "192.168.1.100:60001") {
@@ -288,7 +289,7 @@ bool setListener(uhppoted &u) {
     try {
         string listener = "192.168.1.100:60001";
 
-        u.set_listener(DEVICEID, listener);
+        u.set_listener(DEVICE_ID, listener);
 
         return result("set-listener", true);
     } catch (const exception &e) {
@@ -302,7 +303,7 @@ bool setListener(uhppoted &u) {
 
 bool getDoorControl(uhppoted &u) {
     try {
-        auto d = u.get_door_control(DEVICEID, DOOR);
+        auto d = u.get_door_control(DEVICE_ID, DOOR);
         bool ok = true;
 
         if (d.mode != 3) {
@@ -327,7 +328,7 @@ bool getDoorControl(uhppoted &u) {
 
 bool setDoorControl(uhppoted &u) {
     try {
-        u.set_door_control(DEVICEID, DOOR, NORMALLY_CLOSED, 6);
+        u.set_door_control(DEVICE_ID, DOOR, NORMALLY_CLOSED, 6);
 
         return result("set-door-control", true);
     } catch (const exception &e) {
