@@ -113,7 +113,7 @@ func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *
 	if err != nil {
 		return err
 	} else if !ok {
-		return fmt.Errorf("%v: put-card failed")
+		return fmt.Errorf("%v: put-card failed", deviceID)
 	}
 
 	return nil
