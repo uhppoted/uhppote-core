@@ -16,7 +16,9 @@
         '("set-door-control"  "Sets the control mode and delay for a controller door.")
         '("get-cards"         "Retrieves the number of cards stored on a controller.")
         '("get-card"          "Retrieves the card detail for card number from a controller.")
-        '("get-card-by-index" "Retrieves the card detail for the card stored at an index on a controller.")))
+        '("get-card-by-index" "Retrieves the card detail for the card stored at an index on a controller.")
+        '("put-card"          "Adds or updates the card detail stored on a controller.")
+))
 
 (defun usage () ""
   (let ((cmds (commands)))
@@ -73,6 +75,10 @@
 (defun get-card-by-index () ""
   (format t "  get-card-byindex:~% ~:w~%~%" (examples:get-card-by-index 405419896 7)))
 
+(defun put-card () ""
+  (let ((doors (make-array 4 :initial-contents '(0 1 31 75))))
+    (format t "  put-card:~%    ~:w~%~%" (examples:put-card 405419896 8000001 "2022-01-01" "2022-12-31" doors))))
+
 (defun main () ""
   (let ((args (parse-command-line)))
     (if (not args)
@@ -92,6 +98,7 @@
                    ((string= arg "get-cards")         (get-cards))
                    ((string= arg "get-card")          (get-card))
                    ((string= arg "get-card-by-index") (get-card-by-index))
+                   ((string= arg "put-card")          (put-card))
                    (t (progn
                         (format t "~%   *** ERROR: invalid command (~a)~%"  arg) 
                         (usage))))))))

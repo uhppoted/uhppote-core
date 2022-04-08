@@ -26,10 +26,16 @@ typedef struct command {
 const command commands[] = {
     {.cmd = "get-devices",
      .help = "Retrieves a list of UHPPOTE controller IDs findable on the local LAN."},
-    {.cmd = "get-device",
-     .help = "Retrieves the basic device information for a single UHPPOTE controller."},
-    {.cmd = "set-address",
-     .help = "Sets the controller IPv4 address, subnet mask and gateway address."},
+    {
+        .cmd = "get-device",
+        .help = "Retrieves the basic device information for a single UHPPOTE controller.",
+        .fn = getDevice,
+    },
+    {
+        .cmd = "set-address",
+        .help = "Sets the controller IPv4 address, subnet mask and gateway address.",
+        .fn = setAddress,
+    },
     {.cmd = "get-status",
      .help = "Retrieves a controller status."},
     {.cmd = "get-time",
@@ -44,13 +50,26 @@ const command commands[] = {
      .help = "Retrieves the control state and open delay for a controller door."},
     {.cmd = "set-door-control",
      .help = "Sets the control mode and delay for a controller door."},
-    {.cmd = "get-cards",
-     .help = "Retrieves the number of cards stored on a controller."},
-    {.cmd = "get-card",
-     .help = "Retrieves the card detail for card number from a controller."},
-    {.cmd = "get-card-by-index",
-     .help = "Retrieves the card detail for the card stored at an index on a controller.",
-     .fn = getCardByIndex},
+    {
+        .cmd = "get-cards",
+        .help = "Retrieves the number of cards stored on a controller.",
+        .fn = getCards,
+    },
+    {
+        .cmd = "get-card",
+        .help = "Retrieves the card detail for card number from a controller.",
+        .fn = getCard,
+    },
+    {
+        .cmd = "get-card-by-index",
+        .help = "Retrieves the card detail for the card stored at an index on a controller.",
+        .fn = getCardByIndex,
+    },
+    {
+        .cmd = "put-card",
+        .help = "Adds or updates the card detail for card number stored on a controller.",
+        .fn = putCard,
+    },
 };
 
 int main(int argc, char **argv) {
@@ -72,12 +91,8 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    if (strncmp(cmd, "get-devices", 11) == 0) {
+    if (strcmp(cmd, "get-devices") == 0) {
         rc = getDevices();
-    } else if (strncmp(cmd, "get-device", 10) == 0) {
-        rc = getDevice(argc, argv);
-    } else if (strncmp(cmd, "set-address", 11) == 0) {
-        rc = setAddress(DEVICE_ID, "192.168.1.125", "255.255.254.0", "192.168.1.0");
     } else if (strncmp(cmd, "get-status", 10) == 0) {
         rc = getStatus(DEVICE_ID);
     } else if (strncmp(cmd, "get-time", 8) == 0) {
@@ -101,18 +116,23 @@ int main(int argc, char **argv) {
         rc = getDoorControl(DEVICE_ID, DOOR);
     } else if (strncmp(cmd, "set-door-control", 16) == 0) {
         rc = setDoorControl(DEVICE_ID, DOOR, NORMALLY_OPEN, 9);
-    } else if (strncmp(cmd, "get-cards", 16) == 0) {
-        rc = getCards(argc, argv);
-    } else if (strcmp(cmd, "get-card") == 0) {
-        rc = getCard(argc, argv);
-    } else if (strcmp(cmd, "get-card-by-index") == 0) {
-        rc = getCardByIndex(argc, argv);
     } else {
-        printf("\n   *** ERROR invalid command (%s)\n\n", cmd);
+        int N = sizeof(commands) / sizeof(command);
+        for (int i = 0; i < N; i++) {
+            command c = commands[i];
+
+            if (strcmp(c.cmd, cmd) == 0) {
+                rc = c.fn(argc, argv);
+                goto done;
+            }
+        }
+
+        printf("\n   *** ERROR invalid command (%s)\n", cmd);
         usage();
         rc = -1;
     }
 
+done:
     teardown();
 
     return rc;

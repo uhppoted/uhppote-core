@@ -61,6 +61,9 @@ get-card: build
 get-card-by-index: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-card-by-index
 
+put-card: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) put-card
+
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-card-by-index
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) put-card
 

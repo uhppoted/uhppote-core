@@ -6,8 +6,10 @@ import "C"
 import (
 	"C"
 	"fmt"
+	"time"
 	"unsafe"
 
+	"github.com/uhppoted/uhppote-core/types"
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
 
@@ -74,6 +76,45 @@ func getCardByIndex(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, i
 	doors[1] = C.uchar(response.Doors[2])
 	doors[2] = C.uchar(response.Doors[3])
 	doors[3] = C.uchar(response.Doors[4])
+
+	return nil
+}
+
+func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8) error {
+	_from, err := time.Parse("2006-01-02", C.GoString(from))
+	if err != nil {
+		return fmt.Errorf("Invalid 'from' date (%v)", err)
+	}
+
+	_to, err := time.Parse("2006-01-02", C.GoString(to))
+	if err != nil {
+		return fmt.Errorf("Invalid 'to' date (%v)", err)
+	}
+
+	if doors == nil {
+		return fmt.Errorf("invalid argument (doors) - expected valid pointer")
+	}
+
+	_doors := unsafe.Slice(doors, 4)
+
+	card := types.Card{
+		CardNumber: cardNumber,
+		From:       (*types.Date)(&_from),
+		To:         (*types.Date)(&_to),
+		Doors: map[uint8]int{
+			1: int(_doors[0]),
+			2: int(_doors[1]),
+			3: int(_doors[2]),
+			4: int(_doors[3]),
+		},
+	}
+
+	ok, err := uu.PutCard(deviceID, card)
+	if err != nil {
+		return err
+	} else if !ok {
+		return fmt.Errorf("%v: put-card failed")
+	}
 
 	return nil
 }

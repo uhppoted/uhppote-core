@@ -338,6 +338,27 @@
                                       (%get-unsigned-byte doors 3)))))))
 
 
+(defun uhppoted-put-card (uhppote device-id card-number from to doors) "Adds or updates the card detail stored on a controller"
+  (with-cstrs ((from_ from)
+               (to_   to))
+    (multiple-value-bind (doors_ pdoors) (make-heap-ivector 4 '(unsigned-byte 1))
+      (unwind-protect
+        (progn
+          (setf (paref pdoors (:* :unsigned-byte) 0) (aref doors 0))
+          (setf (paref pdoors (:* :unsigned-byte) 1) (aref doors 1))
+          (setf (paref pdoors (:* :unsigned-byte) 2) (aref doors 2))
+          (setf (paref pdoors (:* :unsigned-byte) 3) (aref doors 3))
+          (with-macptrs ((err (external-call "PutCard" :address uhppote 
+                                                       :unsigned-long device-id 
+                                                       :unsigned-long card-number
+                                                       :address       from_  
+                                                       :address       to_
+                                                       :address       pdoors
+                                                       :address)))
+            (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err))))))
+      (dispose-heap-ivector doors_))))
+
+
 (defun debug () "" 
   (handler-bind
 	((uhppoted-error

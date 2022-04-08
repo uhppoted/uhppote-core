@@ -73,3 +73,29 @@ int getCardByIndex(int argc, char **argv) {
 
     return 0;
 }
+
+int putCard(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    uint32_t card_number = CARD_ID;
+    char *from = "2022-01-01";
+    char *to = "2022-12-31";
+    uint8_t doors[4] = {0, 1, 31, 75};
+
+    if (put_card(deviceID, card_number, from, to, doors) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    printf("\nput-card\n");
+    printf("  ID:           %u\n", deviceID);
+    printf("  card number:  %u\n", card_number);
+    printf("       from:    %s\n", from);
+    printf("       to:      %s\n", to);
+    printf("       door[1]: %u\n", doors[0]);
+    printf("       door[2]: %u\n", doors[1]);
+    printf("       door[3]: %u\n", doors[2]);
+    printf("       door[4]: %u\n", doors[3]);
+    printf("\n");
+
+    return 0;
+}

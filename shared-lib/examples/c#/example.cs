@@ -5,15 +5,23 @@ using uhppoted;
 public class command {
     public string cmd;
     public string help;
+    public Action<Uhppoted, string[]> fn;
 
     public command(string cmd, string help) {
         this.cmd = cmd;
         this.help = help;
     }
+
+    public command(string cmd, string help, Action<Uhppoted, string[]> fn) {
+        this.cmd = cmd;
+        this.help = help;
+        this.fn = fn;
+    }
 };
 
 public class example {
     const uint DEVICEID = 405419896;
+    const uint CARD_NUMBER = 8000001;
 
     static command[] commands = {
         new command("get-devices",
@@ -42,6 +50,9 @@ public class example {
                     "Retrieves the card detail for card number from a controller."),
         new command("get-card-by-index",
                     "Retrieves the card detail for the card stored at an index on a controller."),
+        new command("put-card",
+                    "Adds or updates the card detail for card number stored on a controller.",
+                    PutCard),
     };
 
     public static void Main(string[] args) {
@@ -116,6 +127,13 @@ public class example {
                 break;
 
             default:
+                foreach (command c in commands) {
+                    if (c.cmd == cmd) {
+                        c.fn(u, args);
+                        return;
+                    }
+                }
+
                 Console.WriteLine();
                 Console.WriteLine(String.Format("  *** ERROR: invalid command ({0})", cmd));
                 usage();
@@ -340,6 +358,27 @@ public class example {
         Console.WriteLine(String.Format("       door[2]: {0}", card.doors[1]));
         Console.WriteLine(String.Format("       door[3]: {0}", card.doors[2]));
         Console.WriteLine(String.Format("       door[4]: {0}", card.doors[3]));
+        Console.WriteLine();
+    }
+
+    static void PutCard(Uhppoted u, string[] args) {
+        uint deviceID = DEVICEID;
+        uint cardNumber = CARD_NUMBER;
+        string from = "2022-01-01";
+        string to = "2022-12-31";
+        byte[] doors = { 0, 1, 31, 75 };
+
+        u.PutCard(deviceID, cardNumber, from, to, doors);
+
+        Console.WriteLine(String.Format("put-card"));
+        Console.WriteLine(String.Format("  ID:           {0}", deviceID));
+        Console.WriteLine(String.Format("  card number:  {0}", cardNumber));
+        Console.WriteLine(String.Format("       from:    {0}", from));
+        Console.WriteLine(String.Format("       to:      {0}", to));
+        Console.WriteLine(String.Format("       door[1]: {0}", doors[0]));
+        Console.WriteLine(String.Format("       door[2]: {0}", doors[1]));
+        Console.WriteLine(String.Format("       door[3]: {0}", doors[2]));
+        Console.WriteLine(String.Format("       door[4]: {0}", doors[3]));
         Console.WriteLine();
     }
 }

@@ -17,6 +17,7 @@
            get-cards
            get-card
            get-card-by-index
+           put-card
            failed
            message))
 

@@ -5,3 +5,4 @@
 extern bool getCards(uhppoted &);
 extern bool getCard(uhppoted &);
 extern bool getCardByIndex(uhppoted &);
+extern bool putCard(uhppoted &);

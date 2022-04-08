@@ -124,3 +124,14 @@ bool getCardByIndex() {
 
     return result("get-card-by-index", ok);
 }
+
+bool putCard() {
+    uint8_t doors[4] = {0, 1, 31, 75};
+
+    if (put_card(DEVICE_ID, CARD_ID, "2022-01-01", "2022-12-31", (uint8_t *)doors) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    return result("put-card", true);
+}

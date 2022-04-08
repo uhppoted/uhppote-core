@@ -18,6 +18,7 @@
         '("get-cards"         tests:get-cards)
         '("get-card"          tests:get-card)
         '("get-card-by-index" tests:get-card-by-index)
+        '("put-card"          tests:put-card)
 ))
 
 
@@ -65,17 +66,17 @@
   (let* ((ll (commands))
          (args (parse-command-line))
          (arg  (if args (first args) "all")))
-    (if (string= arg "all") 
-        (all)
-        (block single-command
-          (loop for cmd in ll
-            do (if (string= arg (first cmd))
-                   (progn
-                     (test (second cmd))
-                     (return-from single-command))))
+    (cond ((string= arg "help") (usage))
+          ((string= arg "all")  (all))
+          (t (block single-command
+               (loop for cmd in ll
+                 do (if (string= arg (first cmd))
+                        (progn
+                          (test (second cmd))
+                          (return-from single-command))))
 
-          (format *error-output* "~%   *** ERROR invalid command (~a)~%" arg)
-          (usage)))))
+               (format *error-output* "~%   *** ERROR invalid command (~a)~%" arg)
+               (usage))))))
 
 ;;;; Workaround to skip command line arguments for REPL - invoking (main) in the REPL is
 ;;;; particularly pointless so:

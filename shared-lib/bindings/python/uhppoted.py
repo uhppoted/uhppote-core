@@ -292,6 +292,24 @@ class Uhppote:
 
         return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors)
 
+    def put_card(self, deviceID, cardNumber, start, end, doors):
+        PutCard = lib.PutCard
+        PutCard.argtypes = [
+            POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, c_char_p,
+            POINTER(c_ubyte)
+        ]
+        PutCard.restype = ctypes.c_char_p
+        PutCard.errcheck = self.errcheck
+
+        _doors = (c_ubyte * 4)(*[0] * 4)
+        _doors[0] = doors[0]
+        _doors[1] = doors[1]
+        _doors[2] = doors[2]
+        _doors[3] = doors[3]
+
+        PutCard(self._uhppote, deviceID, cardNumber, c_char_p(bytes(start, 'utf-8')),
+                c_char_p(bytes(end, 'utf-8')), _doors)
+
 
 # INTERNAL TYPES
 class GoController(Structure):

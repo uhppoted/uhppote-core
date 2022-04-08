@@ -11,6 +11,9 @@ lib:
 build: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp --eval '(make-app)' 
 
+usage: build
+	$(CMD) help
+
 invalid: build
 	$(CMD) mystery-meat
 
@@ -52,6 +55,9 @@ get-card: build
 
 get-card-by-index: build
 	$(CMD) get-card-by-index
+
+put-card: build
+	$(CMD) put-card
 
 all: build
 	$(CMD) all

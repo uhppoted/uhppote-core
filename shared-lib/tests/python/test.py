@@ -8,7 +8,7 @@ sys.path.append('../../bindings/python')
 import uhppoted
 
 DEVICE_ID = 405419896
-CARD_ID = 8165538
+CARD_NUMBER = 8165538
 CARD_INDEX = 7
 DOOR = 4
 
@@ -28,6 +28,7 @@ def tests():
         'get-cards': get_cards,
         'get-card': get_card,
         'get-card-by-index': get_card_by_index,
+        'put-card': put_card,
     }
 
 
@@ -270,7 +271,7 @@ def get_cards(u):
 
 
 def get_card(u):
-    card = u.get_card(DEVICE_ID, CARD_ID)
+    card = u.get_card(DEVICE_ID, CARD_NUMBER)
     ok = True
 
     if card.cardNumber != 8165538:
@@ -345,24 +346,37 @@ def get_card_by_index(u):
     return ok
 
 
+def put_card(u):
+    u.put_card(DEVICE_ID, CARD_NUMBER, '2022-01-01', '2022-12-31', [0, 1, 31, 75])
+
+    return result('put-card', True)
+
+
+def result(test, ok):
+    if ok:
+        print(f'{test:<17} ok')
+
+    return ok
+
+
 def usage():
-    print("   Usage: python test.py <command>")
+    print('   Usage: python test.py <command>')
     print()
-    print("   Supported commands:")
-    print("      all")
+    print('   Supported commands:')
+    print('      all')
     for k in tests():
-        print(f"      {k}")
+        print(f'      {k}')
     print()
 
 
 if __name__ == "__main__":
-    cmd = ""
+    cmd = ''
 
     if len(sys.argv) > 1:
         cmd = sys.argv[1]
 
-    alpha = uhppoted.Controller(405419896, "192.168.1.100")
-    beta = uhppoted.Controller(303986753, "192.168.1.100")
+    alpha = uhppoted.Controller(405419896, '192.168.1.100')
+    beta = uhppoted.Controller(303986753, '192.168.1.100')
     controllers = [alpha, beta]
 
     u = uhppoted.Uhppote(
@@ -373,13 +387,17 @@ if __name__ == "__main__":
         if cmd in tests():
             ok = ok if tests()[cmd](u) else False
 
-        elif cmd == "" or cmd == 'all':
+        elif cmd == '' or cmd == 'all':
             for _, f in tests().items():
                 ok = ok if f(u) else False
 
+        elif cmd == 'help':
+            print()
+            usage()
+
         else:
             print()
-            print(f"   *** ERROR invalid command ({cmd})")
+            print(f'   *** ERROR invalid command ({cmd})')
             print()
             usage()
 
@@ -388,7 +406,7 @@ if __name__ == "__main__":
 
     except BaseException as x:
         print()
-        print(f"*** ERROR  {cmd} failed: {x}")
+        print(f'*** ERROR  {cmd} failed: {x}')
         print()
 
         sys.exit(1)

@@ -89,3 +89,35 @@ int getCardByIndex(uhppoted &u, int argc, char **argv) {
 
     return -1;
 }
+
+int putCard(uhppoted &u, int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    uint32_t card_number = CARD_ID;
+    string from = "2022-01-01";
+    string to = "2022-12-31";
+    uint8_t doors[4] = {0, 1, 31, 75};
+
+    try {
+        u.put_card(deviceID, card_number, from, to, doors);
+
+        cout << endl
+             << "put-card" << endl;
+        cout << "  ID:           " << deviceID << endl;
+        cout << "  card number:  " << card_number << endl;
+        cout << "       from:    " << from << endl;
+        cout << "       to:      " << to << endl;
+        cout << "       door[1]: " << static_cast<int>(doors[0]) << endl;
+        cout << "       door[2]: " << static_cast<int>(doors[1]) << endl;
+        cout << "       door[3]: " << static_cast<int>(doors[2]) << endl;
+        cout << "       door[4]: " << static_cast<int>(doors[3]) << endl;
+        cout << endl;
+
+        return 0;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return -1;
+}

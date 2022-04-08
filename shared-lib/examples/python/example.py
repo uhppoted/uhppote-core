@@ -9,6 +9,9 @@ sys.path.append('../../bindings/python')
 
 import uhppoted
 
+DEVICE_ID = 405419896
+CARD_NUMBER = 8000001
+
 
 def commands():
     return {
@@ -50,6 +53,10 @@ def commands():
         },
         'get-card-by-index': {
             'help': "Retrieves the card detail for the card stored at an index on a controller.",
+        },
+        'put-card': {
+            'help': "Adds or updates the card detail for card number stored on a controller.",
+            'fn': put_card,
         },
     }
 
@@ -275,7 +282,7 @@ def get_cards(u, deviceID):
         print()
 
 
-def get_card_by_index(u, deviceID, cardNumber):
+def get_card(u, deviceID, cardNumber):
     try:
         card = u.get_card(deviceID, cardNumber)
 
@@ -313,6 +320,32 @@ def get_card_by_index(u, deviceID, index):
 
     except Exception as e:
         print(f" *** ERROR get_card ({e})")
+        print()
+
+
+def put_card(u, args):
+    try:
+        deviceID = DEVICE_ID
+        cardNumber = CARD_NUMBER
+        start = "2022-01-01"
+        end = "2022-12-31"
+        doors = [0, 1, 31, 75]
+
+        card = u.put_card(deviceID, cardNumber, start, end, doors)
+
+        print("put-card")
+        print(f"  ID:           {deviceID}")
+        print(f"  card-number:  {cardNumber}")
+        print(f"       from:    {start}")
+        print(f"       to:      {end}")
+        print(f"       door[1]: {doors[0]}")
+        print(f"       door[2]: {doors[1]}")
+        print(f"       door[3]: {doors[2]}")
+        print(f"       door[4]: {doors[3]}")
+        print()
+
+    except Exception as e:
+        print(f" *** ERROR put_card ({e})")
         print()
 
 
@@ -374,6 +407,11 @@ def main():
                 get_card_by_index(u, 405419896, 7)
 
             else:
+                for c, v in commands().items():
+                    if cmd == c:
+                        v['fn'](u, None)
+                        return
+
                 print()
                 print(f"  ERROR: invalid command ({cmd})")
                 usage()

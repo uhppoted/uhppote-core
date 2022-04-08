@@ -43,6 +43,7 @@ const test tests[] = {
     {.name = "get-cards", .fn = getCards},
     {.name = "get-card", .fn = getCard},
     {.name = "get-card-by-index", .fn = getCardByIndex},
+    {.name = "put-card", .fn = putCard},
 };
 
 int main(int argc, char **argv) {
@@ -60,6 +61,9 @@ int main(int argc, char **argv) {
 
     if (cmd == NULL || strncmp(cmd, "all", 3) == 0) {
         ok = all();
+    } else if (strcmp(cmd, "help") == 0) {
+        printf("\n");
+        usage();
     } else {
         int N = sizeof(tests) / sizeof(test);
 
@@ -100,7 +104,6 @@ void usage() {
     printf("   Usage: test <command>\n");
     printf("\n");
     printf("   Supported commands:\n");
-    printf("      all\n");
 
     for (int i = 0; i < N; i++) {
         test t = tests[i];

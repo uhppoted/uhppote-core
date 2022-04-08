@@ -29,10 +29,11 @@ vector<test> tests = {
     {"get-cards", getCards},
     {"get-card", getCard},
     {"get-card-by-index", getCardByIndex},
+    {"put-card", putCard},
 };
 
 extern const uint32_t DEVICE_ID = 405419896;
-extern const uint32_t CARD_ID = 8198765;
+extern const uint32_t CARD_ID = 8165538;
 extern const uint32_t CARD_INDEX = 7;
 extern const uint8_t DOOR = 4;
 
@@ -60,6 +61,12 @@ int main(int argc, char **argv) {
 
     uhppoted u("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2500, controllers, true);
 
+    if (cmd == "help") {
+        cout << endl;
+        usage();
+        return 0;
+    }
+
     if (cmd == "" || cmd == "all") {
         bool ok = true;
         for (auto it = tests.begin(); it != tests.end(); it++) {
@@ -86,7 +93,6 @@ void usage() {
     cout << "   Usage: test <command>" << endl;
     cout << endl;
     cout << "   Supported commands:" << endl;
-    cout << "      all" << endl;
 
     for (auto it = tests.begin(); it != tests.end(); it++) {
         cout << "      " << it->command << endl;

@@ -19,19 +19,22 @@ extern const uint8_t DOOR = 4;
 const controller ALPHA = {.id = 405419896, .address = "192.168.1.100"};
 const controller BETA = {.id = 303986753, .address = "192.168.1.100"};
 
-typedef int(f)(int, char **a);
+typedef int(f)(uhppoted &, int, char **);
 
 typedef struct command {
     string cmd;
     string help;
-    f fn;
+    f *fn;
 } command;
 
 const vector<command> commands = {
     {.cmd = "get-devices",
      .help = "Retrieves a list of UHPPOTE controller IDs findable on the local LAN."},
-    {.cmd = "get-device",
-     .help = "Retrieves the basic device information for a single UHPPOTE controller."},
+    {
+        .cmd = "get-device",
+        .help = "Retrieves the basic device information for a single UHPPOTE controller.",
+        .fn = getDevice,
+    },
     {.cmd = "set-address",
      .help = "Sets the controller IPv4 address, subnet mask and gateway address."},
     {.cmd = "get-status",
@@ -48,12 +51,26 @@ const vector<command> commands = {
      .help = "Retrieves the control state and open delay for a controller door."},
     {.cmd = "set-door-control",
      .help = "Sets the control mode and delay for a controller door."},
-    {.cmd = "get-cards",
-     .help = "Retrieves the number of cards stored on a controller."},
-    {.cmd = "get-card",
-     .help = "Retrieves the card detail for card number from a controller."},
-    {.cmd = "get-card-by-index",
-     .help = "Retrieves the card detail for the card stored at an index on a controller."},
+    {
+        .cmd = "get-cards",
+        .help = "Retrieves the number of cards stored on a controller.",
+        .fn = getCards,
+    },
+    {
+        .cmd = "get-card",
+        .help = "Retrieves the card detail for card number from a controller.",
+        .fn = getCard,
+    },
+    {
+        .cmd = "get-card-by-index",
+        .help = "Retrieves the card detail for the card stored at an index on a controller.",
+        .fn = getCardByIndex,
+    },
+    {
+        .cmd = "put-card",
+        .help = "Adds or updates the card detail for card number stored on a controller.",
+        .fn = putCard,
+    },
 };
 
 int main(int argc, char **argv) {
@@ -74,8 +91,6 @@ int main(int argc, char **argv) {
 
     if (cmd == "get-devices") {
         return getDevices(u);
-    } else if (cmd == "get-device") {
-        return getDevice(u, argc, argv);
     } else if (cmd == "set-address") {
         return setAddress(u, DEVICE_ID, "192.168.1.125", "255.255.254.0", "192.168.1.10");
     } else if (cmd == "get-status") {
@@ -97,12 +112,12 @@ int main(int argc, char **argv) {
         return getDoorControl(u, DEVICE_ID, DOOR);
     } else if (cmd == "set-door-control") {
         return setDoorControl(u, DEVICE_ID, DOOR, NORMALLY_OPEN, 9);
-    } else if (cmd == "get-cards") {
-        return getCards(u, argc, argv);
-    } else if (cmd == "get-card") {
-        return getCard(u, argc, argv);
-    } else if (cmd == "get-card-by-index") {
-        return getCardByIndex(u, argc, argv);
+    } else {
+        for (auto it = commands.begin(); it != commands.end(); it++) {
+            if (it->cmd == cmd) {
+                return it->fn(u, argc, argv);
+            }
+        }
     }
 
     cerr << endl

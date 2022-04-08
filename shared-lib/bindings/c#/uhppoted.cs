@@ -222,6 +222,9 @@ public class Uhppoted : IDisposable {
     [DllImport("libuhppoted.so")]
     private static extern string GetCardByIndex(ref UHPPOTE u, ref GoCard card, uint deviceID, uint index);
 
+    [DllImport("libuhppoted.so")]
+    private static extern string PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors);
+
     public uint[] GetDevices() {
         int N = 0;
         int count = N;
@@ -404,6 +407,13 @@ public class Uhppoted : IDisposable {
         Marshal.FreeHGlobal(card.doors);
 
         return new Card(card.cardNumber, card.from, card.to, doors);
+    }
+
+    public void PutCard(uint deviceID, uint cardNumber, string from, string to, byte[] doors) {
+        string err = PutCard(ref this.u, deviceID, cardNumber, from, to, doors);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
     }
 
     // INTERNAL structs for DLL

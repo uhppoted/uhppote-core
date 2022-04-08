@@ -139,3 +139,19 @@ bool getCardByIndex(uhppoted &u) {
 
     return false;
 }
+
+bool putCard(uhppoted &u) {
+    try {
+        uint8_t doors[4] = {0, 1, 31, 75};
+
+        u.put_card(DEVICE_ID, CARD_ID, "2022-01-01", "2022-12-31", doors);
+
+        return result("put-card", true);
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return false;
+}

@@ -48,8 +48,12 @@ int getDevice(int argc, char **argv) {
     return 0;
 }
 
-int setAddress(uint32_t deviceID, const char *address, const char *subnet,
-               const char *gateway) {
+int setAddress(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    const char *address = "192.168.1.125";
+    const char *subnet = "255.255.254.0";
+    const char *gateway = "192.168.1.0";
+
     if (set_address(deviceID, address, subnet, gateway) != 0) {
         printf("ERROR %s\n", errmsg());
         return -1;

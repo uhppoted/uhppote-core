@@ -15,7 +15,7 @@ public class test {
 
 public class Test {
     const uint DEVICE_ID = 405419896;
-    const uint CARD_ID = 8165538;
+    const uint CARD_NUMBER = 8165538;
     const uint CARD_INDEX = 7;
     const byte DOOR = 4;
 
@@ -36,6 +36,7 @@ public class Test {
         new test("get-cards", GetCards),
         new test("get-card", GetCard),
         new test("get-card-by-index", GetCardByIndex),
+        new test("put-card", PutCard),
     };
 
     public static void Main(string[] args) {
@@ -46,6 +47,13 @@ public class Test {
 
         try {
             Uhppoted u = new Uhppoted("192.168.1.100", "192.168.1.100:60000", "192.168.1.100:60001", 2500, controllers, true);
+
+            // ... usage
+            if (cmd == "help") {
+                Console.WriteLine();
+                usage();
+                return;
+            }
 
             // ... all/default
             if (cmd == "" || cmd == "all") {
@@ -323,7 +331,7 @@ public class Test {
     }
 
     static bool GetCard(Uhppoted u) {
-        Card card = u.GetCard(DEVICE_ID, CARD_ID);
+        Card card = u.GetCard(DEVICE_ID, CARD_NUMBER);
         bool ok = true;
 
         if (card.cardNumber != 8165538) {
@@ -404,6 +412,14 @@ public class Test {
         }
 
         return result("get-card-by-index", ok);
+    }
+
+    static bool PutCard(Uhppoted u) {
+        byte[] doors = { 0, 1, 31, 75 };
+
+        u.PutCard(DEVICE_ID, CARD_NUMBER, "2022-01-01", "2022-12-31", doors);
+
+        return result("put-card", true);
     }
 
     static bool result(string test, bool ok) {

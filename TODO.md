@@ -3,21 +3,22 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [x] `help` for examples
+  - [ ] python: constants for ControlMode
+  
+  - [x] `usage` for test
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
         - [x] CCL
 
-  - [x] `get-card-by-index`
+  - [x] `put-card`
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
         - [x] CCL
 
-  - [ ] `put-card`
   - [ ] `delete-card`
   - [ ] `delete-cards`
   - [ ] `get-event-index`
@@ -32,27 +33,18 @@
   - [ ] `refresh-tasklist`
   - [ ] `clear-task-list`
 
-  - [ ] Tests usage
+  - [ ] Check received values in tests
   - [ ] Extend examples to use command line args
-        - [ ] Brief usage() list commands
-        - [ ] Python usage()
   - [ ] C++ 
         - std::invoke
   - [ ] python: 
-        - constants for ControlMode
         - https://martinheinz.dev/blog/70
   - [ ] CCL
         - constants + strings for ControlMode
         - DOLIST
         - simplify main loop with `thereis` (https://gigamonkeys.com/book/loop-for-black-belts.html)
-        - test failure format
-```
-set-address       ok
-get-status        ok
-get-time:    incorrect date/time - expected:2022-01-02 12:34:56, got:2022-01-02 12:34:56
-```
+  - [ ] Commonalise test failure format
 
-  
   - [ ] lint
   - (?) Cross-compile
         - https://github.com/elastic/golang-crossbuild

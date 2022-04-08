@@ -15,6 +15,9 @@ format: $(SRC)
 build: format
 	clang -std=c++11 $(SRC) -o test  $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB) -lc++ -L$(LIB) -luhppoted
 
+usage: build
+	$(CMD) help
+
 invalid: build
 	$(CMD) mystery-meat
 
@@ -56,6 +59,9 @@ get-card: build
 
 get-card-by-index: build
 	$(CMD) get-card-by-index
+
+put-card: build
+	$(CMD) put-card
 
 all: build
 	$(CMD) all

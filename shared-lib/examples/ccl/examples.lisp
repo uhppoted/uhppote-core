@@ -56,3 +56,7 @@
 
 (defun get-card-by-index (device-id index) "" 
   (exec #'(lambda (u) (uhppoted-get-card-by-index u device-id index))))
+
+(defun put-card (device-id card-number from to doors) "" 
+  (exec #'(lambda (u) (uhppoted-put-card u device-id card-number from to doors)))
+  t)

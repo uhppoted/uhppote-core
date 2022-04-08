@@ -384,3 +384,13 @@ int get_card_by_index(uint32_t id, uint32_t index, card *c) {
 
     return 0;
 }
+
+int put_card(uint32_t id, uint32_t card_number, const char *from, const char *to, const uint8_t doors[4]) {
+    char *err = PutCard(u, id, card_number, (char *)from, (char *)to, (uint8_t *)doors);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}

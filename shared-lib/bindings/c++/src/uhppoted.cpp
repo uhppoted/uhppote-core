@@ -329,3 +329,11 @@ card uhppoted::get_card_by_index(uint32_t id, uint32_t index) {
 
     return c;
 }
+
+void uhppoted::put_card(uint32_t id, uint32_t card_number, string from, string to, uint8_t doors[4]) {
+    char *err = PutCard(u, id, card_number, (char *)from.c_str(), (char *)to.c_str(), (uint8_t *)doors);
+
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+}

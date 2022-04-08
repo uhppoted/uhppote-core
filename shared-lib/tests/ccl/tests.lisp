@@ -294,3 +294,9 @@
           (format t "get-card-by-index ok~%")
           (error 'failed :message  "get-card-by-index  FAILED"))))
 
+
+(defun put-card () "" 
+  (let ((doors (make-array 4 :initial-contents '(0 1 31 75))))
+    (exec #'(lambda (u) (uhppoted-put-card u 405419896 8165538 "2022-01-01" "2022-12-31" doors)))
+    (format t "put-card          ok~%")))
+
