@@ -61,11 +61,11 @@ get-card-by-index: build
 put-card: build
 	$(CMD) put-card
 
+delete-card: build
+	$(CMD) delete-card
+
 all: build
 	$(CMD) all
 
 test: build
 	$(CMD) 
-
-debug: build
-	$(CMD) get-cards

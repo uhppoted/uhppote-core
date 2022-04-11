@@ -17,5 +17,6 @@
            get-cards
            get-card
            get-card-by-index
-           put-card))
+           put-card
+           delete-card))
 

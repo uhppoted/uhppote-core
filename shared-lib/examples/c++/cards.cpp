@@ -5,7 +5,7 @@
 using namespace std;
 
 extern const uint32_t DEVICE_ID;
-extern const uint32_t CARD_ID;
+extern const uint32_t CARD_NUMBER;
 extern const uint32_t CARD_INDEX;
 extern const uint8_t DOOR;
 
@@ -33,7 +33,7 @@ int getCards(uhppoted &u, int argc, char **argv) {
 
 int getCard(uhppoted &u, int argc, char **argv) {
     uint32_t deviceID = DEVICE_ID;
-    uint32_t cardID = CARD_ID;
+    uint32_t cardID = CARD_NUMBER;
 
     try {
         card c = u.get_card(deviceID, cardID);
@@ -92,7 +92,7 @@ int getCardByIndex(uhppoted &u, int argc, char **argv) {
 
 int putCard(uhppoted &u, int argc, char **argv) {
     uint32_t deviceID = DEVICE_ID;
-    uint32_t card_number = CARD_ID;
+    uint32_t card_number = CARD_NUMBER;
     string from = "2022-01-01";
     string to = "2022-12-31";
     uint8_t doors[4] = {0, 1, 31, 75};
@@ -110,6 +110,29 @@ int putCard(uhppoted &u, int argc, char **argv) {
         cout << "       door[2]: " << static_cast<int>(doors[1]) << endl;
         cout << "       door[3]: " << static_cast<int>(doors[2]) << endl;
         cout << "       door[4]: " << static_cast<int>(doors[3]) << endl;
+        cout << endl;
+
+        return 0;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return -1;
+}
+
+int deleteCard(uhppoted &u, int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    uint32_t card_number = CARD_NUMBER;
+
+    try {
+        u.delete_card(deviceID, card_number);
+
+        cout << endl
+             << "delete-card" << endl;
+        cout << "  ID:           " << deviceID << endl;
+        cout << "  card number:  " << card_number << endl;
         cout << endl;
 
         return 0;

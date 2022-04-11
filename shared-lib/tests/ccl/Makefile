@@ -59,6 +59,9 @@ get-card-by-index: build
 put-card: build
 	$(CMD) put-card
 
+delete-card: build
+	$(CMD) delete-card
+
 all: build
 	$(CMD) all
 

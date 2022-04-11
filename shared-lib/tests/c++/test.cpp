@@ -30,6 +30,7 @@ vector<test> tests = {
     {"get-card", getCard},
     {"get-card-by-index", getCardByIndex},
     {"put-card", putCard},
+    {"delete-card", deleteCard},
 };
 
 extern const uint32_t DEVICE_ID = 405419896;

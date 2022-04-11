@@ -155,3 +155,17 @@ bool putCard(uhppoted &u) {
 
     return false;
 }
+
+bool deleteCard(uhppoted &u) {
+    try {
+        u.delete_card(DEVICE_ID, CARD_ID);
+
+        return result("delete-card", true);
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return false;
+}

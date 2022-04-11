@@ -37,6 +37,7 @@ public class Test {
         new test("get-card", GetCard),
         new test("get-card-by-index", GetCardByIndex),
         new test("put-card", PutCard),
+        new test("delete-card", DeleteCard),
     };
 
     public static void Main(string[] args) {
@@ -420,6 +421,12 @@ public class Test {
         u.PutCard(DEVICE_ID, CARD_NUMBER, "2022-01-01", "2022-12-31", doors);
 
         return result("put-card", true);
+    }
+
+    static bool DeleteCard(Uhppoted u) {
+        u.DeleteCard(DEVICE_ID, CARD_NUMBER);
+
+        return result("delete-card", true);
     }
 
     static bool result(string test, bool ok) {

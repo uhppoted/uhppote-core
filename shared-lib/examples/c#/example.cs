@@ -22,10 +22,12 @@ public class command {
 public class example {
     const uint DEVICEID = 405419896;
     const uint CARD_NUMBER = 8000001;
+    const uint CARD_INDEX = 7;
 
     static command[] commands = {
         new command("get-devices",
-                    "Retrieves a list of UHPPOTE controller IDs findable on the local LAN."),
+                    "Retrieves a list of UHPPOTE controller IDs findable on the local LAN.",
+                    GetDevices),
         new command("get-device",
                     "Retrieves the basic device information for a single UHPPOTE controller."),
         new command("set-address",
@@ -49,10 +51,14 @@ public class example {
         new command("get-card",
                     "Retrieves the card detail for card number from a controller."),
         new command("get-card-by-index",
-                    "Retrieves the card detail for the card stored at an index on a controller."),
+                    "Retrieves the card detail for the card stored at an index on a controller.",
+                    GetCardByIndex),
         new command("put-card",
                     "Adds or updates the card detail for card number stored on a controller.",
                     PutCard),
+        new command("delete-card",
+                    "Deletes a card from a controller.",
+                    DeleteCard),
     };
 
     public static void Main(string[] args) {
@@ -72,10 +78,6 @@ public class example {
             switch (cmd) {
             case "help":
                 help();
-                break;
-
-            case "get-devices":
-                GetDevices(u);
                 break;
 
             case "get-device":
@@ -120,10 +122,6 @@ public class example {
 
             case "get-card":
                 GetCard(u, 405419896, 8000001);
-                break;
-
-            case "get-card-by-index":
-                GetCardByIndex(u, 405419896, 7);
                 break;
 
             default:
@@ -171,7 +169,7 @@ public class example {
         Console.WriteLine();
     }
 
-    static void GetDevices(Uhppoted u) {
+    static void GetDevices(Uhppoted u, string[] args) {
         uint[] list = u.GetDevices();
 
         Console.WriteLine(String.Format("get-devices ({0})", list.Length));
@@ -345,8 +343,11 @@ public class example {
         Console.WriteLine();
     }
 
-    static void GetCardByIndex(Uhppoted u, uint deviceID, uint index) {
-        Card card = u.GetCardByIndex(deviceID, 7);
+    static void GetCardByIndex(Uhppoted u, string[] args) {
+        uint deviceID = DEVICEID;
+        uint index = CARD_INDEX;
+
+        Card card = u.GetCardByIndex(deviceID, index);
 
         Console.WriteLine(String.Format("get-card-by-index"));
         Console.WriteLine(String.Format("  ID:           {0}", deviceID));
@@ -379,6 +380,18 @@ public class example {
         Console.WriteLine(String.Format("       door[2]: {0}", doors[1]));
         Console.WriteLine(String.Format("       door[3]: {0}", doors[2]));
         Console.WriteLine(String.Format("       door[4]: {0}", doors[3]));
+        Console.WriteLine();
+    }
+
+    static void DeleteCard(Uhppoted u, string[] args) {
+        uint deviceID = DEVICEID;
+        uint cardNumber = CARD_NUMBER;
+
+        u.DeleteCard(deviceID, cardNumber);
+
+        Console.WriteLine(String.Format("delete-card"));
+        Console.WriteLine(String.Format("  ID:           {0}", deviceID));
+        Console.WriteLine(String.Format("  card number:  {0}", cardNumber));
         Console.WriteLine();
     }
 }

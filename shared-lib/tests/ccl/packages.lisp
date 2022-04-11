@@ -18,6 +18,7 @@
            get-card
            get-card-by-index
            put-card
+           delete-card
            failed
            message))
 

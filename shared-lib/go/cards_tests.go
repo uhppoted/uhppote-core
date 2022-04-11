@@ -94,3 +94,15 @@ func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *
 
 	return nil
 }
+
+func deleteCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32) error {
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
+	if cardNumber != 8165538 {
+		return fmt.Errorf("Incorrect card number (%v)", cardNumber)
+	}
+
+	return nil
+}

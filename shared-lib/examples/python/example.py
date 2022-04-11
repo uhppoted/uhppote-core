@@ -17,6 +17,7 @@ def commands():
     return {
         'get-devices': {
             'help': "Retrieves a list of UHPPOTE controller IDs findable on the local LAN.",
+            'fn': get_devices,
         },
         'get-device': {
             'help': "Retrieves the basic device information for a single UHPPOTE controller.",
@@ -58,6 +59,10 @@ def commands():
             'help': "Adds or updates the card detail for card number stored on a controller.",
             'fn': put_card,
         },
+        'delete-card': {
+            'help': "Deletes a card from a controller.",
+            'fn': delete_card,
+        },
     }
 
 
@@ -85,7 +90,7 @@ def help():
     print()
 
 
-def get_devices(u):
+def get_devices(u, args):
     try:
         list = u.get_devices()
 
@@ -349,6 +354,23 @@ def put_card(u, args):
         print()
 
 
+def delete_card(u, args):
+    try:
+        deviceID = DEVICE_ID
+        cardNumber = CARD_NUMBER
+
+        u.delete_card(deviceID, cardNumber)
+
+        print("delete-card")
+        print(f"  ID:           {deviceID}")
+        print(f"  card-number:  {cardNumber}")
+        print()
+
+    except Exception as e:
+        print(f" *** ERROR delete_card ({e})")
+        print()
+
+
 def main():
     if len(sys.argv) < 2:
         usage()
@@ -367,10 +389,7 @@ def main():
         u = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE(
             '192.168.1.100', '192.168.1.255', '192.168.1.100:60001', 2500, controllers, True))
         try:
-            if cmd == 'get-devices':
-                get_devices(u)
-
-            elif cmd == 'get-device':
+            if cmd == 'get-device':
                 get_device(u, 405419896)
 
             elif cmd == 'set-address':

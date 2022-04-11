@@ -5,7 +5,7 @@
 #include "uhppoted.h"
 
 extern uint32_t DEVICE_ID;
-extern uint32_t CARD_ID;
+extern uint32_t CARD_NUMBER;
 extern uint32_t CARD_INDEX;
 
 int getCards(int argc, char **argv) {
@@ -27,10 +27,10 @@ int getCards(int argc, char **argv) {
 
 int getCard(int argc, char **argv) {
     uint32_t deviceID = DEVICE_ID;
-    uint32_t cardID = CARD_ID;
+    uint32_t card_number = CARD_NUMBER;
     card card;
 
-    if (get_card(deviceID, cardID, &card) < 0) {
+    if (get_card(deviceID, card_number, &card) < 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     }
@@ -76,7 +76,7 @@ int getCardByIndex(int argc, char **argv) {
 
 int putCard(int argc, char **argv) {
     uint32_t deviceID = DEVICE_ID;
-    uint32_t card_number = CARD_ID;
+    uint32_t card_number = CARD_NUMBER;
     char *from = "2022-01-01";
     char *to = "2022-12-31";
     uint8_t doors[4] = {0, 1, 31, 75};
@@ -95,6 +95,23 @@ int putCard(int argc, char **argv) {
     printf("       door[2]: %u\n", doors[1]);
     printf("       door[3]: %u\n", doors[2]);
     printf("       door[4]: %u\n", doors[3]);
+    printf("\n");
+
+    return 0;
+}
+
+int deleteCard(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    uint32_t card_number = CARD_NUMBER;
+
+    if (delete_card(deviceID, card_number) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    printf("\ndelete-card\n");
+    printf("  ID:           %u\n", deviceID);
+    printf("  card number:  %u\n", card_number);
     printf("\n");
 
     return 0;

@@ -1,6 +1,6 @@
 #pragma once
 
-extern int getDevices();
+extern int getDevices(int argc, char **argv);
 extern int getDevice(int argc, char **argv);
 extern int setAddress(int argc, char **argv);
 extern int getStatus(uint32_t);

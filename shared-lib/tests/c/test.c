@@ -17,7 +17,7 @@ typedef struct test {
 } test;
 
 const uint32_t DEVICE_ID = 405419896;
-const uint32_t CARD_ID = 8165538;
+const uint32_t CARD_NUMBER = 8165538;
 const uint32_t CARD_INDEX = 7;
 const uint8_t DOOR = 4;
 
@@ -44,6 +44,7 @@ const test tests[] = {
     {.name = "get-card", .fn = getCard},
     {.name = "get-card-by-index", .fn = getCardByIndex},
     {.name = "put-card", .fn = putCard},
+    {.name = "delete-card", .fn = deleteCard},
 };
 
 int main(int argc, char **argv) {

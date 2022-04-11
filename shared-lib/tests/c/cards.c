@@ -6,7 +6,7 @@
 #include "uhppoted.h"
 
 extern const uint32_t DEVICE_ID;
-extern const uint32_t CARD_ID;
+extern const uint32_t CARD_NUMBER;
 extern const uint32_t CARD_INDEX;
 extern const uint8_t DOOR;
 extern bool result(char *test, bool ok);
@@ -32,7 +32,7 @@ bool getCards() {
 bool getCard() {
     card card;
 
-    if (get_card(DEVICE_ID, CARD_ID, &card) < 0) {
+    if (get_card(DEVICE_ID, CARD_NUMBER, &card) < 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
@@ -128,10 +128,19 @@ bool getCardByIndex() {
 bool putCard() {
     uint8_t doors[4] = {0, 1, 31, 75};
 
-    if (put_card(DEVICE_ID, CARD_ID, "2022-01-01", "2022-12-31", (uint8_t *)doors) < 0) {
+    if (put_card(DEVICE_ID, CARD_NUMBER, "2022-01-01", "2022-12-31", (uint8_t *)doors) < 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
 
     return result("put-card", true);
+}
+
+bool deleteCard() {
+    if (delete_card(DEVICE_ID, CARD_NUMBER) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    return result("delete-card", true);
 }

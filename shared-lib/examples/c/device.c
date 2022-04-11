@@ -6,7 +6,7 @@
 
 extern uint32_t DEVICE_ID;
 
-int getDevices() {
+int getDevices(int argc, char **argv) {
     uint32_t *devices = NULL;
     int N;
 

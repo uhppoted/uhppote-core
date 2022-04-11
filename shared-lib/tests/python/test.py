@@ -29,6 +29,7 @@ def tests():
         'get-card': get_card,
         'get-card-by-index': get_card_by_index,
         'put-card': put_card,
+        'delete-card': delete_card,
     }
 
 
@@ -350,6 +351,12 @@ def put_card(u):
     u.put_card(DEVICE_ID, CARD_NUMBER, '2022-01-01', '2022-12-31', [0, 1, 31, 75])
 
     return result('put-card', True)
+
+
+def delete_card(u):
+    u.delete_card(DEVICE_ID, CARD_NUMBER)
+
+    return result('delete-card', True)
 
 
 def result(test, ok):

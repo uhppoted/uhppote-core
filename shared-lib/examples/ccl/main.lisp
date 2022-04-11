@@ -18,7 +18,9 @@
         '("get-card"          "Retrieves the card detail for card number from a controller.")
         '("get-card-by-index" "Retrieves the card detail for the card stored at an index on a controller.")
         '("put-card"          "Adds or updates the card detail stored on a controller.")
+        '("delete-card"       "Deletes a card from a controller.")
 ))
+
 
 (defun usage () ""
   (let ((cmds (commands)))
@@ -28,6 +30,7 @@
       do (format t "     ~a~%" (first cmd)))
     (format t "~%")))
 
+
 (defun help () ""
   (let ((cmds (commands)))
     (format t "~%   Usage: ./examples <command>~%")   
@@ -36,8 +39,10 @@
       do (format t "     ~17,a ~a~%" (first cmd) (second cmd)))
     (format t "~%")))
 
+
 (defun get-devices () ""
   (format t "~%  get-devices:~%~{    ~a~^~%~}~%~%" (coerce (examples:get-devices) 'list)))
+
 
 (defun get-device () ""
   (format t "  get-device:~%    ~:w~%~%" (examples:get-device 405419896)))
@@ -75,9 +80,11 @@
 (defun get-card-by-index () ""
   (format t "  get-card-byindex:~% ~:w~%~%" (examples:get-card-by-index 405419896 7)))
 
+
 (defun put-card () ""
   (let ((doors (make-array 4 :initial-contents '(0 1 31 75))))
     (format t "  put-card:~%    ~:w~%~%" (examples:put-card 405419896 8000001 "2022-01-01" "2022-12-31" doors))))
+
 
 (defun main () ""
   (let ((args (parse-command-line)))
@@ -99,6 +106,7 @@
                    ((string= arg "get-card")          (get-card))
                    ((string= arg "get-card-by-index") (get-card-by-index))
                    ((string= arg "put-card")          (put-card))
+                   ((string= arg "delete-card")       (examples:delete-card))
                    (t (progn
                         (format t "~%   *** ERROR: invalid command (~a)~%"  arg) 
                         (usage))))))))

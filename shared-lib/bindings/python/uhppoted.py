@@ -310,6 +310,14 @@ class Uhppote:
         PutCard(self._uhppote, deviceID, cardNumber, c_char_p(bytes(start, 'utf-8')),
                 c_char_p(bytes(end, 'utf-8')), _doors)
 
+    def delete_card(self, deviceID, cardNumber):
+        DeleteCard = lib.DeleteCard
+        DeleteCard.argtypes = [POINTER(GoUHPPOTE), c_ulong, c_ulong]
+        DeleteCard.restype = ctypes.c_char_p
+        DeleteCard.errcheck = self.errcheck
+
+        DeleteCard(self._uhppote, deviceID, cardNumber)
+
 
 # INTERNAL TYPES
 class GoController(Structure):

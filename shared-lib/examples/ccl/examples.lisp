@@ -60,3 +60,10 @@
 (defun put-card (device-id card-number from to doors) "" 
   (exec #'(lambda (u) (uhppoted-put-card u device-id card-number from to doors)))
   t)
+
+(defun delete-card () "" 
+  (let ((device-id   405419896)
+        (card-number 8000001))
+    (format t 
+            "  delete-card:~%    ~:w~%~%" 
+            (exec #'(lambda (u) (uhppoted-delete-card u device-id card-number))))))

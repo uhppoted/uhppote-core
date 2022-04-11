@@ -7,7 +7,7 @@ using namespace std;
 extern const uint32_t DEVICE_ID;
 extern const uint8_t DOOR;
 
-int getDevices(uhppoted &u) {
+int getDevices(uhppoted &u, int argc, char **argv) {
     try {
         auto devices = u.get_devices();
 

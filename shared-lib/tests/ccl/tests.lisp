@@ -27,7 +27,7 @@
                     (progn
                       (format t "get-devices: incorrect device list - expected:~a, got:~a~%" '(201020304 303986753 405419896) devices))
                       (error 'failed :message  "get-devices: FAILED"))
-             (t (format t "get-devices       ok~%")))))
+             (t (result "get-devices" t) ))))
   
 
 (defun get-device () "" 
@@ -68,13 +68,13 @@
              (format t "get-device: incorrect device date - expected:~a, got:~a~%" "v8.92" (device-date device))
              (setf ok NIL)))
        (if ok 
-          (format t "get-device        ok~%") 
+          (result "get-device" t) 
           (error 'failed :message  "get-device: FAILED"))))
 
 
 (defun set-address () "" 
   (exec #'(lambda (u) (uhppoted-set-address u 405419896 "192.168.1.125" "255.255.255.254" "192.168.1.5")))
-  (format t "set-address       ok~%"))
+  (result "set-address" t))
 
 
 (defun get-status () "" 
@@ -166,7 +166,7 @@
                   (format t "get-status:  incorrect event reason - expected:~a, got:~a~%" 21 (event-reason event))
                   (setf ok NIL))))
        (if ok 
-          (format t "get-status        ok~%") 
+          (result "get-status" t)
           (error 'failed :message  "get-status:  FAILED"))))
 
 
@@ -178,13 +178,13 @@
              (format t "get-time:    incorrect date/time - expected:~a, got:~a~%" "2022-01-02 12:34:56" datetime)
              (setf ok NIL)))
        (if ok 
-          (format t "get-time          ok~%")
+          (result "get-time" t)
           (error 'failed :message  "get-time:    FAILED"))))
 
 
 (defun set-time () "" 
   (exec #'(lambda (u) (uhppoted-set-time u 405419896 "2022-03-23 12:24:17")))
-  (format t "set-time          ok~%"))
+  (result "set-time" t))
 
 
 (defun get-listener () "" 
@@ -201,7 +201,7 @@
 
 (defun set-listener () "" 
   (exec #'(lambda (u) (uhppoted-set-listener u 405419896 "192.168.1.100:60001")))
-  (format t "set-listener      ok~%"))
+  (result "set-listener" t))
 
 
 (defun get-door-control () "" 
@@ -218,7 +218,7 @@
              (setf ok NIL)))
 
        (if ok 
-          (format t "get-door-control  ok~%") 
+          (result "get-door-control" t)
           (error 'failed :message  "get-door-control: FAILED"))))
 
 
@@ -235,7 +235,7 @@
              (format t "get-cards:    incorrect card count - expected:~a, got:~a~%" 39 cards)
              (setf ok NIL)))
        (if ok 
-          (format t "get-cards         ok~%")
+          (result "get-cards" t)
           (error 'failed :message  "get-cards     FAILED"))))
 
 
@@ -263,7 +263,7 @@
              (setf ok NIL)))
 
        (if ok 
-          (format t "get-card          ok~%")
+          (result "get-card" t)
           (error 'failed :message  "get-card     FAILED"))))
 
 
@@ -291,12 +291,21 @@
              (setf ok NIL)))
 
        (if ok 
-          (format t "get-card-by-index ok~%")
+          (result "get-card-by-index" t)
           (error 'failed :message  "get-card-by-index  FAILED"))))
 
 
 (defun put-card () "" 
   (let ((doors (make-array 4 :initial-contents '(0 1 31 75))))
     (exec #'(lambda (u) (uhppoted-put-card u 405419896 8165538 "2022-01-01" "2022-12-31" doors)))
-    (format t "put-card          ok~%")))
+    (result "put-card" t)))
 
+
+(defun delete-card () "" 
+  (exec #'(lambda (u) (uhppoted-delete-card u 405419896 8165538)))
+  (result "delete-card" t))
+
+(defun result (tag ok) ""
+  (if ok
+      (format t "~17a ok~%" tag)
+      (format t "~17a failed~%" tag)))

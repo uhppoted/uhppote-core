@@ -337,3 +337,11 @@ void uhppoted::put_card(uint32_t id, uint32_t card_number, string from, string t
         throw uhppoted_exception(err);
     }
 }
+
+void uhppoted::delete_card(uint32_t id, uint32_t card_number) {
+    char *err = DeleteCard(u, id, card_number);
+
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+}

@@ -4,22 +4,16 @@
 
 - Shared-lib/DLL
   - [ ] python: constants for ControlMode
+  - [ ] Fix shared-lib/Makefile
+  - [ ] Add shared-lib to build-all
   
-  - [x] `usage` for test
+  - [x] `delete-card`
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
         - [x] CCL
 
-  - [x] `put-card`
-        - [x] C
-        - [x] C++
-        - [x] C#
-        - [x] Python
-        - [x] CCL
-
-  - [ ] `delete-card`
   - [ ] `delete-cards`
   - [ ] `get-event-index`
   - [ ] `set-event-index`
@@ -44,6 +38,7 @@
         - DOLIST
         - simplify main loop with `thereis` (https://gigamonkeys.com/book/loop-for-black-belts.html)
   - [ ] Commonalise test failure format
+  - [ ] GetCardByIndex should return 'card deleted' error for ff ff ff ff in response
 
   - [ ] lint
   - (?) Cross-compile

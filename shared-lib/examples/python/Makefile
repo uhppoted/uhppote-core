@@ -64,6 +64,9 @@ get-card-by-index: build
 put-card: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) put-card
 
+delete-card: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) delete-card
+
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) put-card
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) delete-card
 

@@ -394,3 +394,13 @@ int put_card(uint32_t id, uint32_t card_number, const char *from, const char *to
 
     return 0;
 }
+
+int delete_card(uint32_t id, uint32_t card_number) {
+    char *err = DeleteCard(u, id, card_number);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}

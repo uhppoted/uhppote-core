@@ -2,7 +2,7 @@
 
 #include "../include/uhppoted.hpp"
 
-extern int getDevices(uhppoted &);
+extern int getDevices(uhppoted &, int argc, char **argv);
 extern int getDevice(uhppoted &u, int argc, char **argv);
 extern int setAddress(uhppoted &, uint32_t, std::string, std::string, std::string);
 extern int getStatus(uhppoted &, uint32_t);

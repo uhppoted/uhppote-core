@@ -19,6 +19,7 @@
         '("get-card"          tests:get-card)
         '("get-card-by-index" tests:get-card-by-index)
         '("put-card"          tests:put-card)
+        '("delete-card"       tests:delete-card)
 ))
 
 

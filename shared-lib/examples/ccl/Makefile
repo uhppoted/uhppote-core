@@ -62,6 +62,9 @@ get-card-by-index: build
 put-card: build
 	$(CMD) put-card
 
+delete-card: build
+	$(CMD) delete-card
+
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp
 

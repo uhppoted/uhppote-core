@@ -359,6 +359,14 @@
       (dispose-heap-ivector doors_))))
 
 
+(defun uhppoted-delete-card (uhppote device-id card-number) "Deletes a card  from on a controller"
+  (with-macptrs ((err (external-call "DeleteCard" :address uhppote 
+                                                  :unsigned-long device-id 
+                                                  :unsigned-long card-number
+                                                  :address)))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+
+
 (defun debug () "" 
   (handler-bind
 	((uhppoted-error

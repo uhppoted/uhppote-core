@@ -12,7 +12,7 @@ void help();
 
 const uint32_t DEVICE_ID = 405419896;
 const uint8_t DOOR = 4;
-const uint32_t CARD_ID = 8000001;
+const uint32_t CARD_NUMBER = 8000001;
 const uint32_t CARD_INDEX = 7;
 
 typedef int(f)(int, char **a);
@@ -24,8 +24,11 @@ typedef struct command {
 } command;
 
 const command commands[] = {
-    {.cmd = "get-devices",
-     .help = "Retrieves a list of UHPPOTE controller IDs findable on the local LAN."},
+    {
+        .cmd = "get-devices",
+        .help = "Retrieves a list of UHPPOTE controller IDs findable on the local LAN.",
+        .fn = getDevices,
+    },
     {
         .cmd = "get-device",
         .help = "Retrieves the basic device information for a single UHPPOTE controller.",
@@ -70,6 +73,11 @@ const command commands[] = {
         .help = "Adds or updates the card detail for card number stored on a controller.",
         .fn = putCard,
     },
+    {
+        .cmd = "delete-card",
+        .help = "Deletes a card from a controller.",
+        .fn = getCard,
+    },
 };
 
 int main(int argc, char **argv) {
@@ -91,9 +99,7 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    if (strcmp(cmd, "get-devices") == 0) {
-        rc = getDevices();
-    } else if (strncmp(cmd, "get-status", 10) == 0) {
+    if (strncmp(cmd, "get-status", 10) == 0) {
         rc = getStatus(DEVICE_ID);
     } else if (strncmp(cmd, "get-time", 8) == 0) {
         rc = getTime(DEVICE_ID);
