@@ -7,6 +7,10 @@ sys.path.append('../../bindings/python')
 
 import uhppoted
 
+from uhppoted import NORMALLY_OPEN
+from uhppoted import NORMALLY_CLOSED
+from uhppoted import CONTROLLED
+
 DEVICE_ID = 405419896
 CARD_NUMBER = 8165538
 CARD_INDEX = 7
@@ -234,7 +238,7 @@ def get_door_control(u):
     control = u.get_door_control(DEVICE_ID, DOOR)
     ok = True
 
-    if control.mode != 3:
+    if control.mode != CONTROLLED:
         print(f"get-door-control: incorrect door control mode - expected:3, got:{control.mode}")
         ok = False
 
@@ -249,7 +253,7 @@ def get_door_control(u):
 
 
 def set_door_control(u):
-    u.set_door_control(DEVICE_ID, DOOR, 2, 6)
+    u.set_door_control(DEVICE_ID, DOOR, NORMALLY_CLOSED, 6)
 
     if ok:
         print(f"set-door-control  ok")

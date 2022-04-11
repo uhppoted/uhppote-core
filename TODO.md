@@ -3,10 +3,11 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] python: constants for ControlMode
+  - [x] python: constants for ControlMode
   - [ ] Fix shared-lib/Makefile
   - [ ] Add shared-lib to build-all
   - [ ] CCL handles test failure horribly
+  - [ ] CCL: constants + strings for ControlMode
 
   - [ ] Check received values in tests
         - [x] `get-devices`
@@ -52,11 +53,11 @@
   - [ ] python: 
         - https://martinheinz.dev/blog/70
   - [ ] CCL
-        - constants + strings for ControlMode
         - DOLIST
         - simplify main loop with `thereis` (https://gigamonkeys.com/book/loop-for-black-belts.html)
   - [ ] Commonalise test failure format
   - [ ] GetCardByIndex should return 'card deleted' error for ff ff ff ff in response
+  - [ ] Constants for event types, reason, etc
 
   - [ ] lint
   - (?) Cross-compile

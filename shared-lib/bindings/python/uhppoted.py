@@ -15,11 +15,16 @@ from ctypes import Structure
 from ctypes import POINTER
 
 from dataclasses import dataclass
+from typing import Final
 
 if 'Windows' in platform.system():
     lib = ctypes.windll.LoadLibrary("uhppoted")
 else:
     lib = ctypes.cdll.LoadLibrary("libuhppoted.so")
+
+NORMALLY_OPEN: Final[int] = 1
+NORMALLY_CLOSED: Final[int] = 2
+CONTROLLED: Final[int] = 3
 
 
 @dataclass

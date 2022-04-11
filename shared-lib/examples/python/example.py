@@ -9,6 +9,10 @@ sys.path.append('../../bindings/python')
 
 import uhppoted
 
+from uhppoted import NORMALLY_OPEN
+from uhppoted import NORMALLY_CLOSED
+from uhppoted import CONTROLLED
+
 DEVICE_ID = 405419896
 CARD_NUMBER = 8000001
 
@@ -231,11 +235,11 @@ def get_door_control(u, deviceID, door):
         print(f"  ID:    {deviceID}")
         print(f"  door:  {door}")
 
-        if control.mode == 1:
+        if control.mode == NORMALLY_OPEN:
             print(f"  mode:  normally open")
-        elif control.mode == 2:
+        elif control.mode == NORMALLY_CLOSED:
             print(f"  mode:  normally closed")
-        elif control.mode == 3:
+        elif control.mode == CONTROLLED:
             print(f"  mode:  controlled")
         else:
             print(f"  mode:  ???")
@@ -256,11 +260,11 @@ def set_door_control(u, deviceID, door, mode, delay):
         print(f"  ID:    {deviceID}")
         print(f"  door:  {door}")
 
-        if mode == 1:
+        if mode == NORMALLY_OPEN:
             print(f"  mode:  normally open")
-        elif mode == 2:
+        elif mode == NORMALLY_CLOSED:
             print(f"  mode:  normally closed")
-        elif mode == 3:
+        elif mode == CONTROLLED:
             print(f"  mode:  controlled")
         else:
             print(f"  mode:  ???")
