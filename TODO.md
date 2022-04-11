@@ -6,6 +6,25 @@
   - [ ] python: constants for ControlMode
   - [ ] Fix shared-lib/Makefile
   - [ ] Add shared-lib to build-all
+  - [ ] CCL handles test failure horribly
+
+  - [ ] Check received values in tests
+        - [x] `get-devices`
+        - [x] `get-device`
+        - [ ] `set-address`
+        - [ ] `get-status`
+        - [ ] `get-time`
+        - [ ] `set-time`
+        - [ ] `get-listener`
+        - [ ] `set-listener`
+        - [ ] `get-door-control`
+        - [ ] `set-door-control`
+        - [ ] `get-cards`
+        - [ ] `get-card`
+        - [ ] `get-card-by-index`
+        - [x] `put-card`
+        - [x] `delete-card`
+
   
   - [x] `delete-card`
         - [x] C
@@ -27,7 +46,6 @@
   - [ ] `refresh-tasklist`
   - [ ] `clear-task-list`
 
-  - [ ] Check received values in tests
   - [ ] Extend examples to use command line args
   - [ ] C++ 
         - std::invoke

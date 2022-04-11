@@ -44,6 +44,10 @@ func getDevice(uu uhppote.IUHPPOTE, device *C.struct_Device, deviceID uint32) er
 		return fmt.Errorf("invalid argument (device) - expected valid pointer to Device struct")
 	}
 
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
 	device.ID = C.uint(deviceID)
 	device.address = C.CString("192.168.1.101")
 	device.subnet = C.CString("255.255.255.0")
