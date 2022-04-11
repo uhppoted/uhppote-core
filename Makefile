@@ -6,7 +6,7 @@ LIBPYTHON = shared-lib/python
 DEBUG    ?= --debug
 
 .PHONY: bump
-.PHONY: lib
+.PHONY: shared-lib
 
 all: test      \
 	 benchmark \
@@ -37,14 +37,13 @@ benchmark: build
 coverage: build
 	go test -cover ./...
 
-build-all: test vet
+build-all: test vet shared-lib
 	env GOOS=linux   GOARCH=amd64       go build -trimpath ./...
 	env GOOS=linux   GOARCH=arm GOARM=7 go build -trimpath ./...
 	env GOOS=darwin  GOARCH=amd64       go build -trimpath ./...
 	env GOOS=windows GOARCH=amd64       go build -trimpath ./...
-	# env CC_FOR_TARGET=????? CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -trimpath -buildmode=c-shared shared-lib/go/lib/main.go
 
-release: test vet
+release: test vet shared-lib
 	env GOOS=linux   GOARCH=amd64       go build -trimpath -o dist/$(DIST)/linux   ./...
 	env GOOS=linux   GOARCH=arm GOARM=7 go build -trimpath -o dist/$(DIST)/arm7    ./...
 	env GOOS=darwin  GOARCH=amd64       go build -trimpath -o dist/$(DIST)/darwin  ./...
@@ -56,6 +55,5 @@ debug: build
 godoc:
 	godoc -http=:80	-index_interval=60s
 
-lib: format
-	go build -trimpath -buildmode=c-shared -o $(LIB)/lib/libuhppoted.so   shared-lib/go/lib/main.go
-	go build -trimpath -buildmode=c-shared -o $(LIB)/debug/libuhppoted.so shared-lib/go/debug/main.go
+shared-lib: 
+	make -C ./shared-lib -f Makefile build

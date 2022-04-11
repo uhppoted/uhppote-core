@@ -4,8 +4,8 @@
 
 - Shared-lib/DLL
   - [x] python: constants for ControlMode
-  - [ ] Fix shared-lib/Makefile
-  - [ ] Add shared-lib to build-all
+  - [x] Fix shared-lib/Makefile
+  - [x] Add shared-lib to build-all/github-workflow
   - [ ] CCL handles test failure horribly
   - [ ] CCL: constants + strings for ControlMode
 
