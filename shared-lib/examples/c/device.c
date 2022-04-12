@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "device.h"
 #include "uhppoted.h"
 
 extern uint32_t DEVICE_ID;
+extern uint8_t DOOR;
 
 int getDevices(int argc, char **argv) {
     uint32_t *devices = NULL;
@@ -62,7 +64,8 @@ int setAddress(int argc, char **argv) {
     return 0;
 }
 
-int getStatus(uint32_t deviceID) {
+int getStatus(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
     struct status s;
 
     if (get_status(deviceID, &s) != 0) {
@@ -96,7 +99,8 @@ int getStatus(uint32_t deviceID) {
     return 0;
 }
 
-int getTime(uint32_t deviceID) {
+int getTime(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
     char *datetime;
 
     if (get_time(deviceID, &datetime) != 0) {
@@ -114,7 +118,17 @@ int getTime(uint32_t deviceID) {
     return 0;
 }
 
-int setTime(uint32_t deviceID, const char *datetime) {
+int setTime(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    time_t utc;
+    struct tm *local;
+    char datetime[20];
+
+    time(&utc);
+    local = localtime(&utc);
+
+    strftime(datetime, 20, "%Y-%m-%d %H:%M:%S", local);
+
     if (set_time(deviceID, (char *)datetime) != 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
@@ -128,7 +142,8 @@ int setTime(uint32_t deviceID, const char *datetime) {
     return 0;
 }
 
-int getListener(uint32_t deviceID) {
+int getListener(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
     char *listener;
 
     if (get_listener(deviceID, &listener) != 0) {
@@ -146,8 +161,11 @@ int getListener(uint32_t deviceID) {
     return 0;
 }
 
-int setListener(uint32_t deviceID, const char *listener) {
-    if (set_listener(deviceID, (char *)listener) != 0) {
+int setListener(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    char *listener = "192.168.1.100:60001";
+
+    if (set_listener(deviceID, listener) != 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     }
@@ -160,7 +178,9 @@ int setListener(uint32_t deviceID, const char *listener) {
     return 0;
 }
 
-int getDoorControl(uint32_t deviceID, uint8_t door) {
+int getDoorControl(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    uint8_t door = DOOR;
     struct door_control control;
 
     if (get_door_control(deviceID, door, &control) != 0) {
@@ -195,7 +215,12 @@ int getDoorControl(uint32_t deviceID, uint8_t door) {
     return 0;
 }
 
-int setDoorControl(uint32_t deviceID, uint8_t door, uint8_t mode, uint8_t delay) {
+int setDoorControl(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    uint8_t door = DOOR;
+    uint8_t mode = NORMALLY_OPEN;
+    uint8_t delay = 9;
+
     if (set_door_control(deviceID, door, mode, delay) != 0) {
         printf("ERROR %s\n", errmsg());
         return -1;

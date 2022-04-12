@@ -404,3 +404,13 @@ int delete_card(uint32_t id, uint32_t card_number) {
 
     return 0;
 }
+
+int delete_cards(uint32_t id) {
+    char *err = DeleteCards(u, id);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}

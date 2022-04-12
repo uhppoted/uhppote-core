@@ -64,6 +64,9 @@ put-card: build
 delete-card: build
 	$(CMD) delete-card
 
+delete-cards: build
+	$(CMD) delete-cards
+
 all: build
 	$(CMD) all
 

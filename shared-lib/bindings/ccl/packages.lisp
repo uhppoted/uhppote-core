@@ -19,6 +19,7 @@
            uhppoted-get-card-by-index
            uhppoted-put-card
            uhppoted-delete-card
+           uhppoted-delete-cards
            uhppoted-error
            with-warning
            message

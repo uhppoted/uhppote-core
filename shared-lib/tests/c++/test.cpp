@@ -31,11 +31,12 @@ vector<test> tests = {
     {"get-card-by-index", getCardByIndex},
     {"put-card", putCard},
     {"delete-card", deleteCard},
+    {"delete-cards", deleteCards},
 };
 
 extern const uint32_t DEVICE_ID = 405419896;
 extern const uint32_t CARD_ID = 8165538;
-extern const uint32_t CARD_INDEX = 7;
+extern const uint32_t CARD_INDEX = 19;
 extern const uint8_t DOOR = 4;
 
 extern bool result(string test, bool ok) {

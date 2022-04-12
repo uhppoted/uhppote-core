@@ -65,6 +65,9 @@ put-card: build
 delete-card: build
 	$(CMD) delete-card
 
+delete-cards: build
+	$(CMD) delete-cards
+
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp
 

@@ -19,6 +19,7 @@
            get-card-by-index
            put-card
            delete-card
+           delete-cards
            failed
            message))
 

@@ -144,3 +144,24 @@ int deleteCard(uhppoted &u, int argc, char **argv) {
 
     return -1;
 }
+
+int deleteCards(uhppoted &u, int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+
+    try {
+        u.delete_cards(deviceID);
+
+        cout << endl
+             << "delete-cards" << endl;
+        cout << "  ID: " << deviceID << endl;
+        cout << endl;
+
+        return 0;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return -1;
+}

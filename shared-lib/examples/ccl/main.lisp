@@ -19,6 +19,7 @@
         '("get-card-by-index" "Retrieves the card detail for the card stored at an index on a controller.")
         '("put-card"          "Adds or updates the card detail stored on a controller.")
         '("delete-card"       "Deletes a card from a controller.")
+        '("delete-cards"      "Deletes all cards from a controller.")
 ))
 
 
@@ -38,10 +39,6 @@
     (loop for cmd in cmds
       do (format t "     ~17,a ~a~%" (first cmd) (second cmd)))
     (format t "~%")))
-
-
-(defun get-devices () ""
-  (format t "~%  get-devices:~%~{    ~a~^~%~}~%~%" (coerce (examples:get-devices) 'list)))
 
 
 (defun get-device () ""
@@ -80,7 +77,6 @@
 (defun get-card-by-index () ""
   (format t "  get-card-byindex:~% ~:w~%~%" (examples:get-card-by-index 405419896 7)))
 
-
 (defun put-card () ""
   (let ((doors (make-array 4 :initial-contents '(0 1 31 75))))
     (format t "  put-card:~%    ~:w~%~%" (examples:put-card 405419896 8000001 "2022-01-01" "2022-12-31" doors))))
@@ -92,7 +88,7 @@
         (usage)
         (loop for arg in args
           do (cond ((string= arg "help")              (help))
-                   ((string= arg "get-devices")       (get-devices))
+                   ((string= arg "get-devices")       (examples:get-devices))
                    ((string= arg "get-device")        (get-device))
                    ((string= arg "set-address")       (set-address))
                    ((string= arg "get-status")        (get-status))
@@ -107,6 +103,7 @@
                    ((string= arg "get-card-by-index") (get-card-by-index))
                    ((string= arg "put-card")          (put-card))
                    ((string= arg "delete-card")       (examples:delete-card))
+                   ((string= arg "delete-cards")      (examples:delete-cards))
                    (t (progn
                         (format t "~%   *** ERROR: invalid command (~a)~%"  arg) 
                         (usage))))))))

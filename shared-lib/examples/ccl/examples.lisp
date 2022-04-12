@@ -15,7 +15,9 @@
 			  :debug          T)))
 
 (defun get-devices () "" 
-  (exec #'(lambda (u) (uhppoted-get-devices u))))
+  (format t 
+          "~%  get-devices:~%~{    ~a~^~%~}~%~%"
+          (coerce (exec #'(lambda (u) (uhppoted-get-devices u))) 'list)))
 
 (defun get-device (device-id) "" 
   (exec #'(lambda (u) (uhppoted-get-device u device-id))))
@@ -67,3 +69,10 @@
     (format t 
             "  delete-card:~%    ~:w~%~%" 
             (exec #'(lambda (u) (uhppoted-delete-card u device-id card-number))))))
+
+
+(defun delete-cards () "" 
+  (let ((device-id   405419896))
+    (format t 
+            "  delete-cards:~%    ~:w~%~%" 
+            (exec #'(lambda (u) (uhppoted-delete-cards u device-id))))))

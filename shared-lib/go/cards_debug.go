@@ -123,3 +123,13 @@ func deleteCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32) error {
 
 	return nil
 }
+
+func deleteCards(uu uhppote.IUHPPOTE, deviceID uint32) error {
+	if DEBUG {
+		fmt.Printf(">>> delete-cards\n")
+		fmt.Printf("    ID:   %v\n", deviceID)
+		fmt.Println()
+	}
+
+	return nil
+}

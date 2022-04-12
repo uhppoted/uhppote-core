@@ -21,6 +21,7 @@ public class command {
 
 public class example {
     const uint DEVICEID = 405419896;
+    const byte DOOR = 4;
     const uint CARD_NUMBER = 8000001;
     const uint CARD_INDEX = 7;
 
@@ -29,27 +30,38 @@ public class example {
                     "Retrieves a list of UHPPOTE controller IDs findable on the local LAN.",
                     GetDevices),
         new command("get-device",
-                    "Retrieves the basic device information for a single UHPPOTE controller."),
+                    "Retrieves the basic device information for a single UHPPOTE controller.",
+                    GetDevice),
         new command("set-address",
-                    "Sets the controller IPv4 address, subnet mask and gateway address."),
+                    "Sets the controller IPv4 address, subnet mask and gateway address.",
+                    SetAddress),
         new command("get-status",
-                    "Retrieves a controller status."),
+                    "Retrieves a controller status.",
+                    GetStatus),
         new command("get-time",
-                    "Retrieves a controller current date/time (YYYY-MM-DD HH:mm:ss)."),
+                    "Retrieves a controller current date/time (YYYY-MM-DD HH:mm:ss).",
+                    GetTime),
         new command("set-time",
-                    "Sets a controller current date/time (YYYY-MM-DD HH:mm:ss)."),
+                    "Sets a controller current date/time (YYYY-MM-DD HH:mm:ss).",
+                    SetTime),
         new command("get-listener",
-                    "Retrieves a controller's configured event listener address."),
+                    "Retrieves a controller's configured event listener address.",
+                    GetListener),
         new command("set-listener",
-                    "Configures a controller's event listener address and port."),
+                    "Configures a controller's event listener address and port.",
+                    SetListener),
         new command("get-door-control",
-                    "Retrieves the control state and open delay for a controller door."),
+                    "Retrieves the control state and open delay for a controller door.",
+                    GetDoorControl),
         new command("set-door-control",
-                    "Sets the control mode and delay for a controller door."),
+                    "Sets the control mode and delay for a controller door.",
+                    SetDoorControl),
         new command("get-cards",
-                    "Retrieves the number of cards stored on a controller."),
+                    "Retrieves the number of cards stored on a controller.",
+                    GetCards),
         new command("get-card",
-                    "Retrieves the card detail for card number from a controller."),
+                    "Retrieves the card detail for card number from a controller.",
+                    GetCard),
         new command("get-card-by-index",
                     "Retrieves the card detail for the card stored at an index on a controller.",
                     GetCardByIndex),
@@ -59,7 +71,13 @@ public class example {
         new command("delete-card",
                     "Deletes a card from a controller.",
                     DeleteCard),
+        new command("delete-cards",
+                    "Deletes all cards from a controller.",
+                    DeleteCards),
     };
+
+    static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
+                                        new Controller(303986753, "192.168.1.100") };
 
     public static void Main(string[] args) {
         if (args.Length < 1) {
@@ -70,73 +88,23 @@ public class example {
         string cmd = args[0];
 
         try {
-            Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
-                                         new Controller(303986753, "192.168.1.100") };
-
-            Uhppoted u = new Uhppoted("192.168.1.100", "192.168.1.100:60000", "192.168.1.100:60001", 2500, controllers, true);
-
-            switch (cmd) {
-            case "help":
+            if (cmd == "help") {
                 help();
-                break;
-
-            case "get-device":
-                GetDevice(u, 405419896);
-                break;
-
-            case "set-address":
-                SetAddress(u, 405419896, "192.168.1.125", "255.255.255.254", "192.168.1.5");
-                break;
-
-            case "get-status":
-                GetStatus(u, 405419896);
-                break;
-
-            case "get-time":
-                GetTime(u, 405419896);
-                break;
-
-            case "set-time":
-                SetTime(u, 405419896, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                break;
-
-            case "get-listener":
-                GetListener(u, 405419896);
-                break;
-
-            case "set-listener":
-                SetListener(u, 405419896, "192.168.1.100:60001");
-                break;
-
-            case "get-door-control":
-                GetDoorControl(u, 405419896, 4);
-                break;
-
-            case "set-door-control":
-                SetDoorControl(u, 405419896, 4, ControlModes.NormallyOpen, 9);
-                break;
-
-            case "get-cards":
-                GetCards(u, 405419896);
-                break;
-
-            case "get-card":
-                GetCard(u, 405419896, 8000001);
-                break;
-
-            default:
-                foreach (command c in commands) {
-                    if (c.cmd == cmd) {
-                        c.fn(u, args);
-                        return;
-                    }
-                }
-
-                Console.WriteLine();
-                Console.WriteLine(String.Format("  *** ERROR: invalid command ({0})", cmd));
-                usage();
-                break;
+                return;
             }
+
+            foreach (command c in commands) {
+                if (c.cmd == cmd) {
+                    Uhppoted u = new Uhppoted("192.168.1.100", "192.168.1.100:60000", "192.168.1.100:60001", 2500, controllers, true);
+
+                    c.fn(u, args);
+                    return;
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine(String.Format("  *** ERROR: invalid command ({0})", cmd));
+            usage();
 
         } catch (Exception e) {
             Console.WriteLine(String.Format("  *** ERROR: {0}", e.Message));
@@ -179,7 +147,9 @@ public class example {
         Console.WriteLine();
     }
 
-    static void GetDevice(Uhppoted u, uint deviceID) {
+    static void GetDevice(Uhppoted u, string[] args) {
+        uint deviceID = DEVICEID;
+
         Device device = u.GetDevice(deviceID);
 
         Console.WriteLine(String.Format("get-device"));
@@ -191,7 +161,12 @@ public class example {
         Console.WriteLine();
     }
 
-    static void SetAddress(Uhppoted u, uint deviceID, string address, string subnet, string gateway) {
+    static void SetAddress(Uhppoted u, string[] args) {
+        uint deviceID = DEVICEID;
+        string address = "192.168.1.125";
+        string subnet = "255.255.255.254";
+        string gateway = "192.168.1.5";
+
         u.SetAddress(deviceID, address, subnet, gateway);
 
         Console.WriteLine(String.Format("set-address"));
@@ -202,7 +177,9 @@ public class example {
         Console.WriteLine();
     }
 
-    static void GetStatus(Uhppoted u, uint deviceID) {
+    static void GetStatus(Uhppoted u, string[] args) {
+        uint deviceID = DEVICEID;
+
         Status status = u.GetStatus(deviceID);
 
         Console.WriteLine(String.Format("get-status"));
@@ -227,7 +204,9 @@ public class example {
         Console.WriteLine();
     }
 
-    static void GetTime(Uhppoted u, uint deviceID) {
+    static void GetTime(Uhppoted u, string[] args) {
+        uint deviceID = DEVICEID;
+
         string datetime = u.GetTime(deviceID);
 
         Console.WriteLine(String.Format("get-time"));
@@ -235,7 +214,10 @@ public class example {
         Console.WriteLine();
     }
 
-    static void SetTime(Uhppoted u, uint deviceID, string datetime) {
+    static void SetTime(Uhppoted u, string[] args) {
+        uint deviceID = DEVICEID;
+        string datetime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
         u.SetTime(deviceID, datetime);
 
         Console.WriteLine(String.Format("set-time"));
@@ -244,7 +226,9 @@ public class example {
         Console.WriteLine();
     }
 
-    static void GetListener(Uhppoted u, uint deviceID) {
+    static void GetListener(Uhppoted u, string[] args) {
+        uint deviceID = DEVICEID;
+
         string listener = u.GetListener(deviceID);
 
         Console.WriteLine(String.Format("get-listener"));
@@ -252,7 +236,10 @@ public class example {
         Console.WriteLine();
     }
 
-    static void SetListener(Uhppoted u, uint deviceID, string listener) {
+    static void SetListener(Uhppoted u, string[] args) {
+        uint deviceID = DEVICEID;
+        string listener = "192.168.1.100:60001";
+
         u.SetListener(deviceID, listener);
 
         Console.WriteLine(String.Format("set-listener"));
@@ -261,7 +248,10 @@ public class example {
         Console.WriteLine();
     }
 
-    static void GetDoorControl(Uhppoted u, uint deviceID, byte door) {
+    static void GetDoorControl(Uhppoted u, string[] args) {
+        uint deviceID = DEVICEID;
+        byte door = DOOR;
+
         DoorControl control = u.GetDoorControl(deviceID, door);
 
         Console.WriteLine(String.Format("get-door-control"));
@@ -290,7 +280,12 @@ public class example {
         Console.WriteLine();
     }
 
-    static void SetDoorControl(Uhppoted u, uint deviceID, byte door, byte mode, byte delay) {
+    static void SetDoorControl(Uhppoted u, string[] args) {
+        uint deviceID = DEVICEID;
+        byte door = DOOR;
+        byte mode = ControlModes.NormallyOpen;
+        byte delay = 9;
+
         u.SetDoorControl(deviceID, door, mode, delay);
 
         Console.WriteLine(String.Format("set-door-control"));
@@ -319,7 +314,9 @@ public class example {
         Console.WriteLine();
     }
 
-    static void GetCards(Uhppoted u, uint deviceID) {
+    static void GetCards(Uhppoted u, string[] args) {
+        uint deviceID = DEVICEID;
+
         int cards = u.GetCards(deviceID);
 
         Console.WriteLine(String.Format("get-cards"));
@@ -328,7 +325,9 @@ public class example {
         Console.WriteLine();
     }
 
-    static void GetCard(Uhppoted u, uint deviceID, uint cardNumber) {
+    static void GetCard(Uhppoted u, string[] args) {
+        uint deviceID = DEVICEID;
+        uint cardNumber = CARD_NUMBER;
         Card card = u.GetCard(deviceID, cardNumber);
 
         Console.WriteLine(String.Format("get-card"));
@@ -392,6 +391,16 @@ public class example {
         Console.WriteLine(String.Format("delete-card"));
         Console.WriteLine(String.Format("  ID:           {0}", deviceID));
         Console.WriteLine(String.Format("  card number:  {0}", cardNumber));
+        Console.WriteLine();
+    }
+
+    static void DeleteCards(Uhppoted u, string[] args) {
+        uint deviceID = DEVICEID;
+
+        u.DeleteCards(deviceID);
+
+        Console.WriteLine(String.Format("delete-cards"));
+        Console.WriteLine(String.Format("  ID: {0}", deviceID));
         Console.WriteLine();
     }
 }

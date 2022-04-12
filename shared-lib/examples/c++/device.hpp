@@ -4,11 +4,11 @@
 
 extern int getDevices(uhppoted &, int argc, char **argv);
 extern int getDevice(uhppoted &u, int argc, char **argv);
-extern int setAddress(uhppoted &, uint32_t, std::string, std::string, std::string);
-extern int getStatus(uhppoted &, uint32_t);
-extern int getTime(uhppoted &, uint32_t);
-extern int setTime(uhppoted &, uint32_t, std::string);
-extern int getListener(uhppoted &, uint32_t);
-extern int setListener(uhppoted &, uint32_t, std::string);
-extern int getDoorControl(uhppoted &, uint32_t, uint8_t);
-extern int setDoorControl(uhppoted &, uint32_t, uint8_t, uint8_t,uint8_t);
+extern int setAddress(uhppoted &, int argc, char **argv);
+extern int getStatus(uhppoted &, int argc, char **argv);
+extern int getTime(uhppoted &, int argc, char **argv);
+extern int setTime(uhppoted &u, int argc, char **argv);
+extern int getListener(uhppoted &, int argc, char **argv);
+extern int setListener(uhppoted &, int argc, char **argv);
+extern int getDoorControl(uhppoted &, int argc, char **argv);
+extern int setDoorControl(uhppoted &, int argc, char **argv);

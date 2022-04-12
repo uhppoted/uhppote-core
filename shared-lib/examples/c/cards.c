@@ -116,3 +116,18 @@ int deleteCard(int argc, char **argv) {
 
     return 0;
 }
+
+int deleteCards(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+
+    if (delete_cards(deviceID) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    printf("\ndelete-cards\n");
+    printf("  ID: %u\n", deviceID);
+    printf("\n");
+
+    return 0;
+}

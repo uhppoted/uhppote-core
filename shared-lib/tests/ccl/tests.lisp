@@ -1,5 +1,10 @@
 (in-package :tests)
 
+(defconstant TEST-DEVICE-ID   405419896)
+(defconstant TEST-DOOR        4)
+(defconstant TEST-CARD-NUMBER 8165538)
+(defconstant TEST-CARD-INDEX  19)
+
 (define-condition failed (error)
   ((message :initarg :message :reader message)))
 
@@ -32,7 +37,7 @@
 
 (defun get-device () "" 
   (let ((ok T)
-        (device (exec #'(lambda (u) (uhppoted-get-device u 405419896)))))
+        (device (exec #'(lambda (u) (uhppoted-get-device u TEST-DEVICE-ID)))))
        (if (/= 405419896 (device-id device)) 
            (progn
              (format t "get-device: incorrect device ID - expected:~a, got:~a~%" 405419896 (device-id device))
@@ -73,13 +78,13 @@
 
 
 (defun set-address () "" 
-  (exec #'(lambda (u) (uhppoted-set-address u 405419896 "192.168.1.125" "255.255.255.254" "192.168.1.5")))
+  (exec #'(lambda (u) (uhppoted-set-address u TEST-DEVICE-ID "192.168.1.125" "255.255.255.254" "192.168.1.5")))
   (result "set-address" t))
 
 
 (defun get-status () "" 
   (let ((ok T)
-        (status (exec #'(lambda (u) (uhppoted-get-status u 405419896)))))
+        (status (exec #'(lambda (u) (uhppoted-get-status u TEST-DEVICE-ID)))))
        (if (/= 405419896 (status-id status)) 
            (progn
              (format t "get-status:  incorrect device ID - expected:~a, got:~a~%" 405419896 (status-id status))
@@ -172,7 +177,7 @@
 
 (defun get-time () "" 
   (let ((ok T)
-        (datetime (exec #'(lambda (u) (uhppoted-get-time u 405419896)))))
+        (datetime (exec #'(lambda (u) (uhppoted-get-time u TEST-DEVICE-ID)))))
        (if (not (equal "2022-01-02 12:34:56" datetime)) 
            (progn
              (format t "get-time:    incorrect date/time - expected:~a, got:~a~%" "2022-01-02 12:34:56" datetime)
@@ -183,13 +188,13 @@
 
 
 (defun set-time () "" 
-  (exec #'(lambda (u) (uhppoted-set-time u 405419896 "2022-03-23 12:24:17")))
+  (exec #'(lambda (u) (uhppoted-set-time u TEST-DEVICE-ID "2022-03-23 12:24:17")))
   (result "set-time" t))
 
 
 (defun get-listener () "" 
   (let ((ok T)
-        (listener (exec #'(lambda (u) (uhppoted-get-listener u 405419896)))))
+        (listener (exec #'(lambda (u) (uhppoted-get-listener u TEST-DEVICE-ID)))))
        (if (not (equal "192.168.1.100:60001" listener)) 
            (progn
              (format t "get-time:    incorrect event listener address - expected:~a, got:~a~%" "192.168.1.100:60001" listener)
@@ -200,13 +205,13 @@
 
 
 (defun set-listener () "" 
-  (exec #'(lambda (u) (uhppoted-set-listener u 405419896 "192.168.1.100:60001")))
+  (exec #'(lambda (u) (uhppoted-set-listener u TEST-DEVICE-ID "192.168.1.100:60001")))
   (result "set-listener" t))
 
 
 (defun get-door-control () "" 
   (let ((ok T)
-        (control (exec #'(lambda (u) (uhppoted-get-door-control u 405419896 4)))))
+        (control (exec #'(lambda (u) (uhppoted-get-door-control u TEST-DEVICE-ID TEST-DOOR)))))
        (if (/= 3 (door-control-mode control)) 
            (progn
              (format t "get-door-control: incorrect door control mode - expected:~a, got:~a~%" 3 (door-control-mode control))
@@ -223,13 +228,13 @@
 
 
 (defun set-door-control () "" 
-  (exec #'(lambda (u) (uhppoted-set-door-control u 405419896 4 2 6)))
+  (exec #'(lambda (u) (uhppoted-set-door-control u TEST-DEVICE-ID TEST-DOOR 2 6)))
   (format t "set-door-control  ok~%"))
 
 
 (defun get-cards () "" 
   (let ((ok T)
-        (cards (exec #'(lambda (u) (uhppoted-get-cards u 405419896)))))
+        (cards (exec #'(lambda (u) (uhppoted-get-cards u TEST-DEVICE-ID)))))
        (if (not (equal 39 cards)) 
            (progn
              (format t "get-cards:    incorrect card count - expected:~a, got:~a~%" 39 cards)
@@ -241,7 +246,7 @@
 
 (defun get-card () "" 
   (let ((ok T)
-        (card (exec #'(lambda (u) (uhppoted-get-card u 405419896 8165538)))))
+        (card (exec #'(lambda (u) (uhppoted-get-card u TEST-DEVICE-ID TEST-CARD-NUMBER)))))
        (if (not (equal 8165538 (card-card-number card))) 
            (progn
              (format t "get-card:     incorrect card number - expected:~a, got:~a~%" 8165538 (card-card-number card))
@@ -269,7 +274,7 @@
 
 (defun get-card-by-index () "" 
   (let ((ok T)
-        (card (exec #'(lambda (u) (uhppoted-get-card-by-index u 405419896 7)))))
+        (card (exec #'(lambda (u) (uhppoted-get-card-by-index u TEST-DEVICE-ID TEST-CARD-INDEX)))))
        (if (not (equal 8165538 (card-card-number card))) 
            (progn
              (format t "get-card-by-index:  incorrect card number - expected:~a, got:~a~%" 8165538 (card-card-number card))
@@ -297,13 +302,18 @@
 
 (defun put-card () "" 
   (let ((doors (make-array 4 :initial-contents '(0 1 31 75))))
-    (exec #'(lambda (u) (uhppoted-put-card u 405419896 8165538 "2022-01-01" "2022-12-31" doors)))
+    (exec #'(lambda (u) (uhppoted-put-card u TEST-DEVICE-ID TEST-CARD-NUMBER "2022-01-01" "2022-12-31" doors)))
     (result "put-card" t)))
 
 
 (defun delete-card () "" 
-  (exec #'(lambda (u) (uhppoted-delete-card u 405419896 8165538)))
+  (exec #'(lambda (u) (uhppoted-delete-card u TEST-DEVICE-ID TEST-CARD-NUMBER)))
   (result "delete-card" t))
+
+
+(defun delete-cards () "" 
+  (exec #'(lambda (u) (uhppoted-delete-cards u TEST-DEVICE-ID)))
+  (result "delete-cards" t))
 
 (defun result (tag ok) ""
   (if ok

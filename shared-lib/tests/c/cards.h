@@ -7,3 +7,4 @@ extern bool getCard();
 extern bool getCardByIndex();
 extern bool putCard();
 extern bool deleteCard();
+extern bool deleteCards();

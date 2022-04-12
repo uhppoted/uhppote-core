@@ -38,22 +38,46 @@ const vector<command> commands = {
         .help = "Retrieves the basic device information for a single UHPPOTE controller.",
         .fn = getDevice,
     },
-    {.cmd = "set-address",
-     .help = "Sets the controller IPv4 address, subnet mask and gateway address."},
-    {.cmd = "get-status",
-     .help = "Retrieves a controller status."},
-    {.cmd = "get-time",
-     .help = "Retrieves a controller current date/time (YYYY-MM-DD HH:mm:ss)."},
-    {.cmd = "set-time",
-     .help = "Sets a controller current date/time (YYYY-MM-DD HH:mm:ss)."},
-    {.cmd = "get-listener",
-     .help = "Retrieves a controller's configured event listener address."},
-    {.cmd = "set-listener",
-     .help = "Configures a controller's event listener address and port."},
-    {.cmd = "get-door-control",
-     .help = "Retrieves the control state and open delay for a controller door."},
-    {.cmd = "set-door-control",
-     .help = "Sets the control mode and delay for a controller door."},
+    {
+        .cmd = "set-address",
+        .help = "Sets the controller IPv4 address, subnet mask and gateway address.",
+        .fn = setAddress,
+    },
+    {
+        .cmd = "get-status",
+        .help = "Retrieves a controller status.",
+        .fn = getStatus,
+    },
+    {
+        .cmd = "get-time",
+        .help = "Retrieves a controller current date/time (YYYY-MM-DD HH:mm:ss).",
+        .fn = getTime,
+    },
+    {
+        .cmd = "set-time",
+        .help = "Sets a controller current date/time (YYYY-MM-DD HH:mm:ss).",
+        .fn = setTime,
+    },
+    {
+        .cmd = "get-listener",
+        .help = "Retrieves a controller's configured event listener address.",
+        .fn = getListener,
+    },
+    {
+        .cmd = "set-listener",
+        .help = "Configures a controller's event listener address and port.",
+        .fn = setListener,
+    },
+    {
+        .cmd = "get-door-control",
+        .help = "Retrieves the control state and open delay for a controller door.",
+        .fn = getDoorControl,
+    },
+    {
+        .cmd = "set-door-control",
+        .help = "Sets the control mode and delay for a controller door.",
+        .fn = setDoorControl,
+    },
     {
         .cmd = "get-cards",
         .help = "Retrieves the number of cards stored on a controller.",
@@ -79,6 +103,11 @@ const vector<command> commands = {
         .help = "Deletes a card from a controller.",
         .fn = deleteCard,
     },
+    {
+        .cmd = "delete-cards",
+        .help = "Deletes all cards from a controller.",
+        .fn = deleteCards,
+    },
 };
 
 int main(int argc, char **argv) {
@@ -88,41 +117,16 @@ int main(int argc, char **argv) {
     }
 
     string cmd(argv[1]);
-    vector<controller> controllers = {ALPHA, BETA};
-
-    uhppoted u("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2500, controllers, true);
-
     if (cmd == "help") {
         help();
         return 0;
     }
 
-    if (cmd == "set-address") {
-        return setAddress(u, DEVICE_ID, "192.168.1.125", "255.255.254.0", "192.168.1.10");
-    } else if (cmd == "get-status") {
-        return getStatus(u, DEVICE_ID);
-    } else if (cmd == "get-time") {
-        return getTime(u, DEVICE_ID);
-    } else if (cmd == "set-time") {
-        time_t now = time(nullptr);
-        char datetime[100];
+    for (auto it = commands.begin(); it != commands.end(); it++) {
+        if (it->cmd == cmd) {
+            uhppoted u("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2500, {ALPHA, BETA}, true);
 
-        strftime(datetime, sizeof(datetime), "%Y-%m-%d %H:%M:%S", localtime(&now));
-
-        return setTime(u, DEVICE_ID, datetime);
-    } else if (cmd == "get-listener") {
-        return getListener(u, DEVICE_ID);
-    } else if (cmd == "set-listener") {
-        return setListener(u, DEVICE_ID, "192.168.1.100:60001");
-    } else if (cmd == "get-door-control") {
-        return getDoorControl(u, DEVICE_ID, DOOR);
-    } else if (cmd == "set-door-control") {
-        return setDoorControl(u, DEVICE_ID, DOOR, NORMALLY_OPEN, 9);
-    } else {
-        for (auto it = commands.begin(); it != commands.end(); it++) {
-            if (it->cmd == cmd) {
-                return it->fn(u, argc, argv);
-            }
+            return it->fn(u, argc, argv);
         }
     }
 

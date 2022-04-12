@@ -67,6 +67,9 @@ put-card: build
 delete-card: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) delete-card
 
+delete-cards: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) delete-cards
+
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) delete-card
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) delete-cards
 

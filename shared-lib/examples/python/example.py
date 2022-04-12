@@ -14,7 +14,9 @@ from uhppoted import NORMALLY_CLOSED
 from uhppoted import CONTROLLED
 
 DEVICE_ID = 405419896
+DOOR = 4
 CARD_NUMBER = 8000001
+CARD_INDEX = 7
 
 
 def commands():
@@ -25,39 +27,51 @@ def commands():
         },
         'get-device': {
             'help': "Retrieves the basic device information for a single UHPPOTE controller.",
+            'fn': get_device,
         },
         'set-address': {
             'help': "Sets the controller IPv4 address, subnet mask and gateway address.",
+            'fn': set_address,
         },
         'get-status': {
             'help': "Retrieves a controller status.",
+            'fn': get_status,
         },
         'get-time': {
             'help': "Retrieves a controller current date/time (YYYY-MM-DD HH:mm:ss).",
+            'fn': get_time,
         },
         'set-time': {
             'help': "Sets a controller current date/time (YYYY-MM-DD HH:mm:ss).",
+            'fn': set_time,
         },
         'get-listener': {
             'help': "Retrieves a controller's configured event listener address.",
+            'fn': get_listener,
         },
         'set-listener': {
             'help': "Configures a controller's event listener address and port.",
+            'fn': set_listener,
         },
         'get-door-control': {
             'help': "Retrieves the control state and open delay for a controller door.",
+            'fn': get_door_control,
         },
         'set-door-control': {
             'help': "Sets the control mode and delay for a controller door.",
+            'fn': set_door_control,
         },
         'get-cards': {
             'help': "Retrieves the number of cards stored on a controller.",
+            'fn': get_cards,
         },
         'get-card': {
             'help': "Retrieves the card detail for card number from a controller.",
+            'fn': get_card,
         },
         'get-card-by-index': {
             'help': "Retrieves the card detail for the card stored at an index on a controller.",
+            'fn': get_card_by_index,
         },
         'put-card': {
             'help': "Adds or updates the card detail for card number stored on a controller.",
@@ -66,6 +80,10 @@ def commands():
         'delete-card': {
             'help': "Deletes a card from a controller.",
             'fn': delete_card,
+        },
+        'delete-cards': {
+            'help': "Deletes all cards from a controller.",
+            'fn': delete_cards,
         },
     }
 
@@ -108,7 +126,9 @@ def get_devices(u, args):
         print()
 
 
-def get_device(u, deviceID):
+def get_device(u, args):
+    deviceID = DEVICE_ID
+
     try:
         info = u.get_device(deviceID)
 
@@ -125,7 +145,12 @@ def get_device(u, deviceID):
         print()
 
 
-def set_address(u, deviceID, address, subnet, gateway):
+def set_address(u, args):
+    deviceID = DEVICE_ID
+    address = "192.168.1.125"
+    subnet = "255.255.255.253"
+    gateway = "192.168.1.5"
+
     try:
         u.set_address(deviceID, address, subnet, gateway)
 
@@ -141,7 +166,9 @@ def set_address(u, deviceID, address, subnet, gateway):
         print()
 
 
-def get_status(u, deviceID):
+def get_status(u, args):
+    deviceID = DEVICE_ID
+
     try:
         status = u.get_status(deviceID)
 
@@ -173,7 +200,9 @@ def get_status(u, deviceID):
         print()
 
 
-def get_time(u, deviceID):
+def get_time(u, args):
+    deviceID = DEVICE_ID
+
     try:
         datetime = u.get_time(deviceID)
 
@@ -186,13 +215,16 @@ def get_time(u, deviceID):
         print()
 
 
-def set_time(u, deviceID, datetime):
+def set_time(u, args):
+    deviceID = DEVICE_ID
+    dt = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
     try:
-        u.set_time(deviceID, datetime)
+        u.set_time(deviceID, dt)
 
         print("set-time")
         print(f"  ID:        {deviceID}")
-        print(f"  date/time: {datetime}")
+        print(f"  date/time: {dt}")
         print()
 
     except Exception as e:
@@ -200,7 +232,9 @@ def set_time(u, deviceID, datetime):
         print()
 
 
-def get_listener(u, deviceID):
+def get_listener(u, args):
+    deviceID = DEVICE_ID
+
     try:
         listener = u.get_listener(deviceID)
 
@@ -213,7 +247,10 @@ def get_listener(u, deviceID):
         print()
 
 
-def set_listener(u, deviceID, listener):
+def set_listener(u, args):
+    deviceID = DEVICE_ID
+    listener = "192.168.1.100:60001"
+
     try:
         u.set_listener(deviceID, listener)
 
@@ -227,7 +264,10 @@ def set_listener(u, deviceID, listener):
         print()
 
 
-def get_door_control(u, deviceID, door):
+def get_door_control(u, args):
+    deviceID = DEVICE_ID
+    door = DOOR
+
     try:
         control = u.get_door_control(deviceID, door)
 
@@ -252,7 +292,12 @@ def get_door_control(u, deviceID, door):
         print()
 
 
-def set_door_control(u, deviceID, door, mode, delay):
+def set_door_control(u, args):
+    deviceID = DEVICE_ID
+    door = DOOR
+    mode = NORMALLY_OPEN
+    delay = 9
+
     try:
         u.set_door_control(deviceID, door, mode, delay)
 
@@ -277,7 +322,9 @@ def set_door_control(u, deviceID, door, mode, delay):
         print()
 
 
-def get_cards(u, deviceID):
+def get_cards(u, args):
+    deviceID = DEVICE_ID
+
     try:
         cards = u.get_cards(deviceID)
 
@@ -291,7 +338,10 @@ def get_cards(u, deviceID):
         print()
 
 
-def get_card(u, deviceID, cardNumber):
+def get_card(u, args):
+    deviceID = DEVICE_ID
+    cardNumber = CARD_NUMBER
+
     try:
         card = u.get_card(deviceID, cardNumber)
 
@@ -311,7 +361,10 @@ def get_card(u, deviceID, cardNumber):
         print()
 
 
-def get_card_by_index(u, deviceID, index):
+def get_card_by_index(u, args):
+    deviceID = DEVICE_ID
+    index = CARD_INDEX
+
     try:
         card = u.get_card_by_index(deviceID, index)
 
@@ -375,6 +428,21 @@ def delete_card(u, args):
         print()
 
 
+def delete_cards(u, args):
+    try:
+        deviceID = DEVICE_ID
+
+        u.delete_cards(deviceID)
+
+        print("delete-cards")
+        print(f"  ID: {deviceID}")
+        print()
+
+    except Exception as e:
+        print(f" *** ERROR delete_cards ({e})")
+        print()
+
+
 def main():
     if len(sys.argv) < 2:
         usage()
@@ -384,7 +452,6 @@ def main():
 
     if cmd == "help":
         help()
-
     else:
         alpha = uhppoted.Controller(405419896, "192.168.1.100")
         beta = uhppoted.Controller(303986753, "192.168.1.100")
@@ -392,52 +459,16 @@ def main():
 
         u = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE(
             '192.168.1.100', '192.168.1.255', '192.168.1.100:60001', 2500, controllers, True))
+
         try:
-            if cmd == 'get-device':
-                get_device(u, 405419896)
+            for c, v in commands().items():
+                if cmd == c:
+                    v['fn'](u, None)
+                    return
 
-            elif cmd == 'set-address':
-                set_address(u, 405419896, "192.168.1.125", "255.255.255.253", "192.168.1.5")
-
-            elif cmd == 'get-status':
-                get_status(u, 405419896)
-
-            elif cmd == 'get-time':
-                get_time(u, 405419896)
-
-            elif cmd == 'set-time':
-                set_time(u, 405419896, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-
-            elif cmd == 'get-listener':
-                get_listener(u, 405419896)
-
-            elif cmd == 'set-listener':
-                set_listener(u, 405419896, "192.168.1.100:60001")
-
-            elif cmd == 'get-door-control':
-                get_door_control(u, 405419896, 4)
-
-            elif cmd == 'set-door-control':
-                set_door_control(u, 405419896, 4, 1, 9)
-
-            elif cmd == 'get-cards':
-                get_cards(u, 405419896)
-
-            elif cmd == 'get-card':
-                get_card(u, 405419896, 8000001)
-
-            elif cmd == 'get-card-by-index':
-                get_card_by_index(u, 405419896, 7)
-
-            else:
-                for c, v in commands().items():
-                    if cmd == c:
-                        v['fn'](u, None)
-                        return
-
-                print()
-                print(f"  ERROR: invalid command ({cmd})")
-                usage()
+            print()
+            print(f"  ERROR: invalid command ({cmd})")
+            usage()
 
         except BaseException as x:
             print()

@@ -16,7 +16,7 @@ public class test {
 public class Test {
     const uint DEVICE_ID = 405419896;
     const uint CARD_NUMBER = 8165538;
-    const uint CARD_INDEX = 7;
+    const uint CARD_INDEX = 19;
     const byte DOOR = 4;
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -38,6 +38,7 @@ public class Test {
         new test("get-card-by-index", GetCardByIndex),
         new test("put-card", PutCard),
         new test("delete-card", DeleteCard),
+        new test("delete-cards", DeleteCards),
     };
 
     public static void Main(string[] args) {
@@ -427,6 +428,12 @@ public class Test {
         u.DeleteCard(DEVICE_ID, CARD_NUMBER);
 
         return result("delete-card", true);
+    }
+
+    static bool DeleteCards(Uhppoted u) {
+        u.DeleteCards(DEVICE_ID);
+
+        return result("delete-cards", true);
     }
 
     static bool result(string test, bool ok) {

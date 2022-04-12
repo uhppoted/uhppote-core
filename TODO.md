@@ -3,15 +3,11 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [x] python: constants for ControlMode
-  - [x] Fix shared-lib/Makefile
-  - [x] Add shared-lib to build-all/github-workflow
   - [ ] CCL handles test failure horribly
-  - [ ] CCL: constants + strings for ControlMode
+  - [x] CCL: constants
+  - [ ] CCL: constants for ControlMode
 
   - [ ] Check received values in tests
-        - [x] `get-devices`
-        - [x] `get-device`
         - [ ] `set-address`
         - [ ] `get-status`
         - [ ] `get-time`
@@ -22,19 +18,15 @@
         - [ ] `set-door-control`
         - [ ] `get-cards`
         - [ ] `get-card`
-        - [ ] `get-card-by-index`
-        - [x] `put-card`
-        - [x] `delete-card`
-
+        - [x] `get-card-by-index`
   
-  - [x] `delete-card`
+  - [x] `delete-cards`
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
         - [x] CCL
 
-  - [ ] `delete-cards`
   - [ ] `get-event-index`
   - [ ] `set-event-index`
   - [ ] `get-event`

@@ -228,6 +228,9 @@ public class Uhppoted : IDisposable {
     [DllImport("libuhppoted.so")]
     private static extern string DeleteCard(ref UHPPOTE u, uint deviceID, uint cardNumber);
 
+    [DllImport("libuhppoted.so")]
+    private static extern string DeleteCards(ref UHPPOTE u, uint deviceID);
+
     public uint[] GetDevices() {
         int N = 0;
         int count = N;
@@ -421,6 +424,13 @@ public class Uhppoted : IDisposable {
 
     public void DeleteCard(uint deviceID, uint cardNumber) {
         string err = DeleteCard(ref this.u, deviceID, cardNumber);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+    }
+
+    public void DeleteCards(uint deviceID) {
+        string err = DeleteCards(ref this.u, deviceID);
         if (err != null && err != "") {
             throw new UhppotedException(err);
         }

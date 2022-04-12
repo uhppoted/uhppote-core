@@ -39,20 +39,41 @@ const command commands[] = {
         .help = "Sets the controller IPv4 address, subnet mask and gateway address.",
         .fn = setAddress,
     },
-    {.cmd = "get-status",
-     .help = "Retrieves a controller status."},
-    {.cmd = "get-time",
-     .help = "Retrieves a controller current date/time (YYYY-MM-DD HH:mm:ss)."},
-    {.cmd = "set-time",
-     .help = "Sets a controller current date/time (YYYY-MM-DD HH:mm:ss)."},
-    {.cmd = "get-listener",
-     .help = "Retrieves a controller's configured event listener address."},
-    {.cmd = "set-listener",
-     .help = "Configures a controller's event listener address and port."},
-    {.cmd = "get-door-control",
-     .help = "Retrieves the control state and open delay for a controller door."},
-    {.cmd = "set-door-control",
-     .help = "Sets the control mode and delay for a controller door."},
+    {
+        .cmd = "get-status",
+        .help = "Retrieves a controller status.",
+        .fn = getStatus,
+    },
+    {
+        .cmd = "get-time",
+        .help = "Retrieves a controller current date/time (YYYY-MM-DD HH:mm:ss).",
+        .fn = getTime,
+    },
+    {
+        .cmd = "set-time",
+        .help = "Sets a controller current date/time (YYYY-MM-DD HH:mm:ss).",
+        .fn = setTime,
+    },
+    {
+        .cmd = "get-listener",
+        .help = "Retrieves a controller's configured event listener address.",
+        .fn = getListener,
+    },
+    {
+        .cmd = "set-listener",
+        .help = "Configures a controller's event listener address and port.",
+        .fn = setListener,
+    },
+    {
+        .cmd = "get-door-control",
+        .help = "Retrieves the control state and open delay for a controller door.",
+        .fn = getDoorControl,
+    },
+    {
+        .cmd = "set-door-control",
+        .help = "Sets the control mode and delay for a controller door.",
+        .fn = setDoorControl,
+    },
     {
         .cmd = "get-cards",
         .help = "Retrieves the number of cards stored on a controller.",
@@ -78,7 +99,15 @@ const command commands[] = {
         .help = "Deletes a card from a controller.",
         .fn = getCard,
     },
+    {
+        .cmd = "delete-cards",
+        .help = "Deletes all cards from a controller.",
+        .fn = deleteCards,
+    },
 };
+
+controller alpha = {.id = 405419896, .address = "192.168.1.100"};
+controller beta = {.id = 303986753, .address = "192.168.1.100"};
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -87,61 +116,29 @@ int main(int argc, char **argv) {
     }
 
     char *cmd = argv[1];
-    int rc = -1;
-
-    controller alpha = {.id = 405419896, .address = "192.168.1.100"};
-    controller beta = {.id = 303986753, .address = "192.168.1.100"};
-
-    setup("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2500, true, &alpha, &beta, NULL);
 
     if (strcmp(cmd, "help") == 0) {
         help();
         return 0;
     }
 
-    if (strncmp(cmd, "get-status", 10) == 0) {
-        rc = getStatus(DEVICE_ID);
-    } else if (strncmp(cmd, "get-time", 8) == 0) {
-        rc = getTime(DEVICE_ID);
-    } else if (strncmp(cmd, "set-time", 8) == 0) {
-        time_t utc;
-        struct tm *local;
-        char datetime[20];
+    int N = sizeof(commands) / sizeof(command);
+    for (int i = 0; i < N; i++) {
+        command c = commands[i];
+        int rc;
 
-        time(&utc);
-        local = localtime(&utc);
+        if (strcmp(c.cmd, cmd) == 0) {
+            setup("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2500, true, &alpha, &beta, NULL);
+            rc = c.fn(argc, argv);
+            teardown();
 
-        strftime(datetime, 20, "%Y-%m-%d %H:%M:%S", local);
-
-        rc = setTime(DEVICE_ID, datetime);
-    } else if (strncmp(cmd, "get-listener", 12) == 0) {
-        rc = getListener(DEVICE_ID);
-    } else if (strncmp(cmd, "set-listener", 12) == 0) {
-        rc = setListener(DEVICE_ID, "192.168.1.100:60001");
-    } else if (strncmp(cmd, "get-door-control", 16) == 0) {
-        rc = getDoorControl(DEVICE_ID, DOOR);
-    } else if (strncmp(cmd, "set-door-control", 16) == 0) {
-        rc = setDoorControl(DEVICE_ID, DOOR, NORMALLY_OPEN, 9);
-    } else {
-        int N = sizeof(commands) / sizeof(command);
-        for (int i = 0; i < N; i++) {
-            command c = commands[i];
-
-            if (strcmp(c.cmd, cmd) == 0) {
-                rc = c.fn(argc, argv);
-                goto done;
-            }
+            return rc;
         }
-
-        printf("\n   *** ERROR invalid command (%s)\n", cmd);
-        usage();
-        rc = -1;
     }
 
-done:
-    teardown();
-
-    return rc;
+    printf("\n   *** ERROR invalid command (%s)\n", cmd);
+    usage();
+    return -1;
 }
 
 void usage() {

@@ -85,6 +85,7 @@ class uhppoted {
     card get_card_by_index(uint32_t id, uint32_t index);
     void put_card(uint32_t id, uint32_t card_number, std::string from, std::string to, uint8_t doors[4]);
     void delete_card(uint32_t id, uint32_t card_number);
+    void delete_cards(uint32_t id);
 
   private:
     UHPPOTE *u;

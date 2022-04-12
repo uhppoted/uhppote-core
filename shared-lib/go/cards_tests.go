@@ -46,6 +46,14 @@ func getCardByIndex(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, i
 		return fmt.Errorf("invalid argument (card) - expected valid pointer")
 	}
 
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
+	if index != 19 {
+		return fmt.Errorf("Incorrect card index (%v)", index)
+	}
+
 	card.card_number = C.uint(8165538)
 	card.from = C.CString("2022-01-01")
 	card.to = C.CString("2022-12-31")
@@ -102,6 +110,14 @@ func deleteCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32) error {
 
 	if cardNumber != 8165538 {
 		return fmt.Errorf("Incorrect card number (%v)", cardNumber)
+	}
+
+	return nil
+}
+
+func deleteCards(uu uhppote.IUHPPOTE, deviceID uint32) error {
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
 	}
 
 	return nil

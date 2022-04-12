@@ -345,3 +345,11 @@ void uhppoted::delete_card(uint32_t id, uint32_t card_number) {
         throw uhppoted_exception(err);
     }
 }
+
+void uhppoted::delete_cards(uint32_t id) {
+    char *err = DeleteCards(u, id);
+
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+}

@@ -54,8 +54,12 @@ int getDevice(uhppoted &u, int argc, char **argv) {
     return -1;
 }
 
-int setAddress(uhppoted &u, uint32_t deviceID, string address, string subnet,
-               string gateway) {
+int setAddress(uhppoted &u, int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    string address = "192.168.1.125";
+    string subnet = "255.255.254.0";
+    string gateway = "192.168.1.10";
+
     try {
         u.set_address(deviceID, address, subnet, gateway);
 
@@ -77,7 +81,9 @@ int setAddress(uhppoted &u, uint32_t deviceID, string address, string subnet,
     return -1;
 }
 
-int getStatus(uhppoted &u, uint32_t deviceID) {
+int getStatus(uhppoted &u, int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+
     try {
         auto s = u.get_status(deviceID);
 
@@ -125,7 +131,9 @@ int getStatus(uhppoted &u, uint32_t deviceID) {
     return -1;
 }
 
-int getTime(uhppoted &u, uint32_t deviceID) {
+int getTime(uhppoted &u, int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+
     try {
         auto datetime = u.get_time(deviceID);
 
@@ -144,7 +152,15 @@ int getTime(uhppoted &u, uint32_t deviceID) {
     return -1;
 }
 
-int setTime(uhppoted &u, uint32_t deviceID, string datetime) {
+int setTime(uhppoted &u, int argc, char **argv) {
+    char s[20];
+    time_t now = time(nullptr);
+
+    strftime(s, sizeof(s), "%Y-%m-%d %H:%M:%S", localtime(&now));
+
+    uint32_t deviceID = DEVICE_ID;
+    string datetime = s;
+
     try {
         u.set_time(deviceID, datetime);
 
@@ -164,7 +180,9 @@ int setTime(uhppoted &u, uint32_t deviceID, string datetime) {
     return -1;
 }
 
-int getListener(uhppoted &u, uint32_t deviceID) {
+int getListener(uhppoted &u, int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+
     try {
         auto listener = u.get_listener(deviceID);
 
@@ -183,7 +201,10 @@ int getListener(uhppoted &u, uint32_t deviceID) {
     return -1;
 }
 
-int setListener(uhppoted &u, uint32_t deviceID, string listener) {
+int setListener(uhppoted &u, int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    string listener = "192.168.1.100:60001";
+
     try {
         u.set_listener(deviceID, listener);
 
@@ -203,7 +224,10 @@ int setListener(uhppoted &u, uint32_t deviceID, string listener) {
     return -1;
 }
 
-int getDoorControl(uhppoted &u, uint32_t deviceID, uint8_t door) {
+int getDoorControl(uhppoted &u, int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    uint32_t door = DOOR;
+
     try {
         auto d = u.get_door_control(deviceID, door);
 
@@ -214,22 +238,22 @@ int getDoorControl(uhppoted &u, uint32_t deviceID, uint8_t door) {
 
         switch (d.mode) {
         case NORMALLY_OPEN:
-            cout << "  mode: "
+            cout << "  mode:    "
                  << "normally open" << endl;
             break;
 
         case NORMALLY_CLOSED:
-            cout << "  mode: "
+            cout << "  mode:    "
                  << "normally closed" << endl;
             break;
 
         case CONTROLLED:
-            cout << "  mode: "
+            cout << "  mode:    "
                  << "controlled" << endl;
             break;
 
         default:
-            cout << "  mode: "
+            cout << "  mode:    "
                  << "???" << endl;
             break;
         }
@@ -247,7 +271,12 @@ int getDoorControl(uhppoted &u, uint32_t deviceID, uint8_t door) {
     return -1;
 }
 
-int setDoorControl(uhppoted &u, uint32_t deviceID, uint8_t door, uint8_t mode, uint8_t delay) {
+int setDoorControl(uhppoted &u, int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    uint32_t door = DOOR;
+    uint8_t mode = NORMALLY_OPEN;
+    uint8_t delay = 9;
+
     try {
         u.set_door_control(deviceID, door, mode, delay);
 
@@ -258,22 +287,22 @@ int setDoorControl(uhppoted &u, uint32_t deviceID, uint8_t door, uint8_t mode, u
 
         switch (mode) {
         case NORMALLY_OPEN:
-            cout << "  mode: "
+            cout << "  mode:    "
                  << "normally open" << endl;
             break;
 
         case NORMALLY_CLOSED:
-            cout << "  mode: "
+            cout << "  mode:    "
                  << "normally closed" << endl;
             break;
 
         case CONTROLLED:
-            cout << "  mode: "
+            cout << "  mode:    "
                  << "controlled" << endl;
             break;
 
         default:
-            cout << "  mode: "
+            cout << "  mode:    "
                  << "???" << endl;
             break;
         }

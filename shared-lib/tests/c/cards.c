@@ -144,3 +144,12 @@ bool deleteCard() {
 
     return result("delete-card", true);
 }
+
+bool deleteCards() {
+    if (delete_cards(DEVICE_ID) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    return result("delete-cards", true);
+}

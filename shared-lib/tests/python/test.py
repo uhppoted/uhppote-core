@@ -13,7 +13,7 @@ from uhppoted import CONTROLLED
 
 DEVICE_ID = 405419896
 CARD_NUMBER = 8165538
-CARD_INDEX = 7
+CARD_INDEX = 19
 DOOR = 4
 
 
@@ -34,6 +34,7 @@ def tests():
         'get-card-by-index': get_card_by_index,
         'put-card': put_card,
         'delete-card': delete_card,
+        'delete-cards': delete_cards,
     }
 
 
@@ -361,6 +362,12 @@ def delete_card(u):
     u.delete_card(DEVICE_ID, CARD_NUMBER)
 
     return result('delete-card', True)
+
+
+def delete_cards(u):
+    u.delete_cards(DEVICE_ID)
+
+    return result('delete-cards', True)
 
 
 def result(test, ok):

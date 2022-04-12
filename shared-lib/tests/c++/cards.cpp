@@ -169,3 +169,17 @@ bool deleteCard(uhppoted &u) {
 
     return false;
 }
+
+bool deleteCards(uhppoted &u) {
+    try {
+        u.delete_cards(DEVICE_ID);
+
+        return result("delete-cards", true);
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return false;
+}

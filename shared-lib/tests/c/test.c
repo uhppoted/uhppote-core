@@ -18,7 +18,7 @@ typedef struct test {
 
 const uint32_t DEVICE_ID = 405419896;
 const uint32_t CARD_NUMBER = 8165538;
-const uint32_t CARD_INDEX = 7;
+const uint32_t CARD_INDEX = 19;
 const uint8_t DOOR = 4;
 
 bool result(char *test, bool ok) {
@@ -45,6 +45,7 @@ const test tests[] = {
     {.name = "get-card-by-index", .fn = getCardByIndex},
     {.name = "put-card", .fn = putCard},
     {.name = "delete-card", .fn = deleteCard},
+    {.name = "delete-cards", .fn = deleteCards},
 };
 
 int main(int argc, char **argv) {
