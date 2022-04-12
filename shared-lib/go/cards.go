@@ -135,7 +135,7 @@ func deleteCards(uu uhppote.IUHPPOTE, deviceID uint32) error {
 	if err != nil {
 		return err
 	} else if !deleted {
-		return fmt.Errorf("%v: delete-cards %v failed", deviceID)
+		return fmt.Errorf("%v: delete-cards failed", deviceID)
 	}
 
 	return nil
