@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "cards.h"
-#include "device.h"
+#include "tests.h"
 #include "uhppoted.h"
 
 void usage();
@@ -46,6 +45,7 @@ const test tests[] = {
     {.name = "put-card", .fn = putCard},
     {.name = "delete-card", .fn = deleteCard},
     {.name = "delete-cards", .fn = deleteCards},
+    {.name = "get-event-index", .fn = getEventIndex},
 };
 
 int main(int argc, char **argv) {

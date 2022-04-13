@@ -19,5 +19,6 @@
            get-card-by-index
            put-card
            delete-card
-           delete-cards))
+           delete-cards
+           get-event-index))
 

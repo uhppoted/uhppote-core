@@ -17,6 +17,10 @@ func getCards(uu uhppote.IUHPPOTE, N *C.int, deviceID uint32) error {
 		return fmt.Errorf("invalid argument (N) - expected valid pointer")
 	}
 
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
 	*N = C.int(39)
 
 	return nil
@@ -25,6 +29,14 @@ func getCards(uu uhppote.IUHPPOTE, N *C.int, deviceID uint32) error {
 func getCard(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, cardNumber uint32) error {
 	if card == nil {
 		return fmt.Errorf("invalid argument (card) - expected valid pointer")
+	}
+
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
+	if cardNumber != 8165538 {
+		return fmt.Errorf("Incorrect card number (%v)", cardNumber)
 	}
 
 	card.card_number = C.uint(8165538)

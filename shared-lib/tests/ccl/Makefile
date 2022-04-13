@@ -1,6 +1,6 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/ccl
-CMD=./test
+CMD=./tests
 
 .PHONY: build
 .PHONY: debug
@@ -64,6 +64,9 @@ delete-card: build
 
 delete-cards: build
 	$(CMD) delete-cards
+
+get-event-index: build
+	$(CMD) get-event-index
 
 all: build
 	$(CMD) all

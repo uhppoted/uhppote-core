@@ -20,6 +20,7 @@
            put-card
            delete-card
            delete-cards
+           get-event-index
            failed
            message))
 

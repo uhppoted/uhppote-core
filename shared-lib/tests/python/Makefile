@@ -2,7 +2,7 @@ LIB=../../lib/tests
 GO=GODEBUG=cgocheck=2
 DLL=export DYLD_LIBRARY_PATH=$(LIB)
 WRAPPER=export PYTHONPATH=$(PYTHONPATH):..
-CMD=$(GO) && $(DLL) && python test.py 
+CMD=$(GO) && $(DLL) && python tests.py 
 
 lib: 
 	cd ../../go && make all
@@ -66,6 +66,9 @@ delete-card: build
 
 delete-cards: build
 	$(CMD) delete-cards
+
+get-event-index: build
+	$(CMD) get-event-index
 
 all: build
 	$(CMD) all

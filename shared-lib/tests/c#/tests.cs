@@ -13,7 +13,7 @@ public class test {
     }
 };
 
-public class Test {
+public class Tests {
     const uint DEVICE_ID = 405419896;
     const uint CARD_NUMBER = 8165538;
     const uint CARD_INDEX = 19;
@@ -39,6 +39,7 @@ public class Test {
         new test("put-card", PutCard),
         new test("delete-card", DeleteCard),
         new test("delete-cards", DeleteCards),
+        new test("get-event-index", GetEventIndex),
     };
 
     public static void Main(string[] args) {
@@ -160,7 +161,7 @@ public class Test {
     }
 
     static bool SetAddress(Uhppoted u) {
-        u.SetAddress(DEVICE_ID, "192.168.1.125", "255.255.255.254", "192.168.1.5");
+        u.SetAddress(DEVICE_ID, "192.168.1.125", "255.255.254.0", "192.168.1.0");
 
         return result("set-address", true);
     }
@@ -434,6 +435,20 @@ public class Test {
         u.DeleteCards(DEVICE_ID);
 
         return result("delete-cards", true);
+    }
+
+    static bool GetEventIndex(Uhppoted u) {
+        string tag = "get-event-index";
+        int index = u.GetEventIndex(DEVICE_ID);
+        int expected = 47;
+        bool ok = true;
+
+        if (index != expected) {
+            Console.WriteLine("{0}: incorrect index - expected:{1}, got:{2}", tag, expected, index);
+            ok = false;
+        }
+
+        return result(tag, ok);
     }
 
     static bool result(string test, bool ok) {

@@ -2,9 +2,8 @@
 
 package main
 
-import "C"
-
 import (
+	"C"
 	"fmt"
 	"net"
 	"time"
@@ -60,19 +59,29 @@ func getDevice(uu uhppote.IUHPPOTE, device *C.struct_Device, deviceID uint32) er
 }
 
 func setAddress(uu uhppote.IUHPPOTE, deviceID uint32, address, subnet, gateway *C.char) error {
-	_address := net.ParseIP(C.GoString(address))
-	if _address == nil {
-		return fmt.Errorf("invalid IP address (%v)", C.GoString(address))
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
 	}
 
-	_subnet := net.ParseIP(C.GoString(subnet))
-	if _subnet == nil {
-		return fmt.Errorf("invalid IP subnet mask (%v)", C.GoString(subnet))
+	_address := C.GoString(address)
+	if net.ParseIP(_address) == nil {
+		return fmt.Errorf("invalid IP address (%v)", _address)
+	} else if _address != "192.168.1.125" {
+		return fmt.Errorf("Incorrect address (%v)", _address)
 	}
 
-	_gateway := net.ParseIP(C.GoString(gateway))
-	if _gateway == nil {
-		return fmt.Errorf("invalid IP gateway address (%v)", C.GoString(gateway))
+	_subnet := C.GoString(subnet)
+	if net.ParseIP(_subnet) == nil {
+		return fmt.Errorf("invalid IP subnet mask (%v)", _subnet)
+	} else if _subnet != "255.255.254.0" {
+		return fmt.Errorf("Incorrect subnet mask (%v)", _subnet)
+	}
+
+	_gateway := C.GoString(gateway)
+	if net.ParseIP(_gateway) == nil {
+		return fmt.Errorf("invalid IP gateway address (%v)", _gateway)
+	} else if _gateway != "192.168.1.0" {
+		return fmt.Errorf("Incorrect gateway address (%v)", _gateway)
 	}
 
 	return nil
@@ -148,6 +157,10 @@ func getListener(uu uhppote.IUHPPOTE, address **C.char, deviceID uint32) error {
 		return fmt.Errorf("invalid argument (address) - expected valid pointer to string")
 	}
 
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
 	*address = C.CString("192.168.1.100:60001")
 
 	return nil
@@ -158,10 +171,17 @@ func setListener(uu uhppote.IUHPPOTE, deviceID uint32, listener *C.char) error {
 		return fmt.Errorf("invalid argument (listener) - expected valid pointer to string")
 	}
 
-	if address, err := net.ResolveUDPAddr("udp", C.GoString(listener)); err != nil {
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
+	_listener := C.GoString(listener)
+	if address, err := net.ResolveUDPAddr("udp", _listener); err != nil {
 		return err
 	} else if address == nil || address.IP.To4() == nil {
 		return fmt.Errorf("Invalid UDP address: %v", listener)
+	} else if _listener != "192.168.1.100:60001" {
+		return fmt.Errorf("Incorrect listener address (%v)", _listener)
 	}
 
 	return nil
@@ -172,6 +192,14 @@ func getDoorControl(uu uhppote.IUHPPOTE, control *C.struct_DoorControl, deviceID
 		return fmt.Errorf("invalid argument (device) - expected valid pointer to DoorControl struct")
 	}
 
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
+	if door != 4 {
+		return fmt.Errorf("Incorrect door (%v)", door)
+	}
+
 	control.mode = C.uchar(types.Controlled)
 	control.delay = C.uchar(7)
 
@@ -179,5 +207,21 @@ func getDoorControl(uu uhppote.IUHPPOTE, control *C.struct_DoorControl, deviceID
 }
 
 func setDoorControl(uu uhppote.IUHPPOTE, deviceID uint32, door uint8, mode types.ControlState, delay uint8) error {
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
+	if door != 4 {
+		return fmt.Errorf("Incorrect door (%v)", door)
+	}
+
+	if mode != types.NormallyClosed {
+		return fmt.Errorf("Incorrect door control mode (%v)", mode)
+	}
+
+	if delay != 6 {
+		return fmt.Errorf("Incorrect door delay (%v)", delay)
+	}
+
 	return nil
 }

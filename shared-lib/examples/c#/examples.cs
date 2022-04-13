@@ -19,7 +19,7 @@ public class command {
     }
 };
 
-public class example {
+public class examples {
     const uint DEVICEID = 405419896;
     const byte DOOR = 4;
     const uint CARD_NUMBER = 8000001;
@@ -74,6 +74,9 @@ public class example {
         new command("delete-cards",
                     "Deletes all cards from a controller.",
                     DeleteCards),
+        new command("get-event-index",
+                    "Retrieves the current event index from a controller.",
+                    GetEventIndex),
     };
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -401,6 +404,17 @@ public class example {
 
         Console.WriteLine(String.Format("delete-cards"));
         Console.WriteLine(String.Format("  ID: {0}", deviceID));
+        Console.WriteLine();
+    }
+
+    static void GetEventIndex(Uhppoted u, string[] args) {
+        uint deviceID = DEVICEID;
+
+        int index = u.GetEventIndex(deviceID);
+
+        Console.WriteLine(String.Format("get-event-index"));
+        Console.WriteLine(String.Format("  ID:    {0}", deviceID));
+        Console.WriteLine(String.Format("  index: {0}", index));
         Console.WriteLine();
     }
 }

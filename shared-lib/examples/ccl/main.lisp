@@ -20,6 +20,7 @@
         '("put-card"          "Adds or updates the card detail stored on a controller.")
         '("delete-card"       "Deletes a card from a controller.")
         '("delete-cards"      "Deletes all cards from a controller.")
+        '("get-event-index"   "Retrieves the current event index from a controller.")
 ))
 
 
@@ -104,6 +105,7 @@
                    ((string= arg "put-card")          (put-card))
                    ((string= arg "delete-card")       (examples:delete-card))
                    ((string= arg "delete-cards")      (examples:delete-cards))
+                   ((string= arg "get-event-index")   (examples:get-event-index))
                    (t (progn
                         (format t "~%   *** ERROR: invalid command (~a)~%"  arg) 
                         (usage))))))))

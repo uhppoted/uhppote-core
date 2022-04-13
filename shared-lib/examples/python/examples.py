@@ -85,6 +85,10 @@ def commands():
             'help': "Deletes all cards from a controller.",
             'fn': delete_cards,
         },
+        'get-event-index': {
+            'help': "Retrieves the current event index from a controller.",
+            'fn': get_event_index,
+        },
     }
 
 
@@ -440,6 +444,23 @@ def delete_cards(u, args):
 
     except Exception as e:
         print(f" *** ERROR delete_cards ({e})")
+        print()
+
+
+def get_event_index(u, args):
+    tag = "get-event-index"
+    deviceID = DEVICE_ID
+
+    try:
+        index = u.get_event_index(deviceID)
+
+        print(f"{tag}")
+        print(f"  ID:    {deviceID}")
+        print(f"  index: {index}")
+        print()
+
+    except Exception as e:
+        print(f" *** ERROR {tag} ({e})")
         print()
 
 

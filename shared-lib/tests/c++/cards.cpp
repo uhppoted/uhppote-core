@@ -1,7 +1,7 @@
 #include <iomanip>
 #include <iostream>
 
-#include "cards.hpp"
+#include "../include/uhppoted.hpp"
 
 using namespace std;
 

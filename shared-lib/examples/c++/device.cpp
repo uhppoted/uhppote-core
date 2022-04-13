@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "device.hpp"
+#include "../include/uhppoted.hpp"
 
 using namespace std;
 

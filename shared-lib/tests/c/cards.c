@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "device.h"
 #include "uhppoted.h"
 
 extern const uint32_t DEVICE_ID;

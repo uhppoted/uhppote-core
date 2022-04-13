@@ -1,6 +1,6 @@
 LIB=../../lib
 BINDINGS=../../bindings/c\#
-CMD=mono example.exe
+CMD=mono examples.exe
 
 lib: 
 	cd ../../go && make all
@@ -14,7 +14,7 @@ format-dotnet:
 	dotnet format --include $(BINDINGS)/*.cs --folder
 
 build: format
-	csc $(BINDINGS)/uhppoted.cs example.cs
+	csc $(BINDINGS)/uhppoted.cs examples.cs
 
 usage: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD)
@@ -73,6 +73,9 @@ delete-card: build
 delete-cards: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) delete-cards
 
+get-event-index: build
+	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-event-index
+
 debug: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) delete-cards
+	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) get-event-index
 

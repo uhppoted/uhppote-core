@@ -1,7 +1,7 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/c
-CMD=GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && ./test
-SRC=test.c device.c cards.c
+CMD=GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && ./tests
+SRC=tests.c device.c cards.c events.c
 lib: 
 	cd ../../go && make all
 
@@ -11,7 +11,7 @@ format: $(SRC)
 	clang-format -i $(BINDINGS)/include/*.h
 
 build: format
-	clang -o test $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
+	clang -o tests $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
 
 usage: build
 	$(CMD) help
@@ -67,11 +67,12 @@ delete-card: build
 delete-cards: build
 	$(CMD) delete-cards
 
+get-event-index: build
+	$(CMD) get-event-index
+
 all: build
 	$(CMD) all
 
 test: build
 	$(CMD)
 
-debug: build
-	$(CMD) delete-card

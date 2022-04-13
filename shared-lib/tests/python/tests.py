@@ -35,6 +35,7 @@ def tests():
         'put-card': put_card,
         'delete-card': delete_card,
         'delete-cards': delete_cards,
+        'get-event-index': get_event_index,
     }
 
 
@@ -96,7 +97,7 @@ def get_device(u):
 
 
 def set_address(u):
-    u.set_address(DEVICE_ID, "192.168.1.125", "255.255.255.253", "192.168.1.5")
+    u.set_address(DEVICE_ID, "192.168.1.125", "255.255.254.0", "192.168.1.0")
     ok = True
 
     if ok:
@@ -368,6 +369,22 @@ def delete_cards(u):
     u.delete_cards(DEVICE_ID)
 
     return result('delete-cards', True)
+
+
+def get_event_index(u):
+    tag = 'get_event_index'
+    index = u.get_event_index(DEVICE_ID)
+    expected = 47
+    ok = True
+
+    if index != expected:
+        print(f'{tag}: incorrect event index - expected:{expected}, got:{index}')
+        ok = False
+
+    if ok:
+        print(f"{tag:<17} ok")
+
+    return ok
 
 
 def result(test, ok):

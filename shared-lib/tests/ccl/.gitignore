@@ -3,4 +3,4 @@ libuhppoted.so
 libuhppoted.h
 libuhppoted-debug.so
 libuhppoted-debug.h
-test
+tests

@@ -78,7 +78,7 @@
 
 
 (defun set-address () "" 
-  (exec #'(lambda (u) (uhppoted-set-address u TEST-DEVICE-ID "192.168.1.125" "255.255.255.254" "192.168.1.5")))
+  (exec #'(lambda (u) (uhppoted-set-address u TEST-DEVICE-ID "192.168.1.125" "255.255.254.0" "192.168.1.0")))
   (result "set-address" t))
 
 
@@ -314,6 +314,21 @@
 (defun delete-cards () "" 
   (exec #'(lambda (u) (uhppoted-delete-cards u TEST-DEVICE-ID)))
   (result "delete-cards" t))
+
+
+(defun get-event-index () "" 
+  (let ((tag      "get-event-index")
+        (expected 47)
+        (ok       T)
+        (index    (exec #'(lambda (u) (uhppoted-get-event-index u TEST-DEVICE-ID)))))
+       (if (not (equal expected index)) 
+           (progn
+             (format t "~a: incorrect event index - expected:~a, got:~a~%" tag expected index)
+             (setf ok NIL)))
+       (if ok 
+          (result tag t)
+          (error 'failed :message  "get-event-ingex  FAILED"))))
+
 
 (defun result (tag ok) ""
   (if ok

@@ -21,6 +21,7 @@
         '("put-card"          tests:put-card)
         '("delete-card"       tests:delete-card)
         '("delete-cards"      tests:delete-cards)
+        '("get-event-index"   tests:get-event-index)
 ))
 
 
@@ -96,7 +97,7 @@
 
 
 (defun make-app () ""
-  (save-application "test" :toplevel-function #'main :prepend-kernel t))
+  (save-application "tests" :toplevel-function #'main :prepend-kernel t))
 
 
 (defun debug (f) "Invoke test function with 'warning only' condition handler"

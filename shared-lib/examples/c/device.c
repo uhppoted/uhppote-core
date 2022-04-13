@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "device.h"
 #include "uhppoted.h"
 
 extern uint32_t DEVICE_ID;

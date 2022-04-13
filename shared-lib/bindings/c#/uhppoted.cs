@@ -231,6 +231,9 @@ public class Uhppoted : IDisposable {
     [DllImport("libuhppoted.so")]
     private static extern string DeleteCards(ref UHPPOTE u, uint deviceID);
 
+    [DllImport("libuhppoted.so")]
+    private static extern string GetEventIndex(ref UHPPOTE u, ref int index, uint deviceID);
+
     public uint[] GetDevices() {
         int N = 0;
         int count = N;
@@ -434,6 +437,17 @@ public class Uhppoted : IDisposable {
         if (err != null && err != "") {
             throw new UhppotedException(err);
         }
+    }
+
+    public int GetEventIndex(uint deviceID) {
+        int index = 0;
+
+        string err = GetEventIndex(ref this.u, ref index, deviceID);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+
+        return index;
     }
 
     // INTERNAL structs for DLL

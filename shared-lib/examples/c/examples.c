@@ -1,33 +1,28 @@
-#include <ctime>
-#include <iomanip>
-#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
-#include "../include/uhppoted.hpp"
-#include "cards.hpp"
-#include "device.hpp"
-
-using namespace std;
+#include "examples.h"
+#include "uhppoted.h"
 
 void usage();
 void help();
 
-extern const uint32_t DEVICE_ID = 405419896;
-extern const uint32_t CARD_NUMBER = 8000001;
-extern const uint32_t CARD_INDEX = 7;
-extern const uint8_t DOOR = 4;
+const uint32_t DEVICE_ID = 405419896;
+const uint8_t DOOR = 4;
+const uint32_t CARD_NUMBER = 8000001;
+const uint32_t CARD_INDEX = 7;
 
-const controller ALPHA = {.id = 405419896, .address = "192.168.1.100"};
-const controller BETA = {.id = 303986753, .address = "192.168.1.100"};
-
-typedef int(f)(uhppoted &, int, char **);
+typedef int(f)(int, char **a);
 
 typedef struct command {
-    string cmd;
-    string help;
+    char *cmd;
+    char *help;
     f *fn;
 } command;
 
-const vector<command> commands = {
+const command commands[] = {
     {
         .cmd = "get-devices",
         .help = "Retrieves a list of UHPPOTE controller IDs findable on the local LAN.",
@@ -101,14 +96,22 @@ const vector<command> commands = {
     {
         .cmd = "delete-card",
         .help = "Deletes a card from a controller.",
-        .fn = deleteCard,
+        .fn = getCard,
     },
     {
         .cmd = "delete-cards",
         .help = "Deletes all cards from a controller.",
         .fn = deleteCards,
     },
+    {
+        .cmd = "get-event-index",
+        .help = "Retrieves the current event index from a controller.",
+        .fn = getEventIndex,
+    },
 };
+
+controller alpha = {.id = 405419896, .address = "192.168.1.100"};
+controller beta = {.id = 303986753, .address = "192.168.1.100"};
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -116,50 +119,58 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    string cmd(argv[1]);
-    if (cmd == "help") {
+    char *cmd = argv[1];
+
+    if (strcmp(cmd, "help") == 0) {
         help();
         return 0;
     }
 
-    for (auto it = commands.begin(); it != commands.end(); it++) {
-        if (it->cmd == cmd) {
-            uhppoted u("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2500, {ALPHA, BETA}, true);
+    int N = sizeof(commands) / sizeof(command);
+    for (int i = 0; i < N; i++) {
+        command c = commands[i];
+        int rc;
 
-            return it->fn(u, argc, argv);
+        if (strcmp(c.cmd, cmd) == 0) {
+            setup("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2500, true, &alpha, &beta, NULL);
+            rc = c.fn(argc, argv);
+            teardown();
+
+            return rc;
         }
     }
 
-    cerr << endl
-         << "   *** ERROR invalid command '" << cmd << "'" << endl;
-
+    printf("\n   *** ERROR invalid command (%s)\n", cmd);
     usage();
-
     return -1;
 }
 
 void usage() {
-    cout << endl;
-    cout << "   Usage: example <command>" << endl;
-    cout << endl;
-    cout << "   Supported commands:" << endl;
+    int N = sizeof(commands) / sizeof(command);
 
-    for (auto it = commands.begin(); it != commands.end(); it++) {
-        cout << "      " << it->cmd << endl;
+    printf("\n");
+    printf("   Usage: example <command>\n");
+    printf("\n");
+    printf("   Supported commands:\n");
+
+    for (int i = 0; i < N; i++) {
+        printf("      %s\n", commands[i].cmd);
     }
 
-    cout << endl;
+    printf("\n");
 }
 
 void help() {
-    cout << endl;
-    cout << "   Usage: example <command>" << endl;
-    cout << endl;
-    cout << "   Commands:" << endl;
+    int N = sizeof(commands) / sizeof(command);
 
-    for (auto it = commands.begin(); it != commands.end(); it++) {
-        cout << "      " << setw(18) << left << it->cmd << "  " << it->help << endl;
+    printf("\n");
+    printf("   Usage: example <command>\n");
+    printf("\n");
+    printf("   Commands:\n");
+
+    for (int i = 0; i < N; i++) {
+        printf("      %-17s %s\n", commands[i].cmd, commands[i].help);
     }
 
-    cout << endl;
+    printf("\n");
 }

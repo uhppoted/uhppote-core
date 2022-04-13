@@ -3,8 +3,7 @@
 #include <map>
 
 #include "../include/uhppoted.hpp"
-#include "cards.hpp"
-#include "device.hpp"
+#include "tests.hpp"
 
 using namespace std;
 
@@ -32,6 +31,7 @@ vector<test> tests = {
     {"put-card", putCard},
     {"delete-card", deleteCard},
     {"delete-cards", deleteCards},
+    {"get-event-index", getEventIndex},
 };
 
 extern const uint32_t DEVICE_ID = 405419896;

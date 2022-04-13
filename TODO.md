@@ -3,31 +3,27 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] CCL handles test failure horribly
-  - [x] CCL: constants
   - [ ] CCL: constants for ControlMode
 
   - [ ] Check received values in tests
-        - [ ] `set-address`
+        - [x] `set-address`
         - [ ] `get-status`
         - [ ] `get-time`
         - [ ] `set-time`
-        - [ ] `get-listener`
-        - [ ] `set-listener`
-        - [ ] `get-door-control`
-        - [ ] `set-door-control`
-        - [ ] `get-cards`
-        - [ ] `get-card`
-        - [x] `get-card-by-index`
+        - [x] `get-listener`
+        - [x] `set-listener`
+        - [x] `get-door-control`
+        - [x] `set-door-control`
+        - [x] `get-cards`
+        - [x] `get-card`
   
-  - [x] `delete-cards`
+  - [ ] `get-event-index`
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
-        - [x] CCL
+        - [ ] CCL
 
-  - [ ] `get-event-index`
   - [ ] `set-event-index`
   - [ ] `get-event`
   - [ ] `record-special-events`
@@ -45,6 +41,7 @@
   - [ ] python: 
         - https://martinheinz.dev/blog/70
   - [ ] CCL
+        - handles test failure horribly
         - DOLIST
         - simplify main loop with `thereis` (https://gigamonkeys.com/book/loop-for-black-belts.html)
   - [ ] Commonalise test failure format

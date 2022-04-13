@@ -331,6 +331,18 @@ class Uhppote:
 
         DeleteCards(self._uhppote, deviceID)
 
+    def get_event_index(self, deviceID):
+        GetEventIndex = lib.GetEventIndex
+        GetEventIndex.argtypes = [POINTER(GoUHPPOTE), POINTER(c_int), c_ulong]
+        GetEventIndex.restype = ctypes.c_char_p
+        GetEventIndex.errcheck = self.errcheck
+
+        index = ctypes.c_int(0)
+
+        GetEventIndex(self._uhppote, byref(index), deviceID)
+
+        return index.value
+
 
 # INTERNAL TYPES
 class GoController(Structure):

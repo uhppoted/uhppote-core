@@ -76,3 +76,12 @@
     (format t 
             "  delete-cards:~%    ~:w~%~%" 
             (exec #'(lambda (u) (uhppoted-delete-cards u device-id))))))
+
+(defun get-event-index () "" 
+  (let ((tag "get-event-index")
+        (device-id   405419896))
+    (format t 
+            "  ~a:~%    ~:w~%~%" 
+            tag
+            (exec #'(lambda (u) (uhppoted-get-event-index u device-id))))))
+

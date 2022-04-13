@@ -353,3 +353,14 @@ void uhppoted::delete_cards(uint32_t id) {
         throw uhppoted_exception(err);
     }
 }
+
+int uhppoted::get_event_index(uint32_t id) {
+    int index;
+
+    char *err = GetEventIndex(u, &index, id);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+
+    return index;
+}

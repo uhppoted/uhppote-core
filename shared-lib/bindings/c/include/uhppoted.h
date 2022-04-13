@@ -80,3 +80,5 @@ int get_card_by_index(uint32_t id, uint32_t index, card *card);
 int put_card(uint32_t id, uint32_t card_number, const char *from, const char *to, const uint8_t doors[4]);
 int delete_card(uint32_t id, uint32_t card_number);
 int delete_cards(uint32_t id);
+
+int get_event_index(uint32_t id, int *index);

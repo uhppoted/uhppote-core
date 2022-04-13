@@ -1,7 +1,7 @@
 #include <iomanip>
 #include <iostream>
 
-#include "device.hpp"
+#include "../include/uhppoted.hpp"
 
 using namespace std;
 
@@ -101,7 +101,7 @@ bool setAddress(uhppoted &u) {
     try {
         string address = "192.168.1.125";
         string subnet = "255.255.254.0";
-        string gateway = "192.168.1.10";
+        string gateway = "192.168.1.0";
 
         u.set_address(DEVICE_ID, address, subnet, gateway);
 

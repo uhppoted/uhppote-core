@@ -374,6 +374,16 @@
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
 
 
+(defun uhppoted-get-event-index (uhppote device-id) "Retrieves the current event index from a controller"
+  (rletz ((index :signed-long 0))
+         (with-macptrs ((err (external-call "GetEventIndex" :address uhppote 
+                                                            :address index
+                                                            :unsigned-long device-id 
+                                                            :address)))
+          (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+          (%get-unsigned-long index))))
+
+
 (defun debug () "" 
   (handler-bind
 	((uhppoted-error

@@ -10,3 +10,12 @@ extern int getListener(int argc, char **argv);
 extern int setListener(int argc, char **argv);
 extern int getDoorControl(int argc, char **argv);
 extern int setDoorControl(int argc, char **argv);
+
+extern int getCards(int argc, char **argv);
+extern int getCard(int argc, char **argv);
+extern int getCardByIndex(int argc, char **argv);
+extern int putCard(int argc, char **argv);
+extern int deleteCard(int argc, char **argv);
+extern int deleteCards(int argc, char **argv);
+
+extern int getEventIndex(int argc, char **argv);
