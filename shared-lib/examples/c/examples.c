@@ -13,7 +13,7 @@ const uint32_t DEVICE_ID = 405419896;
 const uint8_t DOOR = 4;
 const uint32_t CARD_NUMBER = 8000001;
 const uint32_t CARD_INDEX = 7;
-extern uint32_t EVENT_INDEX =91;
+const uint32_t EVENT_INDEX = 91;
 
 typedef int(f)(int, char **a);
 

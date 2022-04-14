@@ -3,7 +3,7 @@ LIB=./lib
 .PHONY: python
 .PHONY: ccl
 .PHONY: examples
-.PHONY: test
+.PHONY: tests
 
 build: 
 	go fmt ./go/...
@@ -36,7 +36,7 @@ examples:
 	make -C ./examples/python -f Makefile build
 	make -C ./examples/ccl    -f Makefile build
 
-test: 
+tests: 
 	make -C ./tests/c      -f Makefile test
 	make -C ./tests/c++    -f Makefile test
 	make -C ./tests/c#     -f Makefile test
