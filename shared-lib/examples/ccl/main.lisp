@@ -68,7 +68,7 @@
   (format t "  get-door-control:~%    ~:w~%~%" (examples:get-door-control 405419896 4)))
 
 (defun set-door-control () ""
-  (format t "  set-door-control:~%    ~:w~%~%" (examples:set-door-control 405419896 4 1 9)))
+  (format t "  set-door-control:~%    ~:w~%~%" (examples:set-door-control 405419896 4 uhppoted:normally-open 9)))
 
 (defun get-cards () ""
   (format t "  get-cards:~%    ~:w~%~%" (examples:get-cards 405419896)))

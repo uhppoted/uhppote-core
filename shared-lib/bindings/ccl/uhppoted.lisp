@@ -6,6 +6,10 @@
 				   :name "libuhppoted" 
 				   :type "so")))
 
+(defconstant NORMALLY-OPEN   1)
+(defconstant NORMALLY-CLOSED 2)
+(defconstant CONTROLLED      3)
+
 (defstruct device ID 
                   address
                   subnet

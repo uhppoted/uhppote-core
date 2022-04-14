@@ -61,5 +61,8 @@
            card-from
            card-to
            card-doors
-           ))
+
+           normally-open
+           normally-closed
+           controlled))
 

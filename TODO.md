@@ -3,7 +3,7 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [ ] CCL: constants for ControlMode
+  - [x] CCL: constants for ControlMode
 
   - [x] Check received values in tests
         - [x] `get-status`
