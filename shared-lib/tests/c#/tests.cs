@@ -17,6 +17,7 @@ public class Tests {
     const uint DEVICE_ID = 405419896;
     const uint CARD_NUMBER = 8165538;
     const uint CARD_INDEX = 19;
+    const uint EVENT_INDEX = 51;
     const byte DOOR = 4;
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -40,6 +41,7 @@ public class Tests {
         new test("delete-card", DeleteCard),
         new test("delete-cards", DeleteCards),
         new test("get-event-index", GetEventIndex),
+        new test("set-event-index", SetEventIndex),
     };
 
     public static void Main(string[] args) {
@@ -439,8 +441,8 @@ public class Tests {
 
     static bool GetEventIndex(Uhppoted u) {
         string tag = "get-event-index";
-        int index = u.GetEventIndex(DEVICE_ID);
-        int expected = 47;
+        uint index = u.GetEventIndex(DEVICE_ID);
+        uint expected = 47;
         bool ok = true;
 
         if (index != expected) {
@@ -449,6 +451,14 @@ public class Tests {
         }
 
         return result(tag, ok);
+    }
+
+    static bool SetEventIndex(Uhppoted u) {
+        string tag = "set-event-index";
+
+        u.SetEventIndex(DEVICE_ID, EVENT_INDEX);
+
+        return result(tag, true);
     }
 
     static bool result(string test, bool ok) {

@@ -21,3 +21,4 @@ extern bool deleteCard();
 extern bool deleteCards();
 
 extern bool getEventIndex();
+extern bool setEventIndex();

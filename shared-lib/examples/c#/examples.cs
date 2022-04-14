@@ -20,10 +20,11 @@ public class command {
 };
 
 public class examples {
-    const uint DEVICEID = 405419896;
-    const byte DOOR = 4;
+    const uint DEVICE_ID = 405419896;
     const uint CARD_NUMBER = 8000001;
     const uint CARD_INDEX = 7;
+    const uint EVENT_INDEX = 91;
+    const byte DOOR = 4;
 
     static command[] commands = {
         new command("get-devices",
@@ -77,6 +78,9 @@ public class examples {
         new command("get-event-index",
                     "Retrieves the current event index from a controller.",
                     GetEventIndex),
+        new command("set-event-index",
+                    "Sets the current event index on a controller.",
+                    SetEventIndex),
     };
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -151,7 +155,7 @@ public class examples {
     }
 
     static void GetDevice(Uhppoted u, string[] args) {
-        uint deviceID = DEVICEID;
+        uint deviceID = DEVICE_ID;
 
         Device device = u.GetDevice(deviceID);
 
@@ -165,7 +169,7 @@ public class examples {
     }
 
     static void SetAddress(Uhppoted u, string[] args) {
-        uint deviceID = DEVICEID;
+        uint deviceID = DEVICE_ID;
         string address = "192.168.1.125";
         string subnet = "255.255.255.254";
         string gateway = "192.168.1.5";
@@ -181,7 +185,7 @@ public class examples {
     }
 
     static void GetStatus(Uhppoted u, string[] args) {
-        uint deviceID = DEVICEID;
+        uint deviceID = DEVICE_ID;
 
         Status status = u.GetStatus(deviceID);
 
@@ -208,7 +212,7 @@ public class examples {
     }
 
     static void GetTime(Uhppoted u, string[] args) {
-        uint deviceID = DEVICEID;
+        uint deviceID = DEVICE_ID;
 
         string datetime = u.GetTime(deviceID);
 
@@ -218,7 +222,7 @@ public class examples {
     }
 
     static void SetTime(Uhppoted u, string[] args) {
-        uint deviceID = DEVICEID;
+        uint deviceID = DEVICE_ID;
         string datetime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
         u.SetTime(deviceID, datetime);
@@ -230,7 +234,7 @@ public class examples {
     }
 
     static void GetListener(Uhppoted u, string[] args) {
-        uint deviceID = DEVICEID;
+        uint deviceID = DEVICE_ID;
 
         string listener = u.GetListener(deviceID);
 
@@ -240,7 +244,7 @@ public class examples {
     }
 
     static void SetListener(Uhppoted u, string[] args) {
-        uint deviceID = DEVICEID;
+        uint deviceID = DEVICE_ID;
         string listener = "192.168.1.100:60001";
 
         u.SetListener(deviceID, listener);
@@ -252,7 +256,7 @@ public class examples {
     }
 
     static void GetDoorControl(Uhppoted u, string[] args) {
-        uint deviceID = DEVICEID;
+        uint deviceID = DEVICE_ID;
         byte door = DOOR;
 
         DoorControl control = u.GetDoorControl(deviceID, door);
@@ -284,7 +288,7 @@ public class examples {
     }
 
     static void SetDoorControl(Uhppoted u, string[] args) {
-        uint deviceID = DEVICEID;
+        uint deviceID = DEVICE_ID;
         byte door = DOOR;
         byte mode = ControlModes.NormallyOpen;
         byte delay = 9;
@@ -318,7 +322,7 @@ public class examples {
     }
 
     static void GetCards(Uhppoted u, string[] args) {
-        uint deviceID = DEVICEID;
+        uint deviceID = DEVICE_ID;
 
         int cards = u.GetCards(deviceID);
 
@@ -329,7 +333,7 @@ public class examples {
     }
 
     static void GetCard(Uhppoted u, string[] args) {
-        uint deviceID = DEVICEID;
+        uint deviceID = DEVICE_ID;
         uint cardNumber = CARD_NUMBER;
         Card card = u.GetCard(deviceID, cardNumber);
 
@@ -346,7 +350,7 @@ public class examples {
     }
 
     static void GetCardByIndex(Uhppoted u, string[] args) {
-        uint deviceID = DEVICEID;
+        uint deviceID = DEVICE_ID;
         uint index = CARD_INDEX;
 
         Card card = u.GetCardByIndex(deviceID, index);
@@ -365,7 +369,7 @@ public class examples {
     }
 
     static void PutCard(Uhppoted u, string[] args) {
-        uint deviceID = DEVICEID;
+        uint deviceID = DEVICE_ID;
         uint cardNumber = CARD_NUMBER;
         string from = "2022-01-01";
         string to = "2022-12-31";
@@ -386,7 +390,7 @@ public class examples {
     }
 
     static void DeleteCard(Uhppoted u, string[] args) {
-        uint deviceID = DEVICEID;
+        uint deviceID = DEVICE_ID;
         uint cardNumber = CARD_NUMBER;
 
         u.DeleteCard(deviceID, cardNumber);
@@ -398,7 +402,7 @@ public class examples {
     }
 
     static void DeleteCards(Uhppoted u, string[] args) {
-        uint deviceID = DEVICEID;
+        uint deviceID = DEVICE_ID;
 
         u.DeleteCards(deviceID);
 
@@ -408,11 +412,25 @@ public class examples {
     }
 
     static void GetEventIndex(Uhppoted u, string[] args) {
-        uint deviceID = DEVICEID;
+        string tag = "get-event-index";
+        uint deviceID = DEVICE_ID;
 
-        int index = u.GetEventIndex(deviceID);
+        uint index = u.GetEventIndex(deviceID);
 
-        Console.WriteLine(String.Format("get-event-index"));
+        Console.WriteLine(String.Format("{0}", tag));
+        Console.WriteLine(String.Format("  ID:    {0}", deviceID));
+        Console.WriteLine(String.Format("  index: {0}", index));
+        Console.WriteLine();
+    }
+
+    static void SetEventIndex(Uhppoted u, string[] args) {
+        string tag = "set-event-index";
+        uint deviceID = DEVICE_ID;
+        uint index = EVENT_INDEX;
+
+        u.SetEventIndex(deviceID, index);
+
+        Console.WriteLine(String.Format("{0}", tag));
         Console.WriteLine(String.Format("  ID:    {0}", deviceID));
         Console.WriteLine(String.Format("  index: {0}", index));
         Console.WriteLine();

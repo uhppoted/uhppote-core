@@ -72,6 +72,9 @@ delete-cards: build
 get-event-index: build
 	$(CMD) get-event-index
 
+set-event-index: build
+	$(CMD) set-event-index
+
 all: build
 	$(CMD) all
 

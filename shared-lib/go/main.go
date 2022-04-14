@@ -262,10 +262,21 @@ func DeleteCards(u *C.struct_UHPPOTE, deviceID uint32) *C.char {
 }
 
 //export GetEventIndex
-func GetEventIndex(u *C.struct_UHPPOTE, index *C.int, deviceID uint32) *C.char {
+func GetEventIndex(u *C.struct_UHPPOTE, index *uint32, deviceID uint32) *C.char {
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
 	} else if err := getEventIndex(uu, index, deviceID); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
+//export SetEventIndex
+func SetEventIndex(u *C.struct_UHPPOTE, deviceID uint32, index uint32) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := setEventIndex(uu, deviceID, index); err != nil {
 		return C.CString(err.Error())
 	}
 

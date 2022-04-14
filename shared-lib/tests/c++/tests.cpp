@@ -32,11 +32,13 @@ vector<test> tests = {
     {"delete-card", deleteCard},
     {"delete-cards", deleteCards},
     {"get-event-index", getEventIndex},
+    {"set-event-index", setEventIndex},
 };
 
 extern const uint32_t DEVICE_ID = 405419896;
 extern const uint32_t CARD_ID = 8165538;
 extern const uint32_t CARD_INDEX = 19;
+extern const uint32_t EVENT_INDEX = 51;
 extern const uint8_t DOOR = 4;
 
 extern bool result(string test, bool ok) {

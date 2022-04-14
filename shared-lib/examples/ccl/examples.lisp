@@ -59,29 +59,52 @@
 (defun get-card-by-index (device-id index) "" 
   (exec #'(lambda (u) (uhppoted-get-card-by-index u device-id index))))
 
-(defun put-card (device-id card-number from to doors) "" 
-  (exec #'(lambda (u) (uhppoted-put-card u device-id card-number from to doors)))
-  t)
+(defun put-card () "" 
+  (let ((tag         "put-card")
+        (device-id   405419896)
+        (card-number 8000001)
+        (from        "2022-01-01")
+        (to          "2022-12-31")
+        (doors       (make-array 4 :initial-contents '(0 1 31 75))))
+    (format t 
+            "  ~a:~%    ~:w~%~%" 
+            tag
+            (exec #'(lambda (u) (uhppoted-put-card u device-id card-number from to doors))))))
 
 (defun delete-card () "" 
-  (let ((device-id   405419896)
+  (let ((tag         "delete-card")
+        (device-id   405419896)
         (card-number 8000001))
     (format t 
-            "  delete-card:~%    ~:w~%~%" 
+            "  ~a:~%    ~:w~%~%" 
+            tag
             (exec #'(lambda (u) (uhppoted-delete-card u device-id card-number))))))
 
 
 (defun delete-cards () "" 
-  (let ((device-id   405419896))
+  (let ((tag       "delete-cards")
+        (device-id 405419896))
     (format t 
-            "  delete-cards:~%    ~:w~%~%" 
+            "  ~a:~%    ~:w~%~%" 
+            tag
             (exec #'(lambda (u) (uhppoted-delete-cards u device-id))))))
 
+
 (defun get-event-index () "" 
-  (let ((tag "get-event-index")
-        (device-id   405419896))
+  (let ((tag       "get-event-index")
+        (device-id 405419896))
     (format t 
             "  ~a:~%    ~:w~%~%" 
             tag
             (exec #'(lambda (u) (uhppoted-get-event-index u device-id))))))
+
+
+(defun set-event-index () "" 
+  (let ((tag       "set-event-index")
+        (device-id 405419896)
+        (index     91))
+    (format t 
+            "  ~a:~%    ~:w~%~%" 
+            tag
+            (exec #'(lambda (u) (uhppoted-set-event-index u device-id index))))))
 

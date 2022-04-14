@@ -73,6 +73,9 @@ delete-cards: build
 get-event-index: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-event-index
 
+set-event-index: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) set-event-index
+
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-event-index
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) set-event-index
 

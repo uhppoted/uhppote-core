@@ -21,6 +21,7 @@
            delete-card
            delete-cards
            get-event-index
+           set-event-index
            failed
            message))
 

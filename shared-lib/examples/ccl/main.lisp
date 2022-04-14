@@ -21,6 +21,7 @@
         '("delete-card"       "Deletes a card from a controller.")
         '("delete-cards"      "Deletes all cards from a controller.")
         '("get-event-index"   "Retrieves the current event index from a controller.")
+        '("set-event-index"   "Sets the current event index on a controller.")
 ))
 
 
@@ -78,11 +79,6 @@
 (defun get-card-by-index () ""
   (format t "  get-card-byindex:~% ~:w~%~%" (examples:get-card-by-index 405419896 7)))
 
-(defun put-card () ""
-  (let ((doors (make-array 4 :initial-contents '(0 1 31 75))))
-    (format t "  put-card:~%    ~:w~%~%" (examples:put-card 405419896 8000001 "2022-01-01" "2022-12-31" doors))))
-
-
 (defun main () ""
   (let ((args (parse-command-line)))
     (if (not args)
@@ -102,10 +98,11 @@
                    ((string= arg "get-cards")         (get-cards))
                    ((string= arg "get-card")          (get-card))
                    ((string= arg "get-card-by-index") (get-card-by-index))
-                   ((string= arg "put-card")          (put-card))
+                   ((string= arg "put-card")          (examples:put-card))
                    ((string= arg "delete-card")       (examples:delete-card))
                    ((string= arg "delete-cards")      (examples:delete-cards))
                    ((string= arg "get-event-index")   (examples:get-event-index))
+                   ((string= arg "set-event-index")   (examples:set-event-index))
                    (t (progn
                         (format t "~%   *** ERROR: invalid command (~a)~%"  arg) 
                         (usage))))))))

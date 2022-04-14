@@ -5,26 +5,18 @@
 - Shared-lib/DLL
   - [ ] CCL: constants for ControlMode
 
-  - [ ] Check received values in tests
-        - [x] `set-address`
-        - [ ] `get-status`
-        - [ ] `get-time`
-        - [ ] `set-time`
-        - [x] `get-listener`
-        - [x] `set-listener`
-        - [x] `get-door-control`
-        - [x] `set-door-control`
-        - [x] `get-cards`
-        - [x] `get-card`
+  - [x] Check received values in tests
+        - [x] `get-status`
+        - [x] `get-time`
+        - [x] `set-time`
   
-  - [ ] `get-event-index`
+  - [x] `set-event-index`
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
-        - [ ] CCL
+        - [x] CCL
 
-  - [ ] `set-event-index`
   - [ ] `get-event`
   - [ ] `record-special-events`
   - [ ] `open-door`

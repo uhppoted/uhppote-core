@@ -384,6 +384,14 @@
           (%get-unsigned-long index))))
 
 
+(defun uhppoted-set-event-index (uhppote device-id index) "Retrieves the current event index from a controller"
+  (with-macptrs ((err (external-call "SetEventIndex" :address uhppote 
+                                                     :unsigned-long device-id 
+                                                     :unsigned-long index
+                                                     :address)))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+
+
 (defun debug () "" 
   (handler-bind
 	((uhppoted-error

@@ -1,9 +1,10 @@
 (in-package :tests)
 
 (defconstant TEST-DEVICE-ID   405419896)
-(defconstant TEST-DOOR        4)
 (defconstant TEST-CARD-NUMBER 8165538)
 (defconstant TEST-CARD-INDEX  19)
+(defconstant TEST-EVENT-INDEX 51)
+(defconstant TEST-DOOR        4)
 
 (define-condition failed (error)
   ((message :initarg :message :reader message)))
@@ -327,7 +328,16 @@
              (setf ok NIL)))
        (if ok 
           (result tag t)
-          (error 'failed :message  "get-event-ingex  FAILED"))))
+          (error 'failed :message  "get-event-index  FAILED"))))
+
+
+(defun set-event-index () "" 
+  (let ((tag      "set-event-index")
+        (ok       T))
+       (exec #'(lambda (u) (uhppoted-set-event-index u TEST-DEVICE-ID TEST-EVENT-INDEX)))
+       (if ok 
+          (result tag t)
+          (error 'failed :message  "set-event-index  FAILED"))))
 
 
 (defun result (tag ok) ""

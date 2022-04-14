@@ -14,6 +14,7 @@ from uhppoted import CONTROLLED
 DEVICE_ID = 405419896
 CARD_NUMBER = 8165538
 CARD_INDEX = 19
+EVENT_INDEX = 51
 DOOR = 4
 
 
@@ -36,6 +37,7 @@ def tests():
         'delete-card': delete_card,
         'delete-cards': delete_cards,
         'get-event-index': get_event_index,
+        'set-event-index': set_event_index,
     }
 
 
@@ -264,60 +266,61 @@ def set_door_control(u):
 
 
 def get_cards(u):
-    cards = u.get_cards(DEVICE_ID)
+    tag = 'get-cards'
+    expected = 39
     ok = True
 
-    if cards != 39:
-        print(f"get-cards: incorrect card count - expected:39, got:{cards}")
+    cards = u.get_cards(DEVICE_ID)
+
+    if cards != expected:
+        print(f"{tag}: incorrect card count - expected:{expected}, got:{cards}")
         ok = False
 
-    if ok:
-        print(f"get-cards         ok")
-
-    return ok
+    return result(tag, ok)
 
 
 def get_card(u):
-    card = u.get_card(DEVICE_ID, CARD_NUMBER)
+    tag = 'get-card'
     ok = True
 
+    card = u.get_card(DEVICE_ID, CARD_NUMBER)
+
     if card.cardNumber != 8165538:
-        print(f"get-card: incorrect card number - expected:8165538, got:{card.cardNumber}")
+        print(f"{tag}: incorrect card number - expected:8165538, got:{card.cardNumber}")
         ok = False
 
     if card.start != '2022-01-01':
-        print(f"get-card: incorrect 'from' date - expected:2022-01-01, got:{card.start}")
+        print(f"{tag}: incorrect 'from' date - expected:2022-01-01, got:{card.start}")
         ok = False
 
     if card.end != '2022-12-31':
-        print(f"get-card: incorrect 'to' date - expected:2022-12-31, got:{card.end}")
+        print(f"{tag}: incorrect 'to' date - expected:2022-12-31, got:{card.end}")
         ok = False
 
     if card.doors[0] != 0:
-        print(f"get-card: incorrect door[1] - expected:0, got:{card.doors[0]}")
+        print(f"{tag}: incorrect door[1] - expected:0, got:{card.doors[0]}")
         ok = False
 
     if card.doors[1] != 1:
-        print(f"get-card: incorrect door[2] - expected:1, got:{card.doors[1]}")
+        print(f"{tag}: incorrect door[2] - expected:1, got:{card.doors[1]}")
         ok = False
 
     if card.doors[2] != 31:
-        print(f"get-card: incorrect door[3] - expected:31, got:{card.doors[2]}")
+        print(f"{tag}: incorrect door[3] - expected:31, got:{card.doors[2]}")
         ok = False
 
     if card.doors[3] != 75:
-        print(f"get-card: incorrect door[42] - expected:75, got:{card.doors[3]}")
+        print(f"{tag}: incorrect door[42] - expected:75, got:{card.doors[3]}")
         ok = False
 
-    if ok:
-        print(f"get-card          ok")
-
-    return ok
+    return result(tag, ok)
 
 
 def get_card_by_index(u):
-    card = u.get_card_by_index(DEVICE_ID, CARD_INDEX)
+    tag = 'get-card-by-index'
     ok = True
+
+    card = u.get_card_by_index(DEVICE_ID, CARD_INDEX)
 
     if card.cardNumber != 8165538:
         print(f"get-card_by_index: incorrect card number - expected:8165538, got:{card.cardNumber}")
@@ -347,49 +350,62 @@ def get_card_by_index(u):
         print(f"get-card_by_index: incorrect door[42] - expected:75, got:{card.doors[3]}")
         ok = False
 
-    if ok:
-        print(f"get-card_by_index ok")
-
-    return ok
+    return result(tag, ok)
 
 
 def put_card(u):
+    tag = 'put-card'
+    ok = True
+
     u.put_card(DEVICE_ID, CARD_NUMBER, '2022-01-01', '2022-12-31', [0, 1, 31, 75])
 
-    return result('put-card', True)
+    return result(tag, ok)
 
 
 def delete_card(u):
+    tag = 'delete_card'
+    ok = True
+
     u.delete_card(DEVICE_ID, CARD_NUMBER)
 
-    return result('delete-card', True)
+    return result(tag, ok)
 
 
 def delete_cards(u):
+    tag = 'delete_cards'
+    ok = True
+
     u.delete_cards(DEVICE_ID)
 
-    return result('delete-cards', True)
+    return result(tag, ok)
 
 
 def get_event_index(u):
     tag = 'get_event_index'
-    index = u.get_event_index(DEVICE_ID)
     expected = 47
     ok = True
+
+    index = u.get_event_index(DEVICE_ID)
 
     if index != expected:
         print(f'{tag}: incorrect event index - expected:{expected}, got:{index}')
         ok = False
 
+    return result(tag, ok)
+
+
+def set_event_index(u):
+    tag = 'set_event_index'
+    ok = True
+
+    u.set_event_index(DEVICE_ID, EVENT_INDEX)
+
+    return result(tag, ok)
+
+
+def result(tag, ok):
     if ok:
-        print(f"{tag:<17} ok")
-
-    return ok
-
-
-def result(test, ok):
-    if ok:
-        print(f'{test:<17} ok')
+        print(f'{tag:<17} ok')
 
     return ok
 

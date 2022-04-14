@@ -14,9 +14,10 @@ from uhppoted import NORMALLY_CLOSED
 from uhppoted import CONTROLLED
 
 DEVICE_ID = 405419896
-DOOR = 4
 CARD_NUMBER = 8000001
 CARD_INDEX = 7
+EVENT_INDEX = 91
+DOOR = 4
 
 
 def commands():
@@ -88,6 +89,10 @@ def commands():
         'get-event-index': {
             'help': "Retrieves the current event index from a controller.",
             'fn': get_event_index,
+        },
+        'set-event-index': {
+            'help': "Sets the current event index on a controller.",
+            'fn': set_event_index,
         },
     }
 
@@ -453,6 +458,24 @@ def get_event_index(u, args):
 
     try:
         index = u.get_event_index(deviceID)
+
+        print(f"{tag}")
+        print(f"  ID:    {deviceID}")
+        print(f"  index: {index}")
+        print()
+
+    except Exception as e:
+        print(f" *** ERROR {tag} ({e})")
+        print()
+
+
+def set_event_index(u, args):
+    tag = "set-event-index"
+    deviceID = DEVICE_ID
+    index = EVENT_INDEX
+
+    try:
+        u.set_event_index(deviceID, index)
 
         print(f"{tag}")
         print(f"  ID:    {deviceID}")

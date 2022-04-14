@@ -333,15 +333,23 @@ class Uhppote:
 
     def get_event_index(self, deviceID):
         GetEventIndex = lib.GetEventIndex
-        GetEventIndex.argtypes = [POINTER(GoUHPPOTE), POINTER(c_int), c_ulong]
+        GetEventIndex.argtypes = [POINTER(GoUHPPOTE), POINTER(c_ulong), c_ulong]
         GetEventIndex.restype = ctypes.c_char_p
         GetEventIndex.errcheck = self.errcheck
 
-        index = ctypes.c_int(0)
+        index = ctypes.c_ulong(0)
 
         GetEventIndex(self._uhppote, byref(index), deviceID)
 
         return index.value
+
+    def set_event_index(self, deviceID, index):
+        SetEventIndex = lib.SetEventIndex
+        SetEventIndex.argtypes = [POINTER(GoUHPPOTE), c_ulong, c_ulong]
+        SetEventIndex.restype = ctypes.c_char_p
+        SetEventIndex.errcheck = self.errcheck
+
+        SetEventIndex(self._uhppote, deviceID, index)
 
 
 # INTERNAL TYPES

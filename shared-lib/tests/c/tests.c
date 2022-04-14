@@ -20,9 +20,9 @@ const uint32_t CARD_NUMBER = 8165538;
 const uint32_t CARD_INDEX = 19;
 const uint8_t DOOR = 4;
 
-bool result(char *test, bool ok) {
+bool result(const char *tag, bool ok) {
     if (ok) {
-        printf("%-17s  ok\n", test);
+        printf("%-17s  ok\n", tag);
     }
 
     return ok;
@@ -46,6 +46,7 @@ const test tests[] = {
     {.name = "delete-card", .fn = deleteCard},
     {.name = "delete-cards", .fn = deleteCards},
     {.name = "get-event-index", .fn = getEventIndex},
+    {.name = "set-event-index", .fn = setEventIndex},
 };
 
 int main(int argc, char **argv) {

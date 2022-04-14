@@ -8,10 +8,12 @@ extern const uint32_t DEVICE_ID;
 extern const uint32_t CARD_NUMBER;
 extern const uint32_t CARD_INDEX;
 extern const uint8_t DOOR;
-extern bool result(char *test, bool ok);
+extern bool result(const char *, bool);
 
 bool getEventIndex() {
-    int index;
+    const char *tag = "get-event-index";
+    uint32_t expected = 47;
+    uint32_t index;
 
     if (get_event_index(DEVICE_ID, &index) < 0) {
         printf("ERROR %s\n", errmsg());
@@ -20,10 +22,22 @@ bool getEventIndex() {
 
     bool ok = true;
 
-    if (index != 47) {
-        printf("get-event-index: incorrect event index - expected:%u, got:%u\n", 47, index);
+    if (index != expected) {
+        printf("%s: incorrect event index - expected:%u, got:%u\n", tag, expected, index);
         ok = false;
     }
 
-    return result("get-event-index", ok);
+    return result(tag, ok);
+}
+
+bool setEventIndex() {
+    const char *tag = "set-event-index";
+    uint32_t index = 51;
+
+    if (set_event_index(DEVICE_ID, index) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    return result(tag, true);
 }

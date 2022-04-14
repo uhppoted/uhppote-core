@@ -21,3 +21,4 @@ int deleteCard(uhppoted &u, int argc, char **argv);
 int deleteCards(uhppoted &u, int argc, char **argv);
 
 int getEventIndex(uhppoted &u, int argc, char **argv);
+int setEventIndex(uhppoted &u, int argc, char **argv);

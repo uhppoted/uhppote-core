@@ -11,6 +11,8 @@ extern const uint8_t DOOR;
 extern bool result(char *test, bool ok);
 
 bool getCards() {
+    const char *tag = "get-cards";
+    int expected = 39;
     int N;
 
     if (get_cards(DEVICE_ID, &N) < 0) {
@@ -20,8 +22,8 @@ bool getCards() {
 
     bool ok = true;
 
-    if (N != 39) {
-        printf("get-cards: incorrect card count - expected:%u, got:%u\n", 39, N);
+    if (N != expected) {
+        printf("%s: incorrect card count - expected:%u, got:%u\n", tag, expected, N);
         ok = false;
     }
 

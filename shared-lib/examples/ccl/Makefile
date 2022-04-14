@@ -71,6 +71,9 @@ delete-cards: build
 get-event-index: build
 	$(CMD) get-event-index
 
+set-event-index: build
+	$(CMD) set-event-index
+
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp
 

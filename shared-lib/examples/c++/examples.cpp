@@ -13,6 +13,7 @@ void help();
 extern const uint32_t DEVICE_ID = 405419896;
 extern const uint32_t CARD_NUMBER = 8000001;
 extern const uint32_t CARD_INDEX = 7;
+extern const uint32_t EVENT_INDEX = 7;
 extern const uint8_t DOOR = 4;
 
 const controller ALPHA = {.id = 405419896, .address = "192.168.1.100"};
@@ -111,6 +112,11 @@ const vector<command> commands = {
         .cmd = "get-event-index",
         .help = "Retrieves the current event index from a controller.",
         .fn = getEventIndex,
+    },
+    {
+        .cmd = "set-event-index",
+        .help = "Sets the current event index on a controller.",
+        .fn = setEventIndex,
     },
 };
 

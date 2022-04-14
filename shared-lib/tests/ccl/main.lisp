@@ -22,6 +22,7 @@
         '("delete-card"       tests:delete-card)
         '("delete-cards"      tests:delete-cards)
         '("get-event-index"   tests:get-event-index)
+        '("set-event-index"   tests:set-event-index)
 ))
 
 
@@ -89,7 +90,7 @@
 ;;;; Ref. https://github.com/Clozure/ccl/issues/177
 (defun parse-command-line () ""
   (let ((args       *command-line-argument-list*)
-        (executable "test"))
+        (executable "tests"))
     (cond (*unprocessed-command-line-arguments* ())
           ((eq (search executable (car args)) NIL) ())
           ((/= (+ (coerce (search executable (car args)) 'fixnum) (length executable)) (length (car args))) ())

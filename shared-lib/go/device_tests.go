@@ -96,6 +96,10 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status.Event struct")
 	}
 
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
 	status.ID = C.uint(deviceID)
 	status.sysdatetime = C.CString("2022-03-19 15:48:32")
 
@@ -136,6 +140,10 @@ func getTime(uu uhppote.IUHPPOTE, datetime **C.char, deviceID uint32) error {
 		return fmt.Errorf("invalid argument (datetime) - expected valid pointer to string")
 	}
 
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
 	*datetime = C.CString("2022-01-02 12:34:56")
 
 	return nil
@@ -145,11 +153,18 @@ func setTime(uu uhppote.IUHPPOTE, deviceID uint32, datetime *C.char) error {
 		return fmt.Errorf("invalid argument (datetime) - expected valid pointer to string")
 	}
 
-	if _, err := time.Parse("2006-01-02 15:04:05", C.GoString(datetime)); err != nil {
-		return err
-	} else {
-		return nil
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
 	}
+
+	t := C.GoString(datetime)
+	if _, err := time.Parse("2006-01-02 15:04:05", t); err != nil {
+		return err
+	} else if t != "2022-03-23 12:24:17" {
+		return fmt.Errorf("Incorrect date/time (%v)", t)
+	}
+
+	return nil
 }
 
 func getListener(uu uhppote.IUHPPOTE, address **C.char, deviceID uint32) error {

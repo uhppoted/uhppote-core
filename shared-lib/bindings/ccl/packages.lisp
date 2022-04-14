@@ -21,6 +21,7 @@
            uhppoted-delete-card
            uhppoted-delete-cards
            uhppoted-get-event-index
+           uhppoted-set-event-index
            uhppoted-error
            with-warning
            message

@@ -415,8 +415,8 @@ int delete_cards(uint32_t id) {
     return 0;
 }
 
-int get_event_index(uint32_t id, int *index) {
-    int ix;
+int get_event_index(uint32_t id, uint32_t *index) {
+    uint32_t ix;
     char *err = GetEventIndex(u, &ix, id);
     if (err != NULL) {
         set_error(err);
@@ -424,6 +424,16 @@ int get_event_index(uint32_t id, int *index) {
     }
 
     *index = ix;
+
+    return 0;
+}
+
+int set_event_index(uint32_t id, uint32_t index) {
+    char *err = SetEventIndex(u, id, index);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
 
     return 0;
 }
