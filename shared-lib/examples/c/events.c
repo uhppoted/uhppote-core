@@ -54,8 +54,8 @@ int getEvent(int argc, char **argv) {
 
     printf("\nget-event\n");
     printf("  ID:                %u\n", deviceID);
-    printf("  event timestamp:   %s\n", event.timestamp);
-    printf("        index:       %u\n", event.index);
+    printf("  event index:       %u\n", event.index);
+    printf("        timestamp:   %s\n", event.timestamp);
     printf("        type:        %u\n", event.eventType);
     printf("        granted:     %d\n", event.granted);
     printf("        direction:   %u\n", event.direction);

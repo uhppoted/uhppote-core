@@ -67,8 +67,8 @@ int getEvent(uhppoted &u, int argc, char **argv) {
         cout << endl
              << "get-event" << endl;
         cout << "  ID:                " << deviceID << endl;
-        cout << "  event timestamp:   " << e.timestamp << endl;
-        cout << "        index:       " << e.index << endl;
+        cout << "  event index:       " << e.index << endl;
+        cout << "        timestamp:   " << e.timestamp << endl;
         cout << "        type:        " << static_cast<int>(e.eventType) << endl;
         cout << "        granted:     " << static_cast<int>(e.granted) << endl;
         cout << "        direction:   " << static_cast<int>(e.direction) << endl;

@@ -23,7 +23,7 @@ public class examples {
     const uint DEVICE_ID = 405419896;
     const uint CARD_NUMBER = 8000001;
     const uint CARD_INDEX = 7;
-    const uint EVENT_INDEX = 91;
+    const uint EVENT_INDEX = 43;
     const byte DOOR = 4;
 
     static command[] commands = {
@@ -81,6 +81,9 @@ public class examples {
         new command("set-event-index",
                     "Sets the current event index on a controller.",
                     SetEventIndex),
+        new command("get-event",
+                    "Retrieves the event at the index  from a controller.",
+                    GetEvent),
     };
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -433,6 +436,26 @@ public class examples {
         Console.WriteLine(String.Format("{0}", tag));
         Console.WriteLine(String.Format("  ID:    {0}", deviceID));
         Console.WriteLine(String.Format("  index: {0}", index));
+        Console.WriteLine();
+    }
+
+    static void GetEvent(Uhppoted u, string[] args) {
+        string tag = "get-event";
+        uint deviceID = DEVICE_ID;
+        uint index = EVENT_INDEX;
+
+        Event evt = u.GetEvent(deviceID, index);
+
+        Console.WriteLine(String.Format("{0}", tag));
+        Console.WriteLine(String.Format("  ID:                {0}", deviceID));
+        Console.WriteLine(String.Format("  event index:       {0}", evt.index));
+        Console.WriteLine(String.Format("        timestamp:   {0}", evt.timestamp));
+        Console.WriteLine(String.Format("        type:        {0}", evt.eventType));
+        Console.WriteLine(String.Format("        granted:     {0}", evt.granted));
+        Console.WriteLine(String.Format("        door:        {0}", evt.door));
+        Console.WriteLine(String.Format("        direction:   {0}", evt.direction));
+        Console.WriteLine(String.Format("        card number: {0}", evt.card));
+        Console.WriteLine(String.Format("        reason:      {0}", evt.reason));
         Console.WriteLine();
     }
 }

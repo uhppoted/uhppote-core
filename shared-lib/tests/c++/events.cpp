@@ -59,15 +59,15 @@ bool getEvent(uhppoted &u) {
     try {
         auto event = u.get_event(DEVICE_ID, EVENT_INDEX);
 
+        if (event.index != 51) {
+            cout << tag << ": incorrect event index - expected:" << 51 << ", got:" << event.index << endl;
+            ok = false;
+        }
+
         if (event.timestamp != "2022-04-15 12:29:15") {
             cout << tag << ": incorrect event timestamp - expected:"
                  << "2022-01-01"
                  << ", got:" << event.timestamp << endl;
-            ok = false;
-        }
-
-        if (event.index != 51) {
-            cout << tag << ": incorrect event index - expected:" << 51 << ", got:" << event.index << endl;
             ok = false;
         }
 

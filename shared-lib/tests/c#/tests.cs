@@ -42,6 +42,7 @@ public class Tests {
         new test("delete-cards", DeleteCards),
         new test("get-event-index", GetEventIndex),
         new test("set-event-index", SetEventIndex),
+        new test("get-event", GetEvent),
     };
 
     public static void Main(string[] args) {
@@ -378,41 +379,43 @@ public class Tests {
     }
 
     static bool GetCardByIndex(Uhppoted u) {
-        Card card = u.GetCardByIndex(DEVICE_ID, CARD_INDEX);
+        string tag = "get-card-by-index";
         bool ok = true;
 
+        Card card = u.GetCardByIndex(DEVICE_ID, CARD_INDEX);
+
         if (card.cardNumber != 8165538) {
-            Console.WriteLine("get-card-by-index: incorrect card number - expected:{0}, got:{1}", 8165538, card.cardNumber);
+            Console.WriteLine("{0}: incorrect card number - expected:{1}, got:{2}", tag, 8165538, card.cardNumber);
             ok = false;
         }
 
         if (card.from != "2022-01-01") {
-            Console.WriteLine("get-card: incorrect 'from' date - expected:{0}, got:{1}", "2022-01-01", card.from);
+            Console.WriteLine("get-card: incorrect 'from' date - expected:{1}, got:{2}", tag, "2022-01-01", card.from);
             ok = false;
         }
 
         if (card.to != "2022-12-31") {
-            Console.WriteLine("get-card-by-index: incorrect 'to' date - expected:{0}, got:{1}", "2022-12-31", card.to);
+            Console.WriteLine("{0}: incorrect 'to' date - expected:{1}, got:{2}", tag, "2022-12-31", card.to);
             ok = false;
         }
 
         if (card.doors[0] != 0) {
-            Console.WriteLine("get-card-by-index: incorrect doors[1] - expected:{0}, got:{1}", 0, card.doors[0]);
+            Console.WriteLine("{0}: incorrect doors[1] - expected:{1}, got:{2}", tag, 0, card.doors[0]);
             ok = false;
         }
 
         if (card.doors[1] != 1) {
-            Console.WriteLine("get-card-by-index: incorrect doors[2] - expected:{0}, got:{1}", 1, card.doors[1]);
+            Console.WriteLine("{0}: incorrect doors[2] - expected:{1}, got:{2}", tag, 1, card.doors[1]);
             ok = false;
         }
 
         if (card.doors[2] != 31) {
-            Console.WriteLine("get-card-by-index: incorrect doors[3] - expected:{0}, got:{1}", 31, card.doors[2]);
+            Console.WriteLine("{0}: incorrect doors[3] - expected:{1}, got:{2}", tag, 31, card.doors[2]);
             ok = false;
         }
 
         if (card.doors[3] != 75) {
-            Console.WriteLine("get-card-by-index: incorrect doors[4] - expected:{0}, got:{1}", 75, card.doors[3]);
+            Console.WriteLine("{0}: incorrect doors[4] - expected:{1}, got:{2}", tag, 75, card.doors[3]);
             ok = false;
         }
 
@@ -420,23 +423,28 @@ public class Tests {
     }
 
     static bool PutCard(Uhppoted u) {
+        string tag = "put-card";
         byte[] doors = { 0, 1, 31, 75 };
 
         u.PutCard(DEVICE_ID, CARD_NUMBER, "2022-01-01", "2022-12-31", doors);
 
-        return result("put-card", true);
+        return result(tag, true);
     }
 
     static bool DeleteCard(Uhppoted u) {
+        string tag = "delete-card";
+
         u.DeleteCard(DEVICE_ID, CARD_NUMBER);
 
-        return result("delete-card", true);
+        return result(tag, true);
     }
 
     static bool DeleteCards(Uhppoted u) {
+        string tag = "delete-cards";
+
         u.DeleteCards(DEVICE_ID);
 
-        return result("delete-cards", true);
+        return result(tag, true);
     }
 
     static bool GetEventIndex(Uhppoted u) {
@@ -459,6 +467,55 @@ public class Tests {
         u.SetEventIndex(DEVICE_ID, EVENT_INDEX);
 
         return result(tag, true);
+    }
+
+    static bool GetEvent(Uhppoted u) {
+        string tag = "get-event";
+        bool ok = true;
+
+        Event evt = u.GetEvent(DEVICE_ID, EVENT_INDEX);
+
+        if (evt.index != 51) {
+            Console.WriteLine("{0}: incorrect event index - expected:{1}, got:{2}", tag, 51, evt.index);
+            ok = false;
+        }
+
+        if (evt.timestamp != "2022-04-15 12:29:15") {
+            Console.WriteLine("{0}: incorrect event timestamp - expected:{1}, got:{2}", tag, "2022-04-15 12:29:15", evt.timestamp);
+            ok = false;
+        }
+
+        if (evt.eventType != 6) {
+            Console.WriteLine("{0}: incorrect event type - expected:{1}, got:{2}", tag, 6, evt.eventType);
+            ok = false;
+        }
+
+        if (!evt.granted) {
+            Console.WriteLine("{0}: incorrect event granted - expected:{1}, got:{2}", tag, true, evt.granted);
+            ok = false;
+        }
+
+        if (evt.door != 3) {
+            Console.WriteLine("{0}: incorrect event door - expected:{1}, got:{2}", tag, 3, evt.door);
+            ok = false;
+        }
+
+        if (evt.direction != 1) {
+            Console.WriteLine("{0}: incorrect event direction - expected:{1}, got:{2}", tag, 1, evt.direction);
+            ok = false;
+        }
+
+        if (evt.card != 8165538) {
+            Console.WriteLine("{0}: incorrect event card - expected:{1}, got:{2}", tag, 8165538, evt.card);
+            ok = false;
+        }
+
+        if (evt.reason != 21) {
+            Console.WriteLine("{0}: incorrect event reason - expected:{1}, got:{2}", tag, 21, evt.reason);
+            ok = false;
+        }
+
+        return result(tag, ok);
     }
 
     static bool result(string test, bool ok) {

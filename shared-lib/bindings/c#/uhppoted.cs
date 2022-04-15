@@ -237,6 +237,9 @@ public class Uhppoted : IDisposable {
     [DllImport("libuhppoted.so")]
     private static extern string SetEventIndex(ref UHPPOTE u, uint deviceID, uint index);
 
+    [DllImport("libuhppoted.so")]
+    private static extern string GetEvent(ref UHPPOTE u, ref GoEvent evt, uint deviceID, uint index);
+
     public uint[] GetDevices() {
         int N = 0;
         int count = N;
@@ -460,6 +463,24 @@ public class Uhppoted : IDisposable {
         }
     }
 
+    public Event GetEvent(uint deviceID, uint index) {
+        GoEvent evt = new GoEvent();
+
+        string err = GetEvent(ref this.u, ref evt, deviceID, index);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+
+        return new Event(evt.timestamp,
+                         evt.index,
+                         evt.eventType,
+                         evt.granted == 1,
+                         evt.door,
+                         evt.direction,
+                         evt.card,
+                         evt.reason);
+    }
+
     // INTERNAL structs for DLL
 
     struct udevice {
@@ -492,9 +513,6 @@ public class Uhppoted : IDisposable {
         public string date;
     };
 
-    // Ref.
-    // https://stackoverflow.com/questions/3820985/suppressing-is-never-used-and-is-never-assigned-to-warnings-in-c-sharp/3821035#3821035
-#pragma warning disable 0649
     struct GoEvent {
         public string timestamp;
         public uint index;
@@ -505,7 +523,6 @@ public class Uhppoted : IDisposable {
         public uint card;
         public byte reason;
     };
-#pragma warning restore 0649
 
     struct GoStatus {
         public uint ID;
