@@ -76,6 +76,9 @@ get-event-index: build
 set-event-index: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) set-event-index
 
+get-event: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-event
+
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) set-event-index
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-event
 

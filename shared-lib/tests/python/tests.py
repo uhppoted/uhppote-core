@@ -38,6 +38,7 @@ def tests():
         'delete-cards': delete_cards,
         'get-event-index': get_event_index,
         'set-event-index': set_event_index,
+        'get-event': get_event,
     }
 
 
@@ -160,8 +161,8 @@ def get_status(u):
         print(f"get-status: incorrect event index - expected:135, got:{status.event.index}")
         ok = False
 
-    if status.event.type != 6:
-        print(f"get-status: incorrect event type - expected:6, got:{status.event.type}")
+    if status.event.eventType != 6:
+        print(f"get-status: incorrect event type - expected:6, got:{status.event.eventType}")
         ok = False
 
     if status.event.granted != 1:
@@ -382,25 +383,47 @@ def delete_cards(u):
 
 def get_event_index(u):
     tag = 'get_event_index'
-    expected = 47
-    ok = True
-
     index = u.get_event_index(DEVICE_ID)
 
-    if index != expected:
-        print(f'{tag}: incorrect event index - expected:{expected}, got:{index}')
-        ok = False
+    ok = True
+    ok = eval(tag, 'event index', 47, index, ok)
 
     return result(tag, ok)
 
 
 def set_event_index(u):
     tag = 'set_event_index'
-    ok = True
-
     u.set_event_index(DEVICE_ID, EVENT_INDEX)
 
+    return result(tag, True)
+
+
+def get_event(u):
+    tag = 'get-event'
+    event = u.get_event(DEVICE_ID, EVENT_INDEX)
+
+    ok = True
+    ok = eval(tag, 'event index', 51, event.index, ok)
+    ok = eval(tag, 'event timestamp', '2022-04-15 12:29:15', event.timestamp, ok)
+    ok = eval(tag, 'event type', 6, event.eventType, ok)
+    ok = eval(tag, 'event granted', True, event.granted, ok)
+    ok = eval(tag, 'event door', 3, event.door, ok)
+    ok = eval(tag, 'event direction', 1, event.direction, ok)
+    ok = eval(tag, 'event card', 8165538, event.card, ok)
+    ok = eval(tag, 'event reason', 21, event.reason, ok)
+
     return result(tag, ok)
+
+
+def eval(tag, field, expected, actual, ok):
+    if actual != expected:
+        return fail(tag, field, expected, actual)
+    return ok
+
+
+def fail(tag, field, expected, actual):
+    print(f"{tag}: incorrect {field} - expected:{expected}, got:{actual}")
+    return False
 
 
 def result(tag, ok):

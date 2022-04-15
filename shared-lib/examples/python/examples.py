@@ -16,7 +16,7 @@ from uhppoted import CONTROLLED
 DEVICE_ID = 405419896
 CARD_NUMBER = 8000001
 CARD_INDEX = 7
-EVENT_INDEX = 91
+EVENT_INDEX = 43
 DOOR = 4
 
 
@@ -93,6 +93,10 @@ def commands():
         'set-event-index': {
             'help': "Sets the current event index on a controller.",
             'fn': set_event_index,
+        },
+        'get-event': {
+            'help': "Retrieves the event at the index from a controller.",
+            'fn': get_event,
         },
     }
 
@@ -196,7 +200,7 @@ def get_status(u, args):
         print(f"  seq no.  : {status.seqno}")
         print(f"  event timestamp: {status.event.timestamp}")
         print(f"        index:     {status.event.index}")
-        print(f"        type:      {status.event.type}")
+        print(f"        type:      {status.event.eventType}")
         print(f"        granted:   {status.event.granted}")
         print(f"        door:      {status.event.door}")
         print(f"        direction: {status.event.direction}")
@@ -480,6 +484,31 @@ def set_event_index(u, args):
         print(f"{tag}")
         print(f"  ID:    {deviceID}")
         print(f"  index: {index}")
+        print()
+
+    except Exception as e:
+        print(f" *** ERROR {tag} ({e})")
+        print()
+
+
+def get_event(u, args):
+    tag = "get-event"
+    deviceID = DEVICE_ID
+    index = EVENT_INDEX
+
+    try:
+        event = u.get_event(deviceID, index)
+
+        print(f"{tag}")
+        print(f"  ID:                {deviceID}")
+        print(f"  event index:       {event.index}")
+        print(f"        timestamp:   {event.timestamp}")
+        print(f"        type:        {event.eventType}")
+        print(f"        granted:     {event.granted}")
+        print(f"        door:        {event.door}")
+        print(f"        direction:   {event.direction}")
+        print(f"        card number: {event.card}")
+        print(f"        reason:      {event.reason}")
         print()
 
     except Exception as e:

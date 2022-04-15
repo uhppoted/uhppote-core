@@ -58,7 +58,7 @@ class Device:
 class Event:
     timestamp: str
     index: int
-    type: int
+    eventType: int
     granted: bool
     door: int
     direction: int
@@ -176,7 +176,7 @@ class Uhppote:
         event = Event(
             status.event.contents.timestamp.decode('utf-8'),
             status.event.contents.index,
-            status.event.contents.type,
+            status.event.contents.eventType,
             status.event.contents.granted,
             status.event.contents.door,
             status.event.contents.direction,
@@ -351,6 +351,19 @@ class Uhppote:
 
         SetEventIndex(self._uhppote, deviceID, index)
 
+    def get_event(self, deviceID, index):
+        GetEvent = lib.GetEvent
+        GetEvent.argtypes = [POINTER(GoUHPPOTE), POINTER(GoEvent), c_ulong, c_ulong]
+        GetEvent.restype = ctypes.c_char_p
+        GetEvent.errcheck = self.errcheck
+
+        event = GoEvent()
+
+        GetEvent(self._uhppote, byref(event), deviceID, index)
+
+        return Event(event.timestamp.decode('utf-8'), event.index, event.eventType, event.granted,
+                     event.door, event.direction, event.card, event.reason)
+
 
 # INTERNAL TYPES
 class GoController(Structure):
@@ -401,7 +414,7 @@ class GoEvent(Structure):
     _fields_ = [
         ('timestamp', c_char_p),
         ('index', c_uint32),
-        ('type', c_ubyte),
+        ('eventType', c_ubyte),
         ('granted', c_bool),
         ('door', c_ubyte),
         ('direction', c_ubyte),
