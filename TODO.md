@@ -6,8 +6,8 @@
   - [ ] CCL: test failure handling
 
   - [ ] `get-event`
-        - [ ] C
-        - [ ] C++
+        - [x] C
+        - [x] C++
         - [ ] C#
         - [ ] Python
         - [ ] CCL

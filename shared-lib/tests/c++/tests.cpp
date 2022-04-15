@@ -33,6 +33,7 @@ vector<test> tests = {
     {"delete-cards", deleteCards},
     {"get-event-index", getEventIndex},
     {"set-event-index", setEventIndex},
+    {"get-event", getEvent},
 };
 
 extern const uint32_t DEVICE_ID = 405419896;

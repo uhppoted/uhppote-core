@@ -56,3 +56,32 @@ int setEventIndex(uhppoted &u, int argc, char **argv) {
 
     return -1;
 }
+
+int getEvent(uhppoted &u, int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    uint32_t index = EVENT_INDEX;
+
+    try {
+        event e = u.get_event(deviceID, index);
+
+        cout << endl
+             << "get-event" << endl;
+        cout << "  ID:                " << deviceID << endl;
+        cout << "  event timestamp:   " << e.timestamp << endl;
+        cout << "        index:       " << e.index << endl;
+        cout << "        type:        " << static_cast<int>(e.eventType) << endl;
+        cout << "        granted:     " << static_cast<int>(e.granted) << endl;
+        cout << "        direction:   " << static_cast<int>(e.direction) << endl;
+        cout << "        card number: " << static_cast<int>(e.card) << endl;
+        cout << "        reason:      " << static_cast<int>(e.reason) << endl;
+        cout << endl;
+
+        return 0;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return -1;
+}

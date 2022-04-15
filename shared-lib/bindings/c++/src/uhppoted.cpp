@@ -371,3 +371,25 @@ void uhppoted::set_event_index(uint32_t id, uint32_t index) {
         throw uhppoted_exception(err);
     }
 }
+
+event uhppoted::get_event(uint32_t id, uint32_t index) {
+    Event event;
+
+    char *err = GetEvent(u, &event, id, index);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+
+    struct event e;
+
+    e.timestamp = event.timestamp;
+    e.index = event.index;
+    e.eventType = event.eventType;
+    e.granted = event.granted;
+    e.door = event.door;
+    e.direction = event.direction;
+    e.card = event.card;
+    e.reason = event.reason;
+
+    return e;
+}

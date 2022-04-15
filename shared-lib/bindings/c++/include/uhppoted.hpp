@@ -87,7 +87,8 @@ class uhppoted {
     void delete_card(uint32_t id, uint32_t card_number);
     void delete_cards(uint32_t id);
     uint32_t get_event_index(uint32_t id);
-    void set_event_index(uint32_t id, uint32_t);
+    void set_event_index(uint32_t id, uint32_t index);
+    event get_event(uint32_t id, uint32_t index);
 
   private:
     UHPPOTE *u;

@@ -118,6 +118,11 @@ const vector<command> commands = {
         .help = "Sets the current event index on a controller.",
         .fn = setEventIndex,
     },
+    {
+        .cmd = "get-event",
+        .help = "Retrieves the event at the index from a controller.",
+        .fn = getEvent,
+    },
 };
 
 int main(int argc, char **argv) {
