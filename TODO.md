@@ -9,12 +9,12 @@
         - [ ] CCL
 
 - Shared-lib/DLL
-  - [ ] `get-event`
+  - [x] `get-event`
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
-        - [ ] CCL
+        - [x] CCL
 
   - [ ] `record-special-events`
   - [ ] `open-door`

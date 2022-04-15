@@ -22,6 +22,7 @@
         '("delete-cards"      "Deletes all cards from a controller.")
         '("get-event-index"   "Retrieves the current event index from a controller.")
         '("set-event-index"   "Sets the current event index on a controller.")
+        '("get-event"         "Retrieves the event at the index from a controller.")
 ))
 
 
@@ -43,42 +44,6 @@
     (format t "~%")))
 
 
-(defun get-device () ""
-  (format t "  get-device:~%    ~:w~%~%" (examples:get-device 405419896)))
-
-(defun set-address () ""
-  (format t "  set-address:~%    ~a~%~%" (examples:set-address 405419896 "192.168.1.125" "255.255.255.254" "192.168.1.5")))
-
-(defun get-status () ""
-  (format t "  get-status:~%    ~:w~%~%" (examples:get-status 405419896)))
-
-(defun get-time () ""
-  (format t "  get-time:~%    ~:w~%~%" (examples:get-time 405419896)))
-
-(defun set-time () ""
-  (format t "  set-time:~%    ~a~%~%" (examples:set-time 405419896 (now))))
-
-(defun get-listener () ""
-  (format t "  get-listener:~%    ~:w~%~%" (examples:get-listener 405419896)))
-
-(defun set-listener () ""
-  (format t "  set-listener:~%    ~a~%~%" (examples:set-listener 405419896 "192.168.1.100:60001")))
-
-(defun get-door-control () ""
-  (format t "  get-door-control:~%    ~:w~%~%" (examples:get-door-control 405419896 4)))
-
-(defun set-door-control () ""
-  (format t "  set-door-control:~%    ~:w~%~%" (examples:set-door-control 405419896 4 uhppoted:normally-open 9)))
-
-(defun get-cards () ""
-  (format t "  get-cards:~%    ~:w~%~%" (examples:get-cards 405419896)))
-
-(defun get-card () ""
-  (format t "  get-card:~%    ~:w~%~%" (examples:get-card 405419896 8000001)))
-
-(defun get-card-by-index () ""
-  (format t "  get-card-byindex:~% ~:w~%~%" (examples:get-card-by-index 405419896 7)))
-
 (defun main () ""
   (let ((args (parse-command-line)))
     (if (not args)
@@ -86,23 +51,24 @@
         (loop for arg in args
           do (cond ((string= arg "help")              (help))
                    ((string= arg "get-devices")       (examples:get-devices))
-                   ((string= arg "get-device")        (get-device))
-                   ((string= arg "set-address")       (set-address))
-                   ((string= arg "get-status")        (get-status))
-                   ((string= arg "get-time")          (get-time))
-                   ((string= arg "set-time")          (set-time))
-                   ((string= arg "get-listener")      (get-listener))
-                   ((string= arg "set-listener")      (set-listener))
-                   ((string= arg "get-door-control")  (get-door-control))
-                   ((string= arg "set-door-control")  (set-door-control))
-                   ((string= arg "get-cards")         (get-cards))
-                   ((string= arg "get-card")          (get-card))
-                   ((string= arg "get-card-by-index") (get-card-by-index))
+                   ((string= arg "get-device")        (examples:get-device))
+                   ((string= arg "set-address")       (examples:set-address))
+                   ((string= arg "get-status")        (examples:get-status))
+                   ((string= arg "get-time")          (examples:get-time))
+                   ((string= arg "set-time")          (examples:set-time))
+                   ((string= arg "get-listener")      (examples:get-listener))
+                   ((string= arg "set-listener")      (examples:set-listener))
+                   ((string= arg "get-door-control")  (examples:get-door-control))
+                   ((string= arg "set-door-control")  (examples:set-door-control))
+                   ((string= arg "get-cards")         (examples:get-cards))
+                   ((string= arg "get-card")          (examples:get-card))
+                   ((string= arg "get-card-by-index") (examples:get-card-by-index))
                    ((string= arg "put-card")          (examples:put-card))
                    ((string= arg "delete-card")       (examples:delete-card))
                    ((string= arg "delete-cards")      (examples:delete-cards))
                    ((string= arg "get-event-index")   (examples:get-event-index))
                    ((string= arg "set-event-index")   (examples:set-event-index))
+                   ((string= arg "get-event")         (examples:get-event))
                    (t (progn
                         (format t "~%   *** ERROR: invalid command (~a)~%"  arg) 
                         (usage))))))))
@@ -120,11 +86,6 @@
           ((eq (search executable (car args)) NIL) ())
           ((/= (+ (coerce (search executable (car args)) 'fixnum) (length executable)) (length (car args))) ())
           (t (cdr args)))))
-
-
-(defun now () ""
-  (multiple-value-bind (second minute hour day month year) (get-decoded-time)
-     (format nil "~4,'0d-~2,'0d-~2,'0d ~2,'0d:~2,'0d:~2,'0d" year month day hour minute second)))
 
 
 (defun make-app () ""

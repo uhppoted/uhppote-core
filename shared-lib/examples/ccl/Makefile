@@ -74,6 +74,9 @@ get-event-index: build
 set-event-index: build
 	$(CMD) set-event-index
 
+get-event: build
+	$(CMD) get-event
+
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp
 

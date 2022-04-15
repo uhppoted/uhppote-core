@@ -22,6 +22,7 @@
            delete-cards
            get-event-index
            set-event-index
+           get-event
            failed
            message))
 

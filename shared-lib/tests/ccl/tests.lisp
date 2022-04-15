@@ -339,6 +339,54 @@
           (result tag t)
           (error 'failed :message  "set-event-index  FAILED"))))
 
+(defun get-event () "" 
+  (let ((tag "get-event")
+        (ok T)
+        (event (exec #'(lambda (u) (uhppoted-get-event u TEST-DEVICE-ID TEST-EVENT-INDEX)))))
+       (if (not (equal 51 (event-index event))) 
+           (progn
+             (format t "~a:     incorrect event index - expected:~a, got:~a~%" tag 51 (event-index event))
+             (setf ok NIL)))
+
+       (if (not (string= "2022-04-15 12:29:15" (event-timestamp event))) 
+           (progn
+             (format t "~a:     incorrect event timestamp - expected:~a, got:~a~%" tag "2022-04-15 12:29:15" (event-timestamp event))
+             (setf ok NIL)))
+
+       (if (not (equal 6 (event-type event))) 
+           (progn
+             (format t "~a:     incorrect event type - expected:~a, got:~a~%" tag 6 (event-type event))
+             (setf ok NIL)))
+
+       (if (not (equal 1 (event-granted event))) 
+           (progn
+             (format t "~a:     incorrect event granted - expected:~a, got:~a~%" tag 1 (event-type event))
+             (setf ok NIL)))
+
+       (if (not (equal 3 (event-door event))) 
+           (progn
+             (format t "~a:     incorrect event door - expected:~a, got:~a~%" tag 3 (event-door event))
+             (setf ok NIL)))
+
+       (if (not (equal 1 (event-direction event))) 
+           (progn
+             (format t "~a:     incorrect event direction - expected:~a, got:~a~%" tag 1 (event-direction event))
+             (setf ok NIL)))
+
+       (if (not (equal 8165538 (event-card event))) 
+           (progn
+             (format t "~a:     incorrect event card number - expected:~a, got:~a~%" tag 8165538 (event-card event))
+             (setf ok NIL)))
+
+       (if (not (equal 21 (event-reason event))) 
+           (progn
+             (format t "~a:     incorrect event reason - expected:~a, got:~a~%" tag 21 (event-reason event))
+             (setf ok NIL)))
+
+       (if ok 
+          (result tag t)
+          (error 'failed :message  "get-event    FAILED"))))
+
 
 (defun result (tag ok) ""
   (if ok

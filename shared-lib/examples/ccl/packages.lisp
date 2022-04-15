@@ -21,5 +21,6 @@
            delete-card
            delete-cards
            get-event-index
-           set-event-index))
+           set-event-index
+           get-event))
 

@@ -23,6 +23,7 @@
         '("delete-cards"      tests:delete-cards)
         '("get-event-index"   tests:get-event-index)
         '("set-event-index"   tests:set-event-index)
+        '("get-event"         tests:get-event)
 ))
 
 

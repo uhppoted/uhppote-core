@@ -396,6 +396,23 @@
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
 
 
+(defun uhppoted-get-event (uhppote device-id index) "Retrieves the event at the index from on controller"
+  (rletz ((event (:struct :GoEvent)))
+    (with-macptrs ((err (external-call "GetEvent" :address uhppote 
+                                                  :address event
+                                                  :unsigned-long device-id 
+                                                  :unsigned-long index
+                                                  :address)))
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+      (make-event :timestamp (go-string (pref event :GoEvent.timestamp))
+                  :index     (pref event :GoEvent.index)
+                  :type      (pref event :GoEvent.type)
+                  :granted   (pref event :GoEvent.granted)
+                  :door      (pref event :GoEvent.door)
+                  :direction (pref event :GoEvent.direction)
+                  :card      (pref event :GoEvent.card)
+                  :reason    (pref event :GoEvent.reason)))))
+
 (defun debug () "" 
   (handler-bind
 	((uhppoted-error
