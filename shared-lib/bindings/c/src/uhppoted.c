@@ -437,3 +437,26 @@ int set_event_index(uint32_t id, uint32_t index) {
 
     return 0;
 }
+
+int get_event(uint32_t id, uint32_t index, event *e) {
+    struct Event event;
+
+    char *err = GetEvent(u, &event, id, index);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    snprintf(e->timestamp, sizeof(e->timestamp), "%s", event.timestamp);
+    e->index = event.index;
+    e->eventType = event.eventType;
+    e->granted = event.granted;
+    e->door = event.door;
+    e->direction = event.direction;
+    e->card = event.card;
+    e->reason = event.reason;
+
+    free(event.timestamp);
+
+    return 0;
+}

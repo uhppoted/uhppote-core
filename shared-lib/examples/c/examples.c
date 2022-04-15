@@ -114,6 +114,11 @@ const command commands[] = {
         .help = "Sets the current event index on a controller.",
         .fn = setEventIndex,
     },
+    {
+        .cmd = "get-event",
+        .help = "Retrieves the event at the index from a controller.",
+        .fn = getEvent,
+    },
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};

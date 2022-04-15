@@ -41,3 +41,27 @@ int setEventIndex(int argc, char **argv) {
 
     return 0;
 }
+
+int getEvent(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    uint32_t index = EVENT_INDEX;
+    event event;
+
+    if (get_event(deviceID, index, &event) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    printf("\nget-event\n");
+    printf("  ID:                %u\n", deviceID);
+    printf("  event timestamp:   %s\n", event.timestamp);
+    printf("        index:       %u\n", event.index);
+    printf("        type:        %u\n", event.eventType);
+    printf("        granted:     %d\n", event.granted);
+    printf("        direction:   %u\n", event.direction);
+    printf("        card number: %u\n", event.card);
+    printf("        reason:      %u\n", event.reason);
+    printf("\n");
+
+    return 0;
+}

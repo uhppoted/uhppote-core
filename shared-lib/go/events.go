@@ -34,3 +34,27 @@ func setEventIndex(uu uhppote.IUHPPOTE, deviceID uint32, index uint32) error {
 
 	return nil
 }
+
+func getEvent(uu uhppote.IUHPPOTE, event *C.struct_Event, deviceID uint32, index uint32) error {
+	if event == nil {
+		return fmt.Errorf("invalid argument (event) - expected valid pointer")
+	}
+
+	e, err := uu.GetEvent(deviceID, index)
+	if err != nil {
+		return err
+	} else if e == nil {
+		return fmt.Errorf("%v: no response to get-event %v", deviceID, index)
+	}
+
+	event.timestamp = C.CString(fmt.Sprintf("%v", e.Timestamp))
+	event.index = C.uint(e.Index)
+	event.eventType = C.uchar(e.Type)
+	event.granted = cbool(e.Granted)
+	event.door = C.uchar(e.Door)
+	event.direction = C.uchar(e.Direction)
+	event.card = C.uint(e.CardNumber)
+	event.reason = C.uchar(e.Reason)
+
+	return nil
+}

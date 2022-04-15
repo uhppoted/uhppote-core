@@ -18,6 +18,7 @@ typedef struct test {
 const uint32_t DEVICE_ID = 405419896;
 const uint32_t CARD_NUMBER = 8165538;
 const uint32_t CARD_INDEX = 19;
+const uint32_t EVENT_INDEX = 51;
 const uint8_t DOOR = 4;
 
 bool result(const char *tag, bool ok) {
@@ -47,7 +48,11 @@ const test tests[] = {
     {.name = "delete-cards", .fn = deleteCards},
     {.name = "get-event-index", .fn = getEventIndex},
     {.name = "set-event-index", .fn = setEventIndex},
+    {.name = "get-event", .fn = getEvent},
 };
+
+controller alpha = {.id = 405419896, .address = "192.168.1.100"};
+controller beta = {.id = 303986753, .address = "192.168.1.100"};
 
 int main(int argc, char **argv) {
     bool ok = true;
@@ -56,9 +61,6 @@ int main(int argc, char **argv) {
     if (argc > 1) {
         cmd = argv[1];
     }
-
-    controller alpha = {.id = 405419896, .address = "192.168.1.100"};
-    controller beta = {.id = 303986753, .address = "192.168.1.100"};
 
     setup("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2500, true, &alpha, &beta, NULL);
 

@@ -103,14 +103,6 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		return fmt.Errorf("%v: no response to get-status", deviceID)
 	}
 
-	cbool := func(b bool) C.uchar {
-		if b {
-			return 1
-		} else {
-			return 0
-		}
-	}
-
 	format := func(t *types.DateTime) string {
 		if t != nil {
 			return time.Time(*t).Format("2006-01-02 15:04:05")

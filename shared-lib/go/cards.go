@@ -32,23 +32,23 @@ func getCard(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, cardNumb
 		return fmt.Errorf("invalid argument (card) - expected valid pointer")
 	}
 
-	response, err := uu.GetCardByID(deviceID, cardNumber)
+	c, err := uu.GetCardByID(deviceID, cardNumber)
 	if err != nil {
 		return err
-	} else if response == nil {
+	} else if c == nil {
 		return fmt.Errorf("%v: no response to get-card %v", deviceID, cardNumber)
 	}
 
-	card.card_number = C.uint(response.CardNumber)
-	card.from = C.CString(fmt.Sprintf("%v", response.From))
-	card.to = C.CString(fmt.Sprintf("%v", response.To))
+	card.card_number = C.uint(c.CardNumber)
+	card.from = C.CString(fmt.Sprintf("%v", c.From))
+	card.to = C.CString(fmt.Sprintf("%v", c.To))
 
 	doors := unsafe.Slice(card.doors, 4)
 
-	doors[0] = C.uchar(response.Doors[1])
-	doors[1] = C.uchar(response.Doors[2])
-	doors[2] = C.uchar(response.Doors[3])
-	doors[3] = C.uchar(response.Doors[4])
+	doors[0] = C.uchar(c.Doors[1])
+	doors[1] = C.uchar(c.Doors[2])
+	doors[2] = C.uchar(c.Doors[3])
+	doors[3] = C.uchar(c.Doors[4])
 
 	return nil
 }

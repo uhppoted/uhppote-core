@@ -3,21 +3,15 @@
 ### IN PROGRESS
 
 - Shared-lib/DLL
-  - [x] CCL: constants for ControlMode
-
-  - [x] Check received values in tests
-        - [x] `get-status`
-        - [x] `get-time`
-        - [x] `set-time`
-  
-  - [x] `set-event-index`
-        - [x] C
-        - [x] C++
-        - [x] C#
-        - [x] Python
-        - [x] CCL
+  - [ ] CCL: test failure handling
 
   - [ ] `get-event`
+        - [ ] C
+        - [ ] C++
+        - [ ] C#
+        - [ ] Python
+        - [ ] CCL
+
   - [ ] `record-special-events`
   - [ ] `open-door`
   - [ ] `get-time-profile`
@@ -33,13 +27,11 @@
   - [ ] python: 
         - https://martinheinz.dev/blog/70
   - [ ] CCL
-        - handles test failure horribly
         - DOLIST
         - simplify main loop with `thereis` (https://gigamonkeys.com/book/loop-for-black-belts.html)
   - [ ] Commonalise test failure format
   - [ ] GetCardByIndex should return 'card deleted' error for ff ff ff ff in response
   - [ ] Constants for event types, reason, etc
-
   - [ ] lint
   - (?) Cross-compile
         - https://github.com/elastic/golang-crossbuild
