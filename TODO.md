@@ -1,15 +1,19 @@
 ## v0.7.x
 
 ### IN PROGRESS
+  - [ ] Commonalise test failure format
+        - [ ] C
+        - [ ] C++
+        - [ ] C#
+        - [ ] Python
+        - [ ] CCL
 
 - Shared-lib/DLL
-  - [ ] CCL: test failure handling
-
   - [ ] `get-event`
         - [x] C
         - [x] C++
-        - [ ] C#
-        - [ ] Python
+        - [x] C#
+        - [x] Python
         - [ ] CCL
 
   - [ ] `record-special-events`
@@ -27,9 +31,9 @@
   - [ ] python: 
         - https://martinheinz.dev/blog/70
   - [ ] CCL
+        - test failure handling
         - DOLIST
         - simplify main loop with `thereis` (https://gigamonkeys.com/book/loop-for-black-belts.html)
-  - [ ] Commonalise test failure format
   - [ ] GetCardByIndex should return 'card deleted' error for ff ff ff ff in response
   - [ ] Constants for event types, reason, etc
   - [ ] lint
