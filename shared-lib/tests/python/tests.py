@@ -43,394 +43,222 @@ def tests():
 
 
 def get_devices(u):
+    tag = 'get-devices'
     devices = u.get_devices()
-    ok = True
 
-    if len(devices) != 3:
-        print(f"get-devices: incorrect device count - expected:3, got:{len(devices)}")
-        ok = False
-    elif (devices[0] != 201020304 or devices[1] != 303986753 or devices[2] != 405419896):
-        print(
-            f"get-devices: incorrect device list - expected:[ 201020304,303986753,405419896 ], got:[ {devices[0]},{devices[1]},{devices[2]} ]"
-        )
-        ok = False
-
-    if ok:
-        print(f"get-devices       ok")
-
-    return ok
+    return evaluate(tag, [
+        ('device count', 3, len(devices)),
+        ('device list', [201020304, 303986753, 405419896], [devices[0], devices[1], devices[2]]),
+    ])
 
 
 def get_device(u):
+    tag = 'get-device'
     info = u.get_device(DEVICE_ID)
-    ok = True
 
-    if info.ID != 405419896:
-        print(f"get-device: incorrect device ID - expected:405419896, got:{info.ID}")
-        ok = False
-
-    if info.address != "192.168.1.101":
-        print(f"get-device: incorrect IP address - expected:192.168.1.101, got:{info.address}")
-        ok = False
-
-    if info.subnet != "255.255.255.0":
-        print(f"get-device: incorrect subnet mask - expected:255.255.255.0, got:{info.subnet}")
-        ok = False
-
-    if info.gateway != "192.168.1.1":
-        print(f"get-device: incorrect gateway address - expected:192.168.1.1, got:{info.gateway}")
-        ok = False
-
-    if info.MAC != "00:12:23:34:45:56":
-        print(f"get-device: incorrect MAC address - expected:00:12:23:34:45:56, got:{info.MAC}")
-        ok = False
-
-    if info.version != "v8.92":
-        print(f"get-device: incorrect version - expected:v8.92, got:{info.version}")
-        ok = False
-
-    if info.date != "2018-11-05":
-        print(f"get-device: incorrect date - expected:2018-11-05, got:{info.date}")
-        ok = False
-
-    if ok:
-        print(f"get-device        ok")
-
-    return ok
+    return evaluate(tag, [
+        ('device ID', 405419896, info.ID),
+        ('IP address', '192.168.1.101', info.address),
+        ('subnet mask', '255.255.255.0', info.subnet),
+        ('gateway address', '192.168.1.1', info.gateway),
+        ('MAC address', '00:12:23:34:45:56', info.MAC),
+        ('version', 'v8.92', info.version),
+        ('date', '2018-11-05', info.date),
+    ])
 
 
 def set_address(u):
+    tag = 'set-address'
     u.set_address(DEVICE_ID, "192.168.1.125", "255.255.254.0", "192.168.1.0")
-    ok = True
 
-    if ok:
-        print(f"set-address       ok")
-
-    return ok
+    return evaluate(tag, [])
 
 
 def get_status(u):
+    tag = 'get-status'
     status = u.get_status(DEVICE_ID)
-    ok = True
 
-    if status.ID != 405419896:
-        print(f"get-status: incorrect device ID - expected:405419896, got:{status.ID}")
-        ok = False
-
-    if status.sysdatetime != "2022-03-19 15:48:32":
-        print(f"get-status: incorrect system date/time - expected:2022-03-19 15:48:32, got:{status.sysdatetime}")
-        ok = False
-
-    if status.doors[0] != 1 or status.doors[1] != 0 or status.doors[2] != 0 or status.doors[3] != 1:
-        print(
-            f"get-status: incorrect doors state - expected:[1,0,0,1], got:[{status.doors[0]},{status.doors[1]},{status.doors[2]},{status.doors[3]}]"
-        )
-        ok = False
-
-    if status.buttons[0] != 1 or status.buttons[1] != 0 or status.buttons[2] != 1 or status.buttons[3] != 0:
-        print(
-            f"get-status: incorrect buttons state - expected:[1,0,1,0], got:[{status.buttons[0]},{status.buttons[1]},{status.buttons[2]},{status.buttons[3]}]"
-        )
-        ok = False
-
-    if status.relays != 0x12:
-        print(f"get-status: incorrect relay state - expected:0x12, got:{status.relays}")
-        ok = False
-
-    if status.inputs != 0x34:
-        print(f"get-status: incorrect inputs state - expected:0x34, got:{status.inputs}")
-        ok = False
-
-    if status.syserror != 0x56:
-        print(f"get-status: incorrect system error - expected:0x56, got:{status.syserror}")
-        ok = False
-
-    if status.info != 253:
-        print(f"get-status: incorrect special info - expected:253, got:{status.info}")
-        ok = False
-
-    if status.seqno != 9876:
-        print(f"get-status: incorrect sequence number - expected:9876, got:{status.seqno}")
-        ok = False
-
-    if status.event.timestamp != "2022-01-02 12:34:56":
-        print(f"get-status: incorrect event timestamp - expected:2022-01-02 12:34:56, got:{status.event.timestamp}")
-        ok = False
-
-    if status.event.index != 135:
-        print(f"get-status: incorrect event index - expected:135, got:{status.event.index}")
-        ok = False
-
-    if status.event.eventType != 6:
-        print(f"get-status: incorrect event type - expected:6, got:{status.event.eventType}")
-        ok = False
-
-    if status.event.granted != 1:
-        print(f"get-status: incorrect event granted - expected:1, got:{status.event.granted}")
-        ok = False
-
-    if status.event.door != 3:
-        print(f"get-status: incorrect event door - expected:3, got:{status.event.door}")
-        ok = False
-
-    if status.event.direction != 1:
-        print(f"get-status: incorrect event direction - expected:1, got:{status.event.direction}")
-        ok = False
-
-    if status.event.card != 8100023:
-        print(f"get-status: incorrect event card - expected:8100023, got:{status.event.card}")
-        ok = False
-
-    if status.event.reason != 21:
-        print(f"get-status: incorrect event reason - expected:21, got:{status.event.reason}")
-        ok = False
-
-    if ok:
-        print(f"get-status        ok")
-
-    return ok
+    return evaluate(tag, [
+        ('device ID', 405419896, status.ID),
+        ('system date/time', '2022-03-19 15:48:32', status.sysdatetime),
+        ('doors state', [1, 0, 0, 1], [status.doors[0], status.doors[1], status.doors[2], status.doors[3]]),
+        ('buttons state', [1, 0, 1, 0], [status.buttons[0], status.buttons[1], status.buttons[2], status.buttons[3]]),
+        ('relay state', 0x12, status.relays),
+        ('inputs state', 0x34, status.inputs),
+        ('system error', 0x56, status.syserror),
+        ('special info', 253, status.info),
+        ('sequence number', 9876, status.seqno),
+        ('event timestamp', '2022-01-02 12:34:56', status.event.timestamp),
+        ('event index', 135, status.event.index),
+        ('event type', 6, status.event.eventType),
+        ('event granted', 1, status.event.granted),
+        ('event door', 3, status.event.door),
+        ('event direction', 1, status.event.direction),
+        ('event card', 8100023, status.event.card),
+        ('event reason', 21, status.event.reason),
+    ])
 
 
 def get_time(u):
+    tag = 'get-time'
     datetime = u.get_time(DEVICE_ID)
-    ok = True
 
-    if datetime != "2022-01-02 12:34:56":
-        print(f"get-time: incorrect date/time - expected:2022-01-02 12:34:56, got:{datetime}")
-        ok = False
-
-    if ok:
-        print(f"get-time          ok")
-
-    return ok
+    return evaluate(tag, [
+        ('date/time', '2022-01-02 12:34:56', datetime),
+    ])
 
 
 def set_time(u):
+    tag = 'set-time'
     u.set_time(DEVICE_ID, '2022-03-23 12:24:17')
-    ok = True
 
-    if ok:
-        print(f"set-time          ok")
-
-    return ok
+    return evaluate(tag, [])
 
 
 def get_listener(u):
+    tag = 'get-listener'
     listener = u.get_listener(DEVICE_ID)
-    ok = True
 
-    if listener != "192.168.1.100:60001":
-        print(f"get-listener: incorrect event listener - expected:192.168.1.100:60001, got:{listener}")
-        ok = False
-
-    if ok:
-        print(f"get-listener      ok")
-
-    return ok
+    return evaluate(tag, [
+        ('event listener', '192.168.1.100:60001', listener),
+    ])
 
 
 def set_listener(u):
+    tag = 'set-listener'
     u.set_listener(DEVICE_ID, '192.168.1.100:60001')
-    ok = True
 
-    if ok:
-        print(f"set-listener      ok")
-
-    return ok
+    return evaluate(tag, [])
 
 
 def get_door_control(u):
+    tag = 'get-door-control'
     control = u.get_door_control(DEVICE_ID, DOOR)
-    ok = True
 
-    if control.mode != CONTROLLED:
-        print(f"get-door-control: incorrect door control mode - expected:3, got:{control.mode}")
-        ok = False
-
-    if control.delay != 7:
-        print(f"get-door-control: incorrect door open delay - expected:7, got:{control.delay}")
-        ok = False
-
-    if ok:
-        print(f"get-door-control  ok")
-
-    return ok
+    return evaluate(tag, [
+        ('door control mode', CONTROLLED, control.mode),
+        ('door open delay', 7, control.delay),
+    ])
 
 
 def set_door_control(u):
+    tag = 'set-door-control'
     u.set_door_control(DEVICE_ID, DOOR, NORMALLY_CLOSED, 6)
 
-    if ok:
-        print(f"set-door-control  ok")
-
-    return True
+    return evaluate(tag, [])
 
 
 def get_cards(u):
     tag = 'get-cards'
-    expected = 39
-    ok = True
-
     cards = u.get_cards(DEVICE_ID)
 
-    if cards != expected:
-        print(f"{tag}: incorrect card count - expected:{expected}, got:{cards}")
-        ok = False
-
-    return result(tag, ok)
+    return evaluate(tag, [
+        ('card count', 39, cards),
+    ])
 
 
 def get_card(u):
     tag = 'get-card'
-    ok = True
-
     card = u.get_card(DEVICE_ID, CARD_NUMBER)
 
-    if card.cardNumber != 8165538:
-        print(f"{tag}: incorrect card number - expected:8165538, got:{card.cardNumber}")
-        ok = False
-
-    if card.start != '2022-01-01':
-        print(f"{tag}: incorrect 'from' date - expected:2022-01-01, got:{card.start}")
-        ok = False
-
-    if card.end != '2022-12-31':
-        print(f"{tag}: incorrect 'to' date - expected:2022-12-31, got:{card.end}")
-        ok = False
-
-    if card.doors[0] != 0:
-        print(f"{tag}: incorrect door[1] - expected:0, got:{card.doors[0]}")
-        ok = False
-
-    if card.doors[1] != 1:
-        print(f"{tag}: incorrect door[2] - expected:1, got:{card.doors[1]}")
-        ok = False
-
-    if card.doors[2] != 31:
-        print(f"{tag}: incorrect door[3] - expected:31, got:{card.doors[2]}")
-        ok = False
-
-    if card.doors[3] != 75:
-        print(f"{tag}: incorrect door[42] - expected:75, got:{card.doors[3]}")
-        ok = False
-
-    return result(tag, ok)
+    return evaluate(tag, [
+        ('card number', 8165538, card.cardNumber),
+        ('from date', '2022-01-01', card.start),
+        ('to date', '2022-12-31', card.end),
+        ('door[1]', 0, card.doors[0]),
+        ('door[2]', 1, card.doors[1]),
+        ('door[3]', 31, card.doors[2]),
+        ('door[42]', 75, card.doors[3]),
+    ])
 
 
 def get_card_by_index(u):
     tag = 'get-card-by-index'
-    ok = True
-
     card = u.get_card_by_index(DEVICE_ID, CARD_INDEX)
 
-    if card.cardNumber != 8165538:
-        print(f"get-card_by_index: incorrect card number - expected:8165538, got:{card.cardNumber}")
-        ok = False
-
-    if card.start != '2022-01-01':
-        print(f"get-card_by_index: incorrect 'from' date - expected:2022-01-01, got:{card.start}")
-        ok = False
-
-    if card.end != '2022-12-31':
-        print(f"get-card_by_index: incorrect 'to' date - expected:2022-12-31, got:{card.end}")
-        ok = False
-
-    if card.doors[0] != 0:
-        print(f"get-card_by_index: incorrect door[1] - expected:0, got:{card.doors[0]}")
-        ok = False
-
-    if card.doors[1] != 1:
-        print(f"get-card_by_index: incorrect door[2] - expected:1, got:{card.doors[1]}")
-        ok = False
-
-    if card.doors[2] != 31:
-        print(f"get-card_by_index: incorrect door[3] - expected:31, got:{card.doors[2]}")
-        ok = False
-
-    if card.doors[3] != 75:
-        print(f"get-card_by_index: incorrect door[42] - expected:75, got:{card.doors[3]}")
-        ok = False
-
-    return result(tag, ok)
+    return evaluate(tag, [
+        ('card number', 8165538, card.cardNumber),
+        ('from date', '2022-01-01', card.start),
+        ('to date', '2022-12-31', card.end),
+        ('door[1]', 0, card.doors[0]),
+        ('door[2]', 1, card.doors[1]),
+        ('door[3]', 31, card.doors[2]),
+        ('door[42]', 75, card.doors[3]),
+    ])
 
 
 def put_card(u):
     tag = 'put-card'
-    ok = True
-
     u.put_card(DEVICE_ID, CARD_NUMBER, '2022-01-01', '2022-12-31', [0, 1, 31, 75])
 
-    return result(tag, ok)
+    return evaluate(tag, [])
 
 
 def delete_card(u):
     tag = 'delete_card'
-    ok = True
-
     u.delete_card(DEVICE_ID, CARD_NUMBER)
 
-    return result(tag, ok)
+    return evaluate(tag, [])
 
 
 def delete_cards(u):
     tag = 'delete_cards'
-    ok = True
-
     u.delete_cards(DEVICE_ID)
 
-    return result(tag, ok)
+    return evaluate(tag, [])
 
 
 def get_event_index(u):
     tag = 'get_event_index'
     index = u.get_event_index(DEVICE_ID)
 
-    ok = True
-    ok = eval(tag, 'event index', 47, index, ok)
-
-    return result(tag, ok)
+    return evaluate(tag, [
+        ('event index', 47, index),
+    ])
 
 
 def set_event_index(u):
     tag = 'set_event_index'
     u.set_event_index(DEVICE_ID, EVENT_INDEX)
 
-    return result(tag, True)
+    return evaluate(tag, [])
 
 
 def get_event(u):
     tag = 'get-event'
     event = u.get_event(DEVICE_ID, EVENT_INDEX)
 
+    return evaluate(tag, [
+        ('event index', 51, event.index),
+        ('event timestamp', '2022-04-15 12:29:15', event.timestamp),
+        ('event type', 6, event.eventType),
+        ('event granted', True, event.granted),
+        ('event door', 3, event.door),
+        ('event direction', 1, event.direction),
+        ('event card', 8165538, event.card),
+        ('event reason', 21, event.reason),
+    ])
+
+
+def evaluate(tag, resultset):
     ok = True
-    ok = eval(tag, 'event index', 51, event.index, ok)
-    ok = eval(tag, 'event timestamp', '2022-04-15 12:29:15', event.timestamp, ok)
-    ok = eval(tag, 'event type', 6, event.eventType, ok)
-    ok = eval(tag, 'event granted', True, event.granted, ok)
-    ok = eval(tag, 'event door', 3, event.door, ok)
-    ok = eval(tag, 'event direction', 1, event.direction, ok)
-    ok = eval(tag, 'event card', 8165538, event.card, ok)
-    ok = eval(tag, 'event reason', 21, event.reason, ok)
+    for row in resultset:
+        field, expected, actual = row
+        if actual != expected:
+            print(f"{tag}: incorrect {field} - expected:{expected}, got:{actual}")
+            ok = False
 
-    return result(tag, ok)
+    return passed(tag) if ok else failed(tag)
 
 
-def eval(tag, field, expected, actual, ok):
-    if actual != expected:
-        return fail(tag, field, expected, actual)
-    return ok
+def passed(tag):
+    print(f'{tag:<17} ok')
+    return True
 
 
-def fail(tag, field, expected, actual):
-    print(f"{tag}: incorrect {field} - expected:{expected}, got:{actual}")
+def failed(tag):
+    print(f'{tag:<17} failed')
     return False
-
-
-def result(tag, ok):
-    if ok:
-        print(f'{tag:<17} ok')
-
-    return ok
 
 
 def usage():
@@ -449,14 +277,15 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         cmd = sys.argv[1]
 
-    alpha = uhppoted.Controller(405419896, '192.168.1.100')
-    beta = uhppoted.Controller(303986753, '192.168.1.100')
-    controllers = [alpha, beta]
+    controllers = [
+        uhppoted.Controller(405419896, '192.168.1.100'),
+        uhppoted.Controller(303986753, '192.168.1.100'),
+    ]
 
     u = uhppoted.Uhppote(
         uhppote=uhppoted.UHPPOTE('192.168.1.100', '192.168.1.255', '192.168.1.100:60001', 2500, controllers, True))
-    ok = True
 
+    ok = True
     try:
         if cmd in tests():
             ok = ok if tests()[cmd](u) else False
