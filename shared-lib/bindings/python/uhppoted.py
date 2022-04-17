@@ -15,6 +15,8 @@ from ctypes import Structure
 from ctypes import POINTER
 
 from dataclasses import dataclass
+from functools import cache
+from types import SimpleNamespace
 from typing import Final
 
 if 'Windows' in platform.system():
@@ -100,6 +102,7 @@ class Uhppote:
         if uhppote:
             self._uhppote = GoUHPPOTE(uhppote.bind, uhppote.broadcast, uhppote.listen,
                                       uhppote.timeout, uhppote.controllers, uhppote.debug)
+        self.ffi = FFI(self.errcheck)
 
     @staticmethod
     def errcheck(err, func, args):
@@ -109,18 +112,13 @@ class Uhppote:
             return args
 
     def get_devices(self):
-        GetDevices = lib.GetDevices
-        GetDevices.argtypes = [POINTER(GoUHPPOTE), POINTER(ctypes.c_int), POINTER(ctypes.c_uint32)]
-        GetDevices.restype = ctypes.c_char_p
-        GetDevices.errcheck = self.errcheck
-
         N = 0
         while True:
             N = N + 16
             count = ctypes.c_int(N)
             list = (c_uint32 * N)(*[0] * N)
 
-            GetDevices(self._uhppote, byref(count), list)
+            self.ffi.GetDevices(self._uhppote, byref(count), list)
 
             if count.value <= N:
                 break
@@ -128,41 +126,25 @@ class Uhppote:
         return list[0:count.value]
 
     def get_device(self, deviceID):
-        GetDevice = lib.GetDevice
-        GetDevice.argtypes = [POINTER(GoUHPPOTE), POINTER(GoDevice), c_ulong]
-        GetDevice.restype = ctypes.c_char_p
-        GetDevice.errcheck = self.errcheck
-
         device = GoDevice()
 
-        GetDevice(self._uhppote, byref(device), deviceID)
+        self.ffi.GetDevice(self._uhppote, byref(device), deviceID)
 
         return Device(device.ID, device.address.decode('utf-8'), device.subnet.decode('utf-8'),
                       device.gateway.decode('utf-8'), device.MAC.decode('utf-8'),
                       device.version.decode('utf-8'), device.date.decode('utf-8'))
 
     def set_address(self, deviceID, address, subnet, gateway):
-        SetAddress = lib.SetAddress
-        SetAddress.argtypes = [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p]
-        SetAddress.restype = ctypes.c_char_p
-        SetAddress.errcheck = self.errcheck
-
-        SetAddress(self._uhppote, deviceID, c_char_p(bytes(address, 'utf-8')),
-                   c_char_p(bytes(subnet, 'utf-8')), c_char_p(bytes(gateway, 'utf-8')))
+        self.ffi.SetAddress(self._uhppote, deviceID, c_char_p(bytes(address, 'utf-8')),
+                            c_char_p(bytes(subnet, 'utf-8')), c_char_p(bytes(gateway, 'utf-8')))
 
     def get_status(self, deviceID):
-        GetStatus = lib.GetStatus
-        GetStatus.argtypes = [POINTER(GoUHPPOTE), POINTER(GoStatus), c_ulong]
-        GetStatus.restype = ctypes.c_char_p
-        GetStatus.errcheck = self.errcheck
-
         status = GoStatus()
-
         status.doors = (c_ubyte * 4)(*[0] * 4)
         status.buttons = (c_ubyte * 4)(*[0] * 4)
         status.event = pointer(GoEvent())
 
-        GetStatus(self._uhppote, ctypes.byref(status), deviceID)
+        self.ffi.GetStatus(self._uhppote, ctypes.byref(status), deviceID)
 
         doors = [False, False, False, False]
         buttons = [False, False, False, False]
@@ -188,184 +170,164 @@ class Uhppote:
                       status.inputs, status.syserror, status.seqno, status.info, event)
 
     def get_time(self, deviceID):
-        GetTime = lib.GetTime
-        GetTime.argtypes = [POINTER(GoUHPPOTE), POINTER(c_char_p), c_ulong]
-        GetTime.restype = ctypes.c_char_p
-        GetTime.errcheck = self.errcheck
-
         datetime = c_char_p()
 
-        GetTime(self._uhppote, byref(datetime), deviceID)
+        self.ffi.GetTime(self._uhppote, byref(datetime), deviceID)
 
         return datetime.value.decode('utf-8')
 
     def set_time(self, deviceID, datetime):
-        SetTime = lib.SetTime
-        SetTime.argtypes = [POINTER(GoUHPPOTE), c_ulong, c_char_p]
-        SetTime.restype = ctypes.c_char_p
-        SetTime.errcheck = self.errcheck
-
-        SetTime(self._uhppote, deviceID, c_char_p(bytes(datetime, 'utf-8')))
+        self.ffi.SetTime(self._uhppote, deviceID, c_char_p(bytes(datetime, 'utf-8')))
 
     def get_listener(self, deviceID):
-        GetListener = lib.GetListener
-        GetListener.argtypes = [POINTER(GoUHPPOTE), POINTER(c_char_p), c_ulong]
-        GetListener.restype = ctypes.c_char_p
-        GetListener.errcheck = self.errcheck
-
         listener = c_char_p()
 
-        GetListener(self._uhppote, byref(listener), deviceID)
+        self.ffi.GetListener(self._uhppote, byref(listener), deviceID)
 
         return listener.value.decode('utf-8')
 
     def set_listener(self, deviceID, listener):
-        SetListener = lib.SetListener
-        SetListener.argtypes = [POINTER(GoUHPPOTE), c_ulong, c_char_p]
-        SetListener.restype = ctypes.c_char_p
-        SetListener.errcheck = self.errcheck
-
-        SetListener(self._uhppote, deviceID, c_char_p(bytes(listener, 'utf-8')))
+        self.ffi.SetListener(self._uhppote, deviceID, c_char_p(bytes(listener, 'utf-8')))
 
     def get_door_control(self, deviceID, door):
-        GetDoorControl = lib.GetDoorControl
-        GetDoorControl.argtypes = [POINTER(GoUHPPOTE), POINTER(GoDoorControl), c_ulong, c_ubyte]
-        GetDoorControl.restype = ctypes.c_char_p
-        GetDoorControl.errcheck = self.errcheck
-
         control = GoDoorControl()
 
-        GetDoorControl(self._uhppote, byref(control), deviceID, door)
+        self.ffi.GetDoorControl(self._uhppote, byref(control), deviceID, door)
 
         return DoorControl(control.control, control.delay)
 
     def set_door_control(self, deviceID, door, mode, delay):
-        SetDoorControl = lib.SetDoorControl
-        SetDoorControl.argtypes = [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ubyte, c_ubyte]
-        SetDoorControl.restype = ctypes.c_char_p
-        SetDoorControl.errcheck = self.errcheck
-
-        SetDoorControl(self._uhppote, deviceID, door, mode, delay)
+        self.ffi.SetDoorControl(self._uhppote, deviceID, door, mode, delay)
 
     def get_cards(self, deviceID):
-        GetCards = lib.GetCards
-        GetCards.argtypes = [POINTER(GoUHPPOTE), POINTER(c_int), c_ulong]
-        GetCards.restype = ctypes.c_char_p
-        GetCards.errcheck = self.errcheck
-
         cards = ctypes.c_int(0)
 
-        GetCards(self._uhppote, byref(cards), deviceID)
+        self.ffi.GetCards(self._uhppote, byref(cards), deviceID)
 
         return cards.value
 
     def get_card(self, deviceID, cardNumber):
-        GetCard = lib.GetCard
-        GetCard.argtypes = [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]
-        GetCard.restype = ctypes.c_char_p
-        GetCard.errcheck = self.errcheck
-
         card = GoCard()
-
         card.doors = (c_ubyte * 4)(*[0] * 4)
 
-        GetCard(self._uhppote, byref(card), deviceID, cardNumber)
+        self.ffi.GetCard(self._uhppote, byref(card), deviceID, cardNumber)
 
         doors = [0, 0, 0, 0]
-
         for i in range(4):
             doors[i] = card.doors[i]
 
         return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors)
 
     def get_card_by_index(self, deviceID, index):
-        GetCardByIndex = lib.GetCardByIndex
-        GetCardByIndex.argtypes = [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]
-        GetCardByIndex.restype = ctypes.c_char_p
-        GetCardByIndex.errcheck = self.errcheck
-
         card = GoCard()
-
         card.doors = (c_ubyte * 4)(*[0] * 4)
 
-        GetCardByIndex(self._uhppote, byref(card), deviceID, index)
+        self.ffi.GetCardByIndex(self._uhppote, byref(card), deviceID, index)
 
         doors = [0, 0, 0, 0]
-
         for i in range(4):
             doors[i] = card.doors[i]
 
         return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors)
 
     def put_card(self, deviceID, cardNumber, start, end, doors):
-        PutCard = lib.PutCard
-        PutCard.argtypes = [
-            POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, c_char_p,
-            POINTER(c_ubyte)
-        ]
-        PutCard.restype = ctypes.c_char_p
-        PutCard.errcheck = self.errcheck
-
         _doors = (c_ubyte * 4)(*[0] * 4)
         _doors[0] = doors[0]
         _doors[1] = doors[1]
         _doors[2] = doors[2]
         _doors[3] = doors[3]
 
-        PutCard(self._uhppote, deviceID, cardNumber, c_char_p(bytes(start, 'utf-8')),
-                c_char_p(bytes(end, 'utf-8')), _doors)
+        self.ffi.PutCard(self._uhppote, deviceID, cardNumber, c_char_p(bytes(start, 'utf-8')),
+                         c_char_p(bytes(end, 'utf-8')), _doors)
 
     def delete_card(self, deviceID, cardNumber):
-        DeleteCard = lib.DeleteCard
-        DeleteCard.argtypes = [POINTER(GoUHPPOTE), c_ulong, c_ulong]
-        DeleteCard.restype = ctypes.c_char_p
-        DeleteCard.errcheck = self.errcheck
-
-        DeleteCard(self._uhppote, deviceID, cardNumber)
+        self.ffi.DeleteCard(self._uhppote, deviceID, cardNumber)
 
     def delete_cards(self, deviceID):
-        DeleteCards = lib.DeleteCards
-        DeleteCards.argtypes = [POINTER(GoUHPPOTE), c_ulong]
-        DeleteCards.restype = ctypes.c_char_p
-        DeleteCards.errcheck = self.errcheck
-
-        DeleteCards(self._uhppote, deviceID)
+        self.ffi.DeleteCards(self._uhppote, deviceID)
 
     def get_event_index(self, deviceID):
-        GetEventIndex = lib.GetEventIndex
-        GetEventIndex.argtypes = [POINTER(GoUHPPOTE), POINTER(c_ulong), c_ulong]
-        GetEventIndex.restype = ctypes.c_char_p
-        GetEventIndex.errcheck = self.errcheck
-
         index = ctypes.c_ulong(0)
 
-        GetEventIndex(self._uhppote, byref(index), deviceID)
+        self.ffi.GetEventIndex(self._uhppote, byref(index), deviceID)
 
         return index.value
 
     def set_event_index(self, deviceID, index):
-        SetEventIndex = lib.SetEventIndex
-        SetEventIndex.argtypes = [POINTER(GoUHPPOTE), c_ulong, c_ulong]
-        SetEventIndex.restype = ctypes.c_char_p
-        SetEventIndex.errcheck = self.errcheck
-
-        SetEventIndex(self._uhppote, deviceID, index)
+        self.ffi.SetEventIndex(self._uhppote, deviceID, index)
 
     def get_event(self, deviceID, index):
-        GetEvent = lib.GetEvent
-        GetEvent.argtypes = [POINTER(GoUHPPOTE), POINTER(GoEvent), c_ulong, c_ulong]
-        GetEvent.restype = ctypes.c_char_p
-        GetEvent.errcheck = self.errcheck
-
         event = GoEvent()
 
-        GetEvent(self._uhppote, byref(event), deviceID, index)
+        self.ffi.GetEvent(self._uhppote, byref(event), deviceID, index)
 
         return Event(event.timestamp.decode('utf-8'), event.index, event.eventType, event.granted,
                      event.door, event.direction, event.card, event.reason)
 
 
-# INTERNAL TYPES
+# Go FFI types
+
+
+class FFI:
+    def __init__(self, errcheck):
+        self.GetDevices = ffi('GetDevices', errcheck)
+        self.GetDevice = ffi('GetDevice', errcheck)
+        self.SetAddress = ffi('SetAddress', errcheck)
+        self.GetStatus = ffi('GetStatus', errcheck)
+        self.GetTime = ffi('GetTime', errcheck)
+        self.SetTime = ffi('SetTime', errcheck)
+        self.GetListener = ffi('GetListener', errcheck)
+        self.SetListener = ffi('SetListener', errcheck)
+        self.GetDoorControl = ffi('GetDoorControl', errcheck)
+        self.SetDoorControl = ffi('SetDoorControl', errcheck)
+        self.GetCards = ffi('GetCards', errcheck)
+        self.GetCard = ffi('GetCard', errcheck)
+        self.GetCardByIndex = ffi('GetCardByIndex', errcheck)
+        self.PutCard = ffi('PutCard', errcheck)
+        self.DeleteCard = ffi('DeleteCard', errcheck)
+        self.DeleteCards = ffi('DeleteCards', errcheck)
+        self.GetEventIndex = ffi('GetEventIndex', errcheck)
+        self.SetEventIndex = ffi('SetEventIndex', errcheck)
+        self.GetEvent = ffi('GetEvent', errcheck)
+
+
+def ffi(tag, errcheck):
+    (ff, argtypes) = libfunctions()[tag]
+
+    ff.argtypes = argtypes
+    ff.restype = ctypes.c_char_p
+    ff.errcheck = errcheck
+
+    return ff
+
+
+# yapf: disable
+@cache
+def libfunctions():
+    return {
+        'GetDevices':     (lib.GetDevices,     [POINTER(GoUHPPOTE), POINTER(ctypes.c_int), POINTER(ctypes.c_uint32)]),
+        'GetDevice':      (lib.GetDevice,      [POINTER(GoUHPPOTE), POINTER(GoDevice),  c_ulong]),
+        'SetAddress':     (lib.SetAddress,     [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p]),
+        'GetStatus':      (lib.GetStatus,      [POINTER(GoUHPPOTE), POINTER(GoStatus), c_ulong]),
+        'GetTime':        (lib.GetTime,        [POINTER(GoUHPPOTE), POINTER(c_char_p), c_ulong]),
+        'SetTime':        (lib.SetTime,        [POINTER(GoUHPPOTE), c_ulong, c_char_p]),
+        'GetListener':    (lib.GetListener,    [POINTER(GoUHPPOTE), POINTER(c_char_p), c_ulong]),
+        'SetListener':    (lib.SetListener,    [POINTER(GoUHPPOTE), c_ulong, c_char_p]),
+        'GetDoorControl': (lib.GetDoorControl, [POINTER(GoUHPPOTE), POINTER(GoDoorControl), c_ulong, c_ubyte]),
+        'SetDoorControl': (lib.SetDoorControl, [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ubyte, c_ubyte]),
+        'GetCards':       (lib.GetCards,       [POINTER(GoUHPPOTE), POINTER(c_int), c_ulong]),
+        'GetCard':        (lib.GetCard,        [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]),
+        'GetCardByIndex': (lib.GetCardByIndex, [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]),
+        'PutCard':        (lib.PutCard,        [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, c_char_p, POINTER(c_ubyte)]),
+        'DeleteCard':     (lib.DeleteCard,     [POINTER(GoUHPPOTE), c_ulong, c_ulong]),
+        'DeleteCards':    (lib.DeleteCards,    [POINTER(GoUHPPOTE), c_ulong]),
+        'GetEventIndex':  (lib.GetEventIndex,  [POINTER(GoUHPPOTE), POINTER(c_ulong), c_ulong]),
+        'SetEventIndex':  (lib.SetEventIndex,  [POINTER(GoUHPPOTE), c_ulong, c_ulong]),
+        'GetEvent':       (lib.GetEvent,       [POINTER(GoUHPPOTE), POINTER(GoEvent), c_ulong, c_ulong]),
+    }
+# yapf: enable
+
+
 class GoController(Structure):
     _fields_ = [('id', c_uint32), ('address', c_char_p)]
 

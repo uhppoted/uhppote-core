@@ -3,6 +3,8 @@
 import ctypes
 import sys
 
+from functools import reduce
+
 sys.path.append('../../bindings/python')
 
 import uhppoted
@@ -69,7 +71,7 @@ def get_device(u):
 
 def set_address(u):
     tag = 'set-address'
-    u.set_address(DEVICE_ID, "192.168.1.125", "255.255.254.0", "192.168.1.0")
+    u.set_address(DEVICE_ID, '192.168.1.125', '255.255.254.0', '192.168.1.0')
 
     return evaluate(tag, [])
 
@@ -245,7 +247,7 @@ def evaluate(tag, resultset):
     for row in resultset:
         field, expected, actual = row
         if actual != expected:
-            print(f"{tag}: incorrect {field} - expected:{expected}, got:{actual}")
+            print(f'{tag}: incorrect {field} - expected:{expected}, got:{actual}')
             ok = False
 
     return passed(tag) if ok else failed(tag)
@@ -271,28 +273,33 @@ def usage():
     print()
 
 
-if __name__ == "__main__":
+def main():
     cmd = ''
 
     if len(sys.argv) > 1:
         cmd = sys.argv[1]
+
+    bind = '192.168.1.100'
+    broadcast = '192.168.1.255'
+    listen = '192.168.1.100:60001'
+    timeout = 2500
+    debug = True
 
     controllers = [
         uhppoted.Controller(405419896, '192.168.1.100'),
         uhppoted.Controller(303986753, '192.168.1.100'),
     ]
 
-    u = uhppoted.Uhppote(
-        uhppote=uhppoted.UHPPOTE('192.168.1.100', '192.168.1.255', '192.168.1.100:60001', 2500, controllers, True))
+    u = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE(bind, broadcast, listen, timeout, controllers, debug))
 
-    ok = True
     try:
         if cmd in tests():
-            ok = ok if tests()[cmd](u) else False
+            if not tests()[cmd](u):
+                sys.exit(-1)
 
         elif cmd == '' or cmd == 'all':
-            for _, f in tests().items():
-                ok = ok if f(u) else False
+            if not reduce(lambda ok, f: ok and f(u), tests().values(), True):
+                sys.exit(-1)
 
         elif cmd == 'help':
             print()
@@ -304,12 +311,13 @@ if __name__ == "__main__":
             print()
             usage()
 
-        if not ok:
-            sys.exit(-1)
-
     except BaseException as x:
         print()
         print(f'*** ERROR  {cmd} failed: {x}')
         print()
 
         sys.exit(1)
+
+
+if __name__ == '__main__':
+    main()

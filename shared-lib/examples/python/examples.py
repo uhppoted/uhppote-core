@@ -103,21 +103,21 @@ def commands():
 
 def usage():
     print()
-    print("  Usage: python example.py <command>")
+    print('  Usage: python example.py <command>')
     print()
-    print("  Supported commands:")
+    print('  Supported commands:')
 
     for cmd, _ in commands().items():
-        print(f"    {cmd}")
+        print(f'    {cmd}')
 
     print()
 
 
 def help():
     print()
-    print("Usage: python example.py <command>")
+    print('Usage: python example.py <command>')
     print()
-    print("  Commands")
+    print('  Commands')
 
     for cmd, v in commands().items():
         print(f"    {cmd:<17}  {v['help']}")
@@ -129,13 +129,13 @@ def get_devices(u, args):
     try:
         list = u.get_devices()
 
-        print(f"get-devices ({len(list)})")
+        print(f'get-devices ({len(list)})')
         for id in list:
-            print(f"  {id}")
+            print(f'  {id}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR get-devices ({e})")
+        print(f' *** ERROR get-devices ({e})')
         print()
 
 
@@ -145,37 +145,37 @@ def get_device(u, args):
     try:
         info = u.get_device(deviceID)
 
-        print("get-device")
-        print(f"  ID:       {info.ID}")
-        print(f"  IP:       {info.address}  {info.subnet}  {info.gateway}")
-        print(f"  MAC:      {info.MAC}")
-        print(f"  version:  {info.version}")
-        print(f"  released: {info.date}")
+        print('get-device')
+        print(f'  ID:       {info.ID}')
+        print(f'  IP:       {info.address}  {info.subnet}  {info.gateway}')
+        print(f'  MAC:      {info.MAC}')
+        print(f'  version:  {info.version}')
+        print(f'  released: {info.date}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR get-device ({e})")
+        print(f' *** ERROR get-device ({e})')
         print()
 
 
 def set_address(u, args):
     deviceID = DEVICE_ID
-    address = "192.168.1.125"
-    subnet = "255.255.255.253"
-    gateway = "192.168.1.5"
+    address = '192.168.1.125'
+    subnet = '255.255.255.253'
+    gateway = '192.168.1.5'
 
     try:
         u.set_address(deviceID, address, subnet, gateway)
 
-        print("set-address")
-        print(f"  ID:      {deviceID}")
-        print(f"  address: {address}")
-        print(f"  subnet:  {subnet}")
-        print(f"  gateway: {gateway}")
+        print('set-address')
+        print(f'  ID:      {deviceID}')
+        print(f'  address: {address}')
+        print(f'  subnet:  {subnet}')
+        print(f'  gateway: {gateway}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR set-address ({e})")
+        print(f' *** ERROR set-address ({e})')
         print()
 
 
@@ -185,31 +185,31 @@ def get_status(u, args):
     try:
         status = u.get_status(deviceID)
 
-        print("get-status")
-        print(f"  ID:        {status.ID}")
-        print(f"  date/time: {status.sysdatetime}")
+        print('get-status')
+        print(f'  ID:        {status.ID}')
+        print(f'  date/time: {status.sysdatetime}')
         print(
-            f"  doors:     {status.doors[0]} {status.doors[1]} {status.doors[2]} {status.doors[3]}")
+            f'  doors:     {status.doors[0]} {status.doors[1]} {status.doors[2]} {status.doors[3]}')
         print(
-            f"  buttons:   {status.buttons[0]} {status.buttons[1]} {status.buttons[2]} {status.buttons[3]}"
+            f'  buttons:   {status.buttons[0]} {status.buttons[1]} {status.buttons[2]} {status.buttons[3]}'
         )
-        print(f"  relays   : " + "{0:#0{1}x}".format(status.relays, 4))
-        print(f"  inputs   : " + "{0:#0{1}x}".format(status.inputs, 4))
-        print(f"  error    : " + "{0:#0{1}x}".format(status.syserror, 4))
-        print(f"  info     : " + "{0:#0{1}x}".format(status.info, 4))
-        print(f"  seq no.  : {status.seqno}")
-        print(f"  event timestamp: {status.event.timestamp}")
-        print(f"        index:     {status.event.index}")
-        print(f"        type:      {status.event.eventType}")
-        print(f"        granted:   {status.event.granted}")
-        print(f"        door:      {status.event.door}")
-        print(f"        direction: {status.event.direction}")
-        print(f"        card:      {status.event.card}")
-        print(f"        reason:    {status.event.reason}")
+        print(f'  relays   : ' + '{0:#0{1}x}'.format(status.relays, 4))
+        print(f'  inputs   : ' + '{0:#0{1}x}'.format(status.inputs, 4))
+        print(f'  error    : ' + '{0:#0{1}x}'.format(status.syserror, 4))
+        print(f'  info     : ' + '{0:#0{1}x}'.format(status.info, 4))
+        print(f'  seq no.  : {status.seqno}')
+        print(f'  event timestamp: {status.event.timestamp}')
+        print(f'        index:     {status.event.index}')
+        print(f'        type:      {status.event.eventType}')
+        print(f'        granted:   {status.event.granted}')
+        print(f'        door:      {status.event.door}')
+        print(f'        direction: {status.event.direction}')
+        print(f'        card:      {status.event.card}')
+        print(f'        reason:    {status.event.reason}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR get-status ({e})")
+        print(f' *** ERROR get-status ({e})')
         print()
 
 
@@ -219,12 +219,12 @@ def get_time(u, args):
     try:
         datetime = u.get_time(deviceID)
 
-        print("get-time")
-        print(f"  date/time: {datetime}")
+        print('get-time')
+        print(f'  date/time: {datetime}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR get-time ({e})")
+        print(f' *** ERROR get-time ({e})')
         print()
 
 
@@ -235,13 +235,13 @@ def set_time(u, args):
     try:
         u.set_time(deviceID, dt)
 
-        print("set-time")
-        print(f"  ID:        {deviceID}")
-        print(f"  date/time: {dt}")
+        print('set-time')
+        print(f'  ID:        {deviceID}')
+        print(f'  date/time: {dt}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR set-time ({e})")
+        print(f' *** ERROR set-time ({e})')
         print()
 
 
@@ -251,29 +251,29 @@ def get_listener(u, args):
     try:
         listener = u.get_listener(deviceID)
 
-        print("get-listener")
-        print(f"  listener: {listener}")
+        print('get-listener')
+        print(f'  listener: {listener}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR get-listener ({e})")
+        print(f' *** ERROR get-listener ({e})')
         print()
 
 
 def set_listener(u, args):
     deviceID = DEVICE_ID
-    listener = "192.168.1.100:60001"
+    listener = '192.168.1.100:60001'
 
     try:
         u.set_listener(deviceID, listener)
 
-        print("set-listener")
-        print(f"  ID:             {deviceID}")
-        print(f"  event listener: {listener}")
+        print('set-listener')
+        print(f'  ID:             {deviceID}')
+        print(f'  event listener: {listener}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR set-time ({e})")
+        print(f' *** ERROR set-time ({e})')
         print()
 
 
@@ -284,24 +284,24 @@ def get_door_control(u, args):
     try:
         control = u.get_door_control(deviceID, door)
 
-        print("get-door-control")
-        print(f"  ID:    {deviceID}")
-        print(f"  door:  {door}")
+        print('get-door-control')
+        print(f'  ID:    {deviceID}')
+        print(f'  door:  {door}')
 
         if control.mode == NORMALLY_OPEN:
-            print(f"  mode:  normally open")
+            print(f'  mode:  normally open')
         elif control.mode == NORMALLY_CLOSED:
-            print(f"  mode:  normally closed")
+            print(f'  mode:  normally closed')
         elif control.mode == CONTROLLED:
-            print(f"  mode:  controlled")
+            print(f'  mode:  controlled')
         else:
-            print(f"  mode:  ???")
+            print(f'  mode:  ???')
 
-        print(f"  delay: {control.delay}")
+        print(f'  delay: {control.delay}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR get-door-control ({e})")
+        print(f' *** ERROR get-door-control ({e})')
         print()
 
 
@@ -314,24 +314,24 @@ def set_door_control(u, args):
     try:
         u.set_door_control(deviceID, door, mode, delay)
 
-        print("set-door-control")
-        print(f"  ID:    {deviceID}")
-        print(f"  door:  {door}")
+        print('set-door-control')
+        print(f'  ID:    {deviceID}')
+        print(f'  door:  {door}')
 
         if mode == NORMALLY_OPEN:
-            print(f"  mode:  normally open")
+            print(f'  mode:  normally open')
         elif mode == NORMALLY_CLOSED:
-            print(f"  mode:  normally closed")
+            print(f'  mode:  normally closed')
         elif mode == CONTROLLED:
-            print(f"  mode:  controlled")
+            print(f'  mode:  controlled')
         else:
-            print(f"  mode:  ???")
+            print(f'  mode:  ???')
 
-        print(f"  delay: {delay}")
+        print(f'  delay: {delay}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR set-door-control ({e})")
+        print(f' *** ERROR set-door-control ({e})')
         print()
 
 
@@ -341,13 +341,13 @@ def get_cards(u, args):
     try:
         cards = u.get_cards(deviceID)
 
-        print("get-cards")
-        print(f"  ID:    {deviceID}")
-        print(f"  cards: {cards}")
+        print('get-cards')
+        print(f'  ID:    {deviceID}')
+        print(f'  cards: {cards}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR get_cards ({e})")
+        print(f' *** ERROR get_cards ({e})')
         print()
 
 
@@ -358,19 +358,19 @@ def get_card(u, args):
     try:
         card = u.get_card(deviceID, cardNumber)
 
-        print("get-card")
-        print(f"  ID:           {deviceID}")
-        print(f"  card-number:  {card.cardNumber}")
-        print(f"       from:    {card.start}")
-        print(f"       to:      {card.end}")
-        print(f"       door[1]: {card.doors[0]}")
-        print(f"       door[2]: {card.doors[1]}")
-        print(f"       door[3]: {card.doors[2]}")
-        print(f"       door[4]: {card.doors[3]}")
+        print('get-card')
+        print(f'  ID:           {deviceID}')
+        print(f'  card-number:  {card.cardNumber}')
+        print(f'       from:    {card.start}')
+        print(f'       to:      {card.end}')
+        print(f'       door[1]: {card.doors[0]}')
+        print(f'       door[2]: {card.doors[1]}')
+        print(f'       door[3]: {card.doors[2]}')
+        print(f'       door[4]: {card.doors[3]}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR get_card ({e})")
+        print(f' *** ERROR get_card ({e})')
         print()
 
 
@@ -381,20 +381,20 @@ def get_card_by_index(u, args):
     try:
         card = u.get_card_by_index(deviceID, index)
 
-        print("get-card-by-index")
-        print(f"  ID:           {deviceID}")
-        print(f"  index:        {index}")
-        print(f"  card-number:  {card.cardNumber}")
-        print(f"       from:    {card.start}")
-        print(f"       to:      {card.end}")
-        print(f"       door[1]: {card.doors[0]}")
-        print(f"       door[2]: {card.doors[1]}")
-        print(f"       door[3]: {card.doors[2]}")
-        print(f"       door[4]: {card.doors[3]}")
+        print('get-card-by-index')
+        print(f'  ID:           {deviceID}')
+        print(f'  index:        {index}')
+        print(f'  card-number:  {card.cardNumber}')
+        print(f'       from:    {card.start}')
+        print(f'       to:      {card.end}')
+        print(f'       door[1]: {card.doors[0]}')
+        print(f'       door[2]: {card.doors[1]}')
+        print(f'       door[3]: {card.doors[2]}')
+        print(f'       door[4]: {card.doors[3]}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR get_card ({e})")
+        print(f' *** ERROR get_card ({e})')
         print()
 
 
@@ -402,25 +402,25 @@ def put_card(u, args):
     try:
         deviceID = DEVICE_ID
         cardNumber = CARD_NUMBER
-        start = "2022-01-01"
-        end = "2022-12-31"
+        start = '2022-01-01'
+        end = '2022-12-31'
         doors = [0, 1, 31, 75]
 
         card = u.put_card(deviceID, cardNumber, start, end, doors)
 
-        print("put-card")
-        print(f"  ID:           {deviceID}")
-        print(f"  card-number:  {cardNumber}")
-        print(f"       from:    {start}")
-        print(f"       to:      {end}")
-        print(f"       door[1]: {doors[0]}")
-        print(f"       door[2]: {doors[1]}")
-        print(f"       door[3]: {doors[2]}")
-        print(f"       door[4]: {doors[3]}")
+        print('put-card')
+        print(f'  ID:           {deviceID}')
+        print(f'  card-number:  {cardNumber}')
+        print(f'       from:    {start}')
+        print(f'       to:      {end}')
+        print(f'       door[1]: {doors[0]}')
+        print(f'       door[2]: {doors[1]}')
+        print(f'       door[3]: {doors[2]}')
+        print(f'       door[4]: {doors[3]}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR put_card ({e})")
+        print(f' *** ERROR put_card ({e})')
         print()
 
 
@@ -431,13 +431,13 @@ def delete_card(u, args):
 
         u.delete_card(deviceID, cardNumber)
 
-        print("delete-card")
-        print(f"  ID:           {deviceID}")
-        print(f"  card-number:  {cardNumber}")
+        print('delete-card')
+        print(f'  ID:           {deviceID}')
+        print(f'  card-number:  {cardNumber}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR delete_card ({e})")
+        print(f' *** ERROR delete_card ({e})')
         print()
 
 
@@ -447,72 +447,72 @@ def delete_cards(u, args):
 
         u.delete_cards(deviceID)
 
-        print("delete-cards")
-        print(f"  ID: {deviceID}")
+        print('delete-cards')
+        print(f'  ID: {deviceID}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR delete_cards ({e})")
+        print(f' *** ERROR delete_cards ({e})')
         print()
 
 
 def get_event_index(u, args):
-    tag = "get-event-index"
+    tag = 'get-event-index'
     deviceID = DEVICE_ID
 
     try:
         index = u.get_event_index(deviceID)
 
-        print(f"{tag}")
-        print(f"  ID:    {deviceID}")
-        print(f"  index: {index}")
+        print(f'{tag}')
+        print(f'  ID:    {deviceID}')
+        print(f'  index: {index}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR {tag} ({e})")
+        print(f' *** ERROR {tag} ({e})')
         print()
 
 
 def set_event_index(u, args):
-    tag = "set-event-index"
+    tag = 'set-event-index'
     deviceID = DEVICE_ID
     index = EVENT_INDEX
 
     try:
         u.set_event_index(deviceID, index)
 
-        print(f"{tag}")
-        print(f"  ID:    {deviceID}")
-        print(f"  index: {index}")
+        print(f'{tag}')
+        print(f'  ID:    {deviceID}')
+        print(f'  index: {index}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR {tag} ({e})")
+        print(f' *** ERROR {tag} ({e})')
         print()
 
 
 def get_event(u, args):
-    tag = "get-event"
+    tag = 'get-event'
     deviceID = DEVICE_ID
     index = EVENT_INDEX
 
     try:
         event = u.get_event(deviceID, index)
 
-        print(f"{tag}")
-        print(f"  ID:                {deviceID}")
-        print(f"  event index:       {event.index}")
-        print(f"        timestamp:   {event.timestamp}")
-        print(f"        type:        {event.eventType}")
-        print(f"        granted:     {event.granted}")
-        print(f"        door:        {event.door}")
-        print(f"        direction:   {event.direction}")
-        print(f"        card number: {event.card}")
-        print(f"        reason:      {event.reason}")
+        print(f'{tag}')
+        print(f'  ID:                {deviceID}')
+        print(f'  event index:       {event.index}')
+        print(f'        timestamp:   {event.timestamp}')
+        print(f'        type:        {event.eventType}')
+        print(f'        granted:     {event.granted}')
+        print(f'        door:        {event.door}')
+        print(f'        direction:   {event.direction}')
+        print(f'        card number: {event.card}')
+        print(f'        reason:      {event.reason}')
         print()
 
     except Exception as e:
-        print(f" *** ERROR {tag} ({e})")
+        print(f' *** ERROR {tag} ({e})')
         print()
 
 
@@ -523,11 +523,11 @@ def main():
 
     cmd = sys.argv[1]
 
-    if cmd == "help":
+    if cmd == 'help':
         help()
     else:
-        alpha = uhppoted.Controller(405419896, "192.168.1.100")
-        beta = uhppoted.Controller(303986753, "192.168.1.100")
+        alpha = uhppoted.Controller(405419896, '192.168.1.100')
+        beta = uhppoted.Controller(303986753, '192.168.1.100')
         controllers = [alpha, beta]
 
         u = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE(
@@ -540,16 +540,16 @@ def main():
                     return
 
             print()
-            print(f"  ERROR: invalid command ({cmd})")
+            print(f'  ERROR: invalid command ({cmd})')
             usage()
 
         except BaseException as x:
             print()
-            print(f"*** ERROR  {cmd} failed: {x}")
+            print(f'*** ERROR  {cmd} failed: {x}')
             print()
 
             sys.exit(1)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
