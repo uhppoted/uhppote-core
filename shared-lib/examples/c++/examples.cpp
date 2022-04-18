@@ -123,6 +123,11 @@ const vector<command> commands = {
         .help = "Retrieves the event at the index from a controller.",
         .fn = getEvent,
     },
+    {
+        .cmd = "record-special-events",
+        .help = "Enables/disables recording additional events for a controller.",
+        .fn = recordSpecialEvents,
+    },
 };
 
 int main(int argc, char **argv) {

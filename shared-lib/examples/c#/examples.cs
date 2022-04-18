@@ -1,4 +1,6 @@
 using System;
+using static System.Console;
+using static System.String;
 
 using uhppoted;
 
@@ -82,8 +84,11 @@ public class examples {
                     "Sets the current event index on a controller.",
                     SetEventIndex),
         new command("get-event",
-                    "Retrieves the event at the index  from a controller.",
+                    "Retrieves the event at the index from a controller.",
                     GetEvent),
+        new command("record-special-events",
+                    "Enables/disables recording additional events for a controller.",
+                    RecordSpecialEvents),
     };
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -112,49 +117,49 @@ public class examples {
                 }
             }
 
-            Console.WriteLine();
-            Console.WriteLine(String.Format("  *** ERROR: invalid command ({0})", cmd));
+            WriteLine();
+            WriteLine(Format("  *** ERROR: invalid command ({0})", cmd));
             usage();
 
         } catch (Exception e) {
-            Console.WriteLine(String.Format("  *** ERROR: {0}", e.Message));
+            WriteLine(Format("  *** ERROR: {0}", e.Message));
         }
     }
 
     static void usage() {
-        Console.WriteLine();
-        Console.WriteLine("  Usage: mono example.exe <command>");
-        Console.WriteLine();
-        Console.WriteLine("  Supported commands");
+        WriteLine();
+        WriteLine("  Usage: mono example.exe <command>");
+        WriteLine();
+        WriteLine("  Supported commands");
 
         foreach (command c in commands) {
-            Console.WriteLine("    {0}", c.cmd);
+            WriteLine("    {0}", c.cmd);
         }
 
-        Console.WriteLine();
+        WriteLine();
     }
 
     static void help() {
-        Console.WriteLine();
-        Console.WriteLine("  Usage: mono example.exe <command>");
-        Console.WriteLine();
-        Console.WriteLine("  Commands");
+        WriteLine();
+        WriteLine("  Usage: mono example.exe <command>");
+        WriteLine();
+        WriteLine("  Commands");
 
         foreach (command c in commands) {
-            Console.WriteLine("    {0,-17}  {1}", c.cmd, c.help);
+            WriteLine("    {0,-17}  {1}", c.cmd, c.help);
         }
 
-        Console.WriteLine();
+        WriteLine();
     }
 
     static void GetDevices(Uhppoted u, string[] args) {
         uint[] list = u.GetDevices();
 
-        Console.WriteLine(String.Format("get-devices ({0})", list.Length));
+        WriteLine(Format("get-devices ({0})", list.Length));
         for (int i = 0; i < list.Length; i++) {
-            Console.WriteLine(String.Format("  {0}", list[i]));
+            WriteLine(Format("  {0}", list[i]));
         }
-        Console.WriteLine();
+        WriteLine();
     }
 
     static void GetDevice(Uhppoted u, string[] args) {
@@ -162,13 +167,13 @@ public class examples {
 
         Device device = u.GetDevice(deviceID);
 
-        Console.WriteLine(String.Format("get-device"));
-        Console.WriteLine(String.Format("  ID:       {0}", device.ID));
-        Console.WriteLine(String.Format("  IP:       {0}  {1}  {2}", device.address, device.subnet, device.gateway));
-        Console.WriteLine(String.Format("  MAC:      {0}", device.MAC));
-        Console.WriteLine(String.Format("  version:  {0}", device.version));
-        Console.WriteLine(String.Format("  released: {0}", device.date));
-        Console.WriteLine();
+        WriteLine(Format("get-device"));
+        WriteLine(Format("  ID:       {0}", device.ID));
+        WriteLine(Format("  IP:       {0}  {1}  {2}", device.address, device.subnet, device.gateway));
+        WriteLine(Format("  MAC:      {0}", device.MAC));
+        WriteLine(Format("  version:  {0}", device.version));
+        WriteLine(Format("  released: {0}", device.date));
+        WriteLine();
     }
 
     static void SetAddress(Uhppoted u, string[] args) {
@@ -179,12 +184,12 @@ public class examples {
 
         u.SetAddress(deviceID, address, subnet, gateway);
 
-        Console.WriteLine(String.Format("set-address"));
-        Console.WriteLine(String.Format("  ID:      {0}", deviceID));
-        Console.WriteLine(String.Format("  address: {0}", address));
-        Console.WriteLine(String.Format("  subnet:  {0}", subnet));
-        Console.WriteLine(String.Format("  gateway: {0}", gateway));
-        Console.WriteLine();
+        WriteLine(Format("set-address"));
+        WriteLine(Format("  ID:      {0}", deviceID));
+        WriteLine(Format("  address: {0}", address));
+        WriteLine(Format("  subnet:  {0}", subnet));
+        WriteLine(Format("  gateway: {0}", gateway));
+        WriteLine();
     }
 
     static void GetStatus(Uhppoted u, string[] args) {
@@ -192,26 +197,26 @@ public class examples {
 
         Status status = u.GetStatus(deviceID);
 
-        Console.WriteLine(String.Format("get-status"));
-        Console.WriteLine(String.Format("  ID:        {0}", status.ID));
-        Console.WriteLine(String.Format("  timestamp: {0}", status.sysdatetime));
-        Console.WriteLine(String.Format("  doors:     {0} {1} {2} {3}", status.doors[0], status.doors[1], status.doors[2], status.doors[3]));
-        Console.WriteLine(String.Format("  buttons:   {0} {1} {2} {3}", status.buttons[0], status.buttons[1], status.buttons[2], status.buttons[3]));
-        Console.WriteLine(String.Format("  relays:    {0:X}", status.relays));
-        Console.WriteLine(String.Format("  inputs:    {0:X}", status.inputs));
-        Console.WriteLine(String.Format("  syserror:  {0}", status.syserror));
-        Console.WriteLine(String.Format("  info:      {0:X}", status.info));
-        Console.WriteLine(String.Format("  seqno:     {0}", status.seqno));
-        Console.WriteLine(String.Format("  event timestamp: {0}", status.evt.timestamp));
-        Console.WriteLine(String.Format("        index:     {0}", status.evt.index));
-        Console.WriteLine(String.Format("        type:      {0}", status.evt.eventType));
-        Console.WriteLine(String.Format("        granted:   {0}", status.evt.granted));
-        Console.WriteLine(String.Format("        door:      {0}", status.evt.door));
-        Console.WriteLine(String.Format("        direction: {0}", status.evt.direction));
-        Console.WriteLine(String.Format("        card:      {0}", status.evt.card));
-        Console.WriteLine(String.Format("        reason:    {0}", status.evt.reason));
+        WriteLine(Format("get-status"));
+        WriteLine(Format("  ID:        {0}", status.ID));
+        WriteLine(Format("  timestamp: {0}", status.sysdatetime));
+        WriteLine(Format("  doors:     {0} {1} {2} {3}", status.doors[0], status.doors[1], status.doors[2], status.doors[3]));
+        WriteLine(Format("  buttons:   {0} {1} {2} {3}", status.buttons[0], status.buttons[1], status.buttons[2], status.buttons[3]));
+        WriteLine(Format("  relays:    {0:X}", status.relays));
+        WriteLine(Format("  inputs:    {0:X}", status.inputs));
+        WriteLine(Format("  syserror:  {0}", status.syserror));
+        WriteLine(Format("  info:      {0:X}", status.info));
+        WriteLine(Format("  seqno:     {0}", status.seqno));
+        WriteLine(Format("  event timestamp: {0}", status.evt.timestamp));
+        WriteLine(Format("        index:     {0}", status.evt.index));
+        WriteLine(Format("        type:      {0}", status.evt.eventType));
+        WriteLine(Format("        granted:   {0}", status.evt.granted));
+        WriteLine(Format("        door:      {0}", status.evt.door));
+        WriteLine(Format("        direction: {0}", status.evt.direction));
+        WriteLine(Format("        card:      {0}", status.evt.card));
+        WriteLine(Format("        reason:    {0}", status.evt.reason));
 
-        Console.WriteLine();
+        WriteLine();
     }
 
     static void GetTime(Uhppoted u, string[] args) {
@@ -219,9 +224,9 @@ public class examples {
 
         string datetime = u.GetTime(deviceID);
 
-        Console.WriteLine(String.Format("get-time"));
-        Console.WriteLine(String.Format("  date/time: {0}", datetime));
-        Console.WriteLine();
+        WriteLine(Format("get-time"));
+        WriteLine(Format("  date/time: {0}", datetime));
+        WriteLine();
     }
 
     static void SetTime(Uhppoted u, string[] args) {
@@ -230,10 +235,10 @@ public class examples {
 
         u.SetTime(deviceID, datetime);
 
-        Console.WriteLine(String.Format("set-time"));
-        Console.WriteLine(String.Format("  ID:        {0}", deviceID));
-        Console.WriteLine(String.Format("  date/time: {0}", datetime));
-        Console.WriteLine();
+        WriteLine(Format("set-time"));
+        WriteLine(Format("  ID:        {0}", deviceID));
+        WriteLine(Format("  date/time: {0}", datetime));
+        WriteLine();
     }
 
     static void GetListener(Uhppoted u, string[] args) {
@@ -241,9 +246,9 @@ public class examples {
 
         string listener = u.GetListener(deviceID);
 
-        Console.WriteLine(String.Format("get-listener"));
-        Console.WriteLine(String.Format("  listener: {0}", listener));
-        Console.WriteLine();
+        WriteLine(Format("get-listener"));
+        WriteLine(Format("  listener: {0}", listener));
+        WriteLine();
     }
 
     static void SetListener(Uhppoted u, string[] args) {
@@ -252,10 +257,10 @@ public class examples {
 
         u.SetListener(deviceID, listener);
 
-        Console.WriteLine(String.Format("set-listener"));
-        Console.WriteLine(String.Format("  ID:             {0}", deviceID));
-        Console.WriteLine(String.Format("  event listener: {0}", listener));
-        Console.WriteLine();
+        WriteLine(Format("set-listener"));
+        WriteLine(Format("  ID:             {0}", deviceID));
+        WriteLine(Format("  event listener: {0}", listener));
+        WriteLine();
     }
 
     static void GetDoorControl(Uhppoted u, string[] args) {
@@ -264,30 +269,30 @@ public class examples {
 
         DoorControl control = u.GetDoorControl(deviceID, door);
 
-        Console.WriteLine(String.Format("get-door-control"));
-        Console.WriteLine(String.Format("  ID:      {0}", deviceID));
-        Console.WriteLine(String.Format("  door:    {0}", door));
+        WriteLine(Format("get-door-control"));
+        WriteLine(Format("  ID:      {0}", deviceID));
+        WriteLine(Format("  door:    {0}", door));
 
         switch (control.mode) {
         case ControlModes.NormallyOpen:
-            Console.WriteLine(String.Format("  mode:    {0}", "normally open"));
+            WriteLine(Format("  mode:    {0}", "normally open"));
             break;
 
         case ControlModes.NormallyClosed:
-            Console.WriteLine(String.Format("  mode:    {0}", "normally closed"));
+            WriteLine(Format("  mode:    {0}", "normally closed"));
             break;
 
         case ControlModes.Controlled:
-            Console.WriteLine(String.Format("  mode:    {0}", "controlled"));
+            WriteLine(Format("  mode:    {0}", "controlled"));
             break;
 
         default:
-            Console.WriteLine(String.Format("  mode:    {0}", "???"));
+            WriteLine(Format("  mode:    {0}", "???"));
             break;
         }
 
-        Console.WriteLine(String.Format("  delay:   {0}", control.delay));
-        Console.WriteLine();
+        WriteLine(Format("  delay:   {0}", control.delay));
+        WriteLine();
     }
 
     static void SetDoorControl(Uhppoted u, string[] args) {
@@ -298,30 +303,30 @@ public class examples {
 
         u.SetDoorControl(deviceID, door, mode, delay);
 
-        Console.WriteLine(String.Format("set-door-control"));
-        Console.WriteLine(String.Format("  ID:      {0}", deviceID));
-        Console.WriteLine(String.Format("  door:    {0}", door));
+        WriteLine(Format("set-door-control"));
+        WriteLine(Format("  ID:      {0}", deviceID));
+        WriteLine(Format("  door:    {0}", door));
 
         switch (mode) {
         case ControlModes.NormallyOpen:
-            Console.WriteLine(String.Format("  mode:    {0}", "normally open"));
+            WriteLine(Format("  mode:    {0}", "normally open"));
             break;
 
         case ControlModes.NormallyClosed:
-            Console.WriteLine(String.Format("  mode:    {0}", "normally closed"));
+            WriteLine(Format("  mode:    {0}", "normally closed"));
             break;
 
         case ControlModes.Controlled:
-            Console.WriteLine(String.Format("  mode:    {0}", "controlled"));
+            WriteLine(Format("  mode:    {0}", "controlled"));
             break;
 
         default:
-            Console.WriteLine(String.Format("  mode:    {0}", "???"));
+            WriteLine(Format("  mode:    {0}", "???"));
             break;
         }
 
-        Console.WriteLine(String.Format("  delay:   {0}", delay));
-        Console.WriteLine();
+        WriteLine(Format("  delay:   {0}", delay));
+        WriteLine();
     }
 
     static void GetCards(Uhppoted u, string[] args) {
@@ -329,10 +334,10 @@ public class examples {
 
         int cards = u.GetCards(deviceID);
 
-        Console.WriteLine(String.Format("get-cards"));
-        Console.WriteLine(String.Format("  ID:    {0}", deviceID));
-        Console.WriteLine(String.Format("  cards: {0}", cards));
-        Console.WriteLine();
+        WriteLine(Format("get-cards"));
+        WriteLine(Format("  ID:    {0}", deviceID));
+        WriteLine(Format("  cards: {0}", cards));
+        WriteLine();
     }
 
     static void GetCard(Uhppoted u, string[] args) {
@@ -340,16 +345,16 @@ public class examples {
         uint cardNumber = CARD_NUMBER;
         Card card = u.GetCard(deviceID, cardNumber);
 
-        Console.WriteLine(String.Format("get-card"));
-        Console.WriteLine(String.Format("  ID:           {0}", deviceID));
-        Console.WriteLine(String.Format("  card number:  {0}", card.cardNumber));
-        Console.WriteLine(String.Format("       from:    {0}", card.from));
-        Console.WriteLine(String.Format("       to:      {0}", card.to));
-        Console.WriteLine(String.Format("       door[1]: {0}", card.doors[0]));
-        Console.WriteLine(String.Format("       door[2]: {0}", card.doors[1]));
-        Console.WriteLine(String.Format("       door[3]: {0}", card.doors[2]));
-        Console.WriteLine(String.Format("       door[4]: {0}", card.doors[3]));
-        Console.WriteLine();
+        WriteLine(Format("get-card"));
+        WriteLine(Format("  ID:           {0}", deviceID));
+        WriteLine(Format("  card number:  {0}", card.cardNumber));
+        WriteLine(Format("       from:    {0}", card.from));
+        WriteLine(Format("       to:      {0}", card.to));
+        WriteLine(Format("       door[1]: {0}", card.doors[0]));
+        WriteLine(Format("       door[2]: {0}", card.doors[1]));
+        WriteLine(Format("       door[3]: {0}", card.doors[2]));
+        WriteLine(Format("       door[4]: {0}", card.doors[3]));
+        WriteLine();
     }
 
     static void GetCardByIndex(Uhppoted u, string[] args) {
@@ -358,17 +363,17 @@ public class examples {
 
         Card card = u.GetCardByIndex(deviceID, index);
 
-        Console.WriteLine(String.Format("get-card-by-index"));
-        Console.WriteLine(String.Format("  ID:           {0}", deviceID));
-        Console.WriteLine(String.Format("  index:        {0}", index));
-        Console.WriteLine(String.Format("  card number:  {0}", card.cardNumber));
-        Console.WriteLine(String.Format("       from:    {0}", card.from));
-        Console.WriteLine(String.Format("       to:      {0}", card.to));
-        Console.WriteLine(String.Format("       door[1]: {0}", card.doors[0]));
-        Console.WriteLine(String.Format("       door[2]: {0}", card.doors[1]));
-        Console.WriteLine(String.Format("       door[3]: {0}", card.doors[2]));
-        Console.WriteLine(String.Format("       door[4]: {0}", card.doors[3]));
-        Console.WriteLine();
+        WriteLine(Format("get-card-by-index"));
+        WriteLine(Format("  ID:           {0}", deviceID));
+        WriteLine(Format("  index:        {0}", index));
+        WriteLine(Format("  card number:  {0}", card.cardNumber));
+        WriteLine(Format("       from:    {0}", card.from));
+        WriteLine(Format("       to:      {0}", card.to));
+        WriteLine(Format("       door[1]: {0}", card.doors[0]));
+        WriteLine(Format("       door[2]: {0}", card.doors[1]));
+        WriteLine(Format("       door[3]: {0}", card.doors[2]));
+        WriteLine(Format("       door[4]: {0}", card.doors[3]));
+        WriteLine();
     }
 
     static void PutCard(Uhppoted u, string[] args) {
@@ -380,16 +385,16 @@ public class examples {
 
         u.PutCard(deviceID, cardNumber, from, to, doors);
 
-        Console.WriteLine(String.Format("put-card"));
-        Console.WriteLine(String.Format("  ID:           {0}", deviceID));
-        Console.WriteLine(String.Format("  card number:  {0}", cardNumber));
-        Console.WriteLine(String.Format("       from:    {0}", from));
-        Console.WriteLine(String.Format("       to:      {0}", to));
-        Console.WriteLine(String.Format("       door[1]: {0}", doors[0]));
-        Console.WriteLine(String.Format("       door[2]: {0}", doors[1]));
-        Console.WriteLine(String.Format("       door[3]: {0}", doors[2]));
-        Console.WriteLine(String.Format("       door[4]: {0}", doors[3]));
-        Console.WriteLine();
+        WriteLine(Format("put-card"));
+        WriteLine(Format("  ID:           {0}", deviceID));
+        WriteLine(Format("  card number:  {0}", cardNumber));
+        WriteLine(Format("       from:    {0}", from));
+        WriteLine(Format("       to:      {0}", to));
+        WriteLine(Format("       door[1]: {0}", doors[0]));
+        WriteLine(Format("       door[2]: {0}", doors[1]));
+        WriteLine(Format("       door[3]: {0}", doors[2]));
+        WriteLine(Format("       door[4]: {0}", doors[3]));
+        WriteLine();
     }
 
     static void DeleteCard(Uhppoted u, string[] args) {
@@ -398,10 +403,10 @@ public class examples {
 
         u.DeleteCard(deviceID, cardNumber);
 
-        Console.WriteLine(String.Format("delete-card"));
-        Console.WriteLine(String.Format("  ID:           {0}", deviceID));
-        Console.WriteLine(String.Format("  card number:  {0}", cardNumber));
-        Console.WriteLine();
+        WriteLine(Format("delete-card"));
+        WriteLine(Format("  ID:           {0}", deviceID));
+        WriteLine(Format("  card number:  {0}", cardNumber));
+        WriteLine();
     }
 
     static void DeleteCards(Uhppoted u, string[] args) {
@@ -409,9 +414,9 @@ public class examples {
 
         u.DeleteCards(deviceID);
 
-        Console.WriteLine(String.Format("delete-cards"));
-        Console.WriteLine(String.Format("  ID: {0}", deviceID));
-        Console.WriteLine();
+        WriteLine(Format("delete-cards"));
+        WriteLine(Format("  ID: {0}", deviceID));
+        WriteLine();
     }
 
     static void GetEventIndex(Uhppoted u, string[] args) {
@@ -420,10 +425,10 @@ public class examples {
 
         uint index = u.GetEventIndex(deviceID);
 
-        Console.WriteLine(String.Format("{0}", tag));
-        Console.WriteLine(String.Format("  ID:    {0}", deviceID));
-        Console.WriteLine(String.Format("  index: {0}", index));
-        Console.WriteLine();
+        WriteLine(Format("{0}", tag));
+        WriteLine(Format("  ID:    {0}", deviceID));
+        WriteLine(Format("  index: {0}", index));
+        WriteLine();
     }
 
     static void SetEventIndex(Uhppoted u, string[] args) {
@@ -433,10 +438,10 @@ public class examples {
 
         u.SetEventIndex(deviceID, index);
 
-        Console.WriteLine(String.Format("{0}", tag));
-        Console.WriteLine(String.Format("  ID:    {0}", deviceID));
-        Console.WriteLine(String.Format("  index: {0}", index));
-        Console.WriteLine();
+        WriteLine(Format("{0}", tag));
+        WriteLine(Format("  ID:    {0}", deviceID));
+        WriteLine(Format("  index: {0}", index));
+        WriteLine();
     }
 
     static void GetEvent(Uhppoted u, string[] args) {
@@ -446,16 +451,29 @@ public class examples {
 
         Event evt = u.GetEvent(deviceID, index);
 
-        Console.WriteLine(String.Format("{0}", tag));
-        Console.WriteLine(String.Format("  ID:                {0}", deviceID));
-        Console.WriteLine(String.Format("  event index:       {0}", evt.index));
-        Console.WriteLine(String.Format("        timestamp:   {0}", evt.timestamp));
-        Console.WriteLine(String.Format("        type:        {0}", evt.eventType));
-        Console.WriteLine(String.Format("        granted:     {0}", evt.granted));
-        Console.WriteLine(String.Format("        door:        {0}", evt.door));
-        Console.WriteLine(String.Format("        direction:   {0}", evt.direction));
-        Console.WriteLine(String.Format("        card number: {0}", evt.card));
-        Console.WriteLine(String.Format("        reason:      {0}", evt.reason));
-        Console.WriteLine();
+        WriteLine(Format("{0}", tag));
+        WriteLine(Format("  ID:                {0}", deviceID));
+        WriteLine(Format("  event index:       {0}", evt.index));
+        WriteLine(Format("        timestamp:   {0}", evt.timestamp));
+        WriteLine(Format("        type:        {0}", evt.eventType));
+        WriteLine(Format("        granted:     {0}", evt.granted));
+        WriteLine(Format("        door:        {0}", evt.door));
+        WriteLine(Format("        direction:   {0}", evt.direction));
+        WriteLine(Format("        card number: {0}", evt.card));
+        WriteLine(Format("        reason:      {0}", evt.reason));
+        WriteLine();
+    }
+
+    static void RecordSpecialEvents(Uhppoted u, string[] args) {
+        string tag = "record-special-events";
+        uint deviceID = DEVICE_ID;
+        bool enabled = true;
+
+        u.RecordSpecialEvents(deviceID, enabled);
+
+        WriteLine(Format("{0}", tag));
+        WriteLine(Format("  ID:      {0}", deviceID));
+        WriteLine(Format("  enabled: {0}", enabled));
+        WriteLine();
     }
 }

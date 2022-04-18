@@ -393,3 +393,10 @@ event uhppoted::get_event(uint32_t id, uint32_t index) {
 
     return e;
 }
+
+void uhppoted::record_special_events(uint32_t id, bool enabled) {
+    char *err = RecordSpecialEvents(u, id, enabled);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+}

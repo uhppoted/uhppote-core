@@ -58,3 +58,16 @@ func getEvent(uu uhppote.IUHPPOTE, event *C.struct_Event, deviceID uint32, index
 
 	return nil
 }
+
+func recordSpecialEvents(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) error {
+	ok, err := uu.RecordSpecialEvents(deviceID, enabled)
+	if err != nil {
+		return err
+	} else if !ok && enabled {
+		return fmt.Errorf("%v: failed to enable record special events", deviceID)
+	} else if !ok && !enabled {
+		return fmt.Errorf("%v: failed to disable record special events", deviceID)
+	}
+
+	return nil
+}

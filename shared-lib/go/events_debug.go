@@ -59,3 +59,14 @@ func getEvent(uu uhppote.IUHPPOTE, event *C.struct_Event, deviceID uint32, index
 
 	return nil
 }
+
+func recordSpecialEvents(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) error {
+	if DEBUG {
+		fmt.Printf(">>> record-special-events\n")
+		fmt.Printf("    ID:      %v\n", deviceID)
+		fmt.Printf("    enabled: %v\n", enabled)
+		fmt.Println()
+	}
+
+	return nil
+}

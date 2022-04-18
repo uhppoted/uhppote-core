@@ -9,7 +9,9 @@ extern const uint32_t CARD_NUMBER;
 extern const uint32_t CARD_INDEX;
 extern const uint32_t EVENT_INDEX;
 extern const uint8_t DOOR;
-extern bool result(const char *, bool);
+
+extern bool passed(const char *);
+extern bool failed(const char *);
 
 bool getEventIndex() {
     const char *tag = "get-event-index";
@@ -28,7 +30,11 @@ bool getEventIndex() {
         ok = false;
     }
 
-    return result(tag, ok);
+    if (!ok) {
+        return failed(tag);
+    }
+
+    return passed(tag);
 }
 
 bool setEventIndex() {
@@ -40,7 +46,7 @@ bool setEventIndex() {
         return false;
     }
 
-    return result(tag, true);
+    return passed(tag);
 }
 
 bool getEvent() {
@@ -94,5 +100,20 @@ bool getEvent() {
         ok = false;
     }
 
-    return result(tag, ok);
+    if (!ok) {
+        return failed(tag);
+    }
+
+    return passed(tag);
+}
+
+bool recordSpecialEvents() {
+    const char *tag = "record-special-events";
+
+    if (record_special_events(DEVICE_ID, true) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    return passed(tag);
 }

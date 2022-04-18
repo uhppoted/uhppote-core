@@ -23,6 +23,7 @@
            get-event-index
            set-event-index
            get-event
+           record-special-events
            failed
            message))
 

@@ -41,6 +41,7 @@ def tests():
         'get-event-index': get_event_index,
         'set-event-index': set_event_index,
         'get-event': get_event,
+        'record-special-events': record_special_events,
     }
 
 
@@ -164,7 +165,7 @@ def get_card(u):
     card = u.get_card(DEVICE_ID, CARD_NUMBER)
 
     return evaluate(tag, [
-        ('card number', 8165537, card.cardNumber),
+        ('card number', 8165538, card.cardNumber),
         ('from date', '2022-01-01', card.start),
         ('to date', '2022-12-31', card.end),
         ('door[1]', 0, card.doors[0]),
@@ -197,21 +198,21 @@ def put_card(u):
 
 
 def delete_card(u):
-    tag = 'delete_card'
+    tag = 'delete-card'
     u.delete_card(DEVICE_ID, CARD_NUMBER)
 
     return evaluate(tag, [])
 
 
 def delete_cards(u):
-    tag = 'delete_cards'
+    tag = 'delete-cards'
     u.delete_cards(DEVICE_ID)
 
     return evaluate(tag, [])
 
 
 def get_event_index(u):
-    tag = 'get_event_index'
+    tag = 'get-event-index'
     index = u.get_event_index(DEVICE_ID)
 
     return evaluate(tag, [
@@ -220,7 +221,7 @@ def get_event_index(u):
 
 
 def set_event_index(u):
-    tag = 'set_event_index'
+    tag = 'set-event-index'
     u.set_event_index(DEVICE_ID, EVENT_INDEX)
 
     return evaluate(tag, [])
@@ -242,6 +243,13 @@ def get_event(u):
     ])
 
 
+def record_special_events(u):
+    tag = 'record-special-events'
+    u.record_special_events(DEVICE_ID, True)
+
+    return evaluate(tag, [])
+
+
 def evaluate(tag, resultset):
     ok = True
     for row in resultset:
@@ -254,12 +262,12 @@ def evaluate(tag, resultset):
 
 
 def passed(tag):
-    print(f'{tag:<17} ok')
+    print(f'{tag:<21} ok')
     return True
 
 
 def failed(tag):
-    print(f'{tag:<17} failed')
+    print(f'{tag:<21} failed')
     return False
 
 

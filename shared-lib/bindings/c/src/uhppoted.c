@@ -460,3 +460,13 @@ int get_event(uint32_t id, uint32_t index, event *e) {
 
     return 0;
 }
+
+int record_special_events(uint32_t id, bool enabled) {
+    char *err = RecordSpecialEvents(u, id, enabled);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}

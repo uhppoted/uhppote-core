@@ -11,7 +11,8 @@ extern const uint32_t CARD_INDEX;
 extern const uint32_t EVENT_INDEX;
 extern const uint8_t DOOR;
 
-extern bool result(string test, bool ok);
+extern bool passed(string);
+extern bool failed(string);
 
 bool getEventIndex(uhppoted &u) {
     string tag = "set-event-index";
@@ -26,7 +27,12 @@ bool getEventIndex(uhppoted &u) {
             ok = false;
         }
 
-        return result(tag, ok);
+        if (!ok) {
+            return failed(tag);
+        }
+
+        return passed(tag);
+
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -42,7 +48,8 @@ bool setEventIndex(uhppoted &u) {
     try {
         u.set_event_index(DEVICE_ID, EVENT_INDEX);
 
-        return result(tag, true);
+        return passed(tag);
+
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -101,7 +108,29 @@ bool getEvent(uhppoted &u) {
             ok = false;
         }
 
-        return result(tag, ok);
+        if (!ok) {
+            return failed(tag);
+        }
+
+        return passed(tag);
+
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return false;
+}
+
+bool recordSpecialEvents(uhppoted &u) {
+    string tag = "record-special-events";
+
+    try {
+        u.record_special_events(DEVICE_ID, true);
+
+        return passed(tag);
+
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl

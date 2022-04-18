@@ -59,3 +59,15 @@ func getEvent(uu uhppote.IUHPPOTE, event *C.struct_Event, deviceID uint32, index
 
 	return nil
 }
+
+func recordSpecialEvents(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) error {
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
+	if !enabled {
+		return fmt.Errorf("Incorrect enabled value (%v)", enabled)
+	}
+
+	return nil
+}

@@ -10,7 +10,8 @@ extern const uint32_t CARD_ID;
 extern const uint32_t CARD_INDEX;
 extern const uint8_t DOOR;
 
-extern bool result(string test, bool ok);
+extern bool passed(string);
+extern bool failed(string);
 
 bool getCards(uhppoted &u) {
     string tag = "get-cards";
@@ -24,7 +25,12 @@ bool getCards(uhppoted &u) {
             ok = false;
         }
 
-        return result(tag, ok);
+        if (!ok) {
+            return failed(tag);
+        }
+
+        return passed(tag);
+
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -80,7 +86,12 @@ bool getCard(uhppoted &u) {
             ok = false;
         }
 
-        return result("get-card", ok);
+        if (!ok) {
+            return failed(tag);
+        }
+
+        return passed(tag);
+
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -136,7 +147,12 @@ bool getCardByIndex(uhppoted &u) {
             ok = false;
         }
 
-        return result(tag, ok);
+        if (!ok) {
+            return failed(tag);
+        }
+
+        return passed(tag);
+
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -154,7 +170,7 @@ bool putCard(uhppoted &u) {
 
         u.put_card(DEVICE_ID, CARD_ID, "2022-01-01", "2022-12-31", doors);
 
-        return result(tag, true);
+        return passed(tag);
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -170,7 +186,7 @@ bool deleteCard(uhppoted &u) {
     try {
         u.delete_card(DEVICE_ID, CARD_ID);
 
-        return result(tag, true);
+        return passed(tag);
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -186,7 +202,7 @@ bool deleteCards(uhppoted &u) {
     try {
         u.delete_cards(DEVICE_ID);
 
-        return result(tag, true);
+        return passed(tag);
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl

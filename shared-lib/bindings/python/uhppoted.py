@@ -264,6 +264,9 @@ class Uhppote:
         return Event(event.timestamp.decode('utf-8'), event.index, event.eventType, event.granted,
                      event.door, event.direction, event.card, event.reason)
 
+    def record_special_events(self, deviceID, enabled):
+        self.ffi.RecordSpecialEvents(self._uhppote, deviceID, enabled)
+
 
 # Go FFI types
 
@@ -289,6 +292,7 @@ class FFI:
         self.GetEventIndex = ffi('GetEventIndex', errcheck)
         self.SetEventIndex = ffi('SetEventIndex', errcheck)
         self.GetEvent = ffi('GetEvent', errcheck)
+        self.RecordSpecialEvents = ffi('RecordSpecialEvents', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -305,25 +309,26 @@ def ffi(tag, errcheck):
 @cache
 def libfunctions():
     return {
-        'GetDevices':     (lib.GetDevices,     [POINTER(GoUHPPOTE), POINTER(ctypes.c_int), POINTER(ctypes.c_uint32)]),
-        'GetDevice':      (lib.GetDevice,      [POINTER(GoUHPPOTE), POINTER(GoDevice),  c_ulong]),
-        'SetAddress':     (lib.SetAddress,     [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p]),
-        'GetStatus':      (lib.GetStatus,      [POINTER(GoUHPPOTE), POINTER(GoStatus), c_ulong]),
-        'GetTime':        (lib.GetTime,        [POINTER(GoUHPPOTE), POINTER(c_char_p), c_ulong]),
-        'SetTime':        (lib.SetTime,        [POINTER(GoUHPPOTE), c_ulong, c_char_p]),
-        'GetListener':    (lib.GetListener,    [POINTER(GoUHPPOTE), POINTER(c_char_p), c_ulong]),
-        'SetListener':    (lib.SetListener,    [POINTER(GoUHPPOTE), c_ulong, c_char_p]),
-        'GetDoorControl': (lib.GetDoorControl, [POINTER(GoUHPPOTE), POINTER(GoDoorControl), c_ulong, c_ubyte]),
-        'SetDoorControl': (lib.SetDoorControl, [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ubyte, c_ubyte]),
-        'GetCards':       (lib.GetCards,       [POINTER(GoUHPPOTE), POINTER(c_int), c_ulong]),
-        'GetCard':        (lib.GetCard,        [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]),
-        'GetCardByIndex': (lib.GetCardByIndex, [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]),
-        'PutCard':        (lib.PutCard,        [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, c_char_p, POINTER(c_ubyte)]),
-        'DeleteCard':     (lib.DeleteCard,     [POINTER(GoUHPPOTE), c_ulong, c_ulong]),
-        'DeleteCards':    (lib.DeleteCards,    [POINTER(GoUHPPOTE), c_ulong]),
-        'GetEventIndex':  (lib.GetEventIndex,  [POINTER(GoUHPPOTE), POINTER(c_ulong), c_ulong]),
-        'SetEventIndex':  (lib.SetEventIndex,  [POINTER(GoUHPPOTE), c_ulong, c_ulong]),
-        'GetEvent':       (lib.GetEvent,       [POINTER(GoUHPPOTE), POINTER(GoEvent), c_ulong, c_ulong]),
+        'GetDevices':          (lib.GetDevices,          [POINTER(GoUHPPOTE), POINTER(ctypes.c_int), POINTER(ctypes.c_uint32)]),
+        'GetDevice':           (lib.GetDevice,           [POINTER(GoUHPPOTE), POINTER(GoDevice),  c_ulong]),
+        'SetAddress':          (lib.SetAddress,          [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p]),
+        'GetStatus':           (lib.GetStatus,           [POINTER(GoUHPPOTE), POINTER(GoStatus), c_ulong]),
+        'GetTime':             (lib.GetTime,             [POINTER(GoUHPPOTE), POINTER(c_char_p), c_ulong]),
+        'SetTime':             (lib.SetTime,             [POINTER(GoUHPPOTE), c_ulong, c_char_p]),
+        'GetListener':         (lib.GetListener,         [POINTER(GoUHPPOTE), POINTER(c_char_p), c_ulong]),
+        'SetListener':         (lib.SetListener,         [POINTER(GoUHPPOTE), c_ulong, c_char_p]),
+        'GetDoorControl':      (lib.GetDoorControl,      [POINTER(GoUHPPOTE), POINTER(GoDoorControl), c_ulong, c_ubyte]),
+        'SetDoorControl':      (lib.SetDoorControl,      [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ubyte, c_ubyte]),
+        'GetCards':            (lib.GetCards,            [POINTER(GoUHPPOTE), POINTER(c_int), c_ulong]),
+        'GetCard':             (lib.GetCard,             [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]),
+        'GetCardByIndex':      (lib.GetCardByIndex,      [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]),
+        'PutCard':             (lib.PutCard,             [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, c_char_p, POINTER(c_ubyte)]),
+        'DeleteCard':          (lib.DeleteCard,          [POINTER(GoUHPPOTE), c_ulong, c_ulong]),
+        'DeleteCards':         (lib.DeleteCards,         [POINTER(GoUHPPOTE), c_ulong]),
+        'GetEventIndex':       (lib.GetEventIndex,       [POINTER(GoUHPPOTE), POINTER(c_ulong), c_ulong]),
+        'SetEventIndex':       (lib.SetEventIndex,       [POINTER(GoUHPPOTE), c_ulong, c_ulong]),
+        'GetEvent':            (lib.GetEvent,            [POINTER(GoUHPPOTE), POINTER(GoEvent), c_ulong, c_ulong]),
+        'RecordSpecialEvents': (lib.RecordSpecialEvents, [POINTER(GoUHPPOTE), c_ulong, c_bool]),
     }
 # yapf: enable
 

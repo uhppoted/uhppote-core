@@ -24,20 +24,25 @@
 
 
 (defun get-devices () "" 
-  (let ((devices (exec #'(lambda (u) (uhppoted-get-devices u)))))
+  (let ((tag      "get-devices")
+        (ok       T)
+        (devices (exec #'(lambda (u) (uhppoted-get-devices u)))))
        (cond ((/= 3 (length devices))
                     (progn
-                      (format t "get-devices: incorrect device count - expected:~a, got:~a~%" 3 (length devices)))
-                      (error 'failed :message  "get-devices: FAILED"))
+                      (format t "get-devices: incorrect device count - expected:~a, got:~a~%" 3 (length devices))
+                      (setf ok NIL)))
              ((not (equal (coerce devices 'list) '(201020304 303986753 405419896))) 
                     (progn
-                      (format t "get-devices: incorrect device list - expected:~a, got:~a~%" '(201020304 303986753 405419896) devices))
-                      (error 'failed :message  "get-devices: FAILED"))
-             (t (result "get-devices" t) ))))
-  
+                      (format t "get-devices: incorrect device list - expected:~a, got:~a~%" '(201020304 303986753 405419896) devices)
+                      (setf ok NIL))))
+       (if ok 
+          (passed tag)
+          (failed tag))))
+
 
 (defun get-device () "" 
-  (let ((ok T)
+  (let ((tag      "get-device")
+        (ok       T)
         (device (exec #'(lambda (u) (uhppoted-get-device u TEST-DEVICE-ID)))))
        (if (/= 405419896 (device-id device)) 
            (progn
@@ -74,17 +79,22 @@
              (format t "get-device: incorrect device date - expected:~a, got:~a~%" "v8.92" (device-date device))
              (setf ok NIL)))
        (if ok 
-          (result "get-device" t) 
-          (error 'failed :message  "get-device: FAILED"))))
+          (passed tag )
+          (failed tag))))
 
 
 (defun set-address () "" 
-  (exec #'(lambda (u) (uhppoted-set-address u TEST-DEVICE-ID "192.168.1.125" "255.255.254.0" "192.168.1.0")))
-  (result "set-address" t))
+  (let ((tag      "set-address")
+        (ok       T))
+       (exec #'(lambda (u) (uhppoted-set-address u TEST-DEVICE-ID "192.168.1.125" "255.255.254.0" "192.168.1.0")))
+       (if ok 
+          (passed tag )
+          (failed tag))))
 
 
 (defun get-status () "" 
-  (let ((ok T)
+  (let ((tag      "get-status")
+        (ok       T)
         (status (exec #'(lambda (u) (uhppoted-get-status u TEST-DEVICE-ID)))))
        (if (/= 405419896 (status-id status)) 
            (progn
@@ -172,46 +182,57 @@
                   (format t "get-status:  incorrect event reason - expected:~a, got:~a~%" 21 (event-reason event))
                   (setf ok NIL))))
        (if ok 
-          (result "get-status" t)
-          (error 'failed :message  "get-status:  FAILED"))))
+          (passed tag )
+          (failed tag))))
 
 
 (defun get-time () "" 
-  (let ((ok T)
+  (let ((tag      "get-time")
+        (ok       T)
         (datetime (exec #'(lambda (u) (uhppoted-get-time u TEST-DEVICE-ID)))))
        (if (not (equal "2022-01-02 12:34:56" datetime)) 
            (progn
              (format t "get-time:    incorrect date/time - expected:~a, got:~a~%" "2022-01-02 12:34:56" datetime)
              (setf ok NIL)))
        (if ok 
-          (result "get-time" t)
-          (error 'failed :message  "get-time:    FAILED"))))
+          (passed tag )
+          (failed tag))))
 
 
 (defun set-time () "" 
+  (let ((tag      "set-time")
+        (ok       T))
   (exec #'(lambda (u) (uhppoted-set-time u TEST-DEVICE-ID "2022-03-23 12:24:17")))
-  (result "set-time" t))
+       (if ok 
+          (passed tag )
+          (failed tag))))
 
 
 (defun get-listener () "" 
-  (let ((ok T)
+  (let ((tag      "get-listener")
+        (ok       T)
         (listener (exec #'(lambda (u) (uhppoted-get-listener u TEST-DEVICE-ID)))))
        (if (not (equal "192.168.1.100:60001" listener)) 
            (progn
              (format t "get-time:    incorrect event listener address - expected:~a, got:~a~%" "192.168.1.100:60001" listener)
              (setf ok NIL)))
        (if ok 
-          (format t "get-listener      ok~%")
-          (error 'failed :message  "get-listener  FAILED"))))
+          (passed tag )
+          (failed tag))))
 
 
 (defun set-listener () "" 
-  (exec #'(lambda (u) (uhppoted-set-listener u TEST-DEVICE-ID "192.168.1.100:60001")))
-  (result "set-listener" t))
+  (let ((tag      "set-listener")
+        (ok       T))
+       (exec #'(lambda (u) (uhppoted-set-listener u TEST-DEVICE-ID "192.168.1.100:60001")))
+       (if ok 
+          (passed tag )
+          (failed tag))))
 
 
 (defun get-door-control () "" 
-  (let ((ok T)
+  (let ((tag      "get-door-control")
+        (ok       T)
         (control (exec #'(lambda (u) (uhppoted-get-door-control u TEST-DEVICE-ID TEST-DOOR)))))
        (if (/= uhppoted:controlled (door-control-mode control)) 
            (progn
@@ -222,31 +243,37 @@
            (progn
              (format t "get-door-control: incorrect door open delay - expected:~a, got:~a~%" 7 (door-control-delay control))
              (setf ok NIL)))
-
        (if ok 
-          (result "get-door-control" t)
-          (error 'failed :message  "get-door-control: FAILED"))))
+          (passed tag )
+          (failed tag))))
 
 
 (defun set-door-control () "" 
-  (exec #'(lambda (u) (uhppoted-set-door-control u TEST-DEVICE-ID TEST-DOOR uhppoted:normally-closed 6)))
-  (format t "set-door-control  ok~%"))
+  (let ((tag      "set-door-control")
+        (ok       T))
+       (exec #'(lambda (u) (uhppoted-set-door-control u TEST-DEVICE-ID TEST-DOOR uhppoted:normally-closed 6)))
+       (if ok 
+          (passed tag )
+          (failed tag))))
+
 
 
 (defun get-cards () "" 
-  (let ((ok T)
+  (let ((tag      "get-cards")
+        (ok       T)
         (cards (exec #'(lambda (u) (uhppoted-get-cards u TEST-DEVICE-ID)))))
        (if (not (equal 39 cards)) 
            (progn
              (format t "get-cards:    incorrect card count - expected:~a, got:~a~%" 39 cards)
              (setf ok NIL)))
        (if ok 
-          (result "get-cards" t)
-          (error 'failed :message  "get-cards     FAILED"))))
+          (passed tag )
+          (failed tag))))
 
 
 (defun get-card () "" 
-  (let ((ok T)
+  (let ((tag      "get-card")
+        (ok       T)
         (card (exec #'(lambda (u) (uhppoted-get-card u TEST-DEVICE-ID TEST-CARD-NUMBER)))))
        (if (not (equal 8165538 (card-card-number card))) 
            (progn
@@ -269,12 +296,13 @@
              (setf ok NIL)))
 
        (if ok 
-          (result "get-card" t)
-          (error 'failed :message  "get-card     FAILED"))))
+          (passed tag )
+          (failed tag))))
 
 
 (defun get-card-by-index () "" 
-  (let ((ok T)
+  (let ((tag      "get-card-by-index")
+        (ok       T)
         (card (exec #'(lambda (u) (uhppoted-get-card-by-index u TEST-DEVICE-ID TEST-CARD-INDEX)))))
        (if (not (equal 8165538 (card-card-number card))) 
            (progn
@@ -297,38 +325,51 @@
              (setf ok NIL)))
 
        (if ok 
-          (result "get-card-by-index" t)
-          (error 'failed :message  "get-card-by-index  FAILED"))))
+          (passed tag )
+          (failed tag))))
 
 
 (defun put-card () "" 
-  (let ((doors (make-array 4 :initial-contents '(0 1 31 75))))
-    (exec #'(lambda (u) (uhppoted-put-card u TEST-DEVICE-ID TEST-CARD-NUMBER "2022-01-01" "2022-12-31" doors)))
-    (result "put-card" t)))
+  (let ((tag      "put-card")
+        (ok       T)
+        (doors (make-array 4 :initial-contents '(0 1 31 75))))
+       (exec #'(lambda (u) (uhppoted-put-card u TEST-DEVICE-ID TEST-CARD-NUMBER "2022-01-01" "2022-12-31" doors)))
+       (if ok 
+          (passed tag )
+          (failed tag))))
+
 
 
 (defun delete-card () "" 
-  (exec #'(lambda (u) (uhppoted-delete-card u TEST-DEVICE-ID TEST-CARD-NUMBER)))
-  (result "delete-card" t))
+  (let ((tag      "delete-card")
+        (ok       T))
+       (exec #'(lambda (u) (uhppoted-delete-card u TEST-DEVICE-ID TEST-CARD-NUMBER)))
+       (if ok 
+          (passed tag )
+          (failed tag))))
 
 
 (defun delete-cards () "" 
-  (exec #'(lambda (u) (uhppoted-delete-cards u TEST-DEVICE-ID)))
-  (result "delete-cards" t))
+  (let ((tag      "delete-cards")
+        (ok       T))
+       (exec #'(lambda (u) (uhppoted-delete-cards u TEST-DEVICE-ID)))
+       (if ok 
+          (passed tag )
+          (failed tag))))
 
 
 (defun get-event-index () "" 
   (let ((tag      "get-event-index")
-        (expected 47)
         (ok       T)
+        (expected 47)
         (index    (exec #'(lambda (u) (uhppoted-get-event-index u TEST-DEVICE-ID)))))
        (if (not (equal expected index)) 
            (progn
              (format t "~a: incorrect event index - expected:~a, got:~a~%" tag expected index)
              (setf ok NIL)))
        (if ok 
-          (result tag t)
-          (error 'failed :message  "get-event-index  FAILED"))))
+          (passed tag )
+          (failed tag))))
 
 
 (defun set-event-index () "" 
@@ -336,8 +377,9 @@
         (ok       T))
        (exec #'(lambda (u) (uhppoted-set-event-index u TEST-DEVICE-ID TEST-EVENT-INDEX)))
        (if ok 
-          (result tag t)
-          (error 'failed :message  "set-event-index  FAILED"))))
+          (passed tag )
+          (failed tag))))
+
 
 (defun get-event () "" 
   (let ((tag "get-event")
@@ -384,11 +426,22 @@
              (setf ok NIL)))
 
        (if ok 
-          (result tag t)
-          (error 'failed :message  "get-event    FAILED"))))
+          (passed tag )
+          (failed tag))))
 
 
-(defun result (tag ok) ""
-  (if ok
-      (format t "~17a ok~%" tag)
-      (format t "~17a failed~%" tag)))
+(defun record-special-events () "" 
+  (let ((tag      "record-special-events")
+        (ok       T))
+       (exec #'(lambda (u) (uhppoted-record-special-events u TEST-DEVICE-ID t)))
+       (if ok 
+          (passed tag )
+          (failed tag))))
+
+
+(defun passed (tag) ""
+  (format t "~21a ok~%" tag))
+
+(defun failed (tag) ""
+  (format t "~21a failed~%" tag))
+; (error 'failed :message  "get-event    FAILED"))))

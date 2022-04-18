@@ -89,6 +89,7 @@ class uhppoted {
     uint32_t get_event_index(uint32_t id);
     void set_event_index(uint32_t id, uint32_t index);
     event get_event(uint32_t id, uint32_t index);
+    void record_special_events(uint32_t id, bool enabled);
 
   private:
     UHPPOTE *u;

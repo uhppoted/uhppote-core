@@ -15,19 +15,20 @@ typedef struct test {
     f fn;
 } test;
 
+// typedef struct result {
+//     const char *field;
+//     const int type;
+//     union {
+//         bool expected;
+//         bool value;
+//     } Boolean;
+// } result;
+
 const uint32_t DEVICE_ID = 405419896;
 const uint32_t CARD_NUMBER = 8165538;
 const uint32_t CARD_INDEX = 19;
 const uint32_t EVENT_INDEX = 51;
 const uint8_t DOOR = 4;
-
-bool result(const char *tag, bool ok) {
-    if (ok) {
-        printf("%-17s  ok\n", tag);
-    }
-
-    return ok;
-}
 
 const test tests[] = {
     {.name = "get-devices", .fn = getDevices},
@@ -49,6 +50,7 @@ const test tests[] = {
     {.name = "get-event-index", .fn = getEventIndex},
     {.name = "set-event-index", .fn = setEventIndex},
     {.name = "get-event", .fn = getEvent},
+    {.name = "record-special-events", .fn = recordSpecialEvents},
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};
@@ -116,4 +118,19 @@ void usage() {
     }
 
     printf("\n");
+}
+
+// bool evaluate(const char *tag, result resultset[]) {
+// }
+
+bool passed(const char *tag) {
+    printf("%-21s ok\n", tag);
+
+    return true;
+}
+
+bool failed(const char *tag) {
+    printf("%-21s failed\n", tag);
+
+    return false;
 }

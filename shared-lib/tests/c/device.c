@@ -6,9 +6,12 @@
 
 extern const uint32_t DEVICE_ID;
 extern const uint8_t DOOR;
-extern bool result(char *test, bool ok);
+
+extern bool passed(const char *);
+extern bool failed(const char *);
 
 bool getDevices() {
+    const char *tag = "get-devices";
     uint32_t *devices = NULL;
     int N;
 
@@ -31,10 +34,15 @@ bool getDevices() {
 
     free(devices);
 
-    return result("get-devices", ok);
+    if (!ok) {
+        return failed(tag);
+    }
+
+    return passed(tag);
 }
 
 bool getDevice() {
+    const char *tag = "get-device";
     struct device d;
 
     if (get_device(DEVICE_ID, &d) != 0) {
@@ -79,20 +87,27 @@ bool getDevice() {
         ok = false;
     }
 
-    return result("get-device", ok);
+    if (!ok) {
+        return failed(tag);
+    }
+
+    return passed(tag);
 }
 
 bool setAddress(uint32_t deviceID, const char *address, const char *subnet,
                 const char *gateway) {
+    const char *tag = "set-address";
+
     if (set_address(DEVICE_ID, "192.168.1.125", "255.255.254.0", "192.168.1.0") != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
 
-    return result("set-address", true);
+    return passed(tag);
 }
 
 bool getStatus() {
+    const char *tag = "get-status";
     struct status s;
 
     if (get_status(DEVICE_ID, &s) != 0) {
@@ -189,10 +204,15 @@ bool getStatus() {
         ok = false;
     }
 
-    return result("get-status", ok);
+    if (!ok) {
+        return failed(tag);
+    }
+
+    return passed(tag);
 }
 
 bool getTime() {
+    const char *tag = "get-time";
     char *datetime;
 
     if (get_time(DEVICE_ID, &datetime) != 0) {
@@ -209,19 +229,25 @@ bool getTime() {
 
     free(datetime);
 
-    return result("get-time", ok);
+    if (!ok) {
+        return failed(tag);
+    }
+
+    return passed(tag);
 }
 
 bool setTime() {
+    const char *tag = "set-time";
     if (set_time(DEVICE_ID, "2022-03-23 12:24:17") != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
 
-    return result("set-time", true);
+    return passed(tag);
 }
 
 bool getListener() {
+    const char *tag = "get-listener";
     char *listener;
 
     if (get_listener(DEVICE_ID, &listener) != 0) {
@@ -238,19 +264,26 @@ bool getListener() {
 
     free(listener);
 
-    return result("get-listener", ok);
+    if (!ok) {
+        return failed(tag);
+    }
+
+    return passed(tag);
 }
 
 bool setListener() {
+    const char *tag = "set-listener";
+
     if (set_listener(DEVICE_ID, "192.168.1.100:60001") != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
 
-    return result("set-listener", true);
+    return passed(tag);
 }
 
 bool getDoorControl() {
+    const char *tag = "get-door-control";
     struct door_control d;
 
     if (get_door_control(DEVICE_ID, DOOR, &d) != 0) {
@@ -270,14 +303,20 @@ bool getDoorControl() {
         ok = false;
     }
 
-    return result("get-door-control", ok);
+    if (!ok) {
+        return failed(tag);
+    }
+
+    return passed(tag);
 }
 
 bool setDoorControl() {
+    const char *tag = "set-door-control";
+
     if (set_door_control(DEVICE_ID, DOOR, NORMALLY_CLOSED, 6) != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
 
-    return result("set-door-control", true);
+    return passed(tag);
 }

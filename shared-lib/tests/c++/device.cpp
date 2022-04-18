@@ -8,12 +8,15 @@ using namespace std;
 extern const uint32_t DEVICE_ID;
 extern const uint8_t DOOR;
 
-extern bool result(string test, bool ok);
+extern bool passed(string);
+extern bool failed(string);
 
 bool getDevices(uhppoted &u) {
+    string tag = "get-devices";
+    bool ok = true;
+
     try {
         auto devices = u.get_devices();
-        bool ok = true;
 
         if (devices.size() != 3) {
             cout << "get-devices: incorrect device count - expected:" << 3 << ", got:" << devices.size() << endl;
@@ -25,7 +28,12 @@ bool getDevices(uhppoted &u) {
             ok = false;
         }
 
-        return result("get-devices", ok);
+        if (!ok) {
+            return failed(tag);
+        }
+
+        return passed(tag);
+
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -36,9 +44,11 @@ bool getDevices(uhppoted &u) {
 }
 
 bool getDevice(uhppoted &u) {
+    string tag = "get-device";
+    bool ok = true;
+
     try {
         auto d = u.get_device(DEVICE_ID);
-        bool ok = true;
 
         if (d.ID != 405419896) {
             cout << "get-device: incorrect device ID - expected:" << 405419896 << ", got:" << d.ID << endl;
@@ -87,7 +97,12 @@ bool getDevice(uhppoted &u) {
             ok = false;
         }
 
-        return result("get-device", ok);
+        if (!ok) {
+            return failed(tag);
+        }
+
+        return passed(tag);
+
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -98,14 +113,16 @@ bool getDevice(uhppoted &u) {
 }
 
 bool setAddress(uhppoted &u) {
-    try {
-        string address = "192.168.1.125";
-        string subnet = "255.255.254.0";
-        string gateway = "192.168.1.0";
+    string tag = "set-address";
+    string address = "192.168.1.125";
+    string subnet = "255.255.254.0";
+    string gateway = "192.168.1.0";
 
+    try {
         u.set_address(DEVICE_ID, address, subnet, gateway);
 
-        return result("set-address", true);
+        return passed(tag);
+
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -116,9 +133,11 @@ bool setAddress(uhppoted &u) {
 }
 
 bool getStatus(uhppoted &u) {
+    string tag = "get-status";
+    bool ok = true;
+
     try {
         auto s = u.get_status(DEVICE_ID);
-        bool ok = true;
 
         if (s.ID != 405419896) {
             cout << "get-status: incorrect device ID - expected:" << 405419896 << ", got:" << s.ID << endl;
@@ -215,7 +234,12 @@ bool getStatus(uhppoted &u) {
             ok = false;
         }
 
-        return result("get-status", ok);
+        if (!ok) {
+            return failed(tag);
+        }
+
+        return passed(tag);
+
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -226,10 +250,11 @@ bool getStatus(uhppoted &u) {
 }
 
 bool getTime(uhppoted &u) {
-    try {
-        auto datetime = u.get_time(DEVICE_ID);
-        bool ok = true;
+    string tag = "get-time";
+    auto datetime = u.get_time(DEVICE_ID);
+    bool ok = true;
 
+    try {
         if (datetime != "2022-01-02 12:34:56") {
             cout << "get-time: incorrect date/time - expected:"
                  << "2022-01-02 12:34:56"
@@ -237,7 +262,12 @@ bool getTime(uhppoted &u) {
             ok = false;
         }
 
-        return result("get-time", ok);
+        if (!ok) {
+            return failed(tag);
+        }
+
+        return passed(tag);
+
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -248,12 +278,14 @@ bool getTime(uhppoted &u) {
 }
 
 bool setTime(uhppoted &u) {
-    try {
-        string datetime = "2022-03-23 12:24:17";
+    string tag = "set-time";
+    string datetime = "2022-03-23 12:24:17";
 
+    try {
         u.set_time(DEVICE_ID, datetime);
 
-        return result("set-time", true);
+        return passed(tag);
+
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -264,9 +296,11 @@ bool setTime(uhppoted &u) {
 }
 
 bool getListener(uhppoted &u) {
+    string tag = "get-listener";
+    bool ok = true;
+
     try {
         auto listener = u.get_listener(DEVICE_ID);
-        bool ok = true;
 
         if (listener != "192.168.1.100:60001") {
             cout << "get-listener: incorrect listener - expected:"
@@ -275,7 +309,12 @@ bool getListener(uhppoted &u) {
             ok = false;
         }
 
-        return result("get-listener", ok);
+        if (!ok) {
+            return failed(tag);
+        }
+
+        return passed(tag);
+
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -286,12 +325,13 @@ bool getListener(uhppoted &u) {
 }
 
 bool setListener(uhppoted &u) {
-    try {
-        string listener = "192.168.1.100:60001";
+    string tag = "set-listener";
+    string listener = "192.168.1.100:60001";
 
+    try {
         u.set_listener(DEVICE_ID, listener);
 
-        return result("set-listener", true);
+        return passed(tag);
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -302,9 +342,11 @@ bool setListener(uhppoted &u) {
 }
 
 bool getDoorControl(uhppoted &u) {
+    string tag = "get-door-control";
+    bool ok = true;
+
     try {
         auto d = u.get_door_control(DEVICE_ID, DOOR);
-        bool ok = true;
 
         if (d.mode != 3) {
             cout << "get-door-control: incorrect control mode - expected:" << 3 << ", got:" << static_cast<int>(d.mode) << endl;
@@ -316,7 +358,8 @@ bool getDoorControl(uhppoted &u) {
             ok = false;
         }
 
-        return result("get-door-control", ok);
+        return passed(tag);
+
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl
@@ -327,10 +370,13 @@ bool getDoorControl(uhppoted &u) {
 }
 
 bool setDoorControl(uhppoted &u) {
+    string tag = "set-door-control";
+
     try {
         u.set_door_control(DEVICE_ID, DOOR, NORMALLY_CLOSED, 6);
 
-        return result("set-door-control", true);
+        return passed(tag);
+
     } catch (const exception &e) {
         cerr << endl
              << " *** ERROR " << e.what() << endl

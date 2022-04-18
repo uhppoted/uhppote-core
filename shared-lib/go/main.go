@@ -294,6 +294,17 @@ func GetEvent(u *C.struct_UHPPOTE, event *C.struct_Event, deviceID uint32, index
 	return nil
 }
 
+//export RecordSpecialEvents
+func RecordSpecialEvents(u *C.struct_UHPPOTE, deviceID uint32, enabled bool) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := recordSpecialEvents(uu, deviceID, enabled); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 	bind := types.BindAddr{IP: []byte{0, 0, 0, 0}, Port: 0}
 	broadcast := types.BroadcastAddr{IP: []byte{255, 255, 255, 255}, Port: 60000}

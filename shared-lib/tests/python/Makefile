@@ -76,6 +76,9 @@ set-event-index: build
 get-event: build
 	$(CMD) get-event
 
+record-special-events: build
+	$(CMD) record-special-events
+
 all: build
 	$(CMD) all
 

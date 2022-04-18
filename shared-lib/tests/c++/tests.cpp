@@ -34,6 +34,7 @@ vector<test> tests = {
     {"get-event-index", getEventIndex},
     {"set-event-index", setEventIndex},
     {"get-event", getEvent},
+    {"record-special-events", recordSpecialEvents},
 };
 
 extern const uint32_t DEVICE_ID = 405419896;
@@ -41,14 +42,6 @@ extern const uint32_t CARD_ID = 8165538;
 extern const uint32_t CARD_INDEX = 19;
 extern const uint32_t EVENT_INDEX = 51;
 extern const uint8_t DOOR = 4;
-
-extern bool result(string test, bool ok) {
-    if (ok) {
-        cout << setw(18) << left << test << "ok" << endl;
-    }
-
-    return ok;
-}
 
 const controller ALPHA = {.id = 405419896, .address = "192.168.1.100"};
 const controller BETA = {.id = 303986753, .address = "192.168.1.100"};
@@ -103,4 +96,16 @@ void usage() {
         cout << "      " << it->command << endl;
     }
     cout << endl;
+}
+
+extern bool passed(string test) {
+    cout << setw(21) << left << test << " ok" << endl;
+
+    return true;
+}
+
+extern bool failed(string test) {
+    cout << setw(21) << left << test << " failed" << endl;
+
+    return false;
 }

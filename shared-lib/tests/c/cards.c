@@ -8,7 +8,9 @@ extern const uint32_t DEVICE_ID;
 extern const uint32_t CARD_NUMBER;
 extern const uint32_t CARD_INDEX;
 extern const uint8_t DOOR;
-extern bool result(char *test, bool ok);
+
+extern bool passed(const char *);
+extern bool failed(const char *);
 
 bool getCards() {
     const char *tag = "get-cards";
@@ -27,10 +29,15 @@ bool getCards() {
         ok = false;
     }
 
-    return result("get-cards", ok);
+    if (!ok) {
+        return failed(tag);
+    }
+
+    return passed(tag);
 }
 
 bool getCard() {
+    const char *tag = "get-card";
     card card;
 
     if (get_card(DEVICE_ID, CARD_NUMBER, &card) < 0) {
@@ -75,10 +82,15 @@ bool getCard() {
         ok = false;
     }
 
-    return result("get-card", ok);
+    if (!ok) {
+        return failed(tag);
+    }
+
+    return passed(tag);
 }
 
 bool getCardByIndex() {
+    const char *tag = "get-card-by-index";
     card card;
 
     if (get_card_by_index(DEVICE_ID, CARD_INDEX, &card) < 0) {
@@ -123,10 +135,15 @@ bool getCardByIndex() {
         ok = false;
     }
 
-    return result("get-card-by-index", ok);
+    if (!ok) {
+        return failed(tag);
+    }
+
+    return passed(tag);
 }
 
 bool putCard() {
+    const char *tag = "put-card";
     uint8_t doors[4] = {0, 1, 31, 75};
 
     if (put_card(DEVICE_ID, CARD_NUMBER, "2022-01-01", "2022-12-31", (uint8_t *)doors) < 0) {
@@ -134,23 +151,27 @@ bool putCard() {
         return false;
     }
 
-    return result("put-card", true);
+    return passed(tag);
 }
 
 bool deleteCard() {
+    const char *tag = "delete-card";
+
     if (delete_card(DEVICE_ID, CARD_NUMBER) < 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
 
-    return result("delete-card", true);
+    return passed(tag);
 }
 
 bool deleteCards() {
+    const char *tag = "delete-cards";
+
     if (delete_cards(DEVICE_ID) < 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
 
-    return result("delete-cards", true);
+    return passed(tag);
 }

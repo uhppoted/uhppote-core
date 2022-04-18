@@ -65,3 +65,20 @@ int getEvent(int argc, char **argv) {
 
     return 0;
 }
+
+int recordSpecialEvents(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    bool enabled = true;
+
+    if (record_special_events(deviceID, enabled) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    printf("\nrecord-special-events\n");
+    printf("  ID:      %u\n", deviceID);
+    printf("  enabled: %d\n", enabled);
+    printf("\n");
+
+    return 0;
+}

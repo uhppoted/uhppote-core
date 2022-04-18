@@ -190,3 +190,13 @@
             tag
             (exec #'(lambda (u) (uhppoted-get-event u device-id index))))))
 
+
+(defun record-special-events () "" 
+  (let ((tag       "record-special-events")
+        (device-id 405419896)
+        (enabled   t))
+    (format t 
+            "  ~a:~%    ~:w~%~%" 
+            tag
+            (exec #'(lambda (u) (uhppoted-record-special-events u device-id enabled))))))
+

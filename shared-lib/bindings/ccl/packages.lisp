@@ -23,6 +23,7 @@
            uhppoted-get-event-index
            uhppoted-set-event-index
            uhppoted-get-event
+           uhppoted-record-special-events
            uhppoted-error
            with-warning
            message

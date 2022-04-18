@@ -413,6 +413,15 @@
                   :card      (pref event :GoEvent.card)
                   :reason    (pref event :GoEvent.reason)))))
 
+
+(defun uhppoted-record-special-events (uhppote device-id enabled) "Enables/disables recording additional events for a controller"
+  (with-macptrs ((err (external-call "RecordSpecialEvents" :address uhppote 
+                                                           :unsigned-long device-id 
+                                                           :unsigned-byte (if enabled 1 0)
+                                                           :address)))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+
+
 (defun debug () "" 
   (handler-bind
 	((uhppoted-error

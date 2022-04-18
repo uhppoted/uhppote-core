@@ -119,6 +119,11 @@ const command commands[] = {
         .help = "Retrieves the event at the index from a controller.",
         .fn = getEvent,
     },
+    {
+        .cmd = "record-special-events",
+        .help = "Enables/disables recording additional events for a controller.",
+        .fn = recordSpecialEvents,
+    },
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};

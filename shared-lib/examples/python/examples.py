@@ -98,6 +98,10 @@ def commands():
             'help': "Retrieves the event at the index from a controller.",
             'fn': get_event,
         },
+        'record-special-events': {
+            'help': "Enables/disables recording additional events for a controller.",
+            'fn': record_special_events,
+        },
     }
 
 
@@ -516,6 +520,24 @@ def get_event(u, args):
         print()
 
 
+def record_special_events(u, args):
+    tag = 'record-special-events'
+    deviceID = DEVICE_ID
+    enabled = True
+
+    try:
+        u.record_special_events(deviceID, enabled)
+
+        print(f'{tag}')
+        print(f'  ID:      {deviceID}')
+        print(f'  enabled: {enabled}')
+        print()
+
+    except Exception as e:
+        print(f' *** ERROR {tag} ({e})')
+        print()
+
+
 def main():
     if len(sys.argv) < 2:
         usage()
@@ -526,12 +548,18 @@ def main():
     if cmd == 'help':
         help()
     else:
-        alpha = uhppoted.Controller(405419896, '192.168.1.100')
-        beta = uhppoted.Controller(303986753, '192.168.1.100')
-        controllers = [alpha, beta]
+        bind = '192.168.1.100'
+        broadcast = '192.168.1.255'
+        listen = '192.168.1.100:60001'
+        timeout = 2500
+        debug = True
+        controllers = [
+            uhppoted.Controller(405419896, '192.168.1.100'),
+            uhppoted.Controller(303986753, '192.168.1.100'),
+        ]
 
-        u = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE(
-            '192.168.1.100', '192.168.1.255', '192.168.1.100:60001', 2500, controllers, True))
+        u = uhppoted.Uhppote(
+            uhppote=uhppoted.UHPPOTE(bind, broadcast, listen, timeout, controllers, debug))
 
         try:
             for c, v in commands().items():
