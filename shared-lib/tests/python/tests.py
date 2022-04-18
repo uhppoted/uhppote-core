@@ -164,7 +164,7 @@ def get_card(u):
     card = u.get_card(DEVICE_ID, CARD_NUMBER)
 
     return evaluate(tag, [
-        ('card number', 8165538, card.cardNumber),
+        ('card number', 8165537, card.cardNumber),
         ('from date', '2022-01-01', card.start),
         ('to date', '2022-12-31', card.end),
         ('door[1]', 0, card.doors[0]),
@@ -247,7 +247,7 @@ def evaluate(tag, resultset):
     for row in resultset:
         field, expected, actual = row
         if actual != expected:
-            print(f'{tag}: incorrect {field} - expected:{expected}, got:{actual}')
+            print(f'{tag:<17} incorrect {field} (expected:{expected}, got:{actual})')
             ok = False
 
     return passed(tag) if ok else failed(tag)
@@ -298,7 +298,7 @@ def main():
                 sys.exit(-1)
 
         elif cmd == '' or cmd == 'all':
-            if not reduce(lambda ok, f: ok and f(u), tests().values(), True):
+            if not reduce(lambda ok, f: f(u) and ok, tests().values(), True):
                 sys.exit(-1)
 
         elif cmd == 'help':

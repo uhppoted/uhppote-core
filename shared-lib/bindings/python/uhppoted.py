@@ -98,11 +98,11 @@ class Card:
 
 class Uhppote:
     def __init__(self, uhppote=None):
+        self.ffi = FFI(self.errcheck)
         self._uhppote = None
         if uhppote:
             self._uhppote = GoUHPPOTE(uhppote.bind, uhppote.broadcast, uhppote.listen,
                                       uhppote.timeout, uhppote.controllers, uhppote.debug)
-        self.ffi = FFI(self.errcheck)
 
     @staticmethod
     def errcheck(err, func, args):
