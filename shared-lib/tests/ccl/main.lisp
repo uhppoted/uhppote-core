@@ -75,10 +75,10 @@
     (cond ((string= arg "help") (usage))
           ((string= arg "all")  (all))
           (t (block single-command
-               (loop for cmd in ll
-                 do (if (string= arg (first cmd))
+               (loop for (cmd fn) in ll
+                 do (if (string= arg cmd)
                         (progn
-                          (test (second cmd))
+                          (test fn)
                           (return-from single-command))))
 
                (format *error-output* "~%   *** ERROR invalid command (~a)~%" arg)

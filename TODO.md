@@ -1,7 +1,7 @@
 ## v0.7.x
 
 ### IN PROGRESS
-  - [ ] Commonalise test failure format
+  - [ ] Commonalise test failure handling
         - [ ] C
         - [ ] C++
         - [ ] C#
@@ -9,12 +9,12 @@
         - [ ] CCL
 
 - Shared-lib/DLL
-  - [ ] `record-special-events`
+  - [x] `record-special-events`
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
-        - [ ] CCL
+        - [x] CCL
 
   - [ ] `open-door`
   - [ ] `get-time-profile`
@@ -31,7 +31,6 @@
         - https://martinheinz.dev/blog/70
   - [ ] Remove doubled up exception handling in examples
   - [ ] CCL
-        - test failure handling
         - DOLIST
         - simplify main loop with `thereis` (https://gigamonkeys.com/book/loop-for-black-belts.html)
   - [ ] GetCardByIndex should return 'card deleted' error for ff ff ff ff in response
