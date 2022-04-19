@@ -9,12 +9,12 @@
         - [ ] CCL
 
 - Shared-lib/DLL
-  - [ ] `open-door`
-        - [ ] C
-        - [ ] C++
-        - [ ] C#
-        - [ ] Python
-        - [ ] CCL
+  - [x] `open-door`
+        - [x] C
+        - [x] C++
+        - [x] C#
+        - [x] Python
+        - [x] CCL
 
   - [ ] `get-time-profile`
   - [ ] `set-time-profile`
