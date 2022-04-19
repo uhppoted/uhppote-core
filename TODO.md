@@ -2,7 +2,7 @@
 
 ### IN PROGRESS
   - [ ] Commonalise test failure handling
-        - [ ] C
+        - [x] C
         - [ ] C++
         - [ ] C#
         - [x] Python

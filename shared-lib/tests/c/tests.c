@@ -15,14 +15,8 @@ typedef struct test {
     f fn;
 } test;
 
-// typedef struct result {
-//     const char *field;
-//     const int type;
-//     union {
-//         bool expected;
-//         bool value;
-//     } Boolean;
-// } result;
+bool passed(const char *);
+bool failed(const char *);
 
 const uint32_t DEVICE_ID = 405419896;
 const uint32_t CARD_NUMBER = 8165538;
@@ -121,8 +115,43 @@ void usage() {
     printf("\n");
 }
 
-// bool evaluate(const char *tag, result resultset[]) {
-// }
+bool evaluate(const char *tag, int N, const result resultset[]) {
+    bool ok = true;
+
+    for (int i = 0; i < N; i++) {
+        result r = resultset[i];
+        if (strcmp(r.type, "uint8") == 0) {
+            if (r.value.uint8.value != r.value.uint8.expected) {
+                printf("%-21s incorrect %s (expected:%u, got:%u)\n", tag, r.field, r.value.uint8.expected, r.value.uint8.value);
+                ok = false;
+            }
+        } else if (strcmp(r.type, "uint32") == 0) {
+            if (r.value.uint32.value != r.value.uint32.expected) {
+                printf("%-21s incorrect %s (expected:%u, got:%u)\n", tag, r.field, r.value.uint32.expected, r.value.uint32.value);
+                ok = false;
+            }
+        } else if (strcmp(r.type, "boolean") == 0) {
+            if (r.value.boolean.value != r.value.boolean.expected) {
+                printf("%-21s incorrect %s (expected:%d, got:%d)\n", tag, r.field, r.value.boolean.expected, r.value.boolean.value);
+                ok = false;
+            }
+        } else if (strcmp(r.type, "string") == 0) {
+            if (strcmp(r.value.string.value, r.value.string.expected) != 0) {
+                printf("%-21s incorrect %s (expected:%s, got:%s)\n", tag, r.field, r.value.string.expected, r.value.string.value);
+                ok = false;
+            }
+        } else {
+            printf("invalid result type: field::%s,type:%s\n", r.field, r.type);
+            return false;
+        }
+    }
+
+    if (!ok) {
+        return failed(tag);
+    }
+
+    return passed(tag);
+}
 
 bool passed(const char *tag) {
     printf("%-21s ok\n", tag);

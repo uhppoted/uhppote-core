@@ -2,19 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "tests.h"
 #include "uhppoted.h"
-
-extern const uint32_t DEVICE_ID;
-extern const uint32_t CARD_NUMBER;
-extern const uint32_t CARD_INDEX;
-extern const uint8_t DOOR;
-
-extern bool passed(const char *);
-extern bool failed(const char *);
 
 bool getCards() {
     const char *tag = "get-cards";
-    int expected = 39;
     int N;
 
     if (get_cards(DEVICE_ID, &N) < 0) {
@@ -22,18 +14,16 @@ bool getCards() {
         return false;
     }
 
-    bool ok = true;
+    const result resultset[] = {
+        {
+            .field = "card count",
+            .type = "uint32",
+            .value.uint32.expected = 39,
+            .value.uint32.value = N,
+        },
+    };
 
-    if (N != expected) {
-        printf("%s: incorrect card count - expected:%u, got:%u\n", tag, expected, N);
-        ok = false;
-    }
-
-    if (!ok) {
-        return failed(tag);
-    }
-
-    return passed(tag);
+    return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
 
 bool getCard() {
@@ -45,48 +35,52 @@ bool getCard() {
         return false;
     }
 
-    bool ok = true;
+    const result resultset[] = {
+        {
+            .field = "card number",
+            .type = "uint32",
+            .value.uint32.expected = 8165538,
+            .value.uint32.value = card.card_number,
+        },
+        {
+            .field = "card 'from' date",
+            .type = "string",
+            .value.string.expected = "2022-01-01",
+            .value.string.value = card.from,
+        },
+        {
+            .field = "card 'to' date",
+            .type = "string",
+            .value.string.expected = "2022-12-31",
+            .value.string.value = card.to,
+        },
+        {
+            .field = "card doors[1]",
+            .type = "uint8",
+            .value.uint8.expected = 0,
+            .value.uint8.value = card.doors[0],
+        },
+        {
+            .field = "card doors[2]",
+            .type = "uint8",
+            .value.uint8.expected = 1,
+            .value.uint8.value = card.doors[1],
+        },
+        {
+            .field = "card doors[3]",
+            .type = "uint8",
+            .value.uint8.expected = 31,
+            .value.uint8.value = card.doors[2],
+        },
+        {
+            .field = "card doors[4]",
+            .type = "uint8",
+            .value.uint8.expected = 75,
+            .value.uint8.value = card.doors[3],
+        },
+    };
 
-    if (card.card_number != 8165538) {
-        printf("get-card: incorrect card number - expected:%u, got:%u\n", 8198765, card.card_number);
-        ok = false;
-    }
-
-    if (strcmp(card.from, "2022-01-01") != 0) {
-        printf("get-card: incorrect card 'from' date - expected:%s, got:%s\n", "2022-01-01", card.from);
-        ok = false;
-    }
-
-    if (strcmp(card.to, "2022-12-31") != 0) {
-        printf("get-card: incorrect card 'to' date - expected:%s, got:%s\n", "2022-12-31", card.to);
-        ok = false;
-    }
-
-    if (card.doors[0] != 0) {
-        printf("get-card: incorrect card doors[1] - expected:%u, got:%u\n", 0, card.doors[0]);
-        ok = false;
-    }
-
-    if (card.doors[1] != 1) {
-        printf("get-card: incorrect card doors[2] - expected:%u, got:%u\n", 1, card.doors[1]);
-        ok = false;
-    }
-
-    if (card.doors[2] != 31) {
-        printf("get-card: incorrect card doors[3] - expected:%u, got:%u\n", 31, card.doors[2]);
-        ok = false;
-    }
-
-    if (card.doors[3] != 75) {
-        printf("get-card: incorrect card doors[4] - expected:%u, got:%u\n", 75, card.doors[3]);
-        ok = false;
-    }
-
-    if (!ok) {
-        return failed(tag);
-    }
-
-    return passed(tag);
+    return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
 
 bool getCardByIndex() {
@@ -98,48 +92,52 @@ bool getCardByIndex() {
         return false;
     }
 
-    bool ok = true;
+    const result resultset[] = {
+        {
+            .field = "card number",
+            .type = "uint32",
+            .value.uint32.expected = 8165538,
+            .value.uint32.value = card.card_number,
+        },
+        {
+            .field = "card 'from' date",
+            .type = "string",
+            .value.string.expected = "2022-01-01",
+            .value.string.value = card.from,
+        },
+        {
+            .field = "card 'to' date",
+            .type = "string",
+            .value.string.expected = "2022-12-31",
+            .value.string.value = card.to,
+        },
+        {
+            .field = "card doors[1]",
+            .type = "uint8",
+            .value.uint8.expected = 0,
+            .value.uint8.value = card.doors[0],
+        },
+        {
+            .field = "card doors[2]",
+            .type = "uint8",
+            .value.uint8.expected = 1,
+            .value.uint8.value = card.doors[1],
+        },
+        {
+            .field = "card doors[3]",
+            .type = "uint8",
+            .value.uint8.expected = 31,
+            .value.uint8.value = card.doors[2],
+        },
+        {
+            .field = "card doors[4]",
+            .type = "uint8",
+            .value.uint8.expected = 75,
+            .value.uint8.value = card.doors[3],
+        },
+    };
 
-    if (card.card_number != 8165538) {
-        printf("get-card-by-index: incorrect card number - expected:%u, got:%u\n", 8198765, card.card_number);
-        ok = false;
-    }
-
-    if (strcmp(card.from, "2022-01-01") != 0) {
-        printf("get-card-by-index: incorrect card 'from' date - expected:%s, got:%s\n", "2022-01-01", card.from);
-        ok = false;
-    }
-
-    if (strcmp(card.to, "2022-12-31") != 0) {
-        printf("get-card-by-index: incorrect card 'to' date - expected:%s, got:%s\n", "2022-12-31", card.to);
-        ok = false;
-    }
-
-    if (card.doors[0] != 0) {
-        printf("get-card-by-index: incorrect card doors[1] - expected:%u, got:%u\n", 0, card.doors[0]);
-        ok = false;
-    }
-
-    if (card.doors[1] != 1) {
-        printf("get-card-by-index: incorrect card doors[2] - expected:%u, got:%u\n", 1, card.doors[1]);
-        ok = false;
-    }
-
-    if (card.doors[2] != 31) {
-        printf("get-card-by-index: incorrect card doors[3] - expected:%u, got:%u\n", 31, card.doors[2]);
-        ok = false;
-    }
-
-    if (card.doors[3] != 75) {
-        printf("get-card-by-index: incorrect card doors[4] - expected:%u, got:%u\n", 75, card.doors[3]);
-        ok = false;
-    }
-
-    if (!ok) {
-        return failed(tag);
-    }
-
-    return passed(tag);
+    return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
 
 bool putCard() {
@@ -151,7 +149,9 @@ bool putCard() {
         return false;
     }
 
-    return passed(tag);
+    const result resultset[] = {};
+
+    return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
 
 bool deleteCard() {
@@ -162,7 +162,9 @@ bool deleteCard() {
         return false;
     }
 
-    return passed(tag);
+    const result resultset[] = {};
+
+    return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
 
 bool deleteCards() {
@@ -173,5 +175,7 @@ bool deleteCards() {
         return false;
     }
 
-    return passed(tag);
+    const result resultset[] = {};
+
+    return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
