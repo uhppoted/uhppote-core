@@ -199,6 +199,9 @@ class Uhppote:
     def set_door_control(self, deviceID, door, mode, delay):
         self.ffi.SetDoorControl(self._uhppote, deviceID, door, mode, delay)
 
+    def open_door(self, deviceID, door):
+        self.ffi.OpenDoor(self._uhppote, deviceID, door)
+
     def get_cards(self, deviceID):
         cards = ctypes.c_int(0)
 
@@ -283,6 +286,7 @@ class FFI:
         self.SetListener = ffi('SetListener', errcheck)
         self.GetDoorControl = ffi('GetDoorControl', errcheck)
         self.SetDoorControl = ffi('SetDoorControl', errcheck)
+        self.OpenDoor = ffi('OpenDoor', errcheck)
         self.GetCards = ffi('GetCards', errcheck)
         self.GetCard = ffi('GetCard', errcheck)
         self.GetCardByIndex = ffi('GetCardByIndex', errcheck)
@@ -319,6 +323,7 @@ def libfunctions():
         'SetListener':         (lib.SetListener,         [POINTER(GoUHPPOTE), c_ulong, c_char_p]),
         'GetDoorControl':      (lib.GetDoorControl,      [POINTER(GoUHPPOTE), POINTER(GoDoorControl), c_ulong, c_ubyte]),
         'SetDoorControl':      (lib.SetDoorControl,      [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ubyte, c_ubyte]),
+        'OpenDoor':            (lib.OpenDoor,            [POINTER(GoUHPPOTE), c_ulong, c_ubyte]),
         'GetCards':            (lib.GetCards,            [POINTER(GoUHPPOTE), POINTER(c_int), c_ulong]),
         'GetCard':             (lib.GetCard,             [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]),
         'GetCardByIndex':      (lib.GetCardByIndex,      [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]),

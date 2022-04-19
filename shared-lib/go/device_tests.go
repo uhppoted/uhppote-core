@@ -240,3 +240,15 @@ func setDoorControl(uu uhppote.IUHPPOTE, deviceID uint32, door uint8, mode types
 
 	return nil
 }
+
+func openDoor(uu uhppote.IUHPPOTE, deviceID uint32, door uint8) error {
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
+	if door != 4 {
+		return fmt.Errorf("Incorrect door (%v)", door)
+	}
+
+	return nil
+}

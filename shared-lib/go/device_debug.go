@@ -244,3 +244,14 @@ func setDoorControl(uu uhppote.IUHPPOTE, deviceID uint32, door uint8, mode types
 
 	return nil
 }
+
+func openDoor(uu uhppote.IUHPPOTE, deviceID uint32, door uint8) error {
+	if DEBUG {
+		fmt.Printf(">>> open-doorl\n")
+		fmt.Printf("    ID:    %v\n", deviceID)
+		fmt.Printf("    door:  %v\n", door)
+		fmt.Println()
+	}
+
+	return nil
+}

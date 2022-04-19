@@ -296,6 +296,14 @@
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
 
 
+(defun uhppoted-open-door (uhppote device-id door) "Remotely opens a controller door"
+    (with-macptrs ((err (external-call "OpenDoor" :address uhppote 
+                                                  :unsigned-long device-id 
+                                                  :unsigned-byte door
+                                                  :address)))
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+
+
 (defun uhppoted-get-cards (uhppote device-id) "Retrieves the number of cards stored on a controller"
   (rletz ((N :signed-long 0))
          (with-macptrs ((err (external-call "GetCards" :address uhppote 

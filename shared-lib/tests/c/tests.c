@@ -41,6 +41,7 @@ const test tests[] = {
     {.name = "set-listener", .fn = setListener},
     {.name = "get-door-control", .fn = getDoorControl},
     {.name = "set-door-control", .fn = setDoorControl},
+    {.name = "open-door", .fn = openDoor},
     {.name = "get-cards", .fn = getCards},
     {.name = "get-card", .fn = getCard},
     {.name = "get-card-by-index", .fn = getCardByIndex},

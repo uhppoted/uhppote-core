@@ -319,3 +319,26 @@ int setDoorControl(uhppoted &u, int argc, char **argv) {
 
     return -1;
 }
+
+int openDoor(uhppoted &u, int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    uint32_t door = DOOR;
+
+    try {
+        u.open_door(deviceID, door);
+
+        cout << endl
+             << "open-door" << endl;
+        cout << "  ID:      " << deviceID << endl;
+        cout << "  door:    " << static_cast<int>(door) << endl;
+        cout << endl;
+
+        return 0;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return -1;
+}

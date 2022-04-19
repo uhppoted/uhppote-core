@@ -385,3 +385,20 @@ bool setDoorControl(uhppoted &u) {
 
     return false;
 }
+
+bool openDoor(uhppoted &u) {
+    string tag = "open-door";
+
+    try {
+        u.open_door(DEVICE_ID, DOOR);
+
+        return passed(tag);
+
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return false;
+}

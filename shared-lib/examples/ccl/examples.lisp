@@ -105,6 +105,15 @@
             tag
             (exec #'(lambda (u) (uhppoted-set-door-control u device-id door mode delay))))))
 
+(defun open-door () "" 
+  (let ((tag       "open-door")
+        (device-id 405419896)
+        (door      4))
+    (format t 
+            "  ~a:~%    ~:w~%~%" 
+            tag
+            (exec #'(lambda (u) (uhppoted-open-door u device-id door))))))
+
 (defun get-cards () "" 
   (let ((tag       "get-cards")
         (device-id 405419896))

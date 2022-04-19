@@ -36,6 +36,7 @@ public class Tests {
         new test("set-listener", SetListener),
         new test("get-door-control", GetDoorControl),
         new test("set-door-control", SetDoorControl),
+        new test("open-door", OpenDoor),
         new test("get-cards", GetCards),
         new test("get-card", GetCard),
         new test("get-card-by-index", GetCardByIndex),
@@ -341,7 +342,7 @@ public class Tests {
     }
 
     static bool GetDoorControl(Uhppoted u) {
-        string tag = "get-door";
+        string tag = "get-door-control";
         bool ok = true;
 
         DoorControl control = u.GetDoorControl(DEVICE_ID, DOOR);
@@ -364,9 +365,17 @@ public class Tests {
     }
 
     static bool SetDoorControl(Uhppoted u) {
-        string tag = "set-door";
+        string tag = "set-door-control";
 
         u.SetDoorControl(DEVICE_ID, DOOR, ControlModes.NormallyClosed, 6);
+
+        return passed(tag);
+    }
+
+    static bool OpenDoor(Uhppoted u) {
+        string tag = "open-door";
+
+        u.OpenDoor(DEVICE_ID, DOOR);
 
         return passed(tag);
     }

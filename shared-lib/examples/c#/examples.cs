@@ -59,6 +59,9 @@ public class examples {
         new command("set-door-control",
                     "Sets the control mode and delay for a controller door.",
                     SetDoorControl),
+        new command("open-door",
+                    "Remotely opens a controller door.",
+                    OpenDoor),
         new command("get-cards",
                     "Retrieves the number of cards stored on a controller.",
                     GetCards),
@@ -326,6 +329,18 @@ public class examples {
         }
 
         WriteLine(Format("  delay:   {0}", delay));
+        WriteLine();
+    }
+
+    static void OpenDoor(Uhppoted u, string[] args) {
+        uint deviceID = DEVICE_ID;
+        byte door = DOOR;
+
+        u.OpenDoor(deviceID, door);
+
+        WriteLine(Format("open-door"));
+        WriteLine(Format("  ID:      {0}", deviceID));
+        WriteLine(Format("  door:    {0}", door));
         WriteLine();
     }
 

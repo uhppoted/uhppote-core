@@ -257,6 +257,14 @@
           (failed tag))))
 
 
+(defun open-door () "" 
+  (let ((tag      "open-door")
+        (ok       T))
+       (exec #'(lambda (u) (uhppoted-open-door u TEST-DEVICE-ID TEST-DOOR)))
+       (if ok 
+          (passed tag )
+          (failed tag))))
+
 
 (defun get-cards () "" 
   (let ((tag      "get-cards")

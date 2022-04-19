@@ -251,3 +251,20 @@ int setDoorControl(int argc, char **argv) {
 
     return 0;
 }
+
+int openDoor(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    uint8_t door = DOOR;
+
+    if (open_door(deviceID, door) != 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    printf("\nopen-door\n");
+    printf("  ID:    %u\n", deviceID);
+    printf("  door:  %u\n", door);
+    printf("\n");
+
+    return 0;
+}

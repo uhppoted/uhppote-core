@@ -320,3 +320,14 @@ bool setDoorControl() {
 
     return passed(tag);
 }
+
+bool openDoor() {
+    const char *tag = "open-door";
+
+    if (open_door(DEVICE_ID, DOOR) != 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    return passed(tag);
+}

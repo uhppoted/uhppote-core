@@ -247,3 +247,14 @@ func setDoorControl(uu uhppote.IUHPPOTE, deviceID uint32, door uint8, mode types
 
 	return nil
 }
+
+func openDoor(uu uhppote.IUHPPOTE, deviceID uint32, door uint8) error {
+	response, err := uu.OpenDoor(deviceID, door)
+	if err != nil {
+		return err
+	} else if response == nil {
+		return fmt.Errorf("%v: no response to open door %d", deviceID, door)
+	}
+
+	return nil
+}

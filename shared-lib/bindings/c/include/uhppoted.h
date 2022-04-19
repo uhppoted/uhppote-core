@@ -73,6 +73,7 @@ int get_listener(uint32_t id, char **);
 int set_listener(uint32_t id, char *);
 int get_door_control(uint32_t id, uint8_t door, struct door_control *);
 int set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay);
+int open_door(uint32_t id, uint8_t door);
 
 int get_cards(uint32_t id, int *N);
 int get_card(uint32_t id, uint32_t card_number, card *card);

@@ -25,6 +25,7 @@ vector<test> tests = {
     {"set-listener", setListener},
     {"get-door-control", getDoorControl},
     {"set-door-control", setDoorControl},
+    {"open-door", openDoor},
     {"get-cards", getCards},
     {"get-card", getCard},
     {"get-card-by-index", getCardByIndex},

@@ -14,6 +14,7 @@
            set-listener
            get-door-control
            set-door-control
+           open-door
            get-cards
            get-card
            get-card-by-index

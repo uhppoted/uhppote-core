@@ -79,6 +79,7 @@ class uhppoted {
     void set_listener(uint32_t id, std::string &);
     door_control get_door_control(uint32_t id, uint8_t door);
     void set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay);
+    void open_door(uint32_t id, uint8_t door);
 
     int get_cards(uint32_t id);
     card get_card(uint32_t id, uint32_t card_number);

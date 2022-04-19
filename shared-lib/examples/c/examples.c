@@ -75,6 +75,11 @@ const command commands[] = {
         .fn = setDoorControl,
     },
     {
+        .cmd = "open-door",
+        .help = "Remotely opens a controller door.",
+        .fn = openDoor,
+    },
+    {
         .cmd = "get-cards",
         .help = "Retrieves the number of cards stored on a controller.",
         .fn = getCards,

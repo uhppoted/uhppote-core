@@ -214,6 +214,9 @@ public class Uhppoted : IDisposable {
     private static extern string SetDoorControl(ref UHPPOTE u, uint deviceID, byte door, byte mode, byte delay);
 
     [DllImport("libuhppoted.so")]
+    private static extern string OpenDoor(ref UHPPOTE u, uint deviceID, byte door);
+
+    [DllImport("libuhppoted.so")]
     private static extern string GetCards(ref UHPPOTE u, ref int N, uint deviceID);
 
     [DllImport("libuhppoted.so")]
@@ -371,6 +374,13 @@ public class Uhppoted : IDisposable {
 
     public void SetDoorControl(uint deviceID, byte door, byte mode, byte delay) {
         string err = SetDoorControl(ref this.u, deviceID, door, mode, delay);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+    }
+
+    public void OpenDoor(uint deviceID, byte door) {
+        string err = OpenDoor(ref this.u, deviceID, door);
         if (err != null && err != "") {
             throw new UhppotedException(err);
         }

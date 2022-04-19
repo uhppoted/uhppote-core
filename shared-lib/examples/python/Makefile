@@ -52,6 +52,9 @@ get-door-control: build
 set-door-control: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) set-door-control
 
+open-door: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) open-door
+
 get-cards: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-cards
 
@@ -83,5 +86,5 @@ record-special-events: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) record-special-events
 
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) record-special-events
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) open-door
 

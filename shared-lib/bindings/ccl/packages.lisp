@@ -14,6 +14,7 @@
            uhppoted-set-listener
            uhppoted-get-door-control
            uhppoted-set-door-control
+           uhppoted-open-door
            uhppoted-get-cards
            uhppoted-get-card
            uhppoted-get-card-by-index

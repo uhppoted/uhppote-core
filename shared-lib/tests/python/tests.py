@@ -32,6 +32,7 @@ def tests():
         'set-listener': set_listener,
         'get-door-control': get_door_control,
         'set-door-control': set_door_control,
+        'open-door': open_door,
         'get-cards': get_cards,
         'get-card': get_card,
         'get-card-by-index': get_card_by_index,
@@ -147,6 +148,13 @@ def get_door_control(u):
 def set_door_control(u):
     tag = 'set-door-control'
     u.set_door_control(DEVICE_ID, DOOR, NORMALLY_CLOSED, 6)
+
+    return evaluate(tag, [])
+
+
+def open_door(u):
+    tag = 'open-door'
+    u.open_door(DEVICE_ID, DOOR)
 
     return evaluate(tag, [])
 

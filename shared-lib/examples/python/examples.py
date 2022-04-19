@@ -62,6 +62,10 @@ def commands():
             'help': "Sets the control mode and delay for a controller door.",
             'fn': set_door_control,
         },
+        'open-door': {
+            'help': "Remotely opens a controller door.",
+            'fn': open_door,
+        },
         'get-cards': {
             'help': "Retrieves the number of cards stored on a controller.",
             'fn': get_cards,
@@ -336,6 +340,24 @@ def set_door_control(u, args):
 
     except Exception as e:
         print(f' *** ERROR set-door-control ({e})')
+        print()
+
+
+def open_door(u, args):
+    tag = 'open-door'
+    deviceID = DEVICE_ID
+    door = DOOR
+
+    try:
+        u.open_door(deviceID, door)
+
+        print(f'{tag}')
+        print(f'  ID:    {deviceID}')
+        print(f'  door:  {door}')
+        print()
+
+    except Exception as e:
+        print(f' *** ERROR {tag} ({e})')
         print()
 
 

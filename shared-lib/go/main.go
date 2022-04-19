@@ -195,6 +195,17 @@ func SetDoorControl(u *C.struct_UHPPOTE, deviceID uint32, door uint8, mode uint8
 	return nil
 }
 
+//export OpenDoor
+func OpenDoor(u *C.struct_UHPPOTE, deviceID uint32, door uint8) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := openDoor(uu, deviceID, door); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
 //export GetCards
 func GetCards(u *C.struct_UHPPOTE, N *C.int, deviceID uint32) *C.char {
 	if uu, err := makeUHPPOTE(u); err != nil {

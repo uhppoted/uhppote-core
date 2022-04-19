@@ -12,6 +12,7 @@ extern bool getListener(uhppoted &);
 extern bool setListener(uhppoted &);
 extern bool getDoorControl(uhppoted &);
 extern bool setDoorControl(uhppoted &);
+extern bool openDoor(uhppoted &);
 
 extern bool getCards(uhppoted &);
 extern bool getCard(uhppoted &);

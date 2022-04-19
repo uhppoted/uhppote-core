@@ -9,14 +9,13 @@
         - [ ] CCL
 
 - Shared-lib/DLL
-  - [x] `record-special-events`
-        - [x] C
-        - [x] C++
-        - [x] C#
-        - [x] Python
-        - [x] CCL
-
   - [ ] `open-door`
+        - [ ] C
+        - [ ] C++
+        - [ ] C#
+        - [ ] Python
+        - [ ] CCL
+
   - [ ] `get-time-profile`
   - [ ] `set-time-profile`
   - [ ] `clear-time-profiles`

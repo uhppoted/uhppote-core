@@ -14,6 +14,7 @@
         '("set-listener"          examples:set-listener          "Configures a controller's event listener address and port.")
         '("get-door-control"      examples:get-door-control      "Retrieves the control state and open delay for a controller door.")
         '("set-door-control"      examples:set-door-control      "Sets the control mode and delay for a controller door.")
+        '("open-door"             examples:open-door             "Remotely opens a controller door.")
         '("get-cards"             examples:get-cards             "Retrieves the number of cards stored on a controller.")
         '("get-card"              examples:get-card              "Retrieves the card detail for card number from a controller.")
         '("get-card-by-index"     examples:get-card-by-index     "Retrieves the card detail for the card stored at an index on a controller.")
