@@ -2,16 +2,9 @@
 #include <iostream>
 
 #include "../include/uhppoted.hpp"
+#include "tests.hpp"
 
 using namespace std;
-
-extern const uint32_t DEVICE_ID;
-extern const uint32_t CARD_ID;
-extern const uint32_t CARD_INDEX;
-extern const uint8_t DOOR;
-
-extern bool passed(string);
-extern bool failed(string);
 
 bool getCards(uhppoted &u) {
     string tag = "get-cards";

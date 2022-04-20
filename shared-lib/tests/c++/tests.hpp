@@ -1,6 +1,19 @@
 #pragma once
 
+#include <any>
+#include <string>
+#include <tuple>
+#include <vector>
+
 #include "../include/uhppoted.hpp"
+
+typedef std::tuple<std::string, std::any, std::any> result;
+
+extern const uint32_t DEVICE_ID;
+extern const uint32_t CARD_ID;
+extern const uint32_t CARD_INDEX;
+extern const uint32_t EVENT_INDEX;
+extern const uint8_t DOOR;
 
 extern bool getDevices(uhppoted &);
 extern bool getDevice(uhppoted &);
@@ -25,3 +38,7 @@ extern bool getEventIndex(uhppoted &);
 extern bool setEventIndex(uhppoted &);
 extern bool getEvent(uhppoted &);
 extern bool recordSpecialEvents(uhppoted &);
+
+extern bool evaluate(const std::string &, const std::vector<result> &);
+extern bool passed(const std::string &);
+extern bool failed(const std::string &);

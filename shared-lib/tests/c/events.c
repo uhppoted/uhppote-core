@@ -6,7 +6,6 @@
 #include "uhppoted.h"
 
 bool getEventIndex() {
-    const char *tag = "get-event-index";
     uint32_t index;
 
     if (get_event_index(DEVICE_ID, &index) < 0) {
@@ -23,7 +22,7 @@ bool getEventIndex() {
         },
     };
 
-    return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
+    return evaluate("get-event-index", sizeof(resultset) / sizeof(result), resultset);
 }
 
 bool setEventIndex() {

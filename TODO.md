@@ -10,7 +10,7 @@
 
 - Shared-lib/DLL
   - [ ] `get-time-profile`
-        - [ ] C
+        - [x] C
         - [ ] Fix simulator time profiles
         - [ ] Figure out why can't put getTimeProfile in a seperate file
         - [ ] C++

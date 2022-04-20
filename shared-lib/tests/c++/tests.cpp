@@ -48,6 +48,8 @@ const controller ALPHA = {.id = 405419896, .address = "192.168.1.100"};
 const controller BETA = {.id = 303986753, .address = "192.168.1.100"};
 
 void usage();
+bool passed(const string &);
+bool failed(const string &);
 
 int main(int argc, char **argv) {
     string cmd;
@@ -58,34 +60,41 @@ int main(int argc, char **argv) {
 
     vector<controller> controllers = {ALPHA, BETA};
 
-    uhppoted u("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2500, controllers, true);
+    uhppoted u("192.168.1.100", "192.168.1.255:60000", "192.168.1.100:60001", 2500, controllers, true);
 
-    if (cmd == "help") {
-        cout << endl;
-        usage();
-        return 0;
-    }
+    try {
+        if (cmd == "help") {
+            cout << endl;
+            usage();
+            return 0;
+        }
 
-    if (cmd == "" || cmd == "all") {
-        bool ok = true;
+        if (cmd == "" || cmd == "all") {
+            bool ok = true;
+            for (auto it = tests.begin(); it != tests.end(); it++) {
+                ok = it->fn(u) ? ok : false;
+            }
+
+            return ok ? 0 : -1;
+        }
+
         for (auto it = tests.begin(); it != tests.end(); it++) {
-            ok = it->fn(u) ? ok : false;
+            if (it->command == cmd) {
+                return it->fn(u) ? 0 : -1;
+            }
         }
 
-        return ok ? 0 : -1;
-    }
+        cerr << endl
+             << "   *** ERROR invalid command (" << cmd << ")" << endl
+             << endl;
+        usage();
 
-    for (auto it = tests.begin(); it != tests.end(); it++) {
-        if (it->command == cmd) {
-            return it->fn(u) ? 0 : -1;
-        }
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+        return -1;
     }
-
-    cerr << endl
-         << "   *** ERROR invalid command (" << cmd << ")" << endl
-         << endl;
-    usage();
-    return -1;
 }
 
 void usage() {
@@ -99,14 +108,59 @@ void usage() {
     cout << endl;
 }
 
-extern bool passed(string test) {
-    cout << setw(21) << left << test << " ok" << endl;
+extern bool evaluate(const std::string &tag, const std::vector<result> &resultset) {
+    bool ok = true;
+
+    for (auto ix = resultset.begin(); ix != resultset.end(); ix++) {
+        auto field = get<0>(*ix);
+        auto expected = get<1>(*ix);
+        auto value = get<2>(*ix);
+        auto type = expected.type().name();
+
+        //     if (strcmp(r.type, "uint8") == 0) {
+        //         if (r.value.uint8.value != r.value.uint8.expected) {
+        //             printf("%-21s incorrect %s (expected:%u, got:%u)\n", tag, r.field, r.value.uint8.expected, r.value.uint8.value);
+        //             ok = false;
+        //         }
+        //     } else
+        if (type == typeid(uint32_t).name()) {
+            auto p = any_cast<uint32_t>(expected);
+            auto q = any_cast<uint32_t>(value);
+            if (p != q) {
+                cout << setw(21) << tag << " incorrect " << field << "(expected:" << p << ", got:" << q << ")" << endl;
+                ok = false;
+            }
+            //     } else if (strcmp(r.type, "boolean") == 0) {
+            //         if (r.value.boolean.value != r.value.boolean.expected) {
+            //             printf("%-21s incorrect %s (expected:%d, got:%d)\n", tag, r.field, r.value.boolean.expected, r.value.boolean.value);
+            //             ok = false;
+            //         }
+            //     } else if (strcmp(r.type, "string") == 0) {
+            //         if (strcmp(r.value.string.value, r.value.string.expected) != 0) {
+            //             printf("%-21s incorrect %s (expected:%s, got:%s)\n", tag, r.field, r.value.string.expected, r.value.string.value);
+            //             ok = false;
+            //         }
+        } else {
+            cout << "invalid result type: field::" << field << ",type:" << type << endl;
+            return false;
+        }
+    }
+
+    if (!ok) {
+        return failed(tag);
+    }
+
+    return passed(tag);
+}
+
+extern bool passed(const string &tag) {
+    cout << setw(21) << left << tag << " ok" << endl;
 
     return true;
 }
 
-extern bool failed(string test) {
-    cout << setw(21) << left << test << " failed" << endl;
+extern bool failed(const string &tag) {
+    cout << setw(21) << left << tag << " failed" << endl;
 
     return false;
 }
