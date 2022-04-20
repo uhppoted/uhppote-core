@@ -139,3 +139,38 @@ func deleteCards(uu uhppote.IUHPPOTE, deviceID uint32) error {
 
 	return nil
 }
+
+func getTimeProfile(uu uhppote.IUHPPOTE, profile *C.struct_TimeProfile, deviceID uint32, profileID uint8) error {
+	if profile == nil {
+		return fmt.Errorf("invalid argument (profile) - expected valid pointer")
+	}
+
+	p, err := uu.GetTimeProfile(deviceID, profileID)
+	if err != nil {
+		return err
+	} else if p == nil {
+		return fmt.Errorf("%v: no response to get-time-profile %v", deviceID, profileID)
+	}
+
+	profile.ID = C.uchar(p.ID)
+	profile.linked = C.uchar(p.LinkedProfileID)
+	profile.from = C.CString(fmt.Sprintf("%v", p.From))
+	profile.to = C.CString(fmt.Sprintf("%v", p.To))
+
+	profile.monday = cbool(p.Weekdays[time.Monday])
+	profile.tuesday = cbool(p.Weekdays[time.Tuesday])
+	profile.wednesday = cbool(p.Weekdays[time.Wednesday])
+	profile.thursday = cbool(p.Weekdays[time.Thursday])
+	profile.friday = cbool(p.Weekdays[time.Friday])
+	profile.saturday = cbool(p.Weekdays[time.Saturday])
+	profile.sunday = cbool(p.Weekdays[time.Sunday])
+
+	profile.segment1start = C.CString(fmt.Sprintf("%v", p.Segments[1].Start))
+	profile.segment1end = C.CString(fmt.Sprintf("%v", p.Segments[1].End))
+	profile.segment2start = C.CString(fmt.Sprintf("%v", p.Segments[2].Start))
+	profile.segment2end = C.CString(fmt.Sprintf("%v", p.Segments[2].End))
+	profile.segment3start = C.CString(fmt.Sprintf("%v", p.Segments[3].Start))
+	profile.segment3end = C.CString(fmt.Sprintf("%v", p.Segments[3].End))
+
+	return nil
+}

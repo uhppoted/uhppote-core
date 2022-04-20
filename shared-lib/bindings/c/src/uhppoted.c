@@ -480,3 +480,45 @@ int record_special_events(uint32_t id, bool enabled) {
 
     return 0;
 }
+
+int get_time_profile(uint32_t id, uint8_t profile_id, time_profile *p) {
+    struct TimeProfile profile;
+
+    char *err = GetTimeProfile(u, &profile, id, profile_id);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    p->ID = profile.ID;
+    p->linked = profile.linked;
+
+    snprintf(p->from, sizeof(p->from), "%s", profile.from);
+    snprintf(p->to, sizeof(p->to), "%s", profile.to);
+
+    p->monday = profile.monday;
+    p->tuesday = profile.tuesday;
+    p->wednesday = profile.wednesday;
+    p->thursday = profile.thursday;
+    p->friday = profile.friday;
+    p->saturday = profile.saturday;
+    p->sunday = profile.sunday;
+
+    snprintf(p->segment1start, sizeof(p->segment1start), "%s", profile.segment1start);
+    snprintf(p->segment1end, sizeof(p->segment1end), "%s", profile.segment1end);
+    snprintf(p->segment2start, sizeof(p->segment2start), "%s", profile.segment2start);
+    snprintf(p->segment2end, sizeof(p->segment2end), "%s", profile.segment2end);
+    snprintf(p->segment3start, sizeof(p->segment3start), "%s", profile.segment3start);
+    snprintf(p->segment3end, sizeof(p->segment3end), "%s", profile.segment3end);
+
+    free(profile.from);
+    free(profile.to);
+    free(profile.segment1start);
+    free(profile.segment1end);
+    free(profile.segment2start);
+    free(profile.segment2end);
+    free(profile.segment3start);
+    free(profile.segment3end);
+
+    return 0;
+}

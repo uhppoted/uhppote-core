@@ -58,6 +58,26 @@ typedef struct card {
     uint8_t doors[4];
 } card;
 
+typedef struct time_profile {
+    uint8_t ID;
+    uint8_t linked;
+    char from[11];
+    char to[11];
+    bool monday;
+    bool tuesday;
+    bool wednesday;
+    bool thursday;
+    bool friday;
+    bool saturday;
+    bool sunday;
+    char segment1start[6];
+    char segment1end[6];
+    char segment2start[6];
+    char segment2end[6];
+    char segment3start[6];
+    char segment3end[6];
+} time_profile;
+
 void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...);
 void teardown();
 const char *errmsg();
@@ -86,3 +106,5 @@ int get_event_index(uint32_t id, uint32_t *index);
 int set_event_index(uint32_t id, uint32_t index);
 int get_event(uint32_t id, uint32_t index, event *event);
 int record_special_events(uint32_t id, bool enabled);
+
+int get_time_profile(uint32_t id, uint8_t profile_id, time_profile *profile);

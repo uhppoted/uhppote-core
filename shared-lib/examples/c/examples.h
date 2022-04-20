@@ -23,3 +23,5 @@ extern int getEventIndex(int argc, char **argv);
 extern int setEventIndex(int argc, char **argv);
 extern int getEvent(int argc, char **argv);
 extern int recordSpecialEvents(int argc, char **argv);
+
+extern int getTimeProfile(int argc, char **argv);

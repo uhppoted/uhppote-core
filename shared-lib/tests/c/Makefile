@@ -1,7 +1,7 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/c
 CMD=GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && ./tests
-SRC=tests.c device.c cards.c events.c
+SRC=tests.c device.c cards.c events.c time_profiles.c
 lib: 
 	cd ../../go && make all
 
@@ -81,6 +81,9 @@ get-event: build
 
 record-special-events: build
 	$(CMD) record-special-events
+
+get-time-profile: build
+	$(CMD) get-time-profile
 
 all: build
 	$(CMD) all

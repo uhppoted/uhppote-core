@@ -133,3 +133,38 @@ func deleteCards(uu uhppote.IUHPPOTE, deviceID uint32) error {
 
 	return nil
 }
+
+func getTimeProfile(uu uhppote.IUHPPOTE, profile *C.struct_TimeProfile, deviceID uint32, profileID uint8) error {
+	if profile == nil {
+		return fmt.Errorf("invalid argument (profile) - expected valid pointer")
+	}
+
+	if DEBUG {
+		fmt.Printf(">>> get-time-profile\n")
+		fmt.Printf("    ID:      %v\n", deviceID)
+		fmt.Printf("    profile: %v\n", profileID)
+		fmt.Println()
+	}
+
+	profile.ID = 29
+	profile.linked = 71
+	profile.from = C.CString("2022-02-01")
+	profile.to = C.CString("2022-06-30")
+
+	profile.monday = cbool(true)
+	profile.tuesday = cbool(false)
+	profile.wednesday = cbool(true)
+	profile.thursday = cbool(true)
+	profile.friday = cbool(false)
+	profile.saturday = cbool(false)
+	profile.sunday = cbool(true)
+
+	profile.segment1start = C.CString("08:30")
+	profile.segment1end = C.CString("11:30")
+	profile.segment2start = C.CString("")
+	profile.segment2end = C.CString("")
+	profile.segment3start = C.CString("14:45")
+	profile.segment3end = C.CString("")
+
+	return nil
+}

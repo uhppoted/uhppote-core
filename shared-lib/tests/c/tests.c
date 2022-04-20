@@ -23,6 +23,7 @@ const uint32_t CARD_NUMBER = 8165538;
 const uint32_t CARD_INDEX = 19;
 const uint32_t EVENT_INDEX = 51;
 const uint8_t DOOR = 4;
+const uint8_t PROFILE_ID = 49;
 
 const test tests[] = {
     {.name = "get-devices", .fn = getDevices},
@@ -46,6 +47,7 @@ const test tests[] = {
     {.name = "set-event-index", .fn = setEventIndex},
     {.name = "get-event", .fn = getEvent},
     {.name = "record-special-events", .fn = recordSpecialEvents},
+    {.name = "get-time-profile", .fn = getTimeProfile},
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};
@@ -71,7 +73,7 @@ int main(int argc, char **argv) {
 
         for (int i = 0; i < N; i++) {
             test t = tests[i];
-            if (strncmp(cmd, t.name, strlen(t.name)) == 0) {
+            if (strcmp(cmd, t.name) == 0) {
                 ok = t.fn();
                 goto done; // <evil cackle> always wanted to do this just to annoy somebody on the Internet
             }

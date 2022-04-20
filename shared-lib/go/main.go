@@ -69,6 +69,26 @@ typedef struct Card {
 	uint8_t *doors; // uint_8[4]
 } Card;
 
+typedef struct TimeProfile {
+	uint8_t ID;
+	uint8_t linked;
+	char *from;
+	char *to;
+	uint8_t monday;
+	uint8_t tuesday;
+	uint8_t wednesday;
+	uint8_t thursday;
+	uint8_t friday;
+	uint8_t saturday;
+	uint8_t sunday;
+	char * segment1start;
+	char * segment1end;
+	char * segment2start;
+	char * segment2end;
+	char * segment3start;
+	char * segment3end;
+} TimeProfile;
+
 */
 import "C"
 
@@ -310,6 +330,17 @@ func RecordSpecialEvents(u *C.struct_UHPPOTE, deviceID uint32, enabled bool) *C.
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
 	} else if err := recordSpecialEvents(uu, deviceID, enabled); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
+//export GetTimeProfile
+func GetTimeProfile(u *C.struct_UHPPOTE, profile *C.struct_TimeProfile, deviceID uint32, profileID uint8) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := getTimeProfile(uu, profile, deviceID, profileID); err != nil {
 		return C.CString(err.Error())
 	}
 
