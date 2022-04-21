@@ -18,6 +18,7 @@ CARD_NUMBER = 8000001
 CARD_INDEX = 7
 EVENT_INDEX = 43
 DOOR = 4
+PROFILE_ID = 29
 
 
 def commands():
@@ -105,6 +106,10 @@ def commands():
         'record-special-events': {
             'help': "Enables/disables recording additional events for a controller.",
             'fn': record_special_events,
+        },
+        'get-time-profile': {
+            'help': "Retrieves a time profile from a controller.",
+            'fn': get_time_profile,
         },
     }
 
@@ -553,6 +558,37 @@ def record_special_events(u, args):
         print(f'{tag}')
         print(f'  ID:      {deviceID}')
         print(f'  enabled: {enabled}')
+        print()
+
+    except Exception as e:
+        print(f' *** ERROR {tag} ({e})')
+        print()
+
+
+def get_time_profile(u, args):
+    tag = 'get-time-profile'
+    deviceID = DEVICE_ID
+    profileID = PROFILE_ID
+
+    try:
+        profile = u.get_time_profile(deviceID, profileID)
+
+        print(f'{tag}')
+        print(f'  ID:                   {deviceID}')
+        print(f'  profile ID:           {profile.ID}')
+        print(f'  linked profile:       {profile.linked}')
+        print(f'  enabled from:         {profile.start}')
+        print(f'          to:           {profile.end}')
+        print(f'  enabled on Monday:    {profile.monday}')
+        print(f'             Tuesday:   {profile.tuesday}')
+        print(f'             Wednesday: {profile.wednesday}')
+        print(f'             Thursday:  {profile.thursday}')
+        print(f'             Friday:    {profile.friday}')
+        print(f'             Saturday:  {profile.saturday}')
+        print(f'             Sunday:    {profile.sunday}')
+        print(f'  segment 1:            {profile.segment1start}-{profile.segment1end}')
+        print(f'  segment 2:            {profile.segment2start}-{profile.segment2end}')
+        print(f'  segment 3:            {profile.segment3start}-{profile.segment3end}')
         print()
 
     except Exception as e:

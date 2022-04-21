@@ -13,10 +13,10 @@
         - [x] C
         - [ ] Fix simulator time profiles
         - [ ] Figure out why can't put getTimeProfile in a seperate file
-        - [ ] C++
-        - [ ] C#
-        - [ ] Python
-        - [ ] CCL
+        - [x] C++
+        - [x] C#
+        - [x] Python
+        - [x] CCL
 
   - [ ] `set-time-profile`
   - [ ] `clear-time-profiles`

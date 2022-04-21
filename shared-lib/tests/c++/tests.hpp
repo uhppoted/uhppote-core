@@ -14,6 +14,7 @@ extern const uint32_t CARD_ID;
 extern const uint32_t CARD_INDEX;
 extern const uint32_t EVENT_INDEX;
 extern const uint8_t DOOR;
+extern const uint8_t PROFILE_ID;
 
 extern bool getDevices(uhppoted &);
 extern bool getDevice(uhppoted &);
@@ -38,6 +39,8 @@ extern bool getEventIndex(uhppoted &);
 extern bool setEventIndex(uhppoted &);
 extern bool getEvent(uhppoted &);
 extern bool recordSpecialEvents(uhppoted &);
+
+extern bool getTimeProfile(uhppoted &);
 
 extern bool evaluate(const std::string &, const std::vector<result> &);
 extern bool passed(const std::string &);

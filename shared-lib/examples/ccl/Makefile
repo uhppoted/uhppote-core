@@ -83,6 +83,9 @@ get-event: build
 record-special-events: build
 	$(CMD) record-special-events
 
+get-time-profile: build
+	$(CMD) get-time-profile
+
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp
 

@@ -16,7 +16,8 @@ bool getTimeProfile() {
 
     // clang-format off
     const result resultset[] = {
-        { .field = "profile ID",              .type = "uint32",  .value.uint32.expected = 49,           .value.uint32.value  = profile.ID },
+        { .field = "profile ID",              .type = "uint8",   .value.uint8.expected = 49,            .value.uint8.value  = profile.ID },
+        { .field = "linked profile",          .type = "uint8",   .value.uint8.expected = 71,            .value.uint8.value  = profile.linked },
         { .field = "profile 'from' date",     .type = "string",  .value.string.expected = "2022-02-01", .value.string.value  = profile.from },
         { .field = "profile 'to' date",       .type = "string",  .value.string.expected = "2022-06-30", .value.string.value  = profile.to },
         { .field = "profle 'Monday'",         .type = "boolean", .value.boolean.expected = true,        .value.boolean.value = profile.monday },

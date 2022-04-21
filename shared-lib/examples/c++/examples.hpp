@@ -25,3 +25,5 @@ int getEventIndex(uhppoted &u, int argc, char **argv);
 int setEventIndex(uhppoted &u, int argc, char **argv);
 int getEvent(uhppoted &u, int argc, char **argv);
 int recordSpecialEvents(uhppoted &u, int argc, char **argv);
+
+int getTimeProfile(uhppoted &u, int argc, char **argv);

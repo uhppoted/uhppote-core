@@ -36,6 +36,7 @@ vector<test> tests = {
     {"set-event-index", setEventIndex},
     {"get-event", getEvent},
     {"record-special-events", recordSpecialEvents},
+    {"get-time-profile", getTimeProfile},
 };
 
 extern const uint32_t DEVICE_ID = 405419896;
@@ -43,6 +44,7 @@ extern const uint32_t CARD_ID = 8165538;
 extern const uint32_t CARD_INDEX = 19;
 extern const uint32_t EVENT_INDEX = 51;
 extern const uint8_t DOOR = 4;
+extern const uint8_t PROFILE_ID = 49;
 
 const controller ALPHA = {.id = 405419896, .address = "192.168.1.100"};
 const controller BETA = {.id = 303986753, .address = "192.168.1.100"};
@@ -117,29 +119,37 @@ extern bool evaluate(const std::string &tag, const std::vector<result> &resultse
         auto value = get<2>(*ix);
         auto type = expected.type().name();
 
-        //     if (strcmp(r.type, "uint8") == 0) {
-        //         if (r.value.uint8.value != r.value.uint8.expected) {
-        //             printf("%-21s incorrect %s (expected:%u, got:%u)\n", tag, r.field, r.value.uint8.expected, r.value.uint8.value);
-        //             ok = false;
-        //         }
-        //     } else
-        if (type == typeid(uint32_t).name()) {
-            auto p = any_cast<uint32_t>(expected);
-            auto q = any_cast<uint32_t>(value);
+        if (type == typeid(uint8_t).name()) {
+            auto p = any_cast<uint8_t>(expected);
+            auto q = any_cast<uint8_t>(value);
             if (p != q) {
-                cout << setw(21) << tag << " incorrect " << field << "(expected:" << p << ", got:" << q << ")" << endl;
+                cout << setw(21) << tag << " incorrect " << field << " (expected:" << static_cast<int>(p) << ", got:" << static_cast<int>(q) << ")" << endl;
                 ok = false;
             }
-            //     } else if (strcmp(r.type, "boolean") == 0) {
-            //         if (r.value.boolean.value != r.value.boolean.expected) {
-            //             printf("%-21s incorrect %s (expected:%d, got:%d)\n", tag, r.field, r.value.boolean.expected, r.value.boolean.value);
-            //             ok = false;
-            //         }
-            //     } else if (strcmp(r.type, "string") == 0) {
-            //         if (strcmp(r.value.string.value, r.value.string.expected) != 0) {
-            //             printf("%-21s incorrect %s (expected:%s, got:%s)\n", tag, r.field, r.value.string.expected, r.value.string.value);
-            //             ok = false;
-            //         }
+        } else if (type == typeid(uint32_t).name()) {
+            auto p = any_cast<uint32_t>(expected);
+            auto q = any_cast<uint32_t>(value);
+
+            if (p != q) {
+                cout << setw(21) << tag << " incorrect " << field << " (expected:" << p << ", got:" << q << ")" << endl;
+                ok = false;
+            }
+        } else if (type == typeid(bool).name()) {
+            auto p = any_cast<bool>(expected);
+            auto q = any_cast<bool>(value);
+
+            if (p != q) {
+                cout << setw(21) << tag << " incorrect " << field << " (expected:" << p << ", got:" << q << ")" << endl;
+                ok = false;
+            }
+        } else if (type == typeid(string).name()) {
+            auto p = any_cast<string>(expected);
+            auto q = any_cast<string>(value);
+
+            if (p != q) {
+                cout << setw(21) << tag << " incorrect " << field << " (expected:" << p << ", got:" << q << ")" << endl;
+                ok = false;
+            }
         } else {
             cout << "invalid result type: field::" << field << ",type:" << type << endl;
             return false;

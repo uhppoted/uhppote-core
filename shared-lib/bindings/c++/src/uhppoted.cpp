@@ -407,3 +407,36 @@ void uhppoted::record_special_events(uint32_t id, bool enabled) {
         throw uhppoted_exception(err);
     }
 }
+
+time_profile uhppoted::get_time_profile(uint32_t id, uint8_t profile_id) {
+    TimeProfile profile;
+
+    char *err = GetTimeProfile(u, &profile, id, profile_id);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+
+    struct time_profile p;
+
+    p.ID = profile.ID;
+    p.linked = profile.linked;
+    p.from = profile.from;
+    p.to = profile.to;
+
+    p.monday = profile.monday;
+    p.tuesday = profile.tuesday;
+    p.wednesday = profile.wednesday;
+    p.thursday = profile.thursday;
+    p.friday = profile.friday;
+    p.saturday = profile.saturday;
+    p.sunday = profile.sunday;
+
+    p.segment1start = profile.segment1start;
+    p.segment1end = profile.segment1end;
+    p.segment2start = profile.segment2start;
+    p.segment2end = profile.segment2end;
+    p.segment3start = profile.segment3start;
+    p.segment3end = profile.segment3end;
+
+    return p;
+}

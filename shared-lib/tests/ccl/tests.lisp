@@ -5,6 +5,7 @@
 (defconstant TEST-CARD-INDEX  19)
 (defconstant TEST-EVENT-INDEX 51)
 (defconstant TEST-DOOR        4)
+(defconstant TEST-PROFILE-ID  49)
 
 (define-condition failed (error)
   ((message :initarg :message :reader message)))
@@ -442,6 +443,100 @@
   (let ((tag      "record-special-events")
         (ok       T))
        (exec #'(lambda (u) (uhppoted-record-special-events u TEST-DEVICE-ID t)))
+       (if ok 
+          (passed tag )
+          (failed tag))))
+
+
+(defun get-time-profile () "" 
+  (let ((tag      "get-time-profile")
+        (ok       T)
+        (profile (exec #'(lambda (u) (uhppoted-get-time-profile u TEST-DEVICE-ID TEST-PROFILE-ID)))))
+       (if (not (equal 49 (time-profile-id profile))) 
+           (progn
+             (format t "~a:  incorrect profile ID- expected:~a, got:~a~%" tag 49 (time-profile-id profile))
+             (setf ok NIL)))
+
+       (if (not (equal 71 (time-profile-linked profile))) 
+           (progn
+             (format t "~a:  incorrect linked profile - expected:~a, got:~a~%" tag 71 (time-profile-linked profile))
+             (setf ok NIL)))
+
+       (if (not (string= "2022-02-01" (time-profile-from profile))) 
+           (progn
+             (format t "~a: incorrect profile 'from' date - expected:~a, got:~a~%" tag "2022-02-01" (time-profile-from profile))
+             (setf ok NIL)))
+
+       (if (not (string= "2022-06-30" (time-profile-to profile))) 
+           (progn
+             (format t "~a: incorrect profile 'to' date - expected:~a, got:~a~%" tag "2022-06-30" (time-profile-to profile))
+             (setf ok NIL)))
+
+       (if (not (time-profile-monday profile))
+           (progn
+             (format t "~a:  incorrect profile Monday - expected:~a, got:~a~%" tag t (time-profile-monday profile))
+             (setf ok NIL)))
+
+       (if (time-profile-tuesday profile)
+           (progn
+             (format t "~a:  incorrect profile Tuesday - expected:~a, got:~a~%" tag nil (time-profile-tuesday profile))
+             (setf ok NIL)))
+
+       (if (not (time-profile-wednesday profile))
+           (progn
+             (format t "~a:  incorrect profile Wednesday - expected:~a, got:~a~%" tag t (time-profile-wednesday profile))
+             (setf ok NIL)))
+
+       (if (not (time-profile-thursday profile))
+           (progn
+             (format t "~a:  incorrect profile Thursday - expected:~a, got:~a~%" tag t (time-profile-thursday profile))
+             (setf ok NIL)))
+
+       (if (time-profile-friday profile)
+           (progn
+             (format t "~a:  incorrect profile Friday - expected:~a, got:~a~%" tag nil (time-profile-friday profile))
+             (setf ok NIL)))
+
+       (if (time-profile-saturday profile)
+           (progn
+             (format t "~a:  incorrect profile Saturday - expected:~a, got:~a~%" tag nil (time-profile-saturday profile))
+             (setf ok NIL)))
+
+       (if (not (time-profile-sunday profile))
+           (progn
+             (format t "~a:  incorrect profile Sunday - expected:~a, got:~a~%" tag t (time-profile-sunday profile))
+             (setf ok NIL)))
+       
+       (if (not (string= "08:30" (time-profile-segment1start profile))) 
+           (progn
+             (format t "~a: incorrect profile segment 1 start - expected:~a, got:~a~%" tag "08:30" (time-profile-segment1start profile))
+             (setf ok NIL)))
+
+       (if (not (string= "11:30" (time-profile-segment1end profile))) 
+           (progn
+             (format t "~a: incorrect profile segment 1 end - expected:~a, got:~a~%" tag "11:30" (time-profile-segment1end profile))
+             (setf ok NIL)))
+
+       (if (not (string= "" (time-profile-segment2start profile))) 
+           (progn
+             (format t "~a: incorrect profile segment 2 start - expected:~a, got:~a~%" tag "" (time-profile-segment2start profile))
+             (setf ok NIL)))
+
+       (if (not (string= "" (time-profile-segment2end profile))) 
+           (progn
+             (format t "~a: incorrect profile segment 2 end - expected:~a, got:~a~%" tag "" (time-profile-segment2end profile))
+             (setf ok NIL)))
+
+       (if (not (string= "14:45" (time-profile-segment3start profile))) 
+           (progn
+             (format t "~a: incorrect profile segment 3 start - expected:~a, got:~a~%" tag "14:45" (time-profile-segment3start profile))
+             (setf ok NIL)))
+
+       (if (not (string= "" (time-profile-segment3end profile))) 
+           (progn
+             (format t "~a: incorrect profile segment 3 end - expected:~a, got:~a~%" tag "" (time-profile-segment3end profile))
+             (setf ok NIL)))
+
        (if ok 
           (passed tag )
           (failed tag))))

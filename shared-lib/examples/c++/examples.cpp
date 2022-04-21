@@ -15,6 +15,7 @@ extern const uint32_t CARD_NUMBER = 8000001;
 extern const uint32_t CARD_INDEX = 7;
 extern const uint32_t EVENT_INDEX = 7;
 extern const uint8_t DOOR = 4;
+extern const uint8_t PROFILE_ID = 29;
 
 const controller ALPHA = {.id = 405419896, .address = "192.168.1.100"};
 const controller BETA = {.id = 303986753, .address = "192.168.1.100"};
@@ -132,6 +133,11 @@ const vector<command> commands = {
         .cmd = "record-special-events",
         .help = "Enables/disables recording additional events for a controller.",
         .fn = recordSpecialEvents,
+    },
+    {
+        .cmd = "get-time-profile",
+        .help = "Retrieves a time profile from a controller.",
+        .fn = getTimeProfile,
     },
 };
 

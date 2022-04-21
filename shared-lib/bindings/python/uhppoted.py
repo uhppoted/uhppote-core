@@ -96,6 +96,27 @@ class Card:
     doors: list[int]
 
 
+@dataclass
+class TimeProfile:
+    ID: int
+    linked: int
+    start: str
+    end: str
+    monday: bool
+    tuesday: bool
+    wednesday: bool
+    thursday: bool
+    friday: bool
+    saturday: bool
+    sunday: bool
+    segment1start: str
+    segment1end: str
+    segment2start: str
+    segment2end: str
+    segment3start: str
+    segment3end: str
+
+
 class Uhppote:
     def __init__(self, uhppote=None):
         self.ffi = FFI(self.errcheck)
@@ -270,6 +291,19 @@ class Uhppote:
     def record_special_events(self, deviceID, enabled):
         self.ffi.RecordSpecialEvents(self._uhppote, deviceID, enabled)
 
+    def get_time_profile(self, deviceID, profileID):
+        profile = GoTimeProfile()
+
+        self.ffi.GetTimeProfile(self._uhppote, byref(profile), deviceID, profileID)
+
+        return TimeProfile(
+            profile.ID, profile.linked, profile.start.decode('utf-8'), profile.end.decode('utf-8'),
+            profile.monday != 0, profile.tuesday != 0, profile.wednesday != 0,
+            profile.thursday != 0, profile.friday != 0, profile.saturday != 0, profile.sunday != 0,
+            profile.segment1start.decode('utf-8'), profile.segment1end.decode('utf-8'),
+            profile.segment2start.decode('utf-8'), profile.segment2end.decode('utf-8'),
+            profile.segment3start.decode('utf-8'), profile.segment3end.decode('utf-8'))
+
 
 # Go FFI types
 
@@ -297,6 +331,7 @@ class FFI:
         self.SetEventIndex = ffi('SetEventIndex', errcheck)
         self.GetEvent = ffi('GetEvent', errcheck)
         self.RecordSpecialEvents = ffi('RecordSpecialEvents', errcheck)
+        self.GetTimeProfile = ffi('GetTimeProfile', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -334,6 +369,7 @@ def libfunctions():
         'SetEventIndex':       (lib.SetEventIndex,       [POINTER(GoUHPPOTE), c_ulong, c_ulong]),
         'GetEvent':            (lib.GetEvent,            [POINTER(GoUHPPOTE), POINTER(GoEvent), c_ulong, c_ulong]),
         'RecordSpecialEvents': (lib.RecordSpecialEvents, [POINTER(GoUHPPOTE), c_ulong, c_bool]),
+        'GetTimeProfile':      (lib.GetTimeProfile,      [POINTER(GoUHPPOTE), POINTER(GoTimeProfile), c_ulong, c_ubyte]),
     }
 # yapf: enable
 
@@ -423,4 +459,26 @@ class GoCard(Structure):
         ('start', c_char_p),
         ('end', c_char_p),
         ('doors', POINTER(c_ubyte)),  # uint8_t[4]
+    ]
+
+
+class GoTimeProfile(Structure):
+    _fields_ = [
+        ('ID', c_ubyte),
+        ('linked', c_ubyte),
+        ('start', c_char_p),
+        ('end', c_char_p),
+        ('monday', c_ubyte),
+        ('tuesday', c_ubyte),
+        ('wednesday', c_ubyte),
+        ('thursday', c_ubyte),
+        ('friday', c_ubyte),
+        ('saturday', c_ubyte),
+        ('sunday', c_ubyte),
+        ('segment1start', c_char_p),
+        ('segment1end', c_char_p),
+        ('segment2start', c_char_p),
+        ('segment2end', c_char_p),
+        ('segment3start', c_char_p),
+        ('segment3end', c_char_p),
     ]

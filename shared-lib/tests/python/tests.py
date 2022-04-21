@@ -18,6 +18,7 @@ CARD_NUMBER = 8165538
 CARD_INDEX = 19
 EVENT_INDEX = 51
 DOOR = 4
+PROFILE_ID = 49
 
 
 def tests():
@@ -43,6 +44,7 @@ def tests():
         'set-event-index': set_event_index,
         'get-event': get_event,
         'record-special-events': record_special_events,
+        'get-time-profile': get_time_profile,
     }
 
 
@@ -251,6 +253,31 @@ def get_event(u):
     ])
 
 
+def get_time_profile(u):
+    tag = 'get-event'
+    profile = u.get_time_profile(DEVICE_ID, PROFILE_ID)
+
+    return evaluate(tag, [
+        ('profile ID', 49, profile.ID),
+        ('linked profile', 71, profile.linked),
+        ("profile 'from' date", '2022-02-01', profile.start),
+        ("profile 'to' date", '2022-06-30', profile.end),
+        ('profile Monday', True, profile.monday),
+        ('profile Tuesday', False, profile.tuesday),
+        ('profile Wednesday', True, profile.wednesday),
+        ('profile Thursday', True, profile.thursday),
+        ('profile Friday', False, profile.friday),
+        ('profile Saturday', False, profile.saturday),
+        ('profile Sunday', True, profile.sunday),
+        ('profile segment 1 start', '08:30', profile.segment1start),
+        ('profile segment 1 end', '11:30', profile.segment1end),
+        ('profile segment 2 start', '', profile.segment2start),
+        ('profile segment 2 end', '', profile.segment2end),
+        ('profile segment 3 start', '14:45', profile.segment3start),
+        ('profile segment 3 end', '', profile.segment3end),
+    ])
+
+
 def record_special_events(u):
     tag = 'record-special-events'
     u.record_special_events(DEVICE_ID, True)
@@ -263,7 +290,7 @@ def evaluate(tag, resultset):
     for row in resultset:
         field, expected, actual = row
         if actual != expected:
-            print(f'{tag:<17} incorrect {field} (expected:{expected}, got:{actual})')
+            print(f'{tag:<21} incorrect {field} (expected:{expected}, got:{actual})')
             ok = False
 
     return passed(tag) if ok else failed(tag)

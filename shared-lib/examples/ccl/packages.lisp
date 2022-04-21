@@ -24,5 +24,6 @@
            get-event-index
            set-event-index
            get-event
-           record-special-events))
+           record-special-events
+           get-time-profile))
 

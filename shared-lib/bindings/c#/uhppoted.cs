@@ -120,6 +120,52 @@ public class Card {
     }
 };
 
+public class TimeProfile {
+    public byte ID;
+    public byte linked;
+    public string from;
+    public string to;
+    public bool monday;
+    public bool tuesday;
+    public bool wednesday;
+    public bool thursday;
+    public bool friday;
+    public bool saturday;
+    public bool sunday;
+    public string segment1start;
+    public string segment1end;
+    public string segment2start;
+    public string segment2end;
+    public string segment3start;
+    public string segment3end;
+
+    public TimeProfile(byte ID, byte linked, string from, string to,
+                       bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday,
+                       string segment1start, string segment1end,
+                       string segment2start, string segment2end,
+                       string segment3start, string segment3end) {
+        this.ID = ID;
+        this.linked = linked;
+        this.from = from;
+        this.to = to;
+
+        this.monday = monday;
+        this.tuesday = tuesday;
+        this.wednesday = wednesday;
+        this.thursday = thursday;
+        this.friday = friday;
+        this.saturday = saturday;
+        this.sunday = sunday;
+
+        this.segment1start = segment1start;
+        this.segment1end = segment1end;
+        this.segment2start = segment2start;
+        this.segment2end = segment2end;
+        this.segment3start = segment3start;
+        this.segment3end = segment3end;
+    }
+};
+
 public class Uhppoted : IDisposable {
     private UHPPOTE u = new UHPPOTE();
 
@@ -246,6 +292,9 @@ public class Uhppoted : IDisposable {
     [DllImport("libuhppoted.so")]
     private static extern string RecordSpecialEvents(ref UHPPOTE u, uint deviceID, bool enabled);
 
+    [DllImport("libuhppoted.so")]
+    private static extern string GetTimeProfile(ref UHPPOTE u, ref GoTimeProfile profile, uint deviceID, byte profileID);
+
     public uint[] GetDevices() {
         int N = 0;
         int count = N;
@@ -312,17 +361,29 @@ public class Uhppoted : IDisposable {
         Marshal.Copy(status.doors, doors, 0, 4);
         Marshal.Copy(status.buttons, buttons, 0, 4);
 
-        Event e =
-            new Event(evt.timestamp, evt.index, evt.eventType, evt.granted != 0,
-                      evt.door, evt.direction, evt.card, evt.reason);
+        Event e = new Event(evt.timestamp,
+                            evt.index,
+                            evt.eventType,
+                            evt.granted != 0,
+                            evt.door,
+                            evt.direction,
+                            evt.card,
+                            evt.reason);
 
         Marshal.FreeHGlobal(status.doors);
         Marshal.FreeHGlobal(status.buttons);
         Marshal.FreeHGlobal(status.evt);
 
-        return new Status(status.ID, status.sysdatetime, doors, buttons,
-                          status.relays, status.inputs, status.syserror,
-                          status.info, status.seqno, e);
+        return new Status(status.ID,
+                          status.sysdatetime,
+                          doors,
+                          buttons,
+                          status.relays,
+                          status.inputs,
+                          status.syserror,
+                          status.info,
+                          status.seqno,
+                          e);
     }
 
     public string GetTime(uint deviceID) {
@@ -501,6 +562,30 @@ public class Uhppoted : IDisposable {
         }
     }
 
+    public TimeProfile GetTimeProfile(uint deviceID, byte profileID) {
+        GoTimeProfile profile = new GoTimeProfile();
+
+        string err = GetTimeProfile(ref this.u, ref profile, deviceID, profileID);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+
+        return new TimeProfile(profile.ID,
+                               profile.linked,
+                               profile.from,
+                               profile.to,
+                               profile.monday != 0,
+                               profile.tuesday != 0,
+                               profile.wednesday != 0,
+                               profile.thursday != 0,
+                               profile.friday != 0,
+                               profile.saturday != 0,
+                               profile.sunday != 0,
+                               profile.segment1start, profile.segment1end,
+                               profile.segment2start, profile.segment2end,
+                               profile.segment3start, profile.segment3end);
+    }
+
     // INTERNAL structs for DLL
 
     struct udevice {
@@ -567,6 +652,26 @@ public class Uhppoted : IDisposable {
         public string from;
         public string to;
         public IntPtr doors;
+    };
+
+    struct GoTimeProfile {
+        public byte ID;
+        public byte linked;
+        public string from;
+        public string to;
+        public byte monday;
+        public byte tuesday;
+        public byte wednesday;
+        public byte thursday;
+        public byte friday;
+        public byte saturday;
+        public byte sunday;
+        public string segment1start;
+        public string segment1end;
+        public string segment2start;
+        public string segment2end;
+        public string segment3start;
+        public string segment3end;
     };
 };
 }

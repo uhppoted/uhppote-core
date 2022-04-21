@@ -21,6 +21,7 @@ public class Tests {
     const uint CARD_INDEX = 19;
     const uint EVENT_INDEX = 51;
     const byte DOOR = 4;
+    const byte PROFILE_ID = 49;
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
                                         new Controller(303986753, "192.168.1.100") };
@@ -47,6 +48,7 @@ public class Tests {
         new test("set-event-index", SetEventIndex),
         new test("get-event", GetEvent),
         new test("record-special-events", RecordSpecialEvents),
+        new test("get-time-profile", GetTimeProfile),
     };
 
     public static void Main(string[] args) {
@@ -602,6 +604,102 @@ public class Tests {
         string tag = "record-special-events";
 
         u.RecordSpecialEvents(DEVICE_ID, true);
+
+        return passed(tag);
+    }
+
+    static bool GetTimeProfile(Uhppoted u) {
+        string tag = "get-time-profile";
+        TimeProfile profile = u.GetTimeProfile(DEVICE_ID, PROFILE_ID);
+        bool ok = true;
+
+        if (profile.ID != 49) {
+            WriteLine(Format("{0}: incorrect profile ID - expected:{1}, got:{2}", tag, 49, profile.ID));
+            ok = false;
+        }
+
+        if (profile.linked != 71) {
+            WriteLine(Format("{0}: incorrect linked profile - expected:{1}, got:{2}", tag, 71, profile.linked));
+            ok = false;
+        }
+
+        if (profile.from != "2022-02-01") {
+            WriteLine(Format("{0}: incorrect profile 'from' date - expected:{1}, got:{2}", tag, "2022-02-01", profile.from));
+            ok = false;
+        }
+
+        if (profile.to != "2022-06-30") {
+            WriteLine(Format("{0}: incorrect profile 'to' date - expected:{1}, got:{2}", tag, "2022-06-30", profile.to));
+            ok = false;
+        }
+
+        if (!profile.monday) {
+            WriteLine(Format("{0}: incorrect profile 'monday' - expected:{1}, got:{2}", tag, true, profile.monday));
+            ok = false;
+        }
+
+        if (profile.tuesday) {
+            WriteLine(Format("{0}: incorrect profile 'tuesday' - expected:{1}, got:{2}", tag, false, profile.tuesday));
+            ok = false;
+        }
+
+        if (!profile.wednesday) {
+            WriteLine(Format("{0}: incorrect profile 'wednesday' - expected:{1}, got:{2}", tag, true, profile.wednesday));
+            ok = false;
+        }
+
+        if (!profile.thursday) {
+            WriteLine(Format("{0}: incorrect profile 'thursday' - expected:{1}, got:{2}", tag, true, profile.thursday));
+            ok = false;
+        }
+
+        if (profile.friday) {
+            WriteLine(Format("{0}: incorrect profile 'friday' - expected:{1}, got:{2}", tag, false, profile.friday));
+            ok = false;
+        }
+
+        if (profile.saturday) {
+            WriteLine(Format("{0}: incorrect profile 'saturday' - expected:{1}, got:{2}", tag, false, profile.saturday));
+            ok = false;
+        }
+
+        if (!profile.sunday) {
+            WriteLine(Format("{0}: incorrect profile 'sunday' - expected:{1}, got:{2}", tag, true, profile.sunday));
+            ok = false;
+        }
+
+        if (profile.segment1start != "08:30") {
+            WriteLine(Format("{0}: incorrect profile segment 1 start - expected:{1}, got:{2}", tag, "08:30", profile.segment1start));
+            ok = false;
+        }
+
+        if (profile.segment1end != "11:30") {
+            WriteLine(Format("{0}: incorrect profile segment 1 end - expected:{1}, got:{2}", tag, "11:30", profile.segment1end));
+            ok = false;
+        }
+
+        if (profile.segment2start != "") {
+            WriteLine(Format("{0}: incorrect profile segment 2 start - expected:{1}, got:{2}", tag, "", profile.segment2start));
+            ok = false;
+        }
+
+        if (profile.segment2end != "") {
+            WriteLine(Format("{0}: incorrect profile segment 2 end - expected:{1}, got:{2}", tag, "", profile.segment2end));
+            ok = false;
+        }
+
+        if (profile.segment3start != "14:45") {
+            WriteLine(Format("{0}: incorrect profile segment 3 start - expected:{1}, got:{2}", tag, "", profile.segment3start));
+            ok = false;
+        }
+
+        if (profile.segment3end != "") {
+            WriteLine(Format("{0}: incorrect profile segment 3 end - expected:{1}, got:{2}", tag, "", profile.segment3end));
+            ok = false;
+        }
+        if (!ok) {
+            return failed(tag);
+        }
 
         return passed(tag);
     }

@@ -46,6 +46,24 @@
                 to
                 doors)
 
+(defstruct time-profile ID
+                        linked
+                        from
+                        to
+                        monday
+                        tuesday
+                        wednesday
+                        thursday
+                        friday
+                        saturday
+                        sunday
+                        segment1start
+                        segment1end
+                        segment2start
+                        segment2end
+                        segment3start
+                        segment3end)
+
 
 (def-foreign-type nil
   (:struct :UDEVICE (:id      :int)
@@ -103,6 +121,26 @@
                    (:from        :address)
                    (:to          :address)
                    (:doors     :address)))
+
+(def-foreign-type nil
+  (:struct :GoTimeProfile (:ID            :unsigned-byte)
+                          (:linked        :unsigned-byte)
+                          (:from          :address)
+                          (:to            :address)
+                          (:monday        :unsigned-byte)
+                          (:tuesday       :unsigned-byte)
+                          (:wednesday     :unsigned-byte)
+                          (:thursday      :unsigned-byte)
+                          (:friday        :unsigned-byte)
+                          (:saturday      :unsigned-byte)
+                          (:sunday        :unsigned-byte)
+                          (:segment1start :address)
+                          (:segment1end   :address)
+                          (:segment2start :address)
+                          (:segment2end   :address)
+                          (:segment3start :address)
+                          (:segment3end   :address)
+                          ))
 
 
 (define-condition uhppoted-error (error)
@@ -428,6 +466,33 @@
                                                            :unsigned-byte (if enabled 1 0)
                                                            :address)))
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+
+
+(defun uhppoted-get-time-profile (uhppote device-id profile-id) "Retrieves a time profile from a controller"
+  (rletz ((profile (:struct :GoTimeProfile)))
+    (with-macptrs ((err (external-call "GetTimeProfile" :address uhppote 
+                                                        :address profile
+                                                        :unsigned-long device-id 
+                                                        :unsigned-byte profile-id
+                                                        :address)))
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+      (make-time-profile :ID            (pref profile :GoTimeProfile.ID)
+                         :linked        (pref profile :GoTimeProfile.linked)
+                         :from          (go-string (pref profile :GoTimeProfile.from))
+                         :to            (go-string (pref profile :GoTimeProfile.to))
+                         :monday        (/= 0 (pref profile :GoTimeProfile.monday))
+                         :tuesday       (/= 0 (pref profile :GoTimeProfile.tuesday))
+                         :wednesday     (/= 0 (pref profile :GoTimeProfile.wednesday))
+                         :thursday      (/= 0 (pref profile :GoTimeProfile.thursday))
+                         :friday        (/= 0 (pref profile :GoTimeProfile.friday))
+                         :saturday      (/= 0 (pref profile :GoTimeProfile.saturday))
+                         :sunday        (/= 0 (pref profile :GoTimeProfile.sunday))
+                         :segment1start (go-string (pref profile :GoTimeProfile.segment1start))
+                         :segment1end   (go-string (pref profile :GoTimeProfile.segment1end))
+                         :segment2start (go-string (pref profile :GoTimeProfile.segment2start))
+                         :segment2end   (go-string (pref profile :GoTimeProfile.segment2end))
+                         :segment3start (go-string (pref profile :GoTimeProfile.segment3start))
+                         :segment3end   (go-string (pref profile :GoTimeProfile.segment3end))))))
 
 
 (defun debug () "" 

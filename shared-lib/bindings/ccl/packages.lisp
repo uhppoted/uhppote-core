@@ -25,6 +25,7 @@
            uhppoted-set-event-index
            uhppoted-get-event
            uhppoted-record-special-events
+           uhppoted-get-time-profile
            uhppoted-error
            with-warning
            message
@@ -64,6 +65,24 @@
            card-from
            card-to
            card-doors
+
+           time-profile-id
+           time-profile-linked
+           time-profile-from
+           time-profile-to
+           time-profile-monday
+           time-profile-tuesday
+           time-profile-wednesday
+           time-profile-thursday
+           time-profile-friday
+           time-profile-saturday
+           time-profile-sunday
+           time-profile-segment1start
+           time-profile-segment1end
+           time-profile-segment2start
+           time-profile-segment2end
+           time-profile-segment3start
+           time-profile-segment3end
 
            normally-open
            normally-closed

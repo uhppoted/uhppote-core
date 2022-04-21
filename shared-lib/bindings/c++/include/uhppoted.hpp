@@ -59,6 +59,26 @@ typedef struct card {
     uint8_t doors[4];
 } card;
 
+typedef struct time_profile {
+    uint8_t ID;
+    uint8_t linked;
+    std::string from;
+    std::string to;
+    bool monday;
+    bool tuesday;
+    bool wednesday;
+    bool thursday;
+    bool friday;
+    bool saturday;
+    bool sunday;
+    std::string segment1start;
+    std::string segment1end;
+    std::string segment2start;
+    std::string segment2end;
+    std::string segment3start;
+    std::string segment3end;
+} time_profile;
+
 class uhppoted {
   public:
     uhppoted();
@@ -91,6 +111,8 @@ class uhppoted {
     void set_event_index(uint32_t id, uint32_t index);
     event get_event(uint32_t id, uint32_t index);
     void record_special_events(uint32_t id, bool enabled);
+
+    time_profile get_time_profile(uint32_t id, uint8_t profile_id);
 
   private:
     UHPPOTE *u;

@@ -1,7 +1,7 @@
 LIB=../../lib
 BINDINGS=../../bindings/c++
 CMD=./examples
-SRC=examples.cpp device.cpp cards.cpp events.cpp
+SRC=examples.cpp device.cpp cards.cpp events.cpp time_profiles.cpp
 
 lib: 
 	cd ../../go && make all
@@ -86,6 +86,9 @@ get-event: build
 record-special-events: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) record-special-events
 
+get-time-profile: build
+	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-time-profile
+
 debug: format
 	clang -std=c++11  -o examples $(SRC) $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB)/debug -lc++ -L$(LIB)/debug -luhppoted
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) open-door
+	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) get-time-profile

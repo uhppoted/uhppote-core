@@ -25,6 +25,7 @@
            set-event-index
            get-event
            record-special-events
+           get-time-profile
            failed
            message))
 

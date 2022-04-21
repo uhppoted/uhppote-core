@@ -85,6 +85,9 @@ get-event: build
 record-special-events: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) record-special-events
 
+get-time-profile: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-time-profile
+
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) open-door
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-time-profile
 

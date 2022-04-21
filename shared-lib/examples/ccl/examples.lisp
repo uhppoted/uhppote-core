@@ -209,3 +209,11 @@
             tag
             (exec #'(lambda (u) (uhppoted-record-special-events u device-id enabled))))))
 
+(defun get-time-profile () "" 
+  (let ((tag        "get-time-profile")
+        (device-id  405419896)
+        (profile-id 29))
+    (format t 
+            "  ~a:~%    ~:w~%~%" 
+            tag
+            (exec #'(lambda (u) (uhppoted-get-time-profile u device-id profile-id))))))

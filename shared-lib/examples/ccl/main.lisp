@@ -25,6 +25,7 @@
         '("set-event-index"       examples:set-event-index       "Sets the current event index on a controller.")
         '("get-event"             examples:get-event             "Retrieves the event at the index from a controller.")
         '("record-special-events" examples:record-special-events "Enables/disables recording additional events for a controller.")
+        '("get-time-profile"      examples:get-time-profile      "Retrieves a time profile from a controller.")
 ))
 
 
