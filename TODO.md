@@ -3,7 +3,7 @@
 ### IN PROGRESS
   - [ ] Commonalise test failure handling
         - [x] C
-        - [ ] C++
+        - [x] C++
         - [ ] C#
         - [x] Python
         - [ ] CCL
@@ -26,7 +26,8 @@
 
   - [ ] Extend examples to use command line args
   - [ ] C++ 
-        - std::invoke
+        - make doors/inputs in status bool
+
   - [ ] python: 
         - https://martinheinz.dev/blog/70
   - [ ] Remove doubled up exception handling in examples
