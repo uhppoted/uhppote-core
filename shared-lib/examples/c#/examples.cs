@@ -96,6 +96,9 @@ public class examples {
         new command("get-time-profile",
                     "Retrieves a time profile from a controller.",
                     GetTimeProfile),
+        new command("set-time-profile",
+                    "Adds or updates a time profile on a controller.",
+                    GetTimeProfile),
     };
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -502,6 +505,36 @@ public class examples {
         byte profileID = PROFILE_ID;
 
         TimeProfile profile = u.GetTimeProfile(deviceID, profileID);
+
+        WriteLine(Format("{0}", tag));
+        WriteLine(Format("  ID:                   {0}", deviceID));
+        WriteLine(Format("  profile ID:           {0}", profile.ID));
+        WriteLine(Format("  linked profile:       {0}", profile.linked));
+        WriteLine(Format("  enabled from:         {0}", profile.from));
+        WriteLine(Format("          to:           {0}", profile.to));
+        WriteLine(Format("  enabled on Monday:    {0}", profile.monday));
+        WriteLine(Format("             Tuesday:   {0}", profile.tuesday));
+        WriteLine(Format("             Wednesday: {0}", profile.wednesday));
+        WriteLine(Format("             Thursday:  {0}", profile.thursday));
+        WriteLine(Format("             Friday:    {0}", profile.friday));
+        WriteLine(Format("             Saturday:  {0}", profile.saturday));
+        WriteLine(Format("             Sunday:    {0}", profile.sunday));
+        WriteLine(Format("  segment 1:            {0}-{1}", profile.segment1start, profile.segment1end));
+        WriteLine(Format("  segment 2:            {0}-{1}", profile.segment2start, profile.segment2end));
+        WriteLine(Format("  segment 3:            {0}-{1}", profile.segment3start, profile.segment3end));
+        WriteLine();
+    }
+
+    static void SetTimeProfile(Uhppoted u, string[] args) {
+        string tag = "set-time-profile";
+        uint deviceID = DEVICE_ID;
+        TimeProfile profile = new TimeProfile(PROFILE_ID, 71, "2022-02-01", "2022-06-30",
+                                              true, false, true, true, false, false, true,
+                                              "08:30", "11:30",
+                                              "", "",
+                                              "", "18:00");
+
+        u.SetTimeProfile(deviceID, profile);
 
         WriteLine(Format("{0}", tag));
         WriteLine(Format("  ID:                   {0}", deviceID));

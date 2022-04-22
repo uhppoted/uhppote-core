@@ -31,3 +31,31 @@ bool getTimeProfile(uhppoted &u) {
 
     return evaluate("get-time-profile", rs);
 }
+
+bool setTimeProfile(uhppoted &u) {
+    time_profile profile = {
+        .ID = PROFILE_ID,
+        .linked = 71,
+        .from = "2022-02-01",
+        .to = "2022-06-30",
+        .monday = true,
+        .tuesday = false,
+        .wednesday = true,
+        .thursday = true,
+        .friday = false,
+        .saturday = false,
+        .sunday = true,
+        .segment1start = "08:30",
+        .segment1end = "11:30",
+        .segment2start = "",
+        .segment2end = "",
+        .segment3start = "",
+        .segment3end = "18:00",
+    };
+
+    u.set_time_profile(DEVICE_ID, profile);
+
+    vector<result> rs = {};
+
+    return evaluate("set-time-profile", rs);
+}

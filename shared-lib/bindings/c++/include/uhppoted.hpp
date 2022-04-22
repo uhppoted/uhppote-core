@@ -113,6 +113,7 @@ class uhppoted {
     void record_special_events(uint32_t id, bool enabled);
 
     time_profile get_time_profile(uint32_t id, uint8_t profile_id);
+    void set_time_profile(uint32_t id, const time_profile &profile);
 
   private:
     UHPPOTE *u;

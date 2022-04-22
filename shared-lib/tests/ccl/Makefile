@@ -83,6 +83,9 @@ record-special-events: build
 get-time-profile: build
 	$(CMD) get-time-profile
 
+set-time-profile: build
+	$(CMD) set-time-profile
+
 all: build
 	$(CMD) all
 

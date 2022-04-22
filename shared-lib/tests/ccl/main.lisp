@@ -27,6 +27,7 @@
         '("get-event"             tests:get-event)
         '("record-special-events" tests:record-special-events)
         '("get-time-profile"      tests:get-time-profile)
+        '("set-time-profile"      tests:set-time-profile)
 ))
 
 

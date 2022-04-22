@@ -522,3 +522,33 @@ int get_time_profile(uint32_t id, uint8_t profile_id, time_profile *p) {
 
     return 0;
 }
+
+int set_time_profile(uint32_t id, time_profile *p) {
+    struct TimeProfile profile;
+
+    profile.ID = p->ID;
+    profile.linked = p->linked;
+    profile.from = p->from;
+    profile.to = p->to;
+    profile.monday = p->monday;
+    profile.tuesday = p->tuesday;
+    profile.wednesday = p->wednesday;
+    profile.thursday = p->thursday;
+    profile.friday = p->friday;
+    profile.saturday = p->saturday;
+    profile.sunday = p->sunday;
+    profile.segment1start = p->segment1start;
+    profile.segment1end = p->segment1end;
+    profile.segment2start = p->segment2start;
+    profile.segment2end = p->segment2end;
+    profile.segment3start = p->segment3start;
+    profile.segment3end = p->segment3end;
+
+    char *err = SetTimeProfile(u, id, &profile);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}

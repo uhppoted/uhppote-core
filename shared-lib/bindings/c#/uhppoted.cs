@@ -295,6 +295,9 @@ public class Uhppoted : IDisposable {
     [DllImport("libuhppoted.so")]
     private static extern string GetTimeProfile(ref UHPPOTE u, ref GoTimeProfile profile, uint deviceID, byte profileID);
 
+    [DllImport("libuhppoted.so")]
+    private static extern string SetTimeProfile(ref UHPPOTE u, uint deviceID, ref GoTimeProfile profile);
+
     public uint[] GetDevices() {
         int N = 0;
         int count = N;
@@ -584,6 +587,33 @@ public class Uhppoted : IDisposable {
                                profile.segment1start, profile.segment1end,
                                profile.segment2start, profile.segment2end,
                                profile.segment3start, profile.segment3end);
+    }
+
+    public void SetTimeProfile(uint deviceID, TimeProfile p) {
+        GoTimeProfile profile = new GoTimeProfile();
+
+        profile.ID = p.ID;
+        profile.linked = p.linked;
+        profile.from = p.from;
+        profile.to = p.to;
+        profile.monday = p.monday ? (byte)1 : (byte)0;
+        profile.tuesday = p.tuesday ? (byte)1 : (byte)0;
+        profile.wednesday = p.wednesday ? (byte)1 : (byte)0;
+        profile.thursday = p.thursday ? (byte)1 : (byte)0;
+        profile.friday = p.friday ? (byte)1 : (byte)0;
+        profile.saturday = p.saturday ? (byte)1 : (byte)0;
+        profile.sunday = p.sunday ? (byte)1 : (byte)0;
+        profile.segment1start = p.segment1start;
+        profile.segment1end = p.segment1end;
+        profile.segment2start = p.segment2start;
+        profile.segment2end = p.segment2end;
+        profile.segment3start = p.segment3start;
+        profile.segment3end = p.segment3end;
+
+        string err = SetTimeProfile(ref this.u, deviceID, ref profile);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
     }
 
     // INTERNAL structs for DLL

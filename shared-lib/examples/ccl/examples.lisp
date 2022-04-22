@@ -217,3 +217,28 @@
             "  ~a:~%    ~:w~%~%" 
             tag
             (exec #'(lambda (u) (uhppoted-get-time-profile u device-id profile-id))))))
+
+(defun set-time-profile () "" 
+  (let ((tag        "set-time-profile")
+        (device-id  405419896)
+        (profile    (make-time-profile :ID        29
+                                       :linked    71
+                                       :from      "2022-02-01"
+                                       :to        "2022-06-30"
+                                       :monday    t
+                                       :tuesday   nil
+                                       :wednesday t
+                                       :thursday  t
+                                       :friday    nil
+                                       :saturday  nil
+                                       :sunday    t
+                                       :segment1start "08:30"
+                                       :segment1end   "11:30"
+                                       :segment2start ""
+                                       :segment2end   ""
+                                       :segment3start ""
+                                       :segment3end   "18:00")))
+    (format t 
+            "  ~a:~%    ~:w~%~%" 
+            tag
+            (exec #'(lambda (u) (uhppoted-set-time-profile u device-id profile))))))

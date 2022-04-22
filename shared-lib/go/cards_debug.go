@@ -168,3 +168,37 @@ func getTimeProfile(uu uhppote.IUHPPOTE, profile *C.struct_TimeProfile, deviceID
 
 	return nil
 }
+
+func setTimeProfile(uu uhppote.IUHPPOTE, deviceID uint32, profile *C.struct_TimeProfile) error {
+	if profile == nil {
+		return fmt.Errorf("invalid argument (profile) - expected valid pointer")
+	}
+
+	p, err := makeTimeProfile(*profile)
+	if err != nil {
+		return err
+	} else if p == nil {
+		return fmt.Errorf("invalid time profile (%v)", p)
+	}
+
+	if DEBUG {
+		fmt.Printf(">>> set-time-profile\n")
+		fmt.Printf("    ID:                   %v\n", deviceID)
+		fmt.Printf("    profile ID:           %v\n", p.ID)
+		fmt.Printf("    enabled    from:      %v\n", p.From)
+		fmt.Printf("               to:        %v\n", p.To)
+		fmt.Printf("    enabled on Monday:    %v\n", p.Weekdays[time.Monday])
+		fmt.Printf("               Tuesday:   %v\n", p.Weekdays[time.Tuesday])
+		fmt.Printf("               Wednesday: %v\n", p.Weekdays[time.Wednesday])
+		fmt.Printf("               Thursday:  %v\n", p.Weekdays[time.Thursday])
+		fmt.Printf("               Friday:    %v\n", p.Weekdays[time.Friday])
+		fmt.Printf("               Saturday:  %v\n", p.Weekdays[time.Saturday])
+		fmt.Printf("               Sunday:    %v\n", p.Weekdays[time.Sunday])
+		fmt.Printf("    segment 1:            %v-%v\n", p.Segments[1].Start, p.Segments[1].End)
+		fmt.Printf("    segment 2:            %v-%v\n", p.Segments[2].Start, p.Segments[2].End)
+		fmt.Printf("    segment 3:            %v-%v\n", p.Segments[3].Start, p.Segments[3].End)
+		fmt.Println()
+	}
+
+	return nil
+}

@@ -139,6 +139,11 @@ const vector<command> commands = {
         .help = "Retrieves a time profile from a controller.",
         .fn = getTimeProfile,
     },
+    {
+        .cmd = "set-time-profile",
+        .help = "Adds or update a time profile on a controller.",
+        .fn = setTimeProfile,
+    },
 };
 
 int main(int argc, char **argv) {

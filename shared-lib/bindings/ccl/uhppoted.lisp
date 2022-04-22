@@ -495,6 +495,41 @@
                          :segment3end   (go-string (pref profile :GoTimeProfile.segment3end))))))
 
 
+(defun uhppoted-set-time-profile (uhppote device-id profile) "Adds or update a time profile on a controller"
+  (with-cstrs ((from          (time-profile-from          profile))
+               (to            (time-profile-to            profile))
+               (segment1start (time-profile-segment1start profile))
+               (segment1end   (time-profile-segment1end   profile))
+               (segment2start (time-profile-segment2start profile))
+               (segment2end   (time-profile-segment2end   profile))
+               (segment3start (time-profile-segment3start profile))
+               (segment3end   (time-profile-segment3end   profile)))
+  (rletz ((p (:struct :GoTimeProfile) :ID         (time-profile-id     profile)
+                                       :linked    (time-profile-linked profile)
+                                       :from      from
+                                       :to        to
+                                       :monday    (if (time-profile-monday    profile) 1 0)
+                                       :tuesday   (if (time-profile-tuesday   profile) 1 0)
+                                       :wednesday (if (time-profile-wednesday profile) 1 0)
+                                       :thursday  (if (time-profile-thursday  profile) 1 0)
+                                       :friday    (if (time-profile-friday    profile) 1 0)
+                                       :saturday  (if (time-profile-saturday  profile) 1 0)
+                                       :sunday    (if (time-profile-sunday    profile) 1 0)
+                                       :segment1start segment1start
+                                       :segment1end   segment1end
+                                       :segment2start segment2start
+                                       :segment2end   segment2end
+                                       :segment3start segment3start
+                                       :segment3end   segment3end))
+    (with-macptrs ((err (external-call "SetTimeProfile" :address uhppote 
+                                                        :unsigned-long device-id 
+                                                        :address p
+                                                        :address)))
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+      t)))
+    )
+
+
 (defun debug () "" 
   (handler-bind
 	((uhppoted-error

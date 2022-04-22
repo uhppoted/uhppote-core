@@ -48,6 +48,7 @@ const test tests[] = {
     {.name = "get-event", .fn = getEvent},
     {.name = "record-special-events", .fn = recordSpecialEvents},
     {.name = "get-time-profile", .fn = getTimeProfile},
+    {.name = "set-time-profile", .fn = setTimeProfile},
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};

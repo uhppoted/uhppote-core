@@ -41,6 +41,7 @@ extern bool getEvent(uhppoted &);
 extern bool recordSpecialEvents(uhppoted &);
 
 extern bool getTimeProfile(uhppoted &);
+extern bool setTimeProfile(uhppoted &);
 
 extern bool evaluate(const std::string &, const std::vector<result> &);
 extern bool passed(const std::string &);

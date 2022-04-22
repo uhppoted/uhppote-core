@@ -304,6 +304,21 @@ class Uhppote:
             profile.segment2start.decode('utf-8'), profile.segment2end.decode('utf-8'),
             profile.segment3start.decode('utf-8'), profile.segment3end.decode('utf-8'))
 
+    def set_time_profile(self, deviceID, p):
+        profile = GoTimeProfile(p.ID, p.linked, c_char_p(bytes(p.start, 'utf-8')),
+                                c_char_p(bytes(p.end, 'utf-8')), 1 if p.monday else 0,
+                                1 if p.tuesday else 0, 1 if p.wednesday else 0,
+                                1 if p.thursday else 0, 1 if p.friday else 0,
+                                1 if p.saturday else 0, 1 if p.sunday else 0,
+                                c_char_p(bytes(p.segment1start, 'utf-8')),
+                                c_char_p(bytes(p.segment1end, 'utf-8')),
+                                c_char_p(bytes(p.segment2start, 'utf-8')),
+                                c_char_p(bytes(p.segment2end, 'utf-8')),
+                                c_char_p(bytes(p.segment3start, 'utf-8')),
+                                c_char_p(bytes(p.segment3end, 'utf-8')))
+
+        self.ffi.SetTimeProfile(self._uhppote, deviceID, byref(profile))
+
 
 # Go FFI types
 
@@ -332,6 +347,7 @@ class FFI:
         self.GetEvent = ffi('GetEvent', errcheck)
         self.RecordSpecialEvents = ffi('RecordSpecialEvents', errcheck)
         self.GetTimeProfile = ffi('GetTimeProfile', errcheck)
+        self.SetTimeProfile = ffi('SetTimeProfile', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -370,6 +386,7 @@ def libfunctions():
         'GetEvent':            (lib.GetEvent,            [POINTER(GoUHPPOTE), POINTER(GoEvent), c_ulong, c_ulong]),
         'RecordSpecialEvents': (lib.RecordSpecialEvents, [POINTER(GoUHPPOTE), c_ulong, c_bool]),
         'GetTimeProfile':      (lib.GetTimeProfile,      [POINTER(GoUHPPOTE), POINTER(GoTimeProfile), c_ulong, c_ubyte]),
+        'SetTimeProfile':      (lib.SetTimeProfile,      [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTimeProfile)]),
     }
 # yapf: enable
 

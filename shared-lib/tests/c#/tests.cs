@@ -49,6 +49,7 @@ public class Tests {
         new test("get-event", GetEvent),
         new test("record-special-events", RecordSpecialEvents),
         new test("get-time-profile", GetTimeProfile),
+        new test("set-time-profile", SetTimeProfile),
     };
 
     public static void Main(string[] args) {
@@ -700,6 +701,19 @@ public class Tests {
         if (!ok) {
             return failed(tag);
         }
+
+        return passed(tag);
+    }
+
+    static bool SetTimeProfile(Uhppoted u) {
+        string tag = "set-time-profile";
+        TimeProfile profile = new TimeProfile(PROFILE_ID, 71, "2022-02-01", "2022-06-30",
+                                              true, false, true, true, false, false, true,
+                                              "08:30", "11:30",
+                                              "", "",
+                                              "", "18:00");
+
+        u.SetTimeProfile(DEVICE_ID, profile);
 
         return passed(tag);
     }

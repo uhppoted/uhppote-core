@@ -42,3 +42,57 @@ int getTimeProfile(uhppoted &u, int argc, char **argv) {
 
     return -1;
 }
+
+int setTimeProfile(uhppoted &u, int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+    time_profile profile = {
+        .ID = PROFILE_ID,
+        .linked = 71,
+        .from = "2022-02-01",
+        .to = "2022-06-30",
+        .monday = true,
+        .tuesday = false,
+        .wednesday = true,
+        .thursday = true,
+        .friday = false,
+        .saturday = false,
+        .sunday = true,
+        .segment1start = "08:30",
+        .segment1end = "11:30",
+        .segment2start = "",
+        .segment2end = "",
+        .segment3start = "",
+        .segment3end = "18:00",
+    };
+
+    try {
+        u.set_time_profile(deviceID, profile);
+
+        cout << endl
+             << "set-time_profile" << endl;
+        cout << "  ID:                   " << deviceID << endl;
+        cout << "  profile ID:           " << static_cast<int>(profile.ID) << endl;
+        cout << "  linked profile:       " << static_cast<int>(profile.linked) << endl;
+        cout << "  enabled from:         " << profile.from << endl;
+        cout << "          to:           " << profile.to << endl;
+        cout << "  enabled on Monday:    " << static_cast<int>(profile.monday) << endl;
+        cout << "             Tuesday:   " << static_cast<int>(profile.tuesday) << endl;
+        cout << "             Wednesday: " << static_cast<int>(profile.wednesday) << endl;
+        cout << "             Thursday:  " << static_cast<int>(profile.thursday) << endl;
+        cout << "             Friday:    " << static_cast<int>(profile.friday) << endl;
+        cout << "             Saturday:  " << static_cast<int>(profile.saturday) << endl;
+        cout << "             Sunday:    " << static_cast<int>(profile.sunday) << endl;
+        cout << "  segment 1:            " << profile.segment1start << "-" << profile.segment1end << endl;
+        cout << "  segment 2:            " << profile.segment2start << "-" << profile.segment2end << endl;
+        cout << "  segment 3:            " << profile.segment3start << "-" << profile.segment3end << endl;
+        cout << endl;
+
+        return 0;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return -1;
+}

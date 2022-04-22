@@ -6,7 +6,6 @@
 #include "uhppoted.h"
 
 bool getTimeProfile() {
-    const char *tag = "get-time-profile";
     time_profile profile;
 
     if (get_time_profile(DEVICE_ID, PROFILE_ID, &profile) < 0) {
@@ -36,5 +35,36 @@ bool getTimeProfile() {
     };
     // clang-format on
 
-    return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
+    return evaluate("get-time-profile", sizeof(resultset) / sizeof(result), resultset);
+}
+
+bool setTimeProfile() {
+    time_profile profile = {
+        .ID = PROFILE_ID,
+        .linked = 71,
+        .from = "2022-02-01",
+        .to = "2022-06-30",
+        .monday = true,
+        .tuesday = false,
+        .wednesday = true,
+        .thursday = true,
+        .friday = false,
+        .saturday = false,
+        .sunday = true,
+        .segment1start = "08:30",
+        .segment1end = "11:30",
+        .segment2start = "",
+        .segment2end = "",
+        .segment3start = "",
+        .segment3end = "18:00",
+    };
+
+    if (set_time_profile(DEVICE_ID, &profile) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    const result resultset[] = {};
+
+    return evaluate("set-time-profile", sizeof(resultset) / sizeof(result), resultset);
 }

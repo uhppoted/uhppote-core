@@ -37,6 +37,7 @@ vector<test> tests = {
     {"get-event", getEvent},
     {"record-special-events", recordSpecialEvents},
     {"get-time-profile", getTimeProfile},
+    {"set-time-profile", setTimeProfile},
 };
 
 extern const uint32_t DEVICE_ID = 405419896;

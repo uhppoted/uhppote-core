@@ -28,8 +28,7 @@ uhppoted::uhppoted() { u = NULL; }
  */
 uhppoted::uhppoted(const string &bind, const string &broadcast,
                    const string &listen, int timeout,
-                   const vector<controller> &controllers, bool debug)
-    : uhppoted() {
+                   const vector<controller> &controllers, bool debug) : uhppoted() {
     if ((u = new UHPPOTE) != NULL) {
         u->bind = bind.c_str();
         u->broadcast = broadcast.c_str();
@@ -439,4 +438,31 @@ time_profile uhppoted::get_time_profile(uint32_t id, uint8_t profile_id) {
     p.segment3end = profile.segment3end;
 
     return p;
+}
+
+void uhppoted::set_time_profile(uint32_t id, const time_profile &p) {
+    TimeProfile profile;
+
+    profile.ID = p.ID;
+    profile.linked = p.linked;
+    profile.from = (char *)p.from.c_str();
+    profile.to = (char *)p.to.c_str();
+    profile.monday = p.monday;
+    profile.tuesday = p.tuesday;
+    profile.wednesday = p.wednesday;
+    profile.thursday = p.thursday;
+    profile.friday = p.friday;
+    profile.saturday = p.saturday;
+    profile.sunday = p.sunday;
+    profile.segment1start = (char *)p.segment1start.c_str();
+    profile.segment1end = (char *)p.segment1end.c_str();
+    profile.segment2start = (char *)p.segment2start.c_str();
+    profile.segment2end = (char *)p.segment2end.c_str();
+    profile.segment3start = (char *)p.segment3start.c_str();
+    profile.segment3end = (char *)p.segment3end.c_str();
+
+    char *err = SetTimeProfile(u, id, &profile);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
 }

@@ -135,6 +135,11 @@ const command commands[] = {
         .help = "Retrieves a time profile from a controller.",
         .fn = getTimeProfile,
     },
+    {
+        .cmd = "set-time-profile",
+        .help = "Adds or updates a time profile on a controller.",
+        .fn = setTimeProfile,
+    },
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};

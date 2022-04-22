@@ -111,6 +111,10 @@ def commands():
             'help': "Retrieves a time profile from a controller.",
             'fn': get_time_profile,
         },
+        'set-time-profile': {
+            'help': "Adds or updates a time profile on a controller.",
+            'fn': set_time_profile,
+        },
     }
 
 
@@ -572,6 +576,40 @@ def get_time_profile(u, args):
 
     try:
         profile = u.get_time_profile(deviceID, profileID)
+
+        print(f'{tag}')
+        print(f'  ID:                   {deviceID}')
+        print(f'  profile ID:           {profile.ID}')
+        print(f'  linked profile:       {profile.linked}')
+        print(f'  enabled from:         {profile.start}')
+        print(f'          to:           {profile.end}')
+        print(f'  enabled on Monday:    {profile.monday}')
+        print(f'             Tuesday:   {profile.tuesday}')
+        print(f'             Wednesday: {profile.wednesday}')
+        print(f'             Thursday:  {profile.thursday}')
+        print(f'             Friday:    {profile.friday}')
+        print(f'             Saturday:  {profile.saturday}')
+        print(f'             Sunday:    {profile.sunday}')
+        print(f'  segment 1:            {profile.segment1start}-{profile.segment1end}')
+        print(f'  segment 2:            {profile.segment2start}-{profile.segment2end}')
+        print(f'  segment 3:            {profile.segment3start}-{profile.segment3end}')
+        print()
+
+    except Exception as e:
+        print(f' *** ERROR {tag} ({e})')
+        print()
+
+
+def set_time_profile(u, args):
+    tag = 'set-time-profile'
+    deviceID = DEVICE_ID
+
+    try:
+        profile = uhppoted.TimeProfile(PROFILE_ID, 71, "2022-02-01", "2022-06-30", True, False,
+                                       True, True, False, False, True, "08:30", "11:30", "", "", "",
+                                       "18:00")
+
+        u.set_time_profile(deviceID, profile)
 
         print(f'{tag}')
         print(f'  ID:                   {deviceID}')

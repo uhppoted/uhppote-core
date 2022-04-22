@@ -174,3 +174,25 @@ func getTimeProfile(uu uhppote.IUHPPOTE, profile *C.struct_TimeProfile, deviceID
 
 	return nil
 }
+
+func setTimeProfile(uu uhppote.IUHPPOTE, deviceID uint32, profile *C.struct_TimeProfile) error {
+	if profile == nil {
+		return fmt.Errorf("invalid argument (profile) - expected valid pointer")
+	}
+
+	p, err := makeTimeProfile(*profile)
+	if err != nil {
+		return err
+	} else if p == nil {
+		return fmt.Errorf("invalid time profile (%v)", p)
+	}
+
+	ok, err := uu.SetTimeProfile(deviceID, *p)
+	if err != nil {
+		return err
+	} else if !ok {
+		return fmt.Errorf("%v: set-time-profile failed for ", deviceID, profile.ID)
+	}
+
+	return nil
+}

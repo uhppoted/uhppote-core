@@ -45,24 +45,23 @@ def tests():
         'get-event': get_event,
         'record-special-events': record_special_events,
         'get-time-profile': get_time_profile,
+        'set-time-profile': set_time_profile,
     }
 
 
 def get_devices(u):
-    tag = 'get-devices'
     devices = u.get_devices()
 
-    return evaluate(tag, [
+    return evaluate('get-devices', [
         ('device count', 3, len(devices)),
         ('device list', [201020304, 303986753, 405419896], [devices[0], devices[1], devices[2]]),
     ])
 
 
 def get_device(u):
-    tag = 'get-device'
     info = u.get_device(DEVICE_ID)
 
-    return evaluate(tag, [
+    return evaluate('get-device', [
         ('device ID', 405419896, info.ID),
         ('IP address', '192.168.1.101', info.address),
         ('subnet mask', '255.255.255.0', info.subnet),
@@ -74,17 +73,15 @@ def get_device(u):
 
 
 def set_address(u):
-    tag = 'set-address'
     u.set_address(DEVICE_ID, '192.168.1.125', '255.255.254.0', '192.168.1.0')
 
-    return evaluate(tag, [])
+    return evaluate('set-address', [])
 
 
 def get_status(u):
-    tag = 'get-status'
     status = u.get_status(DEVICE_ID)
 
-    return evaluate(tag, [
+    return evaluate('get-status', [
         ('device ID', 405419896, status.ID),
         ('system date/time', '2022-03-19 15:48:32', status.sysdatetime),
         ('doors state', [1, 0, 0, 1], [status.doors[0], status.doors[1], status.doors[2], status.doors[3]]),
@@ -106,75 +103,66 @@ def get_status(u):
 
 
 def get_time(u):
-    tag = 'get-time'
     datetime = u.get_time(DEVICE_ID)
 
-    return evaluate(tag, [
+    return evaluate('get-time', [
         ('date/time', '2022-01-02 12:34:56', datetime),
     ])
 
 
 def set_time(u):
-    tag = 'set-time'
     u.set_time(DEVICE_ID, '2022-03-23 12:24:17')
 
-    return evaluate(tag, [])
+    return evaluate('set-time', [])
 
 
 def get_listener(u):
-    tag = 'get-listener'
     listener = u.get_listener(DEVICE_ID)
 
-    return evaluate(tag, [
+    return evaluate('get-listener', [
         ('event listener', '192.168.1.100:60001', listener),
     ])
 
 
 def set_listener(u):
-    tag = 'set-listener'
     u.set_listener(DEVICE_ID, '192.168.1.100:60001')
 
-    return evaluate(tag, [])
+    return evaluate('set-listener', [])
 
 
 def get_door_control(u):
-    tag = 'get-door-control'
     control = u.get_door_control(DEVICE_ID, DOOR)
 
-    return evaluate(tag, [
+    return evaluate('get-door-control', [
         ('door control mode', CONTROLLED, control.mode),
         ('door open delay', 7, control.delay),
     ])
 
 
 def set_door_control(u):
-    tag = 'set-door-control'
     u.set_door_control(DEVICE_ID, DOOR, NORMALLY_CLOSED, 6)
 
-    return evaluate(tag, [])
+    return evaluate('set-door-control', [])
 
 
 def open_door(u):
-    tag = 'open-door'
     u.open_door(DEVICE_ID, DOOR)
 
-    return evaluate(tag, [])
+    return evaluate('open-door', [])
 
 
 def get_cards(u):
-    tag = 'get-cards'
     cards = u.get_cards(DEVICE_ID)
 
-    return evaluate(tag, [
+    return evaluate('get-cards', [
         ('card count', 39, cards),
     ])
 
 
 def get_card(u):
-    tag = 'get-card'
     card = u.get_card(DEVICE_ID, CARD_NUMBER)
 
-    return evaluate(tag, [
+    return evaluate('get-card', [
         ('card number', 8165538, card.cardNumber),
         ('from date', '2022-01-01', card.start),
         ('to date', '2022-12-31', card.end),
@@ -186,10 +174,9 @@ def get_card(u):
 
 
 def get_card_by_index(u):
-    tag = 'get-card-by-index'
     card = u.get_card_by_index(DEVICE_ID, CARD_INDEX)
 
-    return evaluate(tag, [
+    return evaluate('get-card-by-index', [
         ('card number', 8165538, card.cardNumber),
         ('from date', '2022-01-01', card.start),
         ('to date', '2022-12-31', card.end),
@@ -201,47 +188,41 @@ def get_card_by_index(u):
 
 
 def put_card(u):
-    tag = 'put-card'
     u.put_card(DEVICE_ID, CARD_NUMBER, '2022-01-01', '2022-12-31', [0, 1, 31, 75])
 
-    return evaluate(tag, [])
+    return evaluate('put-card', [])
 
 
 def delete_card(u):
-    tag = 'delete-card'
     u.delete_card(DEVICE_ID, CARD_NUMBER)
 
-    return evaluate(tag, [])
+    return evaluate('delete-card', [])
 
 
 def delete_cards(u):
-    tag = 'delete-cards'
     u.delete_cards(DEVICE_ID)
 
-    return evaluate(tag, [])
+    return evaluate('delete-cards', [])
 
 
 def get_event_index(u):
-    tag = 'get-event-index'
     index = u.get_event_index(DEVICE_ID)
 
-    return evaluate(tag, [
+    return evaluate('get-event-index', [
         ('event index', 47, index),
     ])
 
 
 def set_event_index(u):
-    tag = 'set-event-index'
     u.set_event_index(DEVICE_ID, EVENT_INDEX)
 
-    return evaluate(tag, [])
+    return evaluate('set-event-index', [])
 
 
 def get_event(u):
-    tag = 'get-event'
     event = u.get_event(DEVICE_ID, EVENT_INDEX)
 
-    return evaluate(tag, [
+    return evaluate('get-event', [
         ('event index', 51, event.index),
         ('event timestamp', '2022-04-15 12:29:15', event.timestamp),
         ('event type', 6, event.eventType),
@@ -254,10 +235,9 @@ def get_event(u):
 
 
 def get_time_profile(u):
-    tag = 'get-event'
     profile = u.get_time_profile(DEVICE_ID, PROFILE_ID)
 
-    return evaluate(tag, [
+    return evaluate('get-time-profile', [
         ('profile ID', 49, profile.ID),
         ('linked profile', 71, profile.linked),
         ("profile 'from' date", '2022-02-01', profile.start),
@@ -276,6 +256,15 @@ def get_time_profile(u):
         ('profile segment 3 start', '14:45', profile.segment3start),
         ('profile segment 3 end', '', profile.segment3end),
     ])
+
+
+def set_time_profile(u):
+    profile = uhppoted.TimeProfile(PROFILE_ID, 71, "2022-02-01", "2022-06-30", True, False, True, True, False, False,
+                                   True, "08:30", "11:30", "", "", "", "18:00")
+
+    u.set_time_profile(DEVICE_ID, profile)
+
+    return evaluate('set-time-profile', [])
 
 
 def record_special_events(u):

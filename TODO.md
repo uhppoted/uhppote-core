@@ -9,16 +9,15 @@
         - [ ] CCL
 
 - Shared-lib/DLL
-  - [ ] `get-time-profile`
+  - [ ] `set-time-profile`
         - [x] C
-        - [ ] Fix simulator time profiles
-        - [ ] Figure out why can't put getTimeProfile in a seperate file
         - [x] C++
         - [x] C#
         - [x] Python
         - [x] CCL
+        - [ ] Fix CLI set-time-profile
+        - [ ] Figure out why can't put getTimeProfile in a seperate file
 
-  - [ ] `set-time-profile`
   - [ ] `clear-time-profiles`
   - [ ] `add-task`
   - [ ] `refresh-tasklist`

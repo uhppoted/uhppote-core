@@ -93,6 +93,7 @@ typedef struct TimeProfile {
 import "C"
 
 import (
+	"fmt"
 	"net"
 	"time"
 	"unsafe"
@@ -347,6 +348,17 @@ func GetTimeProfile(u *C.struct_UHPPOTE, profile *C.struct_TimeProfile, deviceID
 	return nil
 }
 
+//export SetTimeProfile
+func SetTimeProfile(u *C.struct_UHPPOTE, deviceID uint32, profile *C.struct_TimeProfile) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := setTimeProfile(uu, deviceID, profile); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 	bind := types.BindAddr{IP: []byte{0, 0, 0, 0}, Port: 0}
 	broadcast := types.BroadcastAddr{IP: []byte{255, 255, 255, 255}, Port: 60000}
@@ -407,6 +419,75 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 	DEBUG = debug
 
 	return uhppote.NewUHPPOTE(bind, broadcast, listen, timeout, devices, debug), nil
+}
+
+func makeTimeProfile(profile C.struct_TimeProfile) (*types.TimeProfile, error) {
+	p := types.TimeProfile{
+		ID:              uint8(profile.ID),
+		LinkedProfileID: uint8(profile.linked),
+
+		Weekdays: map[time.Weekday]bool{
+			time.Monday:    profile.monday != 0,
+			time.Tuesday:   profile.tuesday != 0,
+			time.Wednesday: profile.wednesday != 0,
+			time.Thursday:  profile.thursday != 0,
+			time.Friday:    profile.friday != 0,
+			time.Saturday:  profile.saturday != 0,
+			time.Sunday:    profile.sunday != 0,
+		},
+
+		Segments: map[uint8]types.Segment{},
+	}
+
+	if from, err := types.DateFromString(C.GoString(profile.from)); err != nil {
+		return nil, fmt.Errorf("invalid 'from' date (%v)", err)
+	} else {
+		p.From = &from
+	}
+
+	if to, err := types.DateFromString(C.GoString(profile.to)); err != nil {
+		return nil, fmt.Errorf("invalid 'to' date (%v)", err)
+	} else {
+		p.To = &to
+	}
+
+	hhmm := map[uint8][2]string{
+		1: {C.GoString(profile.segment1start), C.GoString(profile.segment1end)},
+		2: {C.GoString(profile.segment2start), C.GoString(profile.segment2end)},
+		3: {C.GoString(profile.segment3start), C.GoString(profile.segment3end)},
+	}
+
+	for k, v := range hhmm {
+		var start types.HHmm
+		var end types.HHmm
+
+		if v[0] != "" {
+			if hhmm, err := types.HHmmFromString(v[0]); err != nil {
+				return nil, fmt.Errorf("invalid segment %v start (%v)", k, v[0])
+			} else if hhmm == nil {
+				return nil, fmt.Errorf("invalid segment %v start (%v)", k, v[0])
+			} else {
+				start = *hhmm
+			}
+		}
+
+		if v[1] != "" {
+			if hhmm, err := types.HHmmFromString(v[1]); err != nil {
+				return nil, fmt.Errorf("invalid segment %v end (%v)", k, v[1])
+			} else if hhmm == nil {
+				return nil, fmt.Errorf("invalid segment %v end (%v)", k, v[1])
+			} else {
+				end = *hhmm
+			}
+		}
+
+		p.Segments[k] = types.Segment{
+			Start: start,
+			End:   end,
+		}
+	}
+
+	return &p, nil
 }
 
 func cbool(b bool) C.uchar {

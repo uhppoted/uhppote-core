@@ -26,6 +26,7 @@
            uhppoted-get-event
            uhppoted-record-special-events
            uhppoted-get-time-profile
+           uhppoted-set-time-profile
            uhppoted-error
            with-warning
            message
@@ -66,6 +67,7 @@
            card-to
            card-doors
 
+           make-time-profile
            time-profile-id
            time-profile-linked
            time-profile-from
