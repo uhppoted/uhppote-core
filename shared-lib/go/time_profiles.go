@@ -26,7 +26,7 @@ func setTimeProfile(uu uhppote.IUHPPOTE, deviceID uint32, profile types.TimeProf
 	if err != nil {
 		return err
 	} else if !ok {
-		return fmt.Errorf("%v: set-time-profile failed for ", deviceID, profile.ID)
+		return fmt.Errorf("%v: set-time-profile failed for %v", deviceID, profile.ID)
 	}
 
 	return nil
