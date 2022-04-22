@@ -517,24 +517,24 @@
              (format t "~a: incorrect profile segment 1 end - expected:~a, got:~a~%" tag "11:30" (time-profile-segment1end profile))
              (setf ok NIL)))
 
-       (if (not (string= "" (time-profile-segment2start profile))) 
+       (if (not (string= "00:00" (time-profile-segment2start profile))) 
            (progn
-             (format t "~a: incorrect profile segment 2 start - expected:~a, got:~a~%" tag "" (time-profile-segment2start profile))
+             (format t "~a: incorrect profile segment 2 start - expected:~a, got:~a~%" tag "00:00" (time-profile-segment2start profile))
              (setf ok NIL)))
 
-       (if (not (string= "" (time-profile-segment2end profile))) 
+       (if (not (string= "00:00" (time-profile-segment2end profile))) 
            (progn
-             (format t "~a: incorrect profile segment 2 end - expected:~a, got:~a~%" tag "" (time-profile-segment2end profile))
+             (format t "~a: incorrect profile segment 2 end - expected:~a, got:~a~%" tag "00:00" (time-profile-segment2end profile))
              (setf ok NIL)))
 
-       (if (not (string= "14:45" (time-profile-segment3start profile))) 
+       (if (not (string= "00:00" (time-profile-segment3start profile))) 
            (progn
-             (format t "~a: incorrect profile segment 3 start - expected:~a, got:~a~%" tag "14:45" (time-profile-segment3start profile))
+             (format t "~a: incorrect profile segment 3 start - expected:~a, got:~a~%" tag "00:00" (time-profile-segment3start profile))
              (setf ok NIL)))
 
-       (if (not (string= "" (time-profile-segment3end profile))) 
+       (if (not (string= "18:00" (time-profile-segment3end profile))) 
            (progn
-             (format t "~a: incorrect profile segment 3 end - expected:~a, got:~a~%" tag "" (time-profile-segment3end profile))
+             (format t "~a: incorrect profile segment 3 end - expected:~a, got:~a~%" tag "18:00" (time-profile-segment3end profile))
              (setf ok NIL)))
 
        (if ok 

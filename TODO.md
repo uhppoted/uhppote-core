@@ -16,7 +16,7 @@
         - [x] Python
         - [x] CCL
         - [ ] Fix CLI set-time-profile
-        - [ ] Figure out why can't put getTimeProfile in a seperate file
+        - [x] Figure out why can't put getTimeProfile in a seperate file
 
   - [ ] `clear-time-profiles`
   - [ ] `add-task`

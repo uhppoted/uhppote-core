@@ -23,10 +23,10 @@ bool getTimeProfile(uhppoted &u) {
         result("profile Sunday", true, profile.sunday),
         result("profile segment 1 start", string("08:30"), profile.segment1start),
         result("profile segment 1 end", string("11:30"), profile.segment1end),
-        result("profile segment 2 start", string(""), profile.segment2start),
-        result("profile segment 2 end", string(""), profile.segment2end),
-        result("profile segment 3 start", string("14:45"), profile.segment3start),
-        result("profile segment 3 end", string(""), profile.segment3end),
+        result("profile segment 2 start", string("00:00"), profile.segment2start),
+        result("profile segment 2 end", string("00:00"), profile.segment2end),
+        result("profile segment 3 start", string("00:00"), profile.segment3start),
+        result("profile segment 3 end", string("18:00"), profile.segment3end),
     };
 
     return evaluate("get-time-profile", rs);

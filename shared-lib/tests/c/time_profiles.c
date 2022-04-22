@@ -28,10 +28,10 @@ bool getTimeProfile() {
         { .field = "profle 'Sunday'",         .type = "boolean", .value.boolean.expected = true,        .value.boolean.value = profile.sunday },
         { .field = "profile seqment 1 start", .type = "string",  .value.string.expected = "08:30",      .value.string.value  = profile.segment1start },
         { .field = "profile segment 1 end",   .type = "string",  .value.string.expected = "11:30",      .value.string.value  = profile.segment1end },
-        { .field = "profile seqment 2 start", .type = "string",  .value.string.expected = "",           .value.string.value  = profile.segment2start },
-        { .field = "profile segment 2 end",   .type = "string",  .value.string.expected = "",           .value.string.value  = profile.segment2end },
-        { .field = "profile seqment 3 start", .type = "string",  .value.string.expected = "14:45",      .value.string.value  = profile.segment3start },
-        { .field = "profile segment 3 end",   .type = "string",  .value.string.expected = "",           .value.string.value  = profile.segment3end },
+        { .field = "profile seqment 2 start", .type = "string",  .value.string.expected = "00:00",      .value.string.value  = profile.segment2start },
+        { .field = "profile segment 2 end",   .type = "string",  .value.string.expected = "00:00",      .value.string.value  = profile.segment2end },
+        { .field = "profile seqment 3 start", .type = "string",  .value.string.expected = "00:00",      .value.string.value  = profile.segment3start },
+        { .field = "profile segment 3 end",   .type = "string",  .value.string.expected = "18:00",      .value.string.value  = profile.segment3end },
     };
     // clang-format on
 

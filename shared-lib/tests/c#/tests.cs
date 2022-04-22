@@ -679,22 +679,22 @@ public class Tests {
             ok = false;
         }
 
-        if (profile.segment2start != "") {
+        if (profile.segment2start != "00:00") {
             WriteLine(Format("{0}: incorrect profile segment 2 start - expected:{1}, got:{2}", tag, "", profile.segment2start));
             ok = false;
         }
 
-        if (profile.segment2end != "") {
+        if (profile.segment2end != "00:00") {
             WriteLine(Format("{0}: incorrect profile segment 2 end - expected:{1}, got:{2}", tag, "", profile.segment2end));
             ok = false;
         }
 
-        if (profile.segment3start != "14:45") {
+        if (profile.segment3start != "00:00") {
             WriteLine(Format("{0}: incorrect profile segment 3 start - expected:{1}, got:{2}", tag, "", profile.segment3start));
             ok = false;
         }
 
-        if (profile.segment3end != "") {
+        if (profile.segment3end != "18:00") {
             WriteLine(Format("{0}: incorrect profile segment 3 end - expected:{1}, got:{2}", tag, "", profile.segment3end));
             ok = false;
         }

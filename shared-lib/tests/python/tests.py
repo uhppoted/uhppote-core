@@ -251,10 +251,10 @@ def get_time_profile(u):
         ('profile Sunday', True, profile.sunday),
         ('profile segment 1 start', '08:30', profile.segment1start),
         ('profile segment 1 end', '11:30', profile.segment1end),
-        ('profile segment 2 start', '', profile.segment2start),
-        ('profile segment 2 end', '', profile.segment2end),
-        ('profile segment 3 start', '14:45', profile.segment3start),
-        ('profile segment 3 end', '', profile.segment3end),
+        ('profile segment 2 start', '00:00', profile.segment2start),
+        ('profile segment 2 end', '00:00', profile.segment2end),
+        ('profile segment 3 start', '00:00', profile.segment3start),
+        ('profile segment 3 end', '18:00', profile.segment3end),
     ])
 
 
