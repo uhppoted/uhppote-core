@@ -1,12 +1,7 @@
 DIST     ?= development
-LIB       = shared-lib/lib
-LIBC      = shared-lib/c
-LIBCPP    = shared-lib/c++
-LIBPYTHON = shared-lib/python
 DEBUG    ?= --debug
 
 .PHONY: bump
-.PHONY: shared-lib
 
 all: test      \
 	 benchmark \
@@ -37,13 +32,13 @@ benchmark: build
 coverage: build
 	go test -cover ./...
 
-build-all: test vet shared-lib
+build-all: test vet
 	env GOOS=linux   GOARCH=amd64       go build -trimpath ./...
 	env GOOS=linux   GOARCH=arm GOARM=7 go build -trimpath ./...
 	env GOOS=darwin  GOARCH=amd64       go build -trimpath ./...
 	env GOOS=windows GOARCH=amd64       go build -trimpath ./...
 
-release: test vet shared-lib
+release: test vet
 	env GOOS=linux   GOARCH=amd64       go build -trimpath -o dist/$(DIST)/linux   ./...
 	env GOOS=linux   GOARCH=arm GOARM=7 go build -trimpath -o dist/$(DIST)/arm7    ./...
 	env GOOS=darwin  GOARCH=amd64       go build -trimpath -o dist/$(DIST)/darwin  ./...
@@ -55,5 +50,3 @@ debug: build
 godoc:
 	godoc -http=:80	-index_interval=60s
 
-shared-lib: 
-	make -C ./shared-lib -f Makefile build

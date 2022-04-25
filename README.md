@@ -42,7 +42,7 @@ cd uhppote-core
 make build
 ```
 
-If you prefer not to use `make`:
+If you prefer not to build manually:
 ```
 git clone https://github.com/uhppoted/uhppote-core.git
 cd uhppote-core
@@ -87,7 +87,7 @@ go build -trimpath -o bin ./...
 - [`OpenDoor`](#opendoor)
 - [`Listen`](#listen)
 
-Other than `GetDevices` API which specifically uses UDP broadcast to issue a request, the API will uses the configured controller IP address if possible, falling back to a broadcast request if necessary.
+Other than `GetDevices` API which specifically uses UDP broadcast to issue a request, the API will use the configured controller IP address if possible, falling back to a broadcast request if necessary.
 
 #### `GetDevices`
 
