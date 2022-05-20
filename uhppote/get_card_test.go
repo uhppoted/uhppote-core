@@ -20,7 +20,7 @@ func TestGetCardByID(t *testing.T) {
 		CardNumber: 6129876,
 		From:       date("2020-01-01"),
 		To:         date("2020-12-31"),
-		Doors: map[uint8]int{
+		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
 			3: 29,
@@ -72,7 +72,7 @@ func TestGetCardByIndex(t *testing.T) {
 		CardNumber: 6129876,
 		From:       date("2020-01-01"),
 		To:         date("2020-12-31"),
-		Doors: map[uint8]int{
+		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
 			3: 29,

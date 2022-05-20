@@ -22,7 +22,7 @@ func TestCardToString(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors: map[uint8]int{
+		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
 			3: 29,
@@ -44,7 +44,7 @@ func TestCardToStringWithMissingFromDate(t *testing.T) {
 	card := Card{
 		CardNumber: 12345,
 		To:         &to,
-		Doors: map[uint8]int{
+		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
 			3: 0,
@@ -66,7 +66,7 @@ func TestCardToStringWithMissingToDate(t *testing.T) {
 	card := Card{
 		CardNumber: 12345,
 		From:       &from,
-		Doors: map[uint8]int{
+		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
 			3: 0,
@@ -90,7 +90,7 @@ func TestCardToStringWithMissingDoors(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors: map[uint8]int{
+		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
 		},
@@ -112,7 +112,7 @@ func TestCardToStringWithExtraDoors(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors: map[uint8]int{
+		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
 			3: 0,
@@ -137,7 +137,7 @@ func TestMarshalCard(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors: map[uint8]int{
+		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
 			3: 29,
@@ -176,7 +176,7 @@ func TestUnmarshalCard(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors: map[uint8]int{
+		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
 			3: 29,
@@ -216,7 +216,7 @@ func TestUnmarshalCardWithMissingCardNumber(t *testing.T) {
 		CardNumber: 0,
 		From:       &from,
 		To:         &to,
-		Doors: map[uint8]int{
+		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
 			3: 0,
@@ -293,7 +293,7 @@ func TestUnmarshalCardWithMissingDoors(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors: map[uint8]int{
+		Doors: map[uint8]uint8{
 			1: 0,
 			2: 1,
 			3: 0,
@@ -330,7 +330,7 @@ func TestUnmarshalCardWithInvalidDoors(t *testing.T) {
 		CardNumber: 12345,
 		From:       &from,
 		To:         &to,
-		Doors: map[uint8]int{
+		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
 			3: 0,

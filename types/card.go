@@ -6,14 +6,14 @@ import (
 )
 
 type Card struct {
-	CardNumber uint32        `json:"card-number"`
-	From       *Date         `json:"start-date"`
-	To         *Date         `json:"end-date"`
-	Doors      map[uint8]int `json:"doors"`
+	CardNumber uint32          `json:"card-number"`
+	From       *Date           `json:"start-date"`
+	To         *Date           `json:"end-date"`
+	Doors      map[uint8]uint8 `json:"doors"`
 }
 
 func (c Card) String() string {
-	f := func(p int) string {
+	f := func(p uint8) string {
 		switch {
 		case p == 0:
 			return "N"
@@ -69,10 +69,10 @@ func (c *Card) UnmarshalJSON(bytes []byte) error {
 	c.CardNumber = card.CardNumber
 	c.From = &from
 	c.To = &to
-	c.Doors = map[uint8]int{}
+	c.Doors = map[uint8]uint8{}
 
 	for _, i := range []uint8{1, 2, 3, 4} {
-		c.Doors[i] = card.Doors[i]
+		c.Doors[i] = uint8(card.Doors[i])
 	}
 
 	return nil
@@ -83,7 +83,7 @@ func (c *Card) Clone() Card {
 		CardNumber: c.CardNumber,
 		From:       c.From,
 		To:         c.To,
-		Doors: map[uint8]int{
+		Doors: map[uint8]uint8{
 			1: c.Doors[1],
 			2: c.Doors[2],
 			3: c.Doors[3],
