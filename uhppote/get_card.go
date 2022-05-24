@@ -58,7 +58,7 @@ func (u *uhppote) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) 
 	return &card, nil
 }
 
-func (u *uhppote) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
+func (u *uhppote) GetCardByIndex(deviceID, index uint32, f func(notFound, deleted bool) error) (*types.Card, error) {
 	if deviceID == 0 {
 		return nil, fmt.Errorf("Invalid device ID (%v)", deviceID)
 	}
@@ -79,9 +79,19 @@ func (u *uhppote) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
 		return nil, fmt.Errorf("Incorrect device ID in response - expected '%v', received '%v'", deviceID, response.SerialNumber)
 	}
 
-	// 0:          not found
-	// 0xffffffff: deleted
-	if response.CardNumber == 0 || response.CardNumber == 0xffffffff {
+	notFound := false
+	deleted := false
+
+	if response.CardNumber == 0x0 {
+		notFound = true
+	} else if response.CardNumber == 0xffffffff {
+		deleted = true
+	}
+
+	if notFound || deleted {
+		if f != nil {
+			return nil, f(notFound, deleted)
+		}
 		return nil, nil
 	}
 

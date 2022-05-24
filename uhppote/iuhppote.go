@@ -24,7 +24,7 @@ type IUHPPOTE interface {
 	GetStatus(deviceID uint32) (*types.Status, error)
 
 	GetCards(deviceID uint32) (uint32, error)
-	GetCardByIndex(deviceID, index uint32) (*types.Card, error)
+	GetCardByIndex(deviceID, index uint32, f func(bool, bool) error) (*types.Card, error)
 	GetCardByID(deviceID, cardNumber uint32) (*types.Card, error)
 	PutCard(deviceID uint32, card types.Card) (bool, error)
 	DeleteCard(deviceID uint32, cardNumber uint32) (bool, error)
