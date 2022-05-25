@@ -7,6 +7,8 @@
 1. Added -trimpath to build to anonymize local folders
 2. Reworked types.Date to use zero value as invalid
 3. Reworked types.DateTime to use zero value as invalid
+4. BREAKING CHANGE
+   Reworked GetCardByIndex to take an optional handler for missing/deleted cards
 
 ### Removed
 

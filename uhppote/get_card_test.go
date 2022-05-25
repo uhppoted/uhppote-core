@@ -1,7 +1,6 @@
 package uhppote
 
 import (
-	"fmt"
 	"net"
 	"reflect"
 	"testing"
@@ -90,7 +89,7 @@ func TestGetCardByIndex(t *testing.T) {
 		},
 	}
 
-	card, err := u.GetCardByIndex(423187757, 67, nil)
+	card, err := u.GetCardByIndex(423187757, 67)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetCardByIndex (%v)", err)
 	}
@@ -121,50 +120,9 @@ func TestGetCardByIndexWithCardNotFound(t *testing.T) {
 		},
 	}
 
-	card, err := u.GetCardByIndex(423187757, 67, nil)
+	card, err := u.GetCardByIndex(423187757, 67)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetCardByIndex (%v)", err)
-	}
-
-	if card != nil {
-		t.Fatalf("Expected <nil> from GetCardByIndex, got:%v", *card)
-	}
-}
-
-func TestGetCardByIndexWithCardNotFoundAndHandler(t *testing.T) {
-	message := []byte{
-		0x17, 0x5c, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	}
-
-	u := uhppote{
-		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
-				handler(message)
-				return nil
-			},
-		},
-	}
-
-	missing := fmt.Errorf("NOT FOUND")
-	gone := fmt.Errorf("DELETED")
-
-	card, err := u.GetCardByIndex(423187757, 67, func(notFound, deleted bool) error {
-		if notFound && !deleted {
-			return missing
-		} else if !notFound && deleted {
-			return gone
-		}
-
-		return nil
-	})
-
-	if err == nil {
-		t.Fatalf("Expected error returned from GetCardByIndex, got %v", err)
-	} else if err != missing {
-		t.Errorf("Incorrect error returned from GetCardByIndex - expected:%v, got:%v", missing, err)
 	}
 
 	if card != nil {
@@ -189,50 +147,9 @@ func TestGetCardByIndexWithCardDeleted(t *testing.T) {
 		},
 	}
 
-	card, err := u.GetCardByIndex(423187757, 67, nil)
+	card, err := u.GetCardByIndex(423187757, 67)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from GetCardByIndex (%v)", err)
-	}
-
-	if card != nil {
-		t.Fatalf("Expected <nil> from GetCardByIndex, got:%v", *card)
-	}
-}
-
-func TestGetCardByIndexWithCardDeletedAndHandler(t *testing.T) {
-	message := []byte{
-		0x17, 0x5c, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	}
-
-	u := uhppote{
-		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
-				handler(message)
-				return nil
-			},
-		},
-	}
-
-	missing := fmt.Errorf("NOT FOUND")
-	gone := fmt.Errorf("DELETED")
-
-	card, err := u.GetCardByIndex(423187757, 67, func(notFound, deleted bool) error {
-		if notFound && !deleted {
-			return missing
-		} else if !notFound && deleted {
-			return gone
-		}
-
-		return nil
-	})
-
-	if err == nil {
-		t.Fatalf("Expected error returned from GetCardByIndex, got %v", err)
-	} else if err != gone {
-		t.Errorf("Incorrect error returned from GetCardByIndex - expected:%v, got:%v", gone, err)
 	}
 
 	if card != nil {
@@ -243,7 +160,7 @@ func TestGetCardByIndexWithCardDeletedAndHandler(t *testing.T) {
 func TestGetCardByIndexWithInvalidDeviceID(t *testing.T) {
 	u := uhppote{}
 
-	_, err := u.GetCardByIndex(0, 17, nil)
+	_, err := u.GetCardByIndex(0, 17)
 	if err == nil {
 		t.Fatalf("Expected 'Invalid device ID' error, got %v", err)
 	}
