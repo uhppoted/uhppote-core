@@ -13,6 +13,13 @@ const (
 	Controlled
 )
 
+const (
+	ModeUnknown ControlState = iota
+	ModeNormallyOpen
+	ModeNormallyClosed
+	ModeControlled
+)
+
 func (v ControlState) String() string {
 	return [...]string{"", "normally open", "normally closed", "controlled"}[v]
 }
