@@ -1,17 +1,12 @@
 # CHANGELOG
 
-## [Unreleased]
-### Added
+## [v0.7.3] - 2022-06-01
 
 ### Changed
 1. Added -trimpath to build to anonymize local folders
 2. Reworked types.Date to use zero value as invalid
 3. Reworked types.DateTime to use zero value as invalid
-4. BREAKING CHANGE
-   Reworked GetCardByIndex to take an optional handler for missing/deleted cards
-
-### Removed
-
+4. Added ModeUnknown for door control state
 
 ## [v0.7.2] - 2022-01-26
 
