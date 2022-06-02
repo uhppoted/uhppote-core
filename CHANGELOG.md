@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+### Changed
+1. Date.UnmarshalJSON: unmarshalled "" to zero value
+
 ## [v0.7.3] - 2022-06-01
 
 ### Changed

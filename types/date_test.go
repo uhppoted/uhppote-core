@@ -174,3 +174,16 @@ func TestDateUnmarshalJSON(t *testing.T) {
 		t.Errorf("Date incorrectly unmarshaled - expected:%v, got:%v", time.Time(expected), time.Time(date))
 	}
 }
+
+func TestDateUnmarshalJSONFromBlank(t *testing.T) {
+	expected := Date{}
+	date := Date{}
+
+	if err := json.Unmarshal([]byte(`""`), &date); err != nil {
+		t.Fatalf("Unexpected error marshaling Date (%v)", err)
+	}
+
+	if !reflect.DeepEqual(date, expected) {
+		t.Errorf("Date incorrectly unmarshaled - expected:%v, got:%v", time.Time(expected), time.Time(date))
+	}
+}

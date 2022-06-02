@@ -132,12 +132,18 @@ func (d *Date) UnmarshalJSON(bytes []byte) error {
 		return err
 	}
 
-	date, err := time.ParseInLocation("2006-01-02", s, time.Local)
-	if err != nil {
-		return err
-	}
+	if s == "" {
+		date := time.Time{}
 
-	*d = Date(date)
+		*d = Date(date)
+	} else {
+		date, err := time.ParseInLocation("2006-01-02", s, time.Local)
+		if err != nil {
+			return err
+		}
+
+		*d = Date(date)
+	}
 
 	return nil
 }
