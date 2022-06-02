@@ -87,13 +87,14 @@ func (d Date) String() string {
 }
 
 func (d Date) MarshalUT0311L0x() ([]byte, error) {
-	encoded, err := bcd.Encode(time.Time(d).Format("20060102"))
-
-	if err != nil {
-		return []byte{}, fmt.Errorf("Error encoding date %v to BCD: [%v]", d, err)
+	if time.Time(d).IsZero() {
+		return []byte{0x00, 0x01, 0x01, 0x01}, nil
 	}
 
-	if encoded == nil {
+	encoded, err := bcd.Encode(time.Time(d).Format("20060102"))
+	if err != nil {
+		return []byte{}, fmt.Errorf("Error encoding date %v to BCD: [%v]", d, err)
+	} else if encoded == nil {
 		return []byte{}, fmt.Errorf("Unknown error encoding date %v to BCD", d)
 	}
 
@@ -104,6 +105,12 @@ func (d *Date) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
 	decoded, err := bcd.Decode(bytes[0:4])
 	if err != nil {
 		return nil, err
+	}
+
+	if decoded == "00010101" {
+		date := Date{}
+
+		return &date, nil
 	}
 
 	date, err := time.ParseInLocation("20060102", decoded, time.Local)
@@ -133,17 +140,16 @@ func (d *Date) UnmarshalJSON(bytes []byte) error {
 	}
 
 	if s == "" {
-		date := time.Time{}
-
-		*d = Date(date)
-	} else {
-		date, err := time.ParseInLocation("2006-01-02", s, time.Local)
-		if err != nil {
-			return err
-		}
-
-		*d = Date(date)
+		*d = Date(time.Time{})
+		return nil
 	}
+
+	date, err := time.ParseInLocation("2006-01-02", s, time.Local)
+	if err != nil {
+		return err
+	}
+
+	*d = Date(date)
 
 	return nil
 }

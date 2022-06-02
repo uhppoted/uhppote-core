@@ -167,7 +167,7 @@ func TestDateUnmarshalJSON(t *testing.T) {
 	date := Date{}
 
 	if err := json.Unmarshal([]byte(`"2021-02-28"`), &date); err != nil {
-		t.Fatalf("Unexpected error marshaling Date (%v)", err)
+		t.Fatalf("Unexpected error unmarshaling Date (%v)", err)
 	}
 
 	if !reflect.DeepEqual(date, expected) {
@@ -175,12 +175,41 @@ func TestDateUnmarshalJSON(t *testing.T) {
 	}
 }
 
-func TestDateUnmarshalJSONFromBlank(t *testing.T) {
+func TestDateUnmarshalJSONFromEmptyString(t *testing.T) {
 	expected := Date{}
 	date := Date{}
 
 	if err := json.Unmarshal([]byte(`""`), &date); err != nil {
+		t.Fatalf("Unexpected error unmarshaling Date (%v)", err)
+	}
+
+	if !reflect.DeepEqual(date, expected) {
+		t.Errorf("Date incorrectly unmarshaled - expected:%v, got:%v", time.Time(expected), time.Time(date))
+	}
+}
+
+func TestDateMarshalUT0311L0xWithZeroValue(t *testing.T) {
+	expected := []byte{0x00, 0x01, 0x01, 0x01}
+	date := Date{}
+
+	bytes, err := date.MarshalUT0311L0x()
+	if err != nil {
 		t.Fatalf("Unexpected error marshaling Date (%v)", err)
+	}
+
+	if !reflect.DeepEqual(bytes, expected) {
+		t.Errorf("Zero value Date incorrectly marshaled - expected:%v, got:%v", expected, bytes)
+	}
+}
+
+func TestDateUnmarshalUT0311L0xWithZeroValue(t *testing.T) {
+	expected := Date{}
+	date := Date{}
+
+	if d, err := date.UnmarshalUT0311L0x([]byte{0x00, 0x01, 0x01, 0x01}); err != nil {
+		t.Fatalf("Unexpected error unmarshaling Date (%v)", err)
+	} else {
+		date = *(d.(*Date))
 	}
 
 	if !reflect.DeepEqual(date, expected) {
