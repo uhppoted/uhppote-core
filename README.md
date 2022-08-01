@@ -15,6 +15,7 @@ Supported operating systems:
 
 | *Version* | *Description*                                                                             |
 | --------- | ----------------------------------------------------------------------------------------- |
+| v0.8.1    | Maintenance release                                                                       |
 | v0.8.0    | Fixed Date unmarshalling for ""                                                           |
 | v0.7.3    | Reworked zero value for types.Date and types.DateTime                                     |
 | v0.7.2    | Replaced event rollover with simple indexes to match controller behaviour                 |
