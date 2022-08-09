@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [Unreleased]
+
+### Changed
+1. Updated go.mod to Go 1.19.
+
 ## [v0.8.1] - 2022-08-01
 
 ### Changed
