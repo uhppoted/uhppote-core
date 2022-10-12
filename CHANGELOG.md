@@ -1,22 +1,22 @@
 # CHANGELOG
 
-## [Unreleased]
+## [0.8.2](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.2) - 2022-10-14
 
 ### Changed
 1. Updated go.mod to Go 1.19.
 
-## [v0.8.1] - 2022-08-01
+## [0.8.1](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.1) - 2022-08-01
 
 ### Changed
 1. Maintenance release to update dependencies.
 
 
-## [v0.8.0] - 2022-07-01
+## [0.8.0](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.0) - 2022-07-01
 
 ### Changed
 1. Date.UnmarshalJSON: unmarshalled "" to zero value
 
-## [v0.7.3] - 2022-06-01
+## [0.7.3](https://github.com/uhppoted/uhppote-core/releases/tag/v0.7.3) - 2022-06-01
 
 ### Changed
 1. Added -trimpath to build to anonymize local folders
@@ -24,7 +24,7 @@
 3. Reworked types.DateTime to use zero value as invalid
 4. Added ModeUnknown for door control state
 
-## [v0.7.2] - 2022-01-26
+## [0.7.2](https://github.com/uhppoted/uhppote-core/releases/tag/v0.7.2) - 2022-01-26
 
 ### Changed
 1. Retyped UHPPOTE.BindAddress as types.BindAddr
@@ -33,7 +33,7 @@
 4. Removed rollover (ref. https://github.com/uhppoted/uhppote-cli/issues/7)
 
 
-## v0.7.1
+## [0.7.1](https://github.com/uhppoted/uhppote-core/releases/tag/v0.7.1)
 
 ### Added
 1. Implemented `clear-task-list`
@@ -45,7 +45,7 @@
 2. `encoding/conf` moved to `uhppoted-lib`
 
 
-## v0.7.0
+## [0.7.0](https://github.com/uhppoted/uhppote-core/releases/tag/v0.7.0)
 
 ### Added
 2. Implemented `get-time-profile`
