@@ -1,13 +1,18 @@
 # CHANGELOG
 
+## [0.8.3](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.3) - 2022-12-16
+
+1. Maintenance release for version compatibility.
+
+
 ## [0.8.2](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.2) - 2022-10-14
 
 ### Changed
 1. Updated go.mod to Go 1.19.
 
+
 ## [0.8.1](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.1) - 2022-08-01
 
-### Changed
 1. Maintenance release to update dependencies.
 
 
@@ -16,6 +21,7 @@
 ### Changed
 1. Date.UnmarshalJSON: unmarshalled "" to zero value
 
+
 ## [0.7.3](https://github.com/uhppoted/uhppote-core/releases/tag/v0.7.3) - 2022-06-01
 
 ### Changed
@@ -23,6 +29,7 @@
 2. Reworked types.Date to use zero value as invalid
 3. Reworked types.DateTime to use zero value as invalid
 4. Added ModeUnknown for door control state
+
 
 ## [0.7.2](https://github.com/uhppoted/uhppote-core/releases/tag/v0.7.2) - 2022-01-26
 

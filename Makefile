@@ -12,6 +12,7 @@ all: test      \
 clean:
 	go clean
 	rm -rf bin
+	rm -rf dist
 
 format: 
 	go fmt ./...
@@ -46,7 +47,11 @@ build-all: test vet
 	env GOOS=darwin  GOARCH=amd64       GOWORK=off go build -trimpath ./...
 	env GOOS=windows GOARCH=amd64       GOWORK=off go build -trimpath ./...
 
-release: build-all
+release: clean build-all
+
+publish: release
+	echo "Releasing version v$(VERSION)"
+	# gh release create "v$(VERSION)"" ./dist/*.tar.gz --draft --prerelease --title "v($VERSION)-beta" --notes-file release-notes.md
 
 debug: build
 	go test ./... -run TestTSVUnmarshalTasks

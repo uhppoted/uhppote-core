@@ -15,6 +15,7 @@ Supported operating systems:
 
 | *Version* | *Description*                                                                             |
 | --------- | ----------------------------------------------------------------------------------------- |
+| v0.8.3    | Maintenance release                                                                       |
 | v0.8.2    | Bumping Go version to 1.19                                                                |
 | v0.8.1    | Maintenance release                                                                       |
 | v0.8.0    | Fixed Date unmarshalling for ""                                                           |
