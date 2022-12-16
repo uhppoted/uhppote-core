@@ -50,8 +50,8 @@ build-all: test vet
 release: clean build-all
 
 publish: release
-	echo "Releasing version v$(VERSION)"
-	# gh release create "v$(VERSION)"" ./dist/*.tar.gz --draft --prerelease --title "v($VERSION)-beta" --notes-file release-notes.md
+	echo "Releasing version $(VERSION)"
+	gh release create "$(VERSION)" --draft --prerelease --title "$(VERSION)-beta" --notes-file release-notes.md
 
 debug: build
 	go test ./... -run TestTSVUnmarshalTasks
