@@ -1,10 +1,10 @@
 package types
 
 import (
-	"errors"
 	"fmt"
-	"github.com/uhppoted/uhppote-core/encoding/bcd"
 	"time"
+
+	"github.com/uhppoted/uhppote-core/encoding/bcd"
 )
 
 type SystemTime time.Time
@@ -27,11 +27,11 @@ func (d SystemTime) MarshalUT0311L0x() ([]byte, error) {
 	encoded, err := bcd.Encode(time.Time(d).Format("150405"))
 
 	if err != nil {
-		return []byte{}, errors.New(fmt.Sprintf("Error encoding system time %v to BCD: [%v]", d, err))
+		return []byte{}, fmt.Errorf("error encoding system time %v to BCD: [%v]", d, err)
 	}
 
 	if encoded == nil {
-		return []byte{}, errors.New(fmt.Sprintf("Unknown error encoding system time %v to BCD", d))
+		return []byte{}, fmt.Errorf("unknown error encoding system time %v to BCD", d)
 	}
 
 	return *encoded, nil

@@ -93,9 +93,9 @@ func (d Date) MarshalUT0311L0x() ([]byte, error) {
 
 	encoded, err := bcd.Encode(time.Time(d).Format("20060102"))
 	if err != nil {
-		return []byte{}, fmt.Errorf("Error encoding date %v to BCD: [%v]", d, err)
+		return []byte{}, fmt.Errorf("error encoding date %v to BCD: [%v]", d, err)
 	} else if encoded == nil {
-		return []byte{}, fmt.Errorf("Unknown error encoding date %v to BCD", d)
+		return []byte{}, fmt.Errorf("unknown error encoding date %v to BCD", d)
 	}
 
 	return *encoded, nil

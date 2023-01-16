@@ -9,7 +9,7 @@ import (
 
 func (u *uhppote) RefreshTaskList(deviceID uint32) (bool, error) {
 	if deviceID == 0 {
-		return false, fmt.Errorf("Invalid device ID (%v)", deviceID)
+		return false, fmt.Errorf("invalid device ID (%v)", deviceID)
 	}
 
 	request := messages.RefreshTaskListRequest{

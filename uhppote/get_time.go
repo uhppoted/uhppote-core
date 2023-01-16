@@ -9,7 +9,7 @@ import (
 
 func (u *uhppote) GetTime(serialNumber uint32) (*types.Time, error) {
 	if serialNumber == 0 {
-		return nil, fmt.Errorf("Invalid device ID (%v)", serialNumber)
+		return nil, fmt.Errorf("invalid device ID (%v)", serialNumber)
 	}
 
 	request := messages.GetTimeRequest{

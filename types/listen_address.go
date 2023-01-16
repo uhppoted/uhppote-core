@@ -18,7 +18,7 @@ func (a *ListenAddr) Set(v string) error {
 	if err != nil {
 		return err
 	} else if addr == nil {
-		return fmt.Errorf("Invalid listen address '%v'", v)
+		return fmt.Errorf("invalid listen address '%v'", v)
 	}
 
 	*a = *addr

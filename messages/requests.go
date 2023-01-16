@@ -2,12 +2,9 @@ package messages
 
 import (
 	"fmt"
+
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
 )
-
-type handler struct {
-	factory func() Request
-}
 
 var requests = map[byte]func() Request{
 	0x20: func() Request { return new(GetStatusRequest) },
@@ -41,16 +38,16 @@ var requests = map[byte]func() Request{
 
 func UnmarshalRequest(bytes []byte) (Request, error) {
 	if len(bytes) != 64 {
-		return nil, fmt.Errorf("Invalid message length %d", len(bytes))
+		return nil, fmt.Errorf("invalid message length %d", len(bytes))
 	}
 
 	if bytes[0] != 0x17 {
-		return nil, fmt.Errorf("Invalid message type 0x%02x", bytes[0])
+		return nil, fmt.Errorf("invalid message type 0x%02x", bytes[0])
 	}
 
 	f := requests[bytes[1]]
 	if f == nil {
-		return nil, fmt.Errorf("Unknown message type 0x%02x", bytes[1])
+		return nil, fmt.Errorf("unknown message type 0x%02x", bytes[1])
 	}
 
 	response := f()

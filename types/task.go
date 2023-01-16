@@ -190,11 +190,11 @@ func (t *Task) UnmarshalJSON(bytes []byte) error {
 	}
 
 	if task.From == nil {
-		return fmt.Errorf("Invalid 'from' date")
+		return fmt.Errorf("invalid 'from' date")
 	}
 
 	if task.To == nil {
-		return fmt.Errorf("Invalid 'to' date")
+		return fmt.Errorf("invalid 'to' date")
 	}
 
 	t.From = *task.From

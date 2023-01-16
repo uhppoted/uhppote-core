@@ -3,7 +3,6 @@ package types
 import (
 	"encoding/binary"
 	"encoding/json"
-	"errors"
 	"fmt"
 )
 
@@ -47,7 +46,7 @@ func (v *Version) UnmarshalJSON(bytes []byte) error {
 	}
 
 	if N != 1 {
-		return errors.New("Unable to extract 'version' from JSON file")
+		return fmt.Errorf("unable to extract 'version' from JSON file")
 	}
 
 	return nil

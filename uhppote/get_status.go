@@ -10,7 +10,7 @@ import (
 
 func (u *uhppote) GetStatus(serialNumber uint32) (*types.Status, error) {
 	if serialNumber == 0 {
-		return nil, fmt.Errorf("Invalid device ID (%v)", serialNumber)
+		return nil, fmt.Errorf("invalid device ID (%v)", serialNumber)
 	}
 
 	request := messages.GetStatusRequest{

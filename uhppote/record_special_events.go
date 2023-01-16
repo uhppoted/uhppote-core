@@ -2,6 +2,7 @@ package uhppote
 
 import (
 	"fmt"
+
 	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
 )
@@ -14,7 +15,7 @@ import (
 // be sent or the response is invalid.
 func (u *uhppote) RecordSpecialEvents(deviceID uint32, enable bool) (bool, error) {
 	if deviceID == 0 {
-		return false, fmt.Errorf("Invalid device ID (%v)", deviceID)
+		return false, fmt.Errorf("invalid device ID (%v)", deviceID)
 	}
 
 	request := messages.RecordSpecialEventsRequest{
@@ -30,7 +31,7 @@ func (u *uhppote) RecordSpecialEvents(deviceID uint32, enable bool) (bool, error
 	}
 
 	if uint32(response.SerialNumber) != deviceID {
-		return false, fmt.Errorf("Incorrect device ID in response - expected '%v', received '%v'", deviceID, response.SerialNumber)
+		return false, fmt.Errorf("incorrect device ID in response - expected '%v', received '%v'", deviceID, response.SerialNumber)
 	}
 
 	return response.Succeeded, nil

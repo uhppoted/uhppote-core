@@ -2,6 +2,7 @@ package messages
 
 import (
 	"fmt"
+
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
 )
 
@@ -36,16 +37,16 @@ var responses = map[byte]func() Response{
 
 func UnmarshalResponse(bytes []byte) (Response, error) {
 	if len(bytes) != 64 {
-		return nil, fmt.Errorf("Invalid message length %d", len(bytes))
+		return nil, fmt.Errorf("invalid message length %d", len(bytes))
 	}
 
 	if bytes[0] != 0x17 {
-		return nil, fmt.Errorf("Invalid protocol ID 0x%02X", bytes[0])
+		return nil, fmt.Errorf("invalid protocol ID 0x%02X", bytes[0])
 	}
 
 	f := responses[bytes[1]]
 	if f == nil {
-		return nil, fmt.Errorf("Unknown message type %02X", bytes[1])
+		return nil, fmt.Errorf("unknown message type %02X", bytes[1])
 	}
 
 	response := f()

@@ -32,7 +32,7 @@ type StatusEvent struct {
 func (s *Status) String() string {
 	var b strings.Builder
 
-	b.WriteString(fmt.Sprintf("%s", s.SerialNumber))
+	b.WriteString(fmt.Sprintf("%v", s.SerialNumber))
 	b.WriteString(fmt.Sprintf(" %-5v %-5v %-5v %-5v", s.DoorState[1], s.DoorState[2], s.DoorState[3], s.DoorState[4]))
 	b.WriteString(fmt.Sprintf(" %-5v %-5v %-5v %-5v", s.DoorButton[1], s.DoorButton[2], s.DoorButton[3], s.DoorButton[4]))
 	b.WriteString(fmt.Sprintf(" %-4d", s.SystemError))

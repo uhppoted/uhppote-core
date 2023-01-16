@@ -10,7 +10,7 @@ import (
 
 func (u *uhppote) SetTime(serialNumber uint32, datetime time.Time) (*types.Time, error) {
 	if serialNumber == 0 {
-		return nil, fmt.Errorf("Invalid device ID (%v)", serialNumber)
+		return nil, fmt.Errorf("invalid device ID (%v)", serialNumber)
 	}
 
 	request := messages.SetTimeRequest{

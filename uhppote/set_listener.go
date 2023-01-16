@@ -1,7 +1,6 @@
 package uhppote
 
 import (
-	"errors"
 	"fmt"
 	"net"
 
@@ -11,11 +10,11 @@ import (
 
 func (u *uhppote) SetListener(serialNumber uint32, address net.UDPAddr) (*types.Result, error) {
 	if serialNumber == 0 {
-		return nil, fmt.Errorf("Invalid device ID (%v)", serialNumber)
+		return nil, fmt.Errorf("invalid device ID (%v)", serialNumber)
 	}
 
 	if address.IP.To4() == nil {
-		return nil, errors.New(fmt.Sprintf("Invalid IP address: %v", address))
+		return nil, fmt.Errorf("invalid IP address: %v", address)
 	}
 
 	request := messages.SetListenerRequest{

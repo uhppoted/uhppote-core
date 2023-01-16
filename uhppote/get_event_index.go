@@ -9,7 +9,7 @@ import (
 
 func (u *uhppote) GetEventIndex(deviceID uint32) (*types.EventIndex, error) {
 	if deviceID == 0 {
-		return nil, fmt.Errorf("Invalid device ID (%v)", deviceID)
+		return nil, fmt.Errorf("invalid device ID (%v)", deviceID)
 	}
 
 	request := messages.GetEventIndexRequest{

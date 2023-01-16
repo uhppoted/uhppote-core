@@ -2,13 +2,14 @@ package uhppote
 
 import (
 	"fmt"
+
 	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
 )
 
 func (u *uhppote) GetEvent(deviceID, index uint32) (*types.Event, error) {
 	if deviceID == 0 {
-		return nil, fmt.Errorf("Invalid device ID (%v)", deviceID)
+		return nil, fmt.Errorf("invalid device ID (%v)", deviceID)
 	}
 
 	request := messages.GetEventRequest{
@@ -32,7 +33,7 @@ func (u *uhppote) GetEvent(deviceID, index uint32) (*types.Event, error) {
 	}
 
 	if reply.Timestamp == nil {
-		return nil, fmt.Errorf("Invalid 'timestamp' in response")
+		return nil, fmt.Errorf("invalid 'timestamp' in response")
 	}
 
 	return &types.Event{

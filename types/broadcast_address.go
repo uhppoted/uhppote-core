@@ -24,7 +24,7 @@ func (a *BroadcastAddr) Set(v string) error {
 	if err != nil {
 		return err
 	} else if addr == nil {
-		return fmt.Errorf("Invalid broadcast address '%v'", v)
+		return fmt.Errorf("invalid broadcast address '%v'", v)
 	}
 
 	*a = *addr

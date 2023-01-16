@@ -30,7 +30,7 @@ func (u *udp) Broadcast(request []byte, addr *net.UDPAddr) ([][]byte, error) {
 
 	var connection *net.UDPConn
 	if conn, err := net.ListenUDP("udp", &bind); err != nil {
-		return nil, fmt.Errorf("Error creating UDP socket (%v)", err)
+		return nil, fmt.Errorf("error creating UDP socket (%v)", err)
 	} else if conn == nil {
 		return nil, fmt.Errorf("open() created invalid UDP socket (%v)", conn)
 	} else {
@@ -40,15 +40,15 @@ func (u *udp) Broadcast(request []byte, addr *net.UDPAddr) ([][]byte, error) {
 	defer connection.Close()
 
 	if err := connection.SetWriteDeadline(time.Now().Add(1000 * time.Millisecond)); err != nil {
-		return nil, fmt.Errorf("Failed to set UDP write timeout [%v]", err)
+		return nil, fmt.Errorf("failed to set UDP write timeout [%v]", err)
 	}
 
 	if err := connection.SetReadDeadline(NONE); err != nil {
-		return nil, fmt.Errorf("Failed to set UDP read timeout [%v]", err)
+		return nil, fmt.Errorf("failed to set UDP read timeout [%v]", err)
 	}
 
 	if N, err := connection.WriteToUDP(request, addr); err != nil {
-		return nil, fmt.Errorf("Failed to write to UDP socket [%v]", err)
+		return nil, fmt.Errorf("failed to write to UDP socket [%v]", err)
 	} else {
 		u.debugf(fmt.Sprintf(" ... sent %v bytes to %v\n", N, addr), nil)
 	}
@@ -85,7 +85,7 @@ func (u *udp) Send(request []byte, addr *net.UDPAddr, callback func([]byte) bool
 
 	var connection *net.UDPConn
 	if conn, err := net.ListenUDP("udp", &bind); err != nil {
-		return fmt.Errorf("Error creating UDP socket (%v)", err)
+		return fmt.Errorf("error creating UDP socket (%v)", err)
 	} else if conn == nil {
 		return fmt.Errorf("open() created invalid UDP socket (%v)", conn)
 	} else {
@@ -95,15 +95,15 @@ func (u *udp) Send(request []byte, addr *net.UDPAddr, callback func([]byte) bool
 	defer connection.Close()
 
 	if err := connection.SetWriteDeadline(time.Now().Add(1000 * time.Millisecond)); err != nil {
-		return fmt.Errorf("Failed to set UDP write timeout [%v]", err)
+		return fmt.Errorf("failed to set UDP write timeout [%v]", err)
 	}
 
 	if err := connection.SetReadDeadline(NONE); err != nil {
-		return fmt.Errorf("Failed to set UDP read timeout [%v]", err)
+		return fmt.Errorf("failed to set UDP read timeout [%v]", err)
 	}
 
 	if N, err := connection.WriteToUDP(request, addr); err != nil {
-		return fmt.Errorf("Failed to write to UDP socket [%v]", err)
+		return fmt.Errorf("failed to write to UDP socket [%v]", err)
 	} else {
 		u.debugf(fmt.Sprintf(" ... sent %v bytes to %v\n", N, addr), nil)
 	}
@@ -128,7 +128,7 @@ func (u *udp) Send(request []byte, addr *net.UDPAddr, callback func([]byte) bool
 			return err
 
 		case <-timer.C:
-			return fmt.Errorf("Timeout waiting for reply")
+			return fmt.Errorf("timeout waiting for reply")
 		}
 	}
 
@@ -162,9 +162,9 @@ func (u *udp) Listen(signal chan interface{}, done chan interface{}, callback fu
 
 	c, err := net.ListenUDP("udp", &bind)
 	if err != nil {
-		return fmt.Errorf("Error opening UDP listen socket (%v)", err)
+		return fmt.Errorf("error opening UDP listen socket (%v)", err)
 	} else if c == nil {
-		return fmt.Errorf("Failed to open UDP socket (%v)", c)
+		return fmt.Errorf("failed to open UDP socket (%v)", c)
 	}
 
 	closed := false
@@ -216,5 +216,5 @@ func (u *udp) debugf(msg string, err error) {
 func dump(m []byte, prefix string) string {
 	regex := regexp.MustCompile("(?m)^(.*)")
 
-	return fmt.Sprintf("%s", regex.ReplaceAllString(hex.Dump(m), prefix+"$1"))
+	return regex.ReplaceAllString(hex.Dump(m), prefix+"$1")
 }

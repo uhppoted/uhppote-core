@@ -10,7 +10,7 @@ import (
 
 func (u *uhppote) GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeProfile, error) {
 	if deviceID == 0 {
-		return nil, fmt.Errorf("Invalid device ID (%v)", deviceID)
+		return nil, fmt.Errorf("invalid device ID (%v)", deviceID)
 	}
 
 	request := messages.GetTimeProfileRequest{
@@ -26,11 +26,11 @@ func (u *uhppote) GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeP
 	}
 
 	if uint32(response.SerialNumber) != deviceID {
-		return nil, fmt.Errorf("Incorrect device ID in response - expected '%v', received '%v'", deviceID, response.SerialNumber)
+		return nil, fmt.Errorf("incorrect device ID in response - expected '%v', received '%v'", deviceID, response.SerialNumber)
 	}
 
 	if response.ProfileID != 0 && response.ProfileID != profileID {
-		return nil, fmt.Errorf("Incorrect profile ID in response - expected '%v', received '%v'", profileID, response.ProfileID)
+		return nil, fmt.Errorf("incorrect profile ID in response - expected '%v', received '%v'", profileID, response.ProfileID)
 	}
 
 	// 0: not active
@@ -39,11 +39,11 @@ func (u *uhppote) GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeP
 	}
 
 	if response.From == nil {
-		return nil, fmt.Errorf("Invalid 'from' date in response")
+		return nil, fmt.Errorf("invalid 'from' date in response")
 	}
 
 	if response.To == nil {
-		return nil, fmt.Errorf("Invalid 'to' date in response")
+		return nil, fmt.Errorf("invalid 'to' date in response")
 	}
 
 	segments := []types.Segment{types.Segment{}, types.Segment{}, types.Segment{}}

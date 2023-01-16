@@ -1,28 +1,28 @@
 package uhppote
 
 import (
-	"errors"
 	"fmt"
+	"net"
+
 	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
-	"net"
 )
 
 func (u *uhppote) SetAddress(serialNumber uint32, address, mask, gateway net.IP) (*types.Result, error) {
 	if serialNumber == 0 {
-		return nil, fmt.Errorf("Invalid device ID (%v)", serialNumber)
+		return nil, fmt.Errorf("invalid device ID (%v)", serialNumber)
 	}
 
 	if address.To4() == nil {
-		return nil, errors.New(fmt.Sprintf("Invalid IP address: %v", address))
+		return nil, fmt.Errorf("invalid IP address: %v", address)
 	}
 
 	if mask.To4() == nil {
-		return nil, errors.New(fmt.Sprintf("Invalid subnet mask: %v", mask))
+		return nil, fmt.Errorf("invalid subnet mask: %v", mask)
 	}
 
 	if gateway.To4() == nil {
-		return nil, errors.New(fmt.Sprintf("Invalid gateway address: %v", gateway))
+		return nil, fmt.Errorf("invalid gateway address: %v", gateway)
 	}
 
 	request := messages.SetAddressRequest{

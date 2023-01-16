@@ -10,22 +10,22 @@ import (
 
 func (u *uhppote) SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bool, error) {
 	if deviceID == 0 {
-		return false, fmt.Errorf("Invalid device ID (%v)", deviceID)
+		return false, fmt.Errorf("invalid device ID (%v)", deviceID)
 	}
 
 	if profile.From == nil {
-		return false, fmt.Errorf("Time profile requires a valid 'from' date")
+		return false, fmt.Errorf("time profile requires a valid 'from' date")
 	}
 
 	if profile.To == nil {
-		return false, fmt.Errorf("Time profile requires a valid 'to' date")
+		return false, fmt.Errorf("time profile requires a valid 'to' date")
 	}
 
 	for _, k := range []uint8{1, 2, 3} {
 		if segment, ok := profile.Segments[k]; !ok {
-			return false, fmt.Errorf("Time profile is missing segment %v", k)
+			return false, fmt.Errorf("time profile is missing segment %v", k)
 		} else if segment.End.Before(segment.Start) {
-			return false, fmt.Errorf("Time profile segment %v end is before start (%v)", k, segment)
+			return false, fmt.Errorf("time profile segment %v end is before start (%v)", k, segment)
 		}
 	}
 
@@ -58,7 +58,7 @@ func (u *uhppote) SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bo
 	}
 
 	if uint32(response.SerialNumber) != deviceID {
-		return false, fmt.Errorf("Incorrect device ID in response - expected '%v', received '%v'", deviceID, response.SerialNumber)
+		return false, fmt.Errorf("incorrect device ID in response - expected '%v', received '%v'", deviceID, response.SerialNumber)
 	}
 
 	return response.Succeeded, nil

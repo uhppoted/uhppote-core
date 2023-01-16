@@ -24,7 +24,7 @@ func (a *BindAddr) Set(v string) error {
 	if err != nil {
 		return err
 	} else if addr == nil {
-		return fmt.Errorf("Invalid bind address '%v'", v)
+		return fmt.Errorf("invalid bind address '%v'", v)
 	}
 
 	*a = *addr

@@ -9,7 +9,7 @@ import (
 
 func (u *uhppote) SetDoorControlState(serialNumber uint32, door uint8, state types.ControlState, delay uint8) (*types.DoorControlState, error) {
 	if serialNumber == 0 {
-		return nil, fmt.Errorf("Invalid device ID (%v)", serialNumber)
+		return nil, fmt.Errorf("invalid device ID (%v)", serialNumber)
 	}
 
 	request := messages.SetDoorControlStateRequest{

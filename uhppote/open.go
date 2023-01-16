@@ -9,7 +9,7 @@ import (
 
 func (u *uhppote) OpenDoor(deviceID uint32, door uint8) (*types.Result, error) {
 	if deviceID == 0 {
-		return nil, fmt.Errorf("Invalid device ID (%v)", deviceID)
+		return nil, fmt.Errorf("invalid device ID (%v)", deviceID)
 	}
 
 	request := messages.OpenDoorRequest{

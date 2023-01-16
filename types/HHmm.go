@@ -34,29 +34,29 @@ func HHmmFromString(s string) (*HHmm, error) {
 
 	match := re.FindStringSubmatch(s)
 	if match == nil || len(match) != 3 {
-		return nil, fmt.Errorf("Invalid HH:mm string (%s)", s)
+		return nil, fmt.Errorf("invalid HH:mm string (%s)", s)
 	}
 
 	hours, err := strconv.Atoi(match[1])
 	if err != nil {
-		return nil, fmt.Errorf("Invalid HH:mm string (%w)", err)
+		return nil, fmt.Errorf("invalid HH:mm string (%w)", err)
 	}
 
 	minutes, err := strconv.Atoi(match[2])
 	if err != nil {
-		return nil, fmt.Errorf("Invalid HH:mm string (%w)", err)
+		return nil, fmt.Errorf("invalid HH:mm string (%w)", err)
 	}
 
 	if hours < 0 || hours > 24 {
-		return nil, fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
+		return nil, fmt.Errorf("invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
 	}
 
 	if minutes < 0 || minutes > 60 {
-		return nil, fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
+		return nil, fmt.Errorf("invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
 	}
 
 	if hours == 24 && minutes != 0 {
-		return nil, fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
+		return nil, fmt.Errorf("invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
 	}
 
 	return &HHmm{hours: hours, minutes: minutes}, nil
@@ -144,11 +144,11 @@ func (h HHmm) MarshalUT0311L0x() ([]byte, error) {
 	encoded, err := bcd.Encode(fmt.Sprintf("%02d%02d", h.hours, h.minutes))
 
 	if err != nil {
-		return []byte{}, fmt.Errorf("Error encoding HHmm time %v to BCD: [%v]", h, err)
+		return []byte{}, fmt.Errorf("error encoding HHmm time %v to BCD: [%v]", h, err)
 	}
 
 	if encoded == nil {
-		return []byte{}, fmt.Errorf("Unknown error encoding HHmm time %v to BCD", h)
+		return []byte{}, fmt.Errorf("unknown error encoding HHmm time %v to BCD", h)
 	}
 
 	return *encoded, nil
@@ -164,29 +164,29 @@ func (h *HHmm) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
 
 	match := re.FindStringSubmatch(decoded)
 	if match == nil || len(match) != 3 {
-		return nil, fmt.Errorf("Invalid HH:mm string (%s)", decoded)
+		return nil, fmt.Errorf("invalid HH:mm string (%s)", decoded)
 	}
 
 	hours, err := strconv.Atoi(match[1])
 	if err != nil {
-		return nil, fmt.Errorf("Invalid HH:mm string (%w)", err)
+		return nil, fmt.Errorf("invalid HH:mm string (%w)", err)
 	}
 
 	minutes, err := strconv.Atoi(match[2])
 	if err != nil {
-		return nil, fmt.Errorf("Invalid HH:mm string (%w)", err)
+		return nil, fmt.Errorf("invalid HH:mm string (%w)", err)
 	}
 
 	if hours < 0 || hours > 24 {
-		return nil, fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", decoded)
+		return nil, fmt.Errorf("invalid HH:mm string (%s) - valid range is 00:00 to 24:00", decoded)
 	}
 
 	if minutes < 0 || minutes > 60 {
-		return nil, fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", decoded)
+		return nil, fmt.Errorf("invalid HH:mm string (%s) - valid range is 00:00 to 24:00", decoded)
 	}
 
 	if hours == 24 && minutes != 0 {
-		return nil, fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", decoded)
+		return nil, fmt.Errorf("invalid HH:mm string (%s) - valid range is 00:00 to 24:00", decoded)
 	}
 
 	return &HHmm{hours: hours, minutes: minutes}, nil
@@ -208,29 +208,29 @@ func (h *HHmm) UnmarshalJSON(bytes []byte) error {
 
 	match := re.FindStringSubmatch(s)
 	if match == nil || len(match) != 3 {
-		return fmt.Errorf("Invalid HH:mm string (%s)", s)
+		return fmt.Errorf("invalid HH:mm string (%s)", s)
 	}
 
 	hours, err := strconv.Atoi(match[1])
 	if err != nil {
-		return fmt.Errorf("Invalid HH:mm string (%w)", err)
+		return fmt.Errorf("invalid HH:mm string (%w)", err)
 	}
 
 	minutes, err := strconv.Atoi(match[2])
 	if err != nil {
-		return fmt.Errorf("Invalid HH:mm string (%w)", err)
+		return fmt.Errorf("invalid HH:mm string (%w)", err)
 	}
 
 	if hours < 0 || hours > 24 {
-		return fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
+		return fmt.Errorf("invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
 	}
 
 	if minutes < 0 || minutes > 60 {
-		return fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
+		return fmt.Errorf("invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
 	}
 
 	if hours == 24 && minutes != 0 {
-		return fmt.Errorf("Invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
+		return fmt.Errorf("invalid HH:mm string (%s) - valid range is 00:00 to 24:00", s)
 	}
 
 	*h = HHmm{

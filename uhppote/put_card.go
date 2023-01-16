@@ -9,7 +9,7 @@ import (
 
 func (u *uhppote) PutCard(deviceID uint32, card types.Card) (bool, error) {
 	if deviceID == 0 {
-		return false, fmt.Errorf("Invalid device ID (%v)", deviceID)
+		return false, fmt.Errorf("invalid device ID (%v)", deviceID)
 	}
 
 	request := messages.PutCardRequest{
@@ -31,7 +31,7 @@ func (u *uhppote) PutCard(deviceID uint32, card types.Card) (bool, error) {
 	}
 
 	if uint32(reply.SerialNumber) != deviceID {
-		return false, fmt.Errorf("Incorrect serial number in response - expect '%v', received '%v'", deviceID, reply.SerialNumber)
+		return false, fmt.Errorf("incorrect serial number in response - expect '%v', received '%v'", deviceID, reply.SerialNumber)
 	}
 
 	return reply.Succeeded, nil

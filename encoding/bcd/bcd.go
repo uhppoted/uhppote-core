@@ -1,7 +1,6 @@
 package bcd
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 )
@@ -36,7 +35,7 @@ func Encode(s string) (*[]byte, error) {
 		case '9':
 			b = 0x09
 		default:
-			return nil, errors.New(fmt.Sprintf("Invalid numeric string '%s'", s))
+			return nil, fmt.Errorf("invalid numeric string '%s'", s)
 		}
 
 		bytes[ix/2] *= 16
@@ -75,7 +74,7 @@ func Decode(bytes []byte) (string, error) {
 		case 0x90:
 			s.WriteRune('9')
 		default:
-			return "", errors.New(fmt.Sprintf("Invalid BCD number: '%x'", bytes))
+			return "", fmt.Errorf("invalid BCD number: '%x'", bytes)
 		}
 
 		switch b & 0x0f {
@@ -100,7 +99,7 @@ func Decode(bytes []byte) (string, error) {
 		case 0x09:
 			s.WriteRune('9')
 		default:
-			return "", errors.New(fmt.Sprintf("Invalid BCD number: '%x'", bytes))
+			return "", fmt.Errorf("invalid BCD number: '%x'", bytes)
 		}
 	}
 

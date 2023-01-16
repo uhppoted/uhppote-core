@@ -9,7 +9,7 @@ import (
 
 func (u *uhppote) GetCards(deviceID uint32) (uint32, error) {
 	if deviceID == 0 {
-		return 0, fmt.Errorf("Invalid device ID (%v)", deviceID)
+		return 0, fmt.Errorf("invalid device ID (%v)", deviceID)
 	}
 
 	request := messages.GetCardsRequest{

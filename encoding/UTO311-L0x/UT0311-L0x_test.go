@@ -621,5 +621,5 @@ func TestUnmarshalZeroDateTimel(t *testing.T) {
 func print(m []byte) string {
 	regex := regexp.MustCompile("(?m)^(.*)")
 
-	return fmt.Sprintf("%s", regex.ReplaceAllString(hex.Dump(m), "$1"))
+	return regex.ReplaceAllString(hex.Dump(m), "$1")
 }
