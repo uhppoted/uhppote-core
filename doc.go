@@ -17,7 +17,7 @@ The library consists of the following packages:
   - [uhppote-core/messages] which defines the UDP message structures used for the RPC-like
     API.
   - [uhppote-core/types] which defines the data types used in the `messages` package.
-  - [uhppote-core/encoding\UTO311-L0x] which implements message marshalling and unmarshalling
+  - [uhppote-core/encoding/UTO311-L0x] which implements message marshalling and unmarshalling
     to and from the 64 byte packets exchangeed with the access controller.
 */
 package core
