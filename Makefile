@@ -4,6 +4,8 @@ DEBUG    ?= --debug
 .PHONY: bump
 .PHONY: update
 .PHONY: update-release
+.PHONY: vet
+.PHONY: lint
 
 all: test      \
 	 benchmark \
@@ -29,19 +31,19 @@ build: format
 test: build
 	go test ./...
 
-vet: build
-	go vet ./...
-
-lint: build
-	staticcheck ./...
-
 benchmark: build
 	go test -bench ./...
 
 coverage: build
 	go test -cover ./...
 
-build-all: test vet
+vet:
+	go vet ./...
+
+lint:
+	staticcheck ./...
+
+build-all: test vet lint
 	env GOOS=linux   GOARCH=amd64       GOWORK=off go build -trimpath ./...
 	env GOOS=linux   GOARCH=arm GOARM=7 GOWORK=off go build -trimpath ./...
 	env GOOS=darwin  GOARCH=amd64       GOWORK=off go build -trimpath ./...
