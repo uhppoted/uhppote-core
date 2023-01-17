@@ -6,8 +6,8 @@
 1. `doc.go` package overview documentation
 
 ### Updated
-1. Fixed initial round of _staticcheck_ lint errors
-
+1. Fixed initial round of _staticcheck_ lint errors and permanently added _staticcheck_ to
+   CI build.
 
 ## [0.8.3](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.3) - 2022-12-16
 
