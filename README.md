@@ -90,6 +90,7 @@ go build -trimpath -o bin ./...
 - [`GetEventIndex`](#geteventindex)
 - [`SetEventIndex`](#seteventindex)
 - [`OpenDoor`](#opendoor)
+- [`SetPCControl`](#setpccontrol)
 - [`Listen`](#listen)
 
 Other than `GetDevices` API which specifically uses UDP broadcast to issue a request, the API will use the configured controller IP address if possible, falling back to a broadcast request if necessary.
@@ -203,6 +204,16 @@ that have been retrieved).
 #### `OpenDoor`
 
 Unlocks a door remotely.
+
+#### `SetPCControl`
+
+Enables or disables remote host access control. 
+
+If remote host access control is enabled, the access controller expects the host to communicate at least
+once every 30 seconds otherwise it reverts to local control of access using the stored list of cards (the
+communication is not required to be a 'set-pc-control' command - any command is sufficient). If the access
+controller has reverted to local control because no message has been received from the host for more than
+30 seconds, any subsequent communication from the remote host will re-establish remote control mode again.
 
 #### `Listen`
 

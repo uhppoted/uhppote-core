@@ -3,7 +3,8 @@
 ## [Unreleased]
 
 ### Added
-1. `doc.go` package overview documentation
+1. `doc.go` package overview documentation.
+2. `SetPCControl` request and response (https://github.com/uhppoted/uhppote-core/issues/7)
 
 ### Updated
 1. Fixed initial round of _staticcheck_ lint errors and permanently added _staticcheck_ to

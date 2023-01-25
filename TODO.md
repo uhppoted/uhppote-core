@@ -1,10 +1,11 @@
 # TODO
 
-## IN PROGRESS
+- [x] `set-pc-control` 
 
 - [ ] Check UHPPOTE encoding for revised Date implementation
       - should return Date{} for 0000...
       - should return DateTime{} for 0000...
+
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
 
 ## TODO

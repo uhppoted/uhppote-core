@@ -26,6 +26,7 @@ var responses = map[byte]func() Response{
 	0x92: func() Response { return new(GetListenerResponse) },
 	0x94: func() Response { return new(GetDeviceResponse) },
 	0x98: func() Response { return new(GetTimeProfileResponse) },
+	0xa0: func() Response { return new(SetPCControlResponse) },
 	0xa6: func() Response { return new(ClearTaskListResponse) },
 	0xa8: func() Response { return new(AddTaskResponse) },
 	0xaa: func() Response { return new(SetFirstCardResponse) },
