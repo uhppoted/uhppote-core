@@ -26,6 +26,7 @@ type GetCardByIndexResponse struct {
 	Door2        uint8              `uhppote:"offset:21"`
 	Door3        uint8              `uhppote:"offset:22"`
 	Door4        uint8              `uhppote:"offset:23"`
+	PIN          types.PIN          `uhppote:"offset:24"`
 }
 
 type GetCardByIDResponse struct {
@@ -38,4 +39,5 @@ type GetCardByIDResponse struct {
 	Door2        uint8              `uhppote:"offset:21"`
 	Door3        uint8              `uhppote:"offset:22"`
 	Door4        uint8              `uhppote:"offset:23"`
+	PIN          types.PIN          `uhppote:"offset:24"`
 }
