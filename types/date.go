@@ -101,7 +101,7 @@ func (d Date) MarshalUT0311L0x() ([]byte, error) {
 	return *encoded, nil
 }
 
-func (d *Date) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
+func (d *Date) UnmarshalUT0311L0x(bytes []byte) (any, error) {
 	decoded, err := bcd.Decode(bytes[0:4])
 	if err != nil {
 		return nil, err
