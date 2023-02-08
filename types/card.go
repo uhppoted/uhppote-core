@@ -10,6 +10,7 @@ type Card struct {
 	From       *Date           `json:"start-date"`
 	To         *Date           `json:"end-date"`
 	Doors      map[uint8]uint8 `json:"doors"`
+	PIN        PIN             `json:"PIN,omitempty"`
 }
 
 func (c Card) String() string {
@@ -29,17 +30,43 @@ func (c Card) String() string {
 		}
 	}
 
-	from := "-         "
+	from := "-"
 	if c.From != nil {
 		from = fmt.Sprintf("%v", c.From)
 	}
 
-	to := "-         "
+	to := "-"
 	if c.To != nil {
 		to = fmt.Sprintf("%v", c.To)
 	}
 
-	return fmt.Sprintf("%-8v %v %v %v %v %v %v", c.CardNumber, from, to, f(c.Doors[1]), f(c.Doors[2]), f(c.Doors[3]), f(c.Doors[4]))
+	if c.PIN == 0 || c.PIN > 999999 {
+		return fmt.Sprintf("%-8v %-10v %-10v %v %v %v %v", c.CardNumber, from, to, f(c.Doors[1]), f(c.Doors[2]), f(c.Doors[3]), f(c.Doors[4]))
+	} else {
+		return fmt.Sprintf("%-8v %-10v %-10v %v %v %v %v %v", c.CardNumber, from, to, f(c.Doors[1]), f(c.Doors[2]), f(c.Doors[3]), f(c.Doors[4]), c.PIN)
+	}
+}
+
+func (c Card) MarshalJSON() ([]byte, error) {
+	card := struct {
+		CardNumber uint32          `json:"card-number"`
+		From       *Date           `json:"start-date"`
+		To         *Date           `json:"end-date"`
+		Doors      map[uint8]uint8 `json:"doors"`
+		PIN        PIN             `json:"PIN,omitempty"`
+	}{
+		CardNumber: c.CardNumber,
+		From:       c.From,
+		To:         c.To,
+		Doors:      c.Doors,
+		PIN:        c.PIN,
+	}
+
+	if card.PIN > 999999 {
+		card.PIN = 0
+	}
+
+	return json.Marshal(card)
 }
 
 func (c *Card) UnmarshalJSON(bytes []byte) error {
@@ -48,6 +75,7 @@ func (c *Card) UnmarshalJSON(bytes []byte) error {
 		From       string        `json:"start-date"`
 		To         string        `json:"end-date"`
 		Doors      map[uint8]int `json:"doors"`
+		PIN        PIN           `json:"PIN"`
 	}{
 		Doors: map[uint8]int{1: 0, 2: 0, 3: 0, 4: 0},
 	}
@@ -70,6 +98,7 @@ func (c *Card) UnmarshalJSON(bytes []byte) error {
 	c.From = &from
 	c.To = &to
 	c.Doors = map[uint8]uint8{}
+	c.PIN = card.PIN
 
 	for _, i := range []uint8{1, 2, 3, 4} {
 		c.Doors[i] = uint8(card.Doors[i])
@@ -89,6 +118,7 @@ func (c *Card) Clone() Card {
 			3: c.Doors[3],
 			4: c.Doors[4],
 		},
+		PIN: c.PIN,
 	}
 
 	return card

@@ -5,6 +5,8 @@
 ### Added
 1. `doc.go` package overview documentation.
 2. `SetPCControl` request and response (https://github.com/uhppoted/uhppote-core/issues/7)
+3. Added PIN field to get-card, get-card-by-index and put-card messages and card record struct
+   (cf. https://github.com/uhppoted/uhppote-core/issues/8)
 
 ### Updated
 1. Fixed initial round of _staticcheck_ lint errors and permanently added _staticcheck_ to
