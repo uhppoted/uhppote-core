@@ -12,6 +12,10 @@ func (u *uhppote) PutCard(deviceID uint32, card types.Card) (bool, error) {
 		return false, fmt.Errorf("invalid device ID (%v)", deviceID)
 	}
 
+	if card.PIN > 999999 {
+		return false, fmt.Errorf("invalid PIN (%v)", card.PIN)
+	}
+
 	request := messages.PutCardRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   card.CardNumber,
@@ -21,6 +25,7 @@ func (u *uhppote) PutCard(deviceID uint32, card types.Card) (bool, error) {
 		Door2:        uint8(card.Doors[2]),
 		Door3:        uint8(card.Doors[3]),
 		Door4:        uint8(card.Doors[4]),
+		PIN:          card.PIN,
 	}
 
 	reply := messages.PutCardResponse{}

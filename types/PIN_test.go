@@ -12,14 +12,13 @@ func TestPINMarshalUT0311L0x(t *testing.T) {
 		expected []byte
 	}{
 		{0, []byte{0x00, 0x00, 0x00}},
-		{1, []byte{0x00, 0x00, 0x01}},
-		{12, []byte{0x00, 0x00, 0x12}},
-		{123, []byte{0x00, 0x01, 0x23}},
-		{1234, []byte{0x00, 0x12, 0x34}},
-		{12345, []byte{0x01, 0x23, 0x45}},
-		{123456, []byte{0x12, 0x34, 0x56}},
-		{999999, []byte{0x99, 0x99, 0x99}},
-		{1000000, []byte{0x00, 0x00, 0x00}},
+		{1, []byte{0x01, 0x00, 0x00}},
+		{12, []byte{0x0c, 0x00, 0x00}},
+		{123, []byte{0x7b, 0x00, 0x00}},
+		{1234, []byte{0xd2, 0x04, 0x00}},
+		{12345, []byte{0x39, 0x30, 0x00}},
+		{123456, []byte{0x40, 0xe2, 0x01}},
+		{999999, []byte{0x3f, 0x42, 0x0f}},
 	}
 
 	for _, test := range tests {
@@ -31,19 +30,36 @@ func TestPINMarshalUT0311L0x(t *testing.T) {
 	}
 }
 
+func TestInvalidPINMarshalUT0311L0x(t *testing.T) {
+	tests := []struct {
+		pin      PIN
+		expected []byte
+	}{
+		{1000000, []byte{0x00, 0x00, 0x00}},
+	}
+
+	for _, test := range tests {
+		if b, err := test.pin.MarshalUT0311L0x(); err == nil {
+			t.Errorf("Incorrectly marshalled invalid PIN '%v' - expected error, got:%v", test.pin, err)
+		} else if !bytes.Equal(b, test.expected) {
+			t.Errorf("Incorrectly marshalled invalid PIN '%v' - expected:%v, got:%v", test.pin, test.expected, b)
+		}
+	}
+}
+
 func TestPINUnMarshalUT0311L0x(t *testing.T) {
 	tests := []struct {
 		bytes    []byte
 		expected PIN
 	}{
 		{[]byte{0x00, 0x00, 0x00}, 0},
-		{[]byte{0x00, 0x00, 0x01}, 1},
-		{[]byte{0x00, 0x00, 0x12}, 12},
-		{[]byte{0x00, 0x01, 0x23}, 123},
-		{[]byte{0x00, 0x12, 0x34}, 1234},
-		{[]byte{0x01, 0x23, 0x45}, 12345},
-		{[]byte{0x12, 0x34, 0x56}, 123456},
-		{[]byte{0x99, 0x99, 0x99}, 999999},
+		{[]byte{0x01, 0x00, 0x00}, 1},
+		{[]byte{0x0c, 0x00, 0x00}, 12},
+		{[]byte{0x7b, 0x00, 0x00}, 123},
+		{[]byte{0xd2, 0x04, 0x00}, 1234},
+		{[]byte{0x39, 0x30, 0x00}, 12345},
+		{[]byte{0x40, 0xe2, 0x01}, 123456},
+		{[]byte{0x3f, 0x42, 0x0f}, 999999},
 	}
 
 	for _, test := range tests {
@@ -58,6 +74,23 @@ func TestPINUnMarshalUT0311L0x(t *testing.T) {
 			t.Errorf("Incorrectly unmarshalled PIN '%v' - expected:%v, got:%v", test.bytes, test.expected, v)
 		} else if *v != test.expected {
 			t.Errorf("Incorrectly unmarshalled PIN '%v' - expected:%v, got:%T", test.bytes, test.expected, *v)
+		}
+	}
+}
+
+func TestInvalidPINUnMarshalUT0311L0x(t *testing.T) {
+	tests := []struct {
+		bytes []byte
+	}{
+		{[]byte{0x40, 0x42, 0x0f}},
+	}
+
+	for _, test := range tests {
+		var pin PIN
+		if p, err := pin.UnmarshalUT0311L0x(test.bytes); err == nil {
+			t.Fatalf("Error unmarshalling invalid PIN %v - expected error, got: %v", test.bytes, err)
+		} else if p != nil {
+			t.Errorf("Incorrectly unmarshalled invalid PIN '%v' - expected:%v, got:%v", test.bytes, nil, p)
 		}
 	}
 }

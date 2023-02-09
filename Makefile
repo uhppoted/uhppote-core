@@ -58,7 +58,7 @@ publish: release
 	gh release create "$(VERSION)" --draft --prerelease --title "$(VERSION)-beta" --notes-file release-notes.md
 
 debug: build
-	go test ./... -run TestTSVUnmarshalTasks
+	go test ./... -run TestPutCard
 
 godoc:
 	godoc -http=:80	-index_interval=60s

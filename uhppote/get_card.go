@@ -54,6 +54,7 @@ func (u *uhppote) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) 
 			3: response.Door3,
 			4: response.Door4,
 		},
+		PIN: response.PIN,
 	}
 
 	return &card, nil
@@ -104,6 +105,7 @@ func (u *uhppote) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
 			3: response.Door3,
 			4: response.Door4,
 		},
+		PIN: response.PIN,
 	}
 
 	return &card, nil
