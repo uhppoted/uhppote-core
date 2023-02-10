@@ -35,12 +35,12 @@ func TestInvalidPINMarshalUT0311L0x(t *testing.T) {
 		pin      PIN
 		expected []byte
 	}{
-		{1000000, []byte{0x00, 0x00, 0x00}},
+		{305419896, []byte{0x78, 0x56, 0x34}},
 	}
 
 	for _, test := range tests {
-		if b, err := test.pin.MarshalUT0311L0x(); err == nil {
-			t.Errorf("Incorrectly marshalled invalid PIN '%v' - expected error, got:%v", test.pin, err)
+		if b, err := test.pin.MarshalUT0311L0x(); err != nil {
+			t.Errorf("Unexpected error marshalling invalid PIN %v (%v)", test.pin, err)
 		} else if !bytes.Equal(b, test.expected) {
 			t.Errorf("Incorrectly marshalled invalid PIN '%v' - expected:%v, got:%v", test.pin, test.expected, b)
 		}
@@ -80,17 +80,25 @@ func TestPINUnMarshalUT0311L0x(t *testing.T) {
 
 func TestInvalidPINUnMarshalUT0311L0x(t *testing.T) {
 	tests := []struct {
-		bytes []byte
+		bytes    []byte
+		expected PIN
 	}{
-		{[]byte{0x40, 0x42, 0x0f}},
+		{[]byte{0x40, 0x42, 0x0f}, 1000000},
+		{[]byte{0xff, 0xff, 0xff}, 16777215},
 	}
 
 	for _, test := range tests {
 		var pin PIN
-		if p, err := pin.UnmarshalUT0311L0x(test.bytes); err == nil {
-			t.Fatalf("Error unmarshalling invalid PIN %v - expected error, got: %v", test.bytes, err)
-		} else if p != nil {
-			t.Errorf("Incorrectly unmarshalled invalid PIN '%v' - expected:%v, got:%v", test.bytes, nil, p)
+		if p, err := pin.UnmarshalUT0311L0x(test.bytes); err != nil {
+			t.Fatalf("Error unmarshalling invalid PIN %v (%v)", test.bytes, err)
+		} else if pin != test.expected {
+			t.Errorf("Incorrectly unmarshalled invalid PIN '%v' - expected:%v, got:%v", test.bytes, test.expected, pin)
+		} else if p == nil {
+			t.Errorf("Incorrectly unmarshalled invalid PIN '%v' - expected:%v, got:%v", test.bytes, test.expected, p)
+		} else if v, ok := p.(*PIN); !ok || v == nil {
+			t.Errorf("Incorrectly unmarshalled invalid PIN '%v' - expected:%v, got:%v", test.bytes, test.expected, v)
+		} else if *v != test.expected {
+			t.Errorf("Incorrectly unmarshalled invalid PIN '%v' - expected:%v, got:%T", test.bytes, test.expected, *v)
 		}
 	}
 }

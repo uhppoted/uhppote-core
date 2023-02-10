@@ -11,10 +11,6 @@ import (
 type PIN uint32
 
 func (p PIN) MarshalUT0311L0x() ([]byte, error) {
-	if p > 999999 {
-		return []byte{0x00, 0x00, 0x00}, fmt.Errorf("invalid PIN (%v)", p)
-	}
-
 	bytes := make([]byte, 4)
 	binary.LittleEndian.PutUint32(bytes, uint32(p))
 
@@ -26,13 +22,10 @@ func (p *PIN) UnmarshalUT0311L0x(bytes []byte) (any, error) {
 
 	copy(b[0:], bytes[0:3])
 
-	if v := binary.LittleEndian.Uint32(b); v > 999999 {
-		return nil, fmt.Errorf("invalid PIN (%v)", v)
-	} else {
-		*p = PIN(v)
+	v := binary.LittleEndian.Uint32(b)
+	*p = PIN(v)
 
-		return p, nil
-	}
+	return p, nil
 }
 
 func (p PIN) MarshalJSON() ([]byte, error) {
