@@ -40,6 +40,41 @@ func TestDateIsValid(t *testing.T) {
 	}
 }
 
+func TestDateEquals(t *testing.T) {
+	tests := []struct {
+		date     Date
+		other    Date
+		expected bool
+	}{
+		{
+			Date(time.Date(2023, time.February, 28, 12, 34, 56, 789, time.Local)),
+			Date(time.Date(2023, time.February, 28, 12, 34, 56, 789, time.Local)),
+			true},
+		{
+			Date(time.Date(2023, time.February, 28, 12, 34, 56, 789, time.Local)),
+			Date(time.Date(2023, time.February, 28, 12, 34, 0, 0, time.Local)),
+			true},
+		{
+			Date(time.Date(2023, time.February, 28, 12, 34, 56, 789, time.Local)),
+			Date(time.Date(2022, time.February, 28, 12, 34, 56, 789, time.Local)),
+			false},
+		{
+			Date(time.Date(2023, time.February, 28, 12, 34, 56, 789, time.Local)),
+			Date(time.Date(2023, time.March, 28, 12, 34, 56, 789, time.Local)),
+			false},
+		{
+			Date(time.Date(2023, time.February, 28, 12, 34, 56, 789, time.Local)),
+			Date(time.Date(2023, time.February, 27, 12, 34, 56, 789, time.Local)),
+			false},
+	}
+
+	for _, v := range tests {
+		if b := v.date.Equals(v.other); b != v.expected {
+			t.Errorf("Date.Equals returned incorrect value - expected:%v, got:%v", v.expected, b)
+		}
+	}
+}
+
 func TestDateString(t *testing.T) {
 	var zero = Date{}
 	var date = Date(time.Date(2021, time.February, 28, 12, 34, 56, 789, time.Local))

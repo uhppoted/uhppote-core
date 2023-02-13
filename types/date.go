@@ -28,6 +28,21 @@ func (d Date) IsValid() bool {
 	return !time.Time(d).IsZero()
 }
 
+func (d Date) Equals(date Date) bool {
+	p := time.Time(d)
+	q := time.Time(date)
+
+	// fmt.Printf(">> %v %v %v y:%v,%v m:%v,%v d:%v,%v\n",
+	// 	p.Year() == q.Year(),
+	// 	p.Month() == q.Month(),
+	// 	p.Day() == q.Day(),
+	// 	p.Year(), q.Year(),
+	// 	p.Month(), q.Month(),
+	// 	p.Day(), q.Day())
+
+	return p.Year() == q.Year() && p.Month() == q.Month() && p.Day() == q.Day()
+}
+
 func (d Date) Before(date Date) bool {
 	p := time.Time(d)
 	q := time.Time(date)
