@@ -18,11 +18,9 @@ func (p PIN) MarshalUT0311L0x() ([]byte, error) {
 }
 
 func (p *PIN) UnmarshalUT0311L0x(bytes []byte) (any, error) {
-	b := make([]byte, 4)
-
-	copy(b[0:], bytes[0:3])
-
+	b := []byte{bytes[0], bytes[1], bytes[2], 0x00}
 	v := binary.LittleEndian.Uint32(b)
+
 	*p = PIN(v)
 
 	return p, nil
