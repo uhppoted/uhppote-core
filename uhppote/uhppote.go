@@ -188,7 +188,7 @@ func (u *uhppote) send(serialNumber uint32, request, reply interface{}) error {
 
 func (u *uhppote) listen(p chan *event, q chan os.Signal, listener Listener) error {
 	handler := func(bytes []byte) {
-		// ... discard invalid replies
+		// ... discard invalid events
 		if len(bytes) != 64 {
 			listener.OnError(fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
 			return

@@ -7,8 +7,11 @@ import (
 )
 
 func TestStatusToString(t *testing.T) {
-	dt1 := DateTime(time.Date(2023, time.January, 25, 11, 20, 28, 0, time.Local))
-	dt2 := DateTime(time.Date(2023, time.January, 25, 12, 30, 24, 0, time.Local))
+	datetime := func(y int, m time.Month, d int, hh int, mm int, ss int) *DateTime {
+		dt := DateTime(time.Date(y, m, d, hh, mm, ss, 0, time.Local))
+
+		return &dt
+	}
 
 	tests := []struct {
 		status   Status
@@ -20,7 +23,7 @@ func TestStatusToString(t *testing.T) {
 				DoorState:      map[uint8]bool{1: true, 2: true, 3: true, 4: true},
 				DoorButton:     map[uint8]bool{1: false, 2: false, 3: false, 4: false},
 				SystemError:    0,
-				SystemDateTime: DateTime(time.Date(2023, time.January, 25, 11, 20, 28, 0, time.Local)),
+				SystemDateTime: datetime(2023, time.January, 25, 11, 20, 28),
 				SequenceId:     0,
 				SpecialInfo:    0,
 				RelayState:     0,
@@ -32,7 +35,7 @@ func TestStatusToString(t *testing.T) {
 					Door:       3,
 					Direction:  1,
 					CardNumber: 10058399,
-					Timestamp:  &dt1,
+					Timestamp:  datetime(2023, time.January, 25, 11, 20, 28),
 					Reason:     5,
 				},
 			},
@@ -45,7 +48,7 @@ func TestStatusToString(t *testing.T) {
 				DoorState:      map[uint8]bool{1: false, 2: false, 3: false, 4: false},
 				DoorButton:     map[uint8]bool{1: false, 2: false, 3: false, 4: false},
 				SystemError:    0,
-				SystemDateTime: DateTime(time.Date(2023, time.January, 25, 12, 30, 24, 0, time.Local)),
+				SystemDateTime: datetime(2023, time.January, 25, 12, 30, 24),
 				SequenceId:     0,
 				SpecialInfo:    0,
 				RelayState:     0,
@@ -57,7 +60,7 @@ func TestStatusToString(t *testing.T) {
 					Door:       3,
 					Direction:  1,
 					CardNumber: 8165538,
-					Timestamp:  &dt2,
+					Timestamp:  datetime(2023, time.January, 25, 12, 30, 24),
 					Reason:     5,
 				},
 			},

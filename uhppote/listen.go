@@ -1,10 +1,11 @@
 package uhppote
 
 import (
-	"github.com/uhppoted/uhppote-core/messages"
-	"github.com/uhppoted/uhppote-core/types"
 	"os"
 	"time"
+
+	"github.com/uhppoted/uhppote-core/messages"
+	"github.com/uhppoted/uhppote-core/types"
 )
 
 type event messages.GetStatusResponse
@@ -16,6 +17,21 @@ type Listener interface {
 }
 
 func (u *uhppote) Listen(listener Listener, q chan os.Signal) error {
+	sysdatetime := func(e *event) *types.DateTime {
+		if e.SystemDate == nil || e.SystemTime == nil {
+			return nil
+		}
+
+		d := (*time.Time)(e.SystemDate).Format("2006-01-02")
+		t := (*time.Time)(e.SystemTime).Format("15:04:05")
+
+		if dt, err := time.ParseInLocation("2006-01-02 15:04:05", d+" "+t, time.Local); err != nil {
+			return nil
+		} else {
+			return (*types.DateTime)(&dt)
+		}
+	}
+
 	pipe := make(chan *event)
 
 	defer close(pipe)
@@ -25,16 +41,13 @@ func (u *uhppote) Listen(listener Listener, q chan os.Signal) error {
 			if e := <-pipe; e == nil {
 				break
 			} else {
-				d := time.Time(e.SystemDate).Format("2006-01-02")
-				t := time.Time(e.SystemTime).Format("15:04:05")
-				datetime, _ := time.ParseInLocation("2006-01-02 15:04:05", d+" "+t, time.Local)
 
 				status := types.Status{
 					SerialNumber:   e.SerialNumber,
 					DoorState:      map[uint8]bool{1: e.Door1State, 2: e.Door2State, 3: e.Door3State, 4: e.Door4State},
 					DoorButton:     map[uint8]bool{1: e.Door1Button, 2: e.Door2Button, 3: e.Door3Button, 4: e.Door4Button},
 					SystemError:    e.SystemError,
-					SystemDateTime: types.DateTime(datetime),
+					SystemDateTime: sysdatetime(e),
 					SequenceId:     e.SequenceId,
 					SpecialInfo:    e.SpecialInfo,
 					RelayState:     e.RelayState,

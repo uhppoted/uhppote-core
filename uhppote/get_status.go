@@ -24,16 +24,27 @@ func (u *uhppote) GetStatus(serialNumber uint32) (*types.Status, error) {
 		return nil, err
 	}
 
-	d := time.Time(reply.SystemDate).Format("2006-01-02")
-	t := time.Time(reply.SystemTime).Format("15:04:05")
-	datetime, _ := time.ParseInLocation("2006-01-02 15:04:05", d+" "+t, time.Local)
+	sysdatetime := func() *types.DateTime {
+		if reply.SystemDate == nil || reply.SystemTime == nil {
+			return nil
+		}
+
+		d := (*time.Time)(reply.SystemDate).Format("2006-01-02")
+		t := (*time.Time)(reply.SystemTime).Format("15:04:05")
+
+		if dt, err := time.ParseInLocation("2006-01-02 15:04:05", d+" "+t, time.Local); err != nil {
+			return nil
+		} else {
+			return (*types.DateTime)(&dt)
+		}
+	}
 
 	status := types.Status{
 		SerialNumber:   reply.SerialNumber,
 		DoorState:      map[uint8]bool{1: reply.Door1State, 2: reply.Door2State, 3: reply.Door3State, 4: reply.Door4State},
 		DoorButton:     map[uint8]bool{1: reply.Door1Button, 2: reply.Door2Button, 3: reply.Door3Button, 4: reply.Door4Button},
 		SystemError:    reply.SystemError,
-		SystemDateTime: types.DateTime(datetime),
+		SystemDateTime: sysdatetime(),
 		SequenceId:     reply.SequenceId,
 		SpecialInfo:    reply.SpecialInfo,
 		RelayState:     reply.RelayState,

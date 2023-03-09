@@ -29,8 +29,8 @@ type GetStatusResponse struct {
 	Door3Button  bool               `uhppote:"offset:34"`
 	Door4Button  bool               `uhppote:"offset:35"`
 	SystemError  uint8              `uhppote:"offset:36"`
-	SystemDate   types.SystemDate   `uhppote:"offset:51"`
-	SystemTime   types.SystemTime   `uhppote:"offset:37"`
+	SystemDate   *types.SystemDate  `uhppote:"offset:51"`
+	SystemTime   *types.SystemTime  `uhppote:"offset:37"`
 	SequenceId   uint32             `uhppote:"offset:40"`
 	SpecialInfo  uint8              `uhppote:"offset:48"`
 	RelayState   uint8              `uhppote:"offset:49"` // bitmap (0=locked, 1=unlocked, 0000:all doors locked)

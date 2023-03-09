@@ -1,12 +1,28 @@
 # TODO
 
 - [x] `set-pc-control` 
+- [x] Fix controller with uninitialised time
+```
+./bin/uhppote-cli listen
+
+Listening...
+ERROR: parsing time "000000": month out of range
+```
 
 - [ ] Check UHPPOTE encoding for revised Date implementation
       - should return Date{} for 0000...
       - should return DateTime{} for 0000...
 
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
+- [ ] `put-card`: validate card number is valid Wiegand-26
+- [ ] What to do about bad/zero card numbers? e.g.
+```
+      8165537  2021-01-01 2021-12-31 Y N N N
+      8165539  2021-01-01 2021-12-31 N N N N
+      8165538  2023-01-01 2023-12-31 Y N Y 29 7531
+      192837465 2023-01-01 2023-12-31 Y N 55 Y 7531
+      4294967295
+```
 
 ## TODO
 

@@ -10,7 +10,7 @@ type Status struct {
 	DoorState      map[uint8]bool
 	DoorButton     map[uint8]bool
 	SystemError    uint8
-	SystemDateTime DateTime
+	SystemDateTime *DateTime
 	SequenceId     uint32
 	SpecialInfo    uint8
 	RelayState     uint8
@@ -30,13 +30,29 @@ type StatusEvent struct {
 }
 
 func (s Status) String() string {
+	sysdatetime := func() string {
+		if s.SystemDateTime != nil {
+			return s.SystemDateTime.String()
+		} else {
+			return "---"
+		}
+	}
+
+	timestamp := func(t *DateTime) string {
+		if t != nil {
+			return fmt.Sprintf("%v", t)
+		} else {
+			return "---"
+		}
+	}
+
 	var b strings.Builder
 
 	b.WriteString(fmt.Sprintf("%v", s.SerialNumber))
 	b.WriteString(fmt.Sprintf(" %-5v %-5v %-5v %-5v", s.DoorState[1], s.DoorState[2], s.DoorState[3], s.DoorState[4]))
 	b.WriteString(fmt.Sprintf(" %-5v %-5v %-5v %-5v", s.DoorButton[1], s.DoorButton[2], s.DoorButton[3], s.DoorButton[4]))
 	b.WriteString(fmt.Sprintf(" %-4d", s.SystemError))
-	b.WriteString(fmt.Sprintf(" %s", s.SystemDateTime.String()))
+	b.WriteString(fmt.Sprintf(" %v", sysdatetime()))
 	b.WriteString(fmt.Sprintf(" %-10d", s.SequenceId))
 	b.WriteString(fmt.Sprintf(" %d", s.SpecialInfo))
 	b.WriteString(fmt.Sprintf(" %02X", s.RelayState))
@@ -49,7 +65,7 @@ func (s Status) String() string {
 		b.WriteString(fmt.Sprintf(" %d", s.Event.Door))
 		b.WriteString(fmt.Sprintf(" %-5v", s.Event.Direction))
 		b.WriteString(fmt.Sprintf(" %-10d", s.Event.CardNumber))
-		b.WriteString(fmt.Sprintf(" %v", s.Event.Timestamp))
+		b.WriteString(fmt.Sprintf(" %v", timestamp(s.Event.Timestamp)))
 		b.WriteString(fmt.Sprintf(" %d", s.Event.Reason))
 	}
 

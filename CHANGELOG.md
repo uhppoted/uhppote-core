@@ -11,6 +11,9 @@
 ### Updated
 1. Fixed initial round of _staticcheck_ lint errors and permanently added _staticcheck_ to
    CI build.
+2. Fixed `Status` formatting to accomodate events with indices greater than 100000.
+3. Reworked `get-status` and events to handle controller with uninitialised system date/time.
+
 
 ## [0.8.3](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.3) - 2022-12-16
 
