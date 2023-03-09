@@ -29,7 +29,7 @@ type StatusEvent struct {
 	Reason     uint8
 }
 
-func (s *Status) String() string {
+func (s Status) String() string {
 	var b strings.Builder
 
 	b.WriteString(fmt.Sprintf("%v", s.SerialNumber))
@@ -43,7 +43,7 @@ func (s *Status) String() string {
 	b.WriteString(fmt.Sprintf(" %02X", s.InputState))
 
 	if s.Event != nil {
-		b.WriteString(fmt.Sprintf(" | %-5d", s.Event.Index))
+		b.WriteString(fmt.Sprintf(" | %-7d", s.Event.Index))
 		b.WriteString(fmt.Sprintf(" %-3d", s.Event.Type))
 		b.WriteString(fmt.Sprintf(" %-5v", s.Event.Granted))
 		b.WriteString(fmt.Sprintf(" %d", s.Event.Door))
