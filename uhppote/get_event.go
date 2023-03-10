@@ -32,9 +32,9 @@ func (u *uhppote) GetEvent(deviceID, index uint32) (*types.Event, error) {
 		return nil, nil
 	}
 
-	if reply.Timestamp == nil {
-		return nil, fmt.Errorf("invalid 'timestamp' in response")
-	}
+	//	if reply.Timestamp.IsZero() == nil {
+	//		return nil, fmt.Errorf("invalid 'timestamp' in response")
+	//	}
 
 	return &types.Event{
 		SerialNumber: reply.SerialNumber,
@@ -44,7 +44,7 @@ func (u *uhppote) GetEvent(deviceID, index uint32) (*types.Event, error) {
 		Door:         reply.Door,
 		Direction:    reply.Direction,
 		CardNumber:   reply.CardNumber,
-		Timestamp:    *reply.Timestamp,
+		Timestamp:    reply.Timestamp,
 		Reason:       reply.Reason,
 	}, nil
 }

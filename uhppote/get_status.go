@@ -24,18 +24,18 @@ func (u *uhppote) GetStatus(serialNumber uint32) (*types.Status, error) {
 		return nil, err
 	}
 
-	sysdatetime := func() *types.DateTime {
-		if reply.SystemDate == nil || reply.SystemTime == nil {
-			return nil
+	sysdatetime := func() types.DateTime {
+		if reply.SystemDate.IsZero() {
+			return types.DateTime{}
 		}
 
-		d := (*time.Time)(reply.SystemDate).Format("2006-01-02")
-		t := (*time.Time)(reply.SystemTime).Format("15:04:05")
+		d := reply.SystemDate.Format("2006-01-02")
+		t := reply.SystemTime.Format("15:04:05")
 
 		if dt, err := time.ParseInLocation("2006-01-02 15:04:05", d+" "+t, time.Local); err != nil {
-			return nil
+			return types.DateTime{}
 		} else {
-			return (*types.DateTime)(&dt)
+			return types.DateTime(dt)
 		}
 	}
 

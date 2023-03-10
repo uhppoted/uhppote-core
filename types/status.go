@@ -10,7 +10,7 @@ type Status struct {
 	DoorState      map[uint8]bool
 	DoorButton     map[uint8]bool
 	SystemError    uint8
-	SystemDateTime *DateTime
+	SystemDateTime DateTime
 	SequenceId     uint32
 	SpecialInfo    uint8
 	RelayState     uint8
@@ -31,18 +31,18 @@ type StatusEvent struct {
 
 func (s Status) String() string {
 	sysdatetime := func() string {
-		if s.SystemDateTime != nil {
-			return s.SystemDateTime.String()
-		} else {
+		if s.SystemDateTime.IsZero() {
 			return "---"
+		} else {
+			return s.SystemDateTime.String()
 		}
 	}
 
 	timestamp := func(t *DateTime) string {
-		if t != nil {
-			return fmt.Sprintf("%v", t)
-		} else {
+		if t == nil || t.IsZero() {
 			return "---"
+		} else {
+			return fmt.Sprintf("%v", t)
 		}
 	}
 

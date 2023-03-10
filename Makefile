@@ -58,7 +58,7 @@ publish: release
 	gh release create "$(VERSION)" --draft --prerelease --title "$(VERSION)-beta" --notes-file release-notes.md
 
 debug: build
-	go test ./... -run TestDateEquals
+	go test ./... -run TestUnmarshalGetEventResponseWithInvalidTimestamp
 
 godoc:
 	godoc -http=:80	-index_interval=60s

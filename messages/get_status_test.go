@@ -151,12 +151,12 @@ func TestUnmarshalGetStatusResponse(t *testing.T) {
 	}
 
 	sysdate, _ := time.ParseInLocation("2006-01-02", "2019-04-20", time.Local)
-	if reply.SystemDate == nil || *reply.SystemDate != types.SystemDate(sysdate) {
+	if reply.SystemDate != types.SystemDate(sysdate) {
 		t.Errorf("Incorrect 'system date' - expected:%v, got:%v", sysdate.Format("2006-01-02"), reply.SystemDate)
 	}
 
 	systime, _ := time.ParseInLocation("15:04:05", "14:37:02", time.Local)
-	if reply.SystemTime == nil || *reply.SystemTime != types.SystemTime(systime) {
+	if reply.SystemTime != types.SystemTime(systime) {
 		t.Errorf("Incorrect 'system time' - expected:%v, got:%v", systime.Format("15:04:05"), reply.SystemTime)
 	}
 
@@ -278,12 +278,12 @@ func TestFactoryUnmarshalGetStatusResponse(t *testing.T) {
 	}
 
 	sysdate, _ := time.ParseInLocation("2006-01-02", "2019-04-20", time.Local)
-	if reply.SystemDate == nil || *reply.SystemDate != types.SystemDate(sysdate) {
+	if reply.SystemDate != types.SystemDate(sysdate) {
 		t.Errorf("Incorrect 'system date' - expected:%v, got:%v", sysdate.Format("2006-01-02"), reply.SystemDate)
 	}
 
 	systime, _ := time.ParseInLocation("15:04:05", "14:37:02", time.Local)
-	if reply.SystemTime == nil || *reply.SystemTime != types.SystemTime(systime) {
+	if reply.SystemTime != types.SystemTime(systime) {
 		t.Errorf("Incorrect 'system time' - expected:%v, got:%v", systime.Format("15:04:05"), reply.SystemTime)
 	}
 
@@ -374,8 +374,8 @@ func TestUnmarshalGetStatusResponseWithNoEvent(t *testing.T) {
 		t.Errorf("Incorrect 'card number' - expected:%v, got:%v", 0, reply.CardNumber)
 	}
 
-	if reply.Timestamp != nil {
-		t.Errorf("Incorrect 'event timestamp' - expected:%v, got:%v", nil, reply.Timestamp)
+	if !reply.Timestamp.IsZero() {
+		t.Errorf("Incorrect 'event timestamp' - expected:%v, got:%v", types.DateTime{}, reply.Timestamp)
 	}
 
 	if reply.Reason != 0 {
@@ -419,12 +419,12 @@ func TestUnmarshalGetStatusResponseWithNoEvent(t *testing.T) {
 	}
 
 	sysdate, _ := time.ParseInLocation("2006-01-02", "2021-04-08", time.Local)
-	if reply.SystemDate == nil || *reply.SystemDate != types.SystemDate(sysdate) {
+	if reply.SystemDate != types.SystemDate(sysdate) {
 		t.Errorf("Incorrect 'system date' - expected:%v, got:%v", sysdate.Format("2006-01-02"), reply.SystemDate)
 	}
 
 	systime, _ := time.ParseInLocation("15:04:05", "16:03:34", time.Local)
-	if reply.SystemTime == nil || *reply.SystemTime != types.SystemTime(systime) {
+	if reply.SystemTime != types.SystemTime(systime) {
 		t.Errorf("Incorrect 'system time' - expected:%v, got:%v", systime.Format("15:04:05"), reply.SystemTime)
 	}
 

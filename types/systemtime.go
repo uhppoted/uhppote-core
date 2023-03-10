@@ -19,6 +19,10 @@ func TimeFromString(s string) (*SystemTime, error) {
 	return &t, nil
 }
 
+func (t SystemTime) Format(format string) string {
+	return time.Time(t).Format(format)
+}
+
 func (t SystemTime) String() string {
 	return time.Time(t).Format("15:04:05")
 }

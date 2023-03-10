@@ -237,7 +237,6 @@ func unmarshal(bytes []byte, s reflect.Value) error {
 	}
 
 	// Unmarshal fields tagged with `uhppote:"..."`
-
 	if s.Kind() == reflect.Struct {
 		N := s.NumField()
 

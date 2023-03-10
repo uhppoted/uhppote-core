@@ -17,18 +17,18 @@ type Listener interface {
 }
 
 func (u *uhppote) Listen(listener Listener, q chan os.Signal) error {
-	sysdatetime := func(e *event) *types.DateTime {
-		if e.SystemDate == nil || e.SystemTime == nil {
-			return nil
+	sysdatetime := func(e *event) types.DateTime {
+		if e.SystemDate.IsZero() {
+			return types.DateTime{}
 		}
 
-		d := (*time.Time)(e.SystemDate).Format("2006-01-02")
-		t := (*time.Time)(e.SystemTime).Format("15:04:05")
+		d := e.SystemDate.Format("2006-01-02")
+		t := e.SystemTime.Format("15:04:05")
 
 		if dt, err := time.ParseInLocation("2006-01-02 15:04:05", d+" "+t, time.Local); err != nil {
-			return nil
+			return types.DateTime{}
 		} else {
-			return (*types.DateTime)(&dt)
+			return types.DateTime(dt)
 		}
 	}
 
@@ -41,7 +41,6 @@ func (u *uhppote) Listen(listener Listener, q chan os.Signal) error {
 			if e := <-pipe; e == nil {
 				break
 			} else {
-
 				status := types.Status{
 					SerialNumber:   e.SerialNumber,
 					DoorState:      map[uint8]bool{1: e.Door1State, 2: e.Door2State, 3: e.Door3State, 4: e.Door4State},

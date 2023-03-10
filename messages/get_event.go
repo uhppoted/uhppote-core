@@ -19,6 +19,6 @@ type GetEventResponse struct {
 	Door         uint8              `uhppote:"offset:14"`
 	Direction    uint8              `uhppote:"offset:15"`
 	CardNumber   uint32             `uhppote:"offset:16"`
-	Timestamp    *types.DateTime    `uhppote:"offset:20"`
+	Timestamp    types.DateTime     `uhppote:"offset:20"`
 	Reason       uint8              `uhppote:"offset:27"`
 }

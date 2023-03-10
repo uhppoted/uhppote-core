@@ -1,6 +1,7 @@
 package types
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -86,15 +87,19 @@ func (d DateTime) MarshalUT0311L0x() ([]byte, error) {
 	return *encoded, nil
 }
 
-func (d *DateTime) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
-	decoded, err := bcd.Decode(bytes[0:7])
+func (d *DateTime) UnmarshalUT0311L0x(b []byte) (any, error) {
+	if bytes.Equal(b[0:7], []byte{0, 0, 0, 0, 0, 0, 0}) {
+		return &DateTime{}, nil
+	}
+
+	decoded, err := bcd.Decode(b[0:7])
 	if err != nil {
 		return nil, err
 	}
 
 	datetime, err := time.ParseInLocation("20060102150405", decoded, time.Local)
 	if err != nil {
-		return nil, err
+		return &DateTime{}, nil
 	}
 
 	v := DateTime(datetime)

@@ -7,7 +7,11 @@ import (
 )
 
 func TestStatusToString(t *testing.T) {
-	datetime := func(y int, m time.Month, d int, hh int, mm int, ss int) *DateTime {
+	datetime := func(y int, m time.Month, d int, hh int, mm int, ss int) DateTime {
+		return DateTime(time.Date(y, m, d, hh, mm, ss, 0, time.Local))
+	}
+
+	datetimePtr := func(y int, m time.Month, d int, hh int, mm int, ss int) *DateTime {
 		dt := DateTime(time.Date(y, m, d, hh, mm, ss, 0, time.Local))
 
 		return &dt
@@ -35,7 +39,7 @@ func TestStatusToString(t *testing.T) {
 					Door:       3,
 					Direction:  1,
 					CardNumber: 10058399,
-					Timestamp:  datetime(2023, time.January, 25, 11, 20, 28),
+					Timestamp:  datetimePtr(2023, time.January, 25, 11, 20, 28),
 					Reason:     5,
 				},
 			},
@@ -60,7 +64,7 @@ func TestStatusToString(t *testing.T) {
 					Door:       3,
 					Direction:  1,
 					CardNumber: 8165538,
-					Timestamp:  datetime(2023, time.January, 25, 12, 30, 24),
+					Timestamp:  datetimePtr(2023, time.January, 25, 12, 30, 24),
 					Reason:     5,
 				},
 			},

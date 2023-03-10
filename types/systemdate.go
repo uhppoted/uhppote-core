@@ -1,6 +1,7 @@
 package types
 
 import (
+	"bytes"
 	"fmt"
 	"time"
 
@@ -8,6 +9,14 @@ import (
 )
 
 type SystemDate time.Time
+
+func (d SystemDate) IsZero() bool {
+	return time.Time(d).IsZero()
+}
+
+func (d SystemDate) Format(format string) string {
+	return time.Time(d).Format(format)
+}
 
 func (d SystemDate) String() string {
 	return time.Time(d).Format("2006-01-02")
@@ -27,8 +36,12 @@ func (d SystemDate) MarshalUT0311L0x() ([]byte, error) {
 	return *encoded, nil
 }
 
-func (d *SystemDate) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
-	decoded, err := bcd.Decode(bytes[0:3])
+func (d *SystemDate) UnmarshalUT0311L0x(b []byte) (interface{}, error) {
+	if bytes.Equal(b[0:3], []byte{0, 0, 0}) {
+		return &SystemDate{}, nil
+	}
+
+	decoded, err := bcd.Decode(b[0:3])
 	if err != nil {
 		return nil, err
 	}
