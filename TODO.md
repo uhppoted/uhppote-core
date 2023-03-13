@@ -12,12 +12,12 @@
       - [x] Should return DateTime{} for 0000...
       - [x] Should return SystemDate{} for 0000...
       - [ ] Should return Date{} for 0000...
-      - [ ] Parse *types.DateTime
+      - [ ] Unmarshal *types.DateTime
 ```
-  // FIXME
-  //  if reply.NilDateTime != nil {
-  //    t.Errorf("Expected %v date/time, got: '%v'\n", nil, reply.NilDateTime)
-  //  }
+        // FIXME
+        //  if reply.NilDateTime != nil {
+        //    t.Errorf("Expected %v date/time, got: '%v'\n", nil, reply.NilDateTime)
+        //  }
 ```
 
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
