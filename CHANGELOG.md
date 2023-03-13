@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [Unreleased]
+## [0.8.4](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.4) - 2023-03-15
 
 ### Added
 1. `doc.go` package overview documentation.
