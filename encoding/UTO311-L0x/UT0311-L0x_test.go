@@ -558,16 +558,18 @@ func TestUnmarshalDateTime(t *testing.T) {
 	message := []byte{
 		0x17, 0x88, 0x6e, 0x00, 0x2d, 0x55, 0x39, 0x19, 0x20, 0x18, 0x12, 0x31, 0x12, 0x23, 0x34, 0x00,
 		0x20, 0x19, 0x12, 0x31, 0x12, 0x23, 0x34, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
 	reply := struct {
-		MsgType      types.MsgType   `uhppote:"value:0x88"`
-		DateTime     types.DateTime  `uhppote:"offset:8"`
-		DateTimeP    *types.DateTime `uhppote:"offset:16"`
-		ZeroDateTime types.DateTime  `uhppote:"offset:24"`
-		NilDateTime  *types.DateTime `uhppote:"offset:32"`
+		MsgType        types.MsgType   `uhppote:"value:0x88"`
+		DateTime       types.DateTime  `uhppote:"offset:8"`
+		DateTimeP      *types.DateTime `uhppote:"offset:16"`
+		ZeroDateTime   types.DateTime  `uhppote:"offset:24"`
+		NilDateTime    *types.DateTime `uhppote:"offset:32"`
+		ZeroDateTime20 types.DateTime  `uhppote:"offset:40"`
+		NilDateTime20  *types.DateTime `uhppote:"offset:48"`
 	}{}
 
 	err := Unmarshal(message, &reply)
@@ -591,12 +593,16 @@ func TestUnmarshalDateTime(t *testing.T) {
 		t.Errorf("Expected '%v' date/time, got: '%v'\n", zero, reply.ZeroDateTime)
 	}
 
-	// FIXME
-	//	if reply.NilDateTime != nil {
-	//		t.Errorf("Expected %v date/time, got: '%v'\n", nil, reply.NilDateTime)
-	//	}
-	if reply.NilDateTime == nil || *reply.NilDateTime != zero {
+	if reply.ZeroDateTime20 != zero || !reply.ZeroDateTime20.IsZero() {
+		t.Errorf("Expected '%v' date/time, got: '%v'\n", zero, reply.ZeroDateTime20)
+	}
+
+	if reply.NilDateTime != nil {
 		t.Errorf("Expected %v date/time, got: '%v'\n", nil, reply.NilDateTime)
+	}
+
+	if reply.NilDateTime20 != nil {
+		t.Errorf("Expected %v date/time, got: '%v'\n", nil, reply.NilDateTime20)
 	}
 }
 
@@ -612,13 +618,6 @@ func TestUnmarshalZeroDateTime(t *testing.T) {
 		MsgType      types.MsgType  `uhppote:"value:0x88"`
 		ZeroDateTime types.DateTime `uhppote:"offset:8"`
 	}{}
-
-	// expected := fmt.Errorf(`parsing time "00000000000000": month out of range`)
-	//
-	// err := Unmarshal(message, &reply)
-	// if err == nil || err.Error() != expected.Error() {
-	// 	t.Errorf("Expected error: %v, got:%v", expected, err)
-	// }
 
 	if err := Unmarshal(message, &reply); err != nil {
 		t.Fatalf("Unexpected error (%v)", err)

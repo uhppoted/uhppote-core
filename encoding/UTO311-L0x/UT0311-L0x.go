@@ -290,7 +290,7 @@ func unmarshal(bytes []byte, s reflect.Value) error {
 
 				// Unmarshall pointer fields with UnmarshalUT0311L0x{} interface
 				if u, ok := f.Interface().(Unmarshaler); ok {
-					if p, err := u.UnmarshalUT0311L0x(bytes[offset:]); err == nil {
+					if p, err := u.UnmarshalUT0311L0x(bytes[offset:]); err == nil && p != nil {
 						f.Set(reflect.ValueOf(p))
 					}
 					continue

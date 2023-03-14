@@ -89,7 +89,20 @@ func (d DateTime) MarshalUT0311L0x() ([]byte, error) {
 
 func (d *DateTime) UnmarshalUT0311L0x(b []byte) (any, error) {
 	if bytes.Equal(b[0:7], []byte{0, 0, 0, 0, 0, 0, 0}) {
-		return &DateTime{}, nil
+		if d == nil {
+			return nil, nil
+		} else {
+			return &DateTime{}, nil
+		}
+	}
+
+	// ... some uninitialised controllers default to 2000-00-00 00:00:00
+	if bytes.Equal(b[0:7], []byte{0x20, 0, 0, 0, 0, 0, 0}) {
+		if d == nil {
+			return nil, nil
+		} else {
+			return &DateTime{}, nil
+		}
 	}
 
 	decoded, err := bcd.Decode(b[0:7])

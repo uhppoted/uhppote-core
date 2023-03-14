@@ -374,8 +374,8 @@ func TestUnmarshalGetStatusResponseWithNoEvent(t *testing.T) {
 		t.Errorf("Incorrect 'card number' - expected:%v, got:%v", 0, reply.CardNumber)
 	}
 
-	if !reply.Timestamp.IsZero() {
-		t.Errorf("Incorrect 'event timestamp' - expected:%v, got:%v", types.DateTime{}, reply.Timestamp)
+	if reply.Timestamp != nil {
+		t.Errorf("Incorrect 'event timestamp' - expected:%v, got:%v", nil, reply.Timestamp)
 	}
 
 	if reply.Reason != 0 {

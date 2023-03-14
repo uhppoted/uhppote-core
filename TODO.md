@@ -1,24 +1,10 @@
 # TODO
 
-- [x] `set-pc-control` 
-- [x] Fix controller with uninitialised time
-      ```
-      Listening...
-      ERROR: parsing time "000000": month out of range
-      ```
-      - [x] Rather use zero date/time and fix in Unmarshal
-
 - [ ] Check UHPPOTE encoding for revised Date implementation
       - [x] Should return DateTime{} for 0000...
       - [x] Should return SystemDate{} for 0000...
+      - [x] Unmarshal *types.DateTime as `<nil>`
       - [ ] Should return Date{} for 0000...
-      - [ ] Unmarshal *types.DateTime
-```
-        // FIXME
-        //  if reply.NilDateTime != nil {
-        //    t.Errorf("Expected %v date/time, got: '%v'\n", nil, reply.NilDateTime)
-        //  }
-```
 
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
 - [ ] `put-card`: validate card number is valid Wiegand-26
