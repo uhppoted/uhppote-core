@@ -11,7 +11,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-var VERSION string = "v0.8.4"
+var VERSION string = "v0.8.x"
 
 type driver interface {
 	Broadcast([]byte, *net.UDPAddr) ([][]byte, error)
