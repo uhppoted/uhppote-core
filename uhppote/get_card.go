@@ -87,18 +87,18 @@ func (u *uhppote) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
 		return nil, nil
 	}
 
-	if response.From == nil {
+	if response.From.IsZero() {
 		return nil, fmt.Errorf("invalid 'from' date in response")
 	}
 
-	if response.To == nil {
+	if response.To.IsZero() {
 		return nil, fmt.Errorf("invalid 'to' date in response")
 	}
 
 	card := types.Card{
 		CardNumber: response.CardNumber,
-		From:       response.From,
-		To:         response.To,
+		From:       &response.From,
+		To:         &response.To,
 		Doors: map[uint8]uint8{
 			1: response.Door1,
 			2: response.Door2,
