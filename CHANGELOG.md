@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Updated
+1. Reworkd `get-card-xxx` to use zero valued dates rather than pointers.
+2. Reworkd card `From` and `To` dates to not be pointers.
+
 
 ## [0.8.4](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.4) - 2023-03-17
 
