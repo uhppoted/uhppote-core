@@ -119,7 +119,7 @@ func (d *Date) UnmarshalUT0311L0x(bytes []byte) (any, error) {
 		return nil, err
 	}
 
-	if decoded == "00000000" {
+	if decoded == "00000000" || decoded == "00010101" {
 		if d == nil {
 			return nil, nil
 		} else {

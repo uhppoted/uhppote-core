@@ -245,7 +245,7 @@ func TestDateUnmarshalUT0311L0x(t *testing.T) {
 	}{
 		{[]byte{0x20, 0x21, 0x02, 0x28}, ToDate(2021, time.February, 28), false},
 		{[]byte{0x00, 0x00, 0x00, 0x00}, Date{}, true},
-		{[]byte{0x00, 0x01, 0x01, 0x01}, ToDate(1, time.January, 1), false},
+		{[]byte{0x00, 0x01, 0x01, 0x01}, Date{}, true},
 	}
 
 	for _, v := range tests {
@@ -282,7 +282,6 @@ func TestDateUnmarshalUT0311L0xWithInvalidDate(t *testing.T) {
 
 func TestDatePtrUnmarshalUT0311L0x(t *testing.T) {
 	d20210228 := ToDate(2021, time.February, 28)
-	d00010101 := ToDate(1, time.January, 1)
 
 	tests := []struct {
 		bytes    []byte
@@ -291,7 +290,7 @@ func TestDatePtrUnmarshalUT0311L0x(t *testing.T) {
 	}{
 		{[]byte{0x20, 0x21, 0x02, 0x28}, &d20210228, false},
 		{[]byte{0x00, 0x00, 0x00, 0x00}, nil, true},
-		{[]byte{0x00, 0x01, 0x01, 0x01}, &d00010101, false},
+		{[]byte{0x00, 0x01, 0x01, 0x01}, nil, true},
 	}
 
 	for _, v := range tests {
