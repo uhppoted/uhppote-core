@@ -132,12 +132,12 @@ func TestUnmarshalGetCardWithPINByIndexResponse(t *testing.T) {
 	}
 
 	from := types.ToDate(2019, time.February, 3)
-	if reply.From != types.Date(from) {
+	if reply.From != from {
 		t.Errorf("Incorrect 'from date' - expected:%v, got:%v", from, reply.From)
 	}
 
 	to := types.ToDate(2019, time.December, 29)
-	if reply.To != types.Date(to) {
+	if reply.To != to {
 		t.Errorf("Incorrect 'to date' - expected:%v, got:%v", to, reply.To)
 	}
 
@@ -239,14 +239,14 @@ func TestUnmarshalGetCardByIdResponse(t *testing.T) {
 		t.Errorf("Incorrect 'card number' - expected:%v, got:%v", 6154412, reply.CardNumber)
 	}
 
-	from, _ := time.ParseInLocation("2006-01-02", "2019-02-03", time.Local)
-	if *reply.From != types.Date(from) {
-		t.Errorf("Incorrect 'from date' - expected:%s, got:%s", from.Format("2006-01-02"), reply.From)
+	from := types.ToDate(2019, time.February, 03)
+	if reply.From != from {
+		t.Errorf("Incorrect 'from date' - expected:%v, got:%v", from, reply.From)
 	}
 
-	to, _ := time.ParseInLocation("2006-01-02", "2019-12-29", time.Local)
-	if *reply.To != types.Date(to) {
-		t.Errorf("Incorrect 'to date' - expected:%s, got:%s", to.Format("2006-01-02"), reply.To)
+	to := types.ToDate(2019, time.December, 29)
+	if reply.To != to {
+		t.Errorf("Incorrect 'to date' - expected:%v, got:%v", to, reply.To)
 	}
 
 	if reply.Door1 != 0 {
@@ -296,14 +296,14 @@ func TestUnmarshalGetCardWithPINByIdResponse(t *testing.T) {
 		t.Errorf("Incorrect 'card number' - expected:%v, got:%v", 6154412, reply.CardNumber)
 	}
 
-	from, _ := time.ParseInLocation("2006-01-02", "2019-02-03", time.Local)
-	if *reply.From != types.Date(from) {
-		t.Errorf("Incorrect 'from date' - expected:%s, got:%s", from.Format("2006-01-02"), reply.From)
+	from := types.ToDate(2019, time.February, 3)
+	if reply.From != from {
+		t.Errorf("Incorrect 'from date' - expected:%v, got:%v", from, reply.From)
 	}
 
-	to, _ := time.ParseInLocation("2006-01-02", "2019-12-29", time.Local)
-	if *reply.To != types.Date(to) {
-		t.Errorf("Incorrect 'to date' - expected:%s, got:%s", to.Format("2006-01-02"), reply.To)
+	to := types.ToDate(2019, time.December, 29)
+	if reply.To != to {
+		t.Errorf("Incorrect 'to date' - expected:%v, got:%v", to, reply.To)
 	}
 
 	if reply.Door1 != 0 {
@@ -353,12 +353,12 @@ func TestUnmarshalGetCardByIdNotFoundResponse(t *testing.T) {
 		t.Errorf("Incorrect 'card number' - expected:%v, got:%v", 0, reply.CardNumber)
 	}
 
-	if reply.From != nil {
-		t.Errorf("Incorrect 'from date' - expected:%v, got:%v", nil, reply.From)
+	if !reply.From.IsZero() {
+		t.Errorf("Incorrect 'from date' - expected:%v, got:%v", types.Date{}, reply.From)
 	}
 
-	if reply.To != nil {
-		t.Errorf("Incorrect 'to date' - expected:%v, got:%v", nil, reply.To)
+	if !reply.To.IsZero() {
+		t.Errorf("Incorrect 'to date' - expected:%v, got:%v", types.Date{}, reply.To)
 	}
 
 	if reply.Door1 != 0 {
