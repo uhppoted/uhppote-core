@@ -87,6 +87,11 @@ func (d DateTime) MarshalUT0311L0x() ([]byte, error) {
 	return *encoded, nil
 }
 
+/*
+ * Unmarshalls invalid date/time values as a 'zero' date without an error on the grounds
+ * that it should be possible to retrieve information from a corrupted access controller.
+ * Applications are expected to check for valid date-times.
+ */
 func (d *DateTime) UnmarshalUT0311L0x(b []byte) (any, error) {
 	if bytes.Equal(b[0:7], []byte{0, 0, 0, 0, 0, 0, 0}) {
 		if d == nil {

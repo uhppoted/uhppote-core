@@ -8,6 +8,29 @@ import (
 	"time"
 )
 
+func TestDateString(t *testing.T) {
+	var zero = Date{}
+	var date = Date(time.Date(2021, time.February, 28, 12, 34, 56, 789, time.Local))
+
+	tests := []struct {
+		dt       interface{}
+		expected string
+	}{
+		{date, "2021-02-28"},
+		{&date, "2021-02-28"},
+		{zero, ""},
+		{&zero, ""},
+	}
+
+	for _, v := range tests {
+		s := fmt.Sprintf("%v", v.dt)
+
+		if s != v.expected {
+			t.Errorf("Invalid date string - expected:%v, got:%v", v.expected, s)
+		}
+	}
+}
+
 func TestDateFromString(t *testing.T) {
 	expected := Date(time.Date(2021, time.February, 28, 0, 0, 0, 0, time.Local))
 
@@ -21,21 +44,21 @@ func TestDateFromString(t *testing.T) {
 	}
 }
 
-func TestDateIsValid(t *testing.T) {
+func TestDateIsZero(t *testing.T) {
 	var zero = Date{}
 	var date = Date(time.Date(2021, time.February, 28, 12, 34, 56, 789, time.Local))
 
 	tests := []struct {
-		dt       Date
+		date     Date
 		expected bool
 	}{
-		{date, true},
-		{zero, false},
+		{date, false},
+		{zero, true},
 	}
 
 	for _, v := range tests {
-		if b := v.dt.IsValid(); b != v.expected {
-			t.Errorf("Date.IsValid returned incorrect value - expected:%v, got:%v", v.expected, b)
+		if b := v.date.IsZero(); b != v.expected {
+			t.Errorf("Date.IsZero returned incorrect value - expected:%v, got:%v", v.expected, date)
 		}
 	}
 }
@@ -71,29 +94,6 @@ func TestDateEquals(t *testing.T) {
 	for _, v := range tests {
 		if b := v.date.Equals(v.other); b != v.expected {
 			t.Errorf("Date.Equals returned incorrect value - expected:%v, got:%v", v.expected, b)
-		}
-	}
-}
-
-func TestDateString(t *testing.T) {
-	var zero = Date{}
-	var date = Date(time.Date(2021, time.February, 28, 12, 34, 56, 789, time.Local))
-
-	tests := []struct {
-		dt       interface{}
-		expected string
-	}{
-		{date, "2021-02-28"},
-		{&date, "2021-02-28"},
-		{zero, ""},
-		{&zero, ""},
-	}
-
-	for _, v := range tests {
-		s := fmt.Sprintf("%v", v.dt)
-
-		if s != v.expected {
-			t.Errorf("Invalid date string - expected:%v, got:%v", v.expected, s)
 		}
 	}
 }
@@ -224,7 +224,7 @@ func TestDateUnmarshalJSONFromEmptyString(t *testing.T) {
 }
 
 func TestDateMarshalUT0311L0xWithZeroValue(t *testing.T) {
-	expected := []byte{0x00, 0x01, 0x01, 0x01}
+	expected := []byte{0x00, 0x00, 0x00, 0x00}
 	date := Date{}
 
 	bytes, err := date.MarshalUT0311L0x()
@@ -237,17 +237,79 @@ func TestDateMarshalUT0311L0xWithZeroValue(t *testing.T) {
 	}
 }
 
-func TestDateUnmarshalUT0311L0xWithZeroValue(t *testing.T) {
-	expected := Date{}
-	date := Date{}
-
-	if d, err := date.UnmarshalUT0311L0x([]byte{0x00, 0x01, 0x01, 0x01}); err != nil {
-		t.Fatalf("Unexpected error unmarshaling Date (%v)", err)
-	} else {
-		date = *(d.(*Date))
+func TestDateUnmarshalUT0311L0x(t *testing.T) {
+	tests := []struct {
+		bytes    []byte
+		expected Date
+		isZero   bool
+	}{
+		{[]byte{0x20, 0x21, 0x02, 0x28}, ToDate(2021, time.February, 28), false},
+		{[]byte{0x00, 0x00, 0x00, 0x00}, Date{}, true},
+		{[]byte{0x00, 0x01, 0x01, 0x01}, ToDate(1, time.January, 1), false},
 	}
 
-	if !reflect.DeepEqual(date, expected) {
-		t.Errorf("Date incorrectly unmarshaled - expected:%v, got:%v", time.Time(expected), time.Time(date))
+	for _, v := range tests {
+		var date Date
+
+		if d, err := date.UnmarshalUT0311L0x(v.bytes); err != nil {
+			t.Errorf("Error unmarshalling %v (%v)", v.bytes, err)
+		} else if d.(*Date).IsZero() != v.isZero {
+			t.Errorf("Unmarshalled %v incorrect 'IsZero' - expected:%v, got:%v", v.bytes, v.isZero, d.(*Date).IsZero())
+		} else {
+			p := fmt.Sprintf("%v", d)
+			q := fmt.Sprintf("%v", v.expected)
+
+			if p != q {
+				t.Errorf("Invalid date - expected:%v, got:%v", q, p)
+			}
+		}
+	}
+}
+
+func TestDateUnmarshalUT0311L0xWithInvalidDate(t *testing.T) {
+	var bytes = []byte{0x20, 0x23, 0x13, 0x01}
+	var zero = Date{}
+	var date Date
+
+	if _, err := date.UnmarshalUT0311L0x(bytes); err != nil {
+		t.Errorf("Unexpected error unmarshalling invalid date, got %v", err)
+	} else if !date.IsZero() {
+		t.Errorf("Expected 'zero' date, got %v", date)
+	} else if date != zero {
+		t.Errorf("Expected 'zero' date, got %v", date)
+	}
+}
+
+func TestDatePtrUnmarshalUT0311L0x(t *testing.T) {
+	d20210228 := ToDate(2021, time.February, 28)
+	d00010101 := ToDate(1, time.January, 1)
+
+	tests := []struct {
+		bytes    []byte
+		expected *Date
+		isZero   bool
+	}{
+		{[]byte{0x20, 0x21, 0x02, 0x28}, &d20210228, false},
+		{[]byte{0x00, 0x00, 0x00, 0x00}, nil, true},
+		{[]byte{0x00, 0x01, 0x01, 0x01}, &d00010101, false},
+	}
+
+	for _, v := range tests {
+		var date *Date
+
+		if d, err := date.UnmarshalUT0311L0x(v.bytes); err != nil {
+			t.Errorf("Error unmarshalling %v (%v)", v.bytes, err)
+		} else if v.expected == nil && d != nil {
+			t.Errorf("Unmarshalled %v incorrect date - expected:%v, got:%v", v.bytes, v.expected, d)
+		} else if v.expected != nil && d.(*Date).IsZero() != v.isZero {
+			t.Errorf("Unmarshalled %v incorrect 'IsZero' - expected:%v, got:%v", v.bytes, v.isZero, d.(*Date).IsZero())
+		} else {
+			p := fmt.Sprintf("%v", d)
+			q := fmt.Sprintf("%v", v.expected)
+
+			if p != q {
+				t.Errorf("Invalid date - expected:%v, got:%v", q, p)
+			}
+		}
 	}
 }

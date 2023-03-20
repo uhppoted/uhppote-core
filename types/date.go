@@ -24,21 +24,13 @@ func DateFromString(s string) (Date, error) {
 	}
 }
 
-func (d Date) IsValid() bool {
-	return !time.Time(d).IsZero()
+func (d Date) IsZero() bool {
+	return time.Time(d).IsZero()
 }
 
 func (d Date) Equals(date Date) bool {
 	p := time.Time(d)
 	q := time.Time(date)
-
-	// fmt.Printf(">> %v %v %v y:%v,%v m:%v,%v d:%v,%v\n",
-	// 	p.Year() == q.Year(),
-	// 	p.Month() == q.Month(),
-	// 	p.Day() == q.Day(),
-	// 	p.Year(), q.Year(),
-	// 	p.Month(), q.Month(),
-	// 	p.Day(), q.Day())
 
 	return p.Year() == q.Year() && p.Month() == q.Month() && p.Day() == q.Day()
 }
@@ -94,16 +86,16 @@ func (d Date) Weekday() time.Weekday {
 }
 
 func (d Date) String() string {
-	if time.Time(d).IsZero() {
+	if d.IsZero() {
 		return ""
+	} else {
+		return time.Time(d).Format("2006-01-02")
 	}
-
-	return time.Time(d).Format("2006-01-02")
 }
 
 func (d Date) MarshalUT0311L0x() ([]byte, error) {
 	if time.Time(d).IsZero() {
-		return []byte{0x00, 0x01, 0x01, 0x01}, nil
+		return []byte{0x00, 0x00, 0x00, 0x00}, nil
 	}
 
 	encoded, err := bcd.Encode(time.Time(d).Format("20060102"))
@@ -116,26 +108,32 @@ func (d Date) MarshalUT0311L0x() ([]byte, error) {
 	return *encoded, nil
 }
 
+/*
+ * Unmarshalls invalid date values as a 'zero' date without an error on the grounds
+ * that it should be possible to retrieve information from a corrupted access controller.
+ * Applications are expected to check for valid dates.
+ */
 func (d *Date) UnmarshalUT0311L0x(bytes []byte) (any, error) {
 	decoded, err := bcd.Decode(bytes[0:4])
 	if err != nil {
 		return nil, err
 	}
 
-	if decoded == "00010101" {
-		date := Date{}
-
-		return &date, nil
+	if decoded == "00000000" {
+		if d == nil {
+			return nil, nil
+		} else {
+			return &Date{}, nil
+		}
 	}
 
-	date, err := time.ParseInLocation("20060102", decoded, time.Local)
-	if err != nil {
-		return nil, err
+	if date, err := time.ParseInLocation("20060102", decoded, time.Local); err != nil {
+		return &Date{}, nil
+	} else {
+		v := Date(date)
+
+		return &v, nil
 	}
-
-	v := Date(date)
-
-	return &v, nil
 }
 
 func (d Date) MarshalJSON() ([]byte, error) {
