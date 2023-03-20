@@ -19,8 +19,8 @@ func (u *uhppote) PutCard(deviceID uint32, card types.Card) (bool, error) {
 	request := messages.PutCardRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   card.CardNumber,
-		From:         *card.From,
-		To:           *card.To,
+		From:         card.From,
+		To:           card.To,
 		Door1:        uint8(card.Doors[1]),
 		Door2:        uint8(card.Doors[2]),
 		Door3:        uint8(card.Doors[3]),

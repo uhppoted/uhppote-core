@@ -11,8 +11,8 @@ import (
 func TestTimeProfileToString(t *testing.T) {
 	expected := "4 2021-04-01:2021-12-29 Mon,Tue,Thurs,Sat,Sun 08:30-09:45,11:35-13:15,14:01-17:59 19"
 
-	from := date("2021-04-01")
-	to := date("2021-12-29")
+	from := ToDate(2021, time.April, 1)
+	to := ToDate(2021, time.December, 29)
 	profile := TimeProfile{
 		ID:              4,
 		LinkedProfileID: 19,
@@ -64,8 +64,8 @@ func TestTimeProfileJSONMarshal(t *testing.T) {
   ]
 }`
 
-	from := date("2021-04-01")
-	to := date("2021-12-29")
+	from := ToDate(2021, time.April, 1)
+	to := ToDate(2021, time.December, 29)
 
 	profile := TimeProfile{
 		ID:              4,
@@ -99,8 +99,8 @@ func TestTimeProfileJSONMarshal(t *testing.T) {
 }
 
 func TestTimeProfileJSONUnmarshal(t *testing.T) {
-	from := date("2021-04-01")
-	to := date("2021-12-29")
+	from := ToDate(2021, time.April, 1)
+	to := ToDate(2021, time.December, 29)
 
 	expected := TimeProfile{
 		ID:              4,

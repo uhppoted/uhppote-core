@@ -7,8 +7,8 @@ import (
 
 type Card struct {
 	CardNumber uint32          `json:"card-number"`
-	From       *Date           `json:"start-date"`
-	To         *Date           `json:"end-date"`
+	From       Date            `json:"start-date"`
+	To         Date            `json:"end-date"`
 	Doors      map[uint8]uint8 `json:"doors"`
 	PIN        PIN             `json:"PIN,omitempty"`
 }
@@ -30,13 +30,17 @@ func (c Card) String() string {
 		}
 	}
 
-	from := "-"
-	if c.From != nil {
+	var from string
+	if c.From.IsZero() {
+		from = "-"
+	} else {
 		from = fmt.Sprintf("%v", c.From)
 	}
 
-	to := "-"
-	if c.To != nil {
+	var to string
+	if c.To.IsZero() {
+		to = "-"
+	} else {
 		to = fmt.Sprintf("%v", c.To)
 	}
 
@@ -50,8 +54,8 @@ func (c Card) String() string {
 func (c Card) MarshalJSON() ([]byte, error) {
 	card := struct {
 		CardNumber uint32          `json:"card-number"`
-		From       *Date           `json:"start-date"`
-		To         *Date           `json:"end-date"`
+		From       Date            `json:"start-date"`
+		To         Date            `json:"end-date"`
 		Doors      map[uint8]uint8 `json:"doors"`
 		PIN        PIN             `json:"PIN,omitempty"`
 	}{
@@ -95,8 +99,8 @@ func (c *Card) UnmarshalJSON(bytes []byte) error {
 	}
 
 	c.CardNumber = card.CardNumber
-	c.From = &from
-	c.To = &to
+	c.From = from
+	c.To = to
 	c.Doors = map[uint8]uint8{}
 	c.PIN = card.PIN
 

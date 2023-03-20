@@ -8,20 +8,13 @@ import (
 	"time"
 )
 
-var date = func(s string) Date {
-	d, _ := time.ParseInLocation("2006-01-02", s, time.Local)
-	return Date(d)
-}
-
 func TestCardToString(t *testing.T) {
 	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y"
 
-	from := date("2020-01-01")
-	to := date("2020-12-31")
 	card := Card{
 		CardNumber: 12345,
-		From:       &from,
-		To:         &to,
+		From:       ToDate(2020, time.January, 1),
+		To:         ToDate(2020, time.December, 31),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -40,12 +33,10 @@ func TestCardToString(t *testing.T) {
 func TestCardWithPINToString(t *testing.T) {
 	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y 987654"
 
-	from := date("2020-01-01")
-	to := date("2020-12-31")
 	card := Card{
 		CardNumber: 12345,
-		From:       &from,
-		To:         &to,
+		From:       ToDate(2020, time.January, 1),
+		To:         ToDate(2020, time.December, 31),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -65,12 +56,10 @@ func TestCardWithPINToString(t *testing.T) {
 func TestCardWithInvalidPINToString(t *testing.T) {
 	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y"
 
-	from := date("2020-01-01")
-	to := date("2020-12-31")
 	card := Card{
 		CardNumber: 12345,
-		From:       &from,
-		To:         &to,
+		From:       ToDate(2020, time.January, 1),
+		To:         ToDate(2020, time.December, 31),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -90,10 +79,9 @@ func TestCardWithInvalidPINToString(t *testing.T) {
 func TestCardToStringWithMissingFromDate(t *testing.T) {
 	expected := "12345    -          2020-12-31 Y N N Y"
 
-	to := date("2020-12-31")
 	card := Card{
 		CardNumber: 12345,
-		To:         &to,
+		To:         ToDate(2020, time.December, 31),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -112,10 +100,10 @@ func TestCardToStringWithMissingFromDate(t *testing.T) {
 func TestCardToStringWithMissingToDate(t *testing.T) {
 	expected := "12345    2020-01-01 -          Y N N Y"
 
-	from := date("2020-01-01")
+	from := ToDate(2020, time.January, 1)
 	card := Card{
 		CardNumber: 12345,
-		From:       &from,
+		From:       from,
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -134,12 +122,10 @@ func TestCardToStringWithMissingToDate(t *testing.T) {
 func TestCardToStringWithMissingDoors(t *testing.T) {
 	expected := "12345    2020-01-01 2020-12-31 Y N N N"
 
-	from := date("2020-01-01")
-	to := date("2020-12-31")
 	card := Card{
 		CardNumber: 12345,
-		From:       &from,
-		To:         &to,
+		From:       ToDate(2020, time.January, 1),
+		To:         ToDate(2020, time.December, 31),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -156,12 +142,10 @@ func TestCardToStringWithMissingDoors(t *testing.T) {
 func TestCardToStringWithExtraDoors(t *testing.T) {
 	expected := "12345    2020-01-01 2020-12-31 Y N N Y"
 
-	from := date("2020-01-01")
-	to := date("2020-12-31")
 	card := Card{
 		CardNumber: 12345,
-		From:       &from,
-		To:         &to,
+		From:       ToDate(2020, time.January, 1),
+		To:         ToDate(2020, time.December, 31),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -180,13 +164,11 @@ func TestCardToStringWithExtraDoors(t *testing.T) {
 }
 
 func TestCardMarshalJSON(t *testing.T) {
-	from := date("2020-01-01")
-	to := date("2020-12-31")
 
 	card := Card{
 		CardNumber: 12345,
-		From:       &from,
-		To:         &to,
+		From:       ToDate(2020, time.January, 1),
+		To:         ToDate(2020, time.December, 31),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -219,13 +201,10 @@ func TestCardMarshalJSON(t *testing.T) {
 }
 
 func TestCardWithPINMarshalJSON(t *testing.T) {
-	from := date("2020-01-01")
-	to := date("2020-12-31")
-
 	card := Card{
 		CardNumber: 12345,
-		From:       &from,
-		To:         &to,
+		From:       ToDate(2020, time.January, 1),
+		To:         ToDate(2020, time.December, 31),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -260,13 +239,10 @@ func TestCardWithPINMarshalJSON(t *testing.T) {
 }
 
 func TestCardWithInvalidPINMarshalJSON(t *testing.T) {
-	from := date("2020-01-01")
-	to := date("2020-12-31")
-
 	card := Card{
 		CardNumber: 12345,
-		From:       &from,
-		To:         &to,
+		From:       ToDate(2020, time.January, 1),
+		To:         ToDate(2020, time.December, 31),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -300,13 +276,10 @@ func TestCardWithInvalidPINMarshalJSON(t *testing.T) {
 }
 
 func TestUnmarshalCard(t *testing.T) {
-	from := date("2020-01-01")
-	to := date("2020-12-31")
-
 	expected := Card{
 		CardNumber: 12345,
-		From:       &from,
-		To:         &to,
+		From:       ToDate(2020, time.January, 1),
+		To:         ToDate(2020, time.December, 31),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -341,13 +314,10 @@ func TestUnmarshalCard(t *testing.T) {
 }
 
 func TestUnmarshalCardWithPIN(t *testing.T) {
-	from := date("2020-01-01")
-	to := date("2020-12-31")
-
 	expected := Card{
 		CardNumber: 12345,
-		From:       &from,
-		To:         &to,
+		From:       ToDate(2020, time.January, 1),
+		To:         ToDate(2020, time.December, 31),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -383,13 +353,10 @@ func TestUnmarshalCardWithPIN(t *testing.T) {
 }
 
 func TestUnmarshalCardWithMissingCardNumber(t *testing.T) {
-	from := date("2020-01-01")
-	to := date("2020-12-31")
-
 	expected := Card{
 		CardNumber: 0,
-		From:       &from,
-		To:         &to,
+		From:       ToDate(2020, time.January, 1),
+		To:         ToDate(2020, time.December, 31),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -460,13 +427,10 @@ func TestUnmarshalCardWithMissingEndDate(t *testing.T) {
 }
 
 func TestUnmarshalCardWithMissingDoors(t *testing.T) {
-	from := date("2020-01-01")
-	to := date("2020-12-31")
-
 	expected := Card{
 		CardNumber: 12345,
-		From:       &from,
-		To:         &to,
+		From:       ToDate(2020, time.January, 1),
+		To:         ToDate(2020, time.December, 31),
 		Doors: map[uint8]uint8{
 			1: 0,
 			2: 1,
@@ -497,13 +461,10 @@ func TestUnmarshalCardWithMissingDoors(t *testing.T) {
 }
 
 func TestUnmarshalCardWithInvalidDoors(t *testing.T) {
-	from := date("2020-01-01")
-	to := date("2020-12-31")
-
 	expected := Card{
 		CardNumber: 12345,
-		From:       &from,
-		To:         &to,
+		From:       ToDate(2020, time.January, 1),
+		To:         ToDate(2020, time.December, 31),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,

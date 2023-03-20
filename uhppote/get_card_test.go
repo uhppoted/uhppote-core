@@ -4,6 +4,7 @@ import (
 	"net"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/uhppoted/uhppote-core/types"
 )
@@ -18,8 +19,8 @@ func TestGetCardByID(t *testing.T) {
 
 	expected := types.Card{
 		CardNumber: 6129876,
-		From:       date("2020-01-01"),
-		To:         date("2020-12-31"),
+		From:       types.ToDate(2020, time.January, 1),
+		To:         types.ToDate(2020, time.December, 31),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -71,8 +72,8 @@ func TestGetCardByIndex(t *testing.T) {
 
 	expected := types.Card{
 		CardNumber: 6129876,
-		From:       date("2020-01-01"),
-		To:         date("2020-12-31"),
+		From:       types.ToDate(2020, time.January, 1),
+		To:         types.ToDate(2020, time.December, 31),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
