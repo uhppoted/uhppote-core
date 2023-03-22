@@ -36,13 +36,13 @@ func (u *uhppote) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) 
 		return nil, fmt.Errorf("incorrect card number in response - expected '%v', received '%v'", cardNumber, response.CardNumber)
 	}
 
-	if response.From.IsZero() {
-		return nil, fmt.Errorf("invalid 'from' date in response")
-	}
+	// if response.From.IsZero() {
+	// 	return nil, fmt.Errorf("invalid 'from' date in response")
+	// }
 
-	if response.To.IsZero() {
-		return nil, fmt.Errorf("invalid 'to' date in response")
-	}
+	// if response.To.IsZero() {
+	// 	return nil, fmt.Errorf("invalid 'to' date in response")
+	// }
 
 	card := types.Card{
 		CardNumber: response.CardNumber,
@@ -87,13 +87,13 @@ func (u *uhppote) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
 		return nil, nil
 	}
 
-	if response.From.IsZero() {
-		return nil, fmt.Errorf("invalid 'from' date in response")
-	}
+	// if response.From.IsZero() {
+	// 	return nil, fmt.Errorf("invalid 'from' date in response")
+	// }
 
-	if response.To.IsZero() {
-		return nil, fmt.Errorf("invalid 'to' date in response")
-	}
+	// if response.To.IsZero() {
+	// 	return nil, fmt.Errorf("invalid 'to' date in response")
+	// }
 
 	card := types.Card{
 		CardNumber: response.CardNumber,
