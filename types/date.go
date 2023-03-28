@@ -17,7 +17,9 @@ func ToDate(year int, month time.Month, day int) Date {
 }
 
 func DateFromString(s string) (Date, error) {
-	if date, err := time.ParseInLocation("2006-01-02", s, time.Local); err != nil {
+	if s == "" {
+		return Date{}, fmt.Errorf("blank date string")
+	} else if date, err := time.ParseInLocation("2006-01-02", s, time.Local); err != nil {
 		return Date{}, err
 	} else {
 		return Date(date), nil
