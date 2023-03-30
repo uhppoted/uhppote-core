@@ -1,7 +1,7 @@
 DIST     ?= development
 DEBUG    ?= --debug
 
-.DEFAULT_GOAL := test
+.DEFAULT_GOAL := debug
 .PHONY: bump
 .PHONY: update
 .PHONY: update-release
@@ -62,7 +62,7 @@ publish: release
 	gh release create "$(VERSION)" --draft --prerelease --title "$(VERSION)-beta" --notes-file release-notes.md
 
 debug: build
-	go test ./... -run TestUnmarshalDateTimeDebug
+	go test ./... -run TestValidateCard
 
 godoc:
 	godoc -http=:80	-index_interval=60s

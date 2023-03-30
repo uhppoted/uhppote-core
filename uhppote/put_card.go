@@ -2,6 +2,7 @@ package uhppote
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
@@ -10,6 +11,10 @@ import (
 func (u *uhppote) PutCard(deviceID uint32, card types.Card) (bool, error) {
 	if deviceID == 0 {
 		return false, fmt.Errorf("invalid device ID (%v)", deviceID)
+	}
+
+	if err := validateCard(card.CardNumber); err != nil {
+		return false, err
 	}
 
 	if card.PIN > 999999 {
@@ -40,4 +45,20 @@ func (u *uhppote) PutCard(deviceID uint32, card types.Card) (bool, error) {
 	}
 
 	return reply.Succeeded, nil
+}
+
+func validateCard(card uint32) error {
+	s := fmt.Sprintf("%08v", card)
+
+	if facilityCode, err := strconv.Atoi(s[:3]); err != nil {
+		return fmt.Errorf("invalid card number %v (%v)", card, err)
+	} else if cardNumber, err := strconv.Atoi(s[3:]); err != nil {
+		return fmt.Errorf("invalid card number %v (%v)", card, err)
+	} else if facilityCode < 0 || facilityCode > 255 {
+		return fmt.Errorf("%v: invalid facility code %v", card, facilityCode)
+	} else if cardNumber < 0 || cardNumber > 65535 {
+		return fmt.Errorf("%v: invalid card number %v", card, cardNumber)
+	}
+
+	return nil
 }

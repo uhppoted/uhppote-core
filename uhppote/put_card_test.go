@@ -84,3 +84,45 @@ func TestPutCardWithInvalidDeviceID(t *testing.T) {
 		t.Fatalf("Expected 'Invalid device ID' error, got %v", err)
 	}
 }
+
+func TestValidateCard(t *testing.T) {
+	tests := []struct {
+		card uint32
+		ok   bool
+	}{
+		{0, true},
+		{65535, true},
+		{65536, false},
+		{99999, false},
+
+		{100000, true},
+		{165535, true},
+		{165536, false},
+		{199999, false},
+
+		{25500000, true},
+		{25565535, true},
+		{25565536, false},
+		{25599999, false},
+
+		{25600000, false},
+		{25665535, false},
+		{25665536, false},
+		{25699999, false},
+
+		{99900000, false},
+		{99965535, false},
+		{99965536, false},
+		{99999999, false},
+	}
+
+	for _, test := range tests {
+		err := validateCard(test.card)
+
+		if test.ok && err != nil {
+			t.Errorf("validateCard failed for %v (%v)", test.card, err)
+		} else if !test.ok && err == nil {
+			t.Errorf("validateCard failed for %v (%v)", test.card, err)
+		}
+	}
+}
