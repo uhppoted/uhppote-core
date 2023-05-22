@@ -1,5 +1,13 @@
 # TODO
 
+- [ ] `set-interlock`
+      - [x] request
+      - [x] response
+      - [x] README
+      - [x] CHANGELOG
+
+- [x] `put-card`: validate card number is valid Wiegand-26
+
 - [ ] Check UHPPOTE encoding for revised Date implementation
       - [x] Should return DateTime{} for 0000...
       - [x] Should return SystemDate{} for 0000...
@@ -7,7 +15,6 @@
       - [x] Should return Date{} for 0000...
 
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
-- [ ] `put-card`: validate card number is valid Wiegand-26
 - [ ] What to do about bad/zero card numbers? e.g.
 ```
       8165537  2021-01-01 2021-12-31 Y N N N

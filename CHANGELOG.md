@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Added
+1. `set-interlock` extended function.
+
 ### Updated
 1. Reworkd `get-card-xxx` to use zero valued dates rather than pointers.
 2. Reworkd card `From` and `To` dates to not be pointers.
