@@ -1,9 +1,11 @@
 package messages
 
 import (
-	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
 	"reflect"
 	"testing"
+
+	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
+	"github.com/uhppoted/uhppote-core/types"
 )
 
 func TestMarshalSetInterlockRequest(t *testing.T) {
@@ -16,7 +18,7 @@ func TestMarshalSetInterlockRequest(t *testing.T) {
 
 	request := SetInterlockRequest{
 		SerialNumber: 405419896,
-		Interlock:    uint8(Reader1234),
+		Interlock:    uint8(types.Interlock1234),
 	}
 
 	m, err := codec.Marshal(request)
@@ -57,8 +59,8 @@ func TestFactoryUnmarshalSetInterlockRequest(t *testing.T) {
 		t.Errorf("Incorrect 'serial number' - expected:%v, got:%v\n", 405419896, rq.SerialNumber)
 	}
 
-	if rq.Interlock != uint8(Reader123) {
-		t.Errorf("Incorrect 'interlock' - expected:%v, got:%v\n", Reader123, rq.Interlock)
+	if rq.Interlock != 3 {
+		t.Errorf("Incorrect 'interlock' - expected:%v, got:%v\n", 3, rq.Interlock)
 	}
 }
 

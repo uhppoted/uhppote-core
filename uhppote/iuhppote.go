@@ -43,8 +43,9 @@ type IUHPPOTE interface {
 	SetEventIndex(deviceID, index uint32) (*types.EventIndexResult, error)
 	Listen(listener Listener, q chan os.Signal) error
 
-	OpenDoor(deviceID uint32, door uint8) (*types.Result, error)
-	SetPCControl(deviceID uint32, enable bool) (bool, error)
+	OpenDoor(controllerID uint32, door uint8) (*types.Result, error)
+	SetPCControl(controllerID uint32, enable bool) (bool, error)
+	SetInterlock(controllerID uint32, interlock types.Interlock) (bool, error)
 
 	// TODO: REMOVE (interim functions used by health-check)
 	DeviceList() map[uint32]Device
