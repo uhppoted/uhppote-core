@@ -240,8 +240,9 @@ controller has reverted to local control because no message has been received fr
 
 Sets the interlocking between doors, with support for the following operational modes:
 - `disabled`
+- `doors 1&2`
+- `doors 3&4`
 - `doors 1&2 and 3&4`
-- `doors 1&3 and 2&4`
 - `doors 1&2&3`
 - `doors 1&2&3&4`
 
