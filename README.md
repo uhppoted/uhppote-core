@@ -13,28 +13,29 @@ Supported operating systems:
 
 ## Releases
 
-| *Version* | *Description*                                                                             |
-| --------- | ----------------------------------------------------------------------------------------- |
-| v0.8.4    | Adds set-pc-control function and card keypad PIN support                                  |
-| v0.8.3    | Maintenance release                                                                       |
-| v0.8.2    | Bumping Go version to 1.19                                                                |
-| v0.8.1    | Maintenance release                                                                       |
-| v0.8.0    | Fixed Date unmarshalling for ""                                                           |
-| v0.7.3    | Reworked zero value for types.Date and types.DateTime                                     |
-| v0.7.2    | Replaced event rollover with simple indexes to match controller behaviour                 |
-| v0.7.1    | Added support for task list functions from the extended API                               |
-| v0.7.0    | Added support for time profiles from the extended API                                     |
-| v0.6.12   | Improved handling of concurrent requests and invalid responses                            |
-| v0.6.10   | Bumped version to 0.6.10 for initial `uhppoted-app-wild-apricot` release                  |
-| v0.6.8    | Improved internal support for UHPPOTE v6.62 firmware                                      |
-| v0.6.7    | Implements `record-special-events` for enabling and disabling door events                 |
-| v0.6.5    | Maintenance release for version compatibility with NodeRED module                         |
-| v0.6.4    | Added support for uhppoted-app-sheets                                                     |
-| v0.6.3    | Added support for MQTT ACL API                                                            |
-| v0.6.2    | Added support for REST ACL API                                                            |
-| v0.6.1    | Added support for CLI ACL commands                                                        |
-| v0.6.0    | Added `IDevice` interface to support `uhppoted-api` ACL functionality                     |
-| v0.5.1    | Initial release following restructuring into standalone Go *modules* and *git submodules* |
+| *Version* | *Description*                                                                              |
+| --------- | ------------------------------------------------------------------------------------------ |
+| v0.8.5    | Adds set-interlock function, uhppoted-app-db project and PicoW support in uhppoted-wiegand |
+| v0.8.4    | Adds set-pc-control function and card keypad PIN support                                   |
+| v0.8.3    | Maintenance release                                                                        |
+| v0.8.2    | Bumping Go version to 1.19                                                                 |
+| v0.8.1    | Maintenance release                                                                        |
+| v0.8.0    | Fixed Date unmarshalling for ""                                                            |
+| v0.7.3    | Reworked zero value for types.Date and types.DateTime                                      |
+| v0.7.2    | Replaced event rollover with simple indexes to match controller behaviour                  |
+| v0.7.1    | Added support for task list functions from the extended API                                |
+| v0.7.0    | Added support for time profiles from the extended API                                      |
+| v0.6.12   | Improved handling of concurrent requests and invalid responses                             |
+| v0.6.10   | Bumped version to 0.6.10 for initial `uhppoted-app-wild-apricot` release                   |
+| v0.6.8    | Improved internal support for UHPPOTE v6.62 firmware                                       |
+| v0.6.7    | Implements `record-special-events` for enabling and disabling door events                  |
+| v0.6.5    | Maintenance release for version compatibility with NodeRED module                          |
+| v0.6.4    | Added support for uhppoted-app-sheets                                                      |
+| v0.6.3    | Added support for MQTT ACL API                                                             |
+| v0.6.2    | Added support for REST ACL API                                                             |
+| v0.6.1    | Added support for CLI ACL commands                                                         |
+| v0.6.0    | Added `IDevice` interface to support `uhppoted-api` ACL functionality                      |
+| v0.5.1    | Initial release following restructuring into standalone Go *modules* and *git submodules*  |
 
 ## Development
 
