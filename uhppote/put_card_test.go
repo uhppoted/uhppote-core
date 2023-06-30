@@ -85,7 +85,7 @@ func TestPutCardWithInvalidDeviceID(t *testing.T) {
 	}
 }
 
-func TestValidateCard(t *testing.T) {
+func TestIsWiegand26(t *testing.T) {
 	tests := []struct {
 		card uint32
 		ok   bool
@@ -117,12 +117,10 @@ func TestValidateCard(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		err := validateCard(test.card)
+		ok := isWiegand26(test.card)
 
-		if test.ok && err != nil {
-			t.Errorf("validateCard failed for %v (%v)", test.card, err)
-		} else if !test.ok && err == nil {
-			t.Errorf("validateCard failed for %v (%v)", test.card, err)
+		if ok != test.ok {
+			t.Errorf("incorrect Wiegand-26 validation for %v - expected:%v, got:%v", test.card, test.ok, ok)
 		}
 	}
 }

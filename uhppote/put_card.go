@@ -8,13 +8,29 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *uhppote) PutCard(deviceID uint32, card types.Card) (bool, error) {
+func (u *uhppote) PutCard(deviceID uint32, card types.Card, formats ...types.CardFormat) (bool, error) {
 	if deviceID == 0 {
 		return false, fmt.Errorf("invalid device ID (%v)", deviceID)
 	}
 
-	if err := validateCard(card.CardNumber); err != nil {
-		return false, err
+	// ... card number validation
+	valid := false
+	for _, f := range formats {
+		switch f {
+		case types.Wiegand26:
+			if isWiegand26(card.CardNumber) {
+				valid = true
+			}
+
+		case types.WiegandAny:
+			if isWiegandAny(card.CardNumber) {
+				valid = true
+			}
+		}
+	}
+
+	if !valid && formats != nil {
+		return false, fmt.Errorf("invalid card number (%v)", card.CardNumber)
 	}
 
 	if card.PIN > 999999 {
@@ -47,18 +63,22 @@ func (u *uhppote) PutCard(deviceID uint32, card types.Card) (bool, error) {
 	return reply.Succeeded, nil
 }
 
-func validateCard(card uint32) error {
+func isWiegand26(card uint32) bool {
 	s := fmt.Sprintf("%08v", card)
 
 	if facilityCode, err := strconv.Atoi(s[:3]); err != nil {
-		return fmt.Errorf("invalid card number %v (%v)", card, err)
+		return false
 	} else if cardNumber, err := strconv.Atoi(s[3:]); err != nil {
-		return fmt.Errorf("invalid card number %v (%v)", card, err)
+		return false
 	} else if facilityCode < 0 || facilityCode > 255 {
-		return fmt.Errorf("%v: invalid facility code %v", card, facilityCode)
+		return false
 	} else if cardNumber < 0 || cardNumber > 65535 {
-		return fmt.Errorf("%v: invalid card number %v", card, cardNumber)
+		return false
 	}
 
-	return nil
+	return true
+}
+
+func isWiegandAny(card uint32) bool {
+	return true
 }

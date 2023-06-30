@@ -5,6 +5,13 @@ import (
 	"fmt"
 )
 
+type CardFormat uint8
+
+const (
+	WiegandAny CardFormat = iota
+	Wiegand26
+)
+
 type Card struct {
 	CardNumber uint32          `json:"card-number"`
 	From       Date            `json:"start-date"`

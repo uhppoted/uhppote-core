@@ -1,18 +1,9 @@
 # TODO
 
-- [ ] `set-interlock`
-      - [x] request
-      - [x] response
-      - [x] README
-      - [x] CHANGELOG
-
-- [x] `put-card`: validate card number is valid Wiegand-26
-
-- [ ] Check UHPPOTE encoding for revised Date implementation
-      - [x] Should return DateTime{} for 0000...
-      - [x] Should return SystemDate{} for 0000...
-      - [x] Unmarshal *types.DateTime as `<nil>`
-      - [x] Should return Date{} for 0000...
+- [x] Add support for Wiegand-34 (cf. https://github.com/uhppoted/uhppote-cli/issues/12)
+      - [x] `put-card` with card formats
+      - [x] ~~Wiegand-34 validation~~
+      - [x] _any_ validation
 
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
 - [ ] What to do about bad/zero card numbers? e.g.
