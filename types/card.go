@@ -12,6 +12,10 @@ const (
 	Wiegand26
 )
 
+func (f CardFormat) String() string {
+	return []string{"any", "Wiegand-26"}[f]
+}
+
 type Card struct {
 	CardNumber uint32          `json:"card-number"`
 	From       Date            `json:"start-date"`

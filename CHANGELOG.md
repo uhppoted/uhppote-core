@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Updated
+1. Reworked `put-card` implementation to allow for multiple card formats
+
 
 ## [0.8.5](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.5) - 2023-06-13
 

@@ -4,6 +4,7 @@
       - [x] `put-card` with card formats
       - [x] ~~Wiegand-34 validation~~
       - [x] _any_ validation
+      - [x] CHANGELOG
 
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
 - [ ] What to do about bad/zero card numbers? e.g.
