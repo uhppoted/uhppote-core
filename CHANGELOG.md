@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Added
+1. Implemented `activate-keypad` function.
+
 ### Updated
 1. Reworked `put-card` implementation to allow for multiple card formats
 

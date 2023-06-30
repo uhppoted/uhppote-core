@@ -6,6 +6,11 @@
       - [x] _any_ validation
       - [x] CHANGELOG
 
+- [x] Implement _Activate Keypad_ function (cf. https://github.com/uhppoted/uhppoted/issues/35)
+      - [x] Add to messages
+      - [x] CHANGELOG
+      - [x] README
+
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
 - [ ] What to do about bad/zero card numbers? e.g.
 ```

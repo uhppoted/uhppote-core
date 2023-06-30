@@ -29,6 +29,7 @@ var requests = map[byte]func() Request{
 	0x98: func() Request { return new(GetTimeProfileRequest) },
 	0xa0: func() Request { return new(SetPCControlRequest) },
 	0xa2: func() Request { return new(SetInterlockRequest) },
+	0xa4: func() Request { return new(ActivateAccessKeypadRequest) },
 	0xa6: func() Request { return new(ClearTaskListRequest) },
 	0xa8: func() Request { return new(AddTaskRequest) },
 	0xaa: func() Request { return new(SetFirstCardRequest) },
