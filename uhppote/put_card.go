@@ -13,23 +13,7 @@ func (u *uhppote) PutCard(deviceID uint32, card types.Card, formats ...types.Car
 		return false, fmt.Errorf("invalid device ID (%v)", deviceID)
 	}
 
-	// ... card number validation
-	valid := false
-	for _, f := range formats {
-		switch f {
-		case types.Wiegand26:
-			if isWiegand26(card.CardNumber) {
-				valid = true
-			}
-
-		case types.WiegandAny:
-			if isWiegandAny(card.CardNumber) {
-				valid = true
-			}
-		}
-	}
-
-	if !valid && formats != nil {
+	if !isCardNumberValid(card.CardNumber, formats...) {
 		return false, fmt.Errorf("invalid card number (%v)", card.CardNumber)
 	}
 
@@ -61,6 +45,28 @@ func (u *uhppote) PutCard(deviceID uint32, card types.Card, formats ...types.Car
 	}
 
 	return reply.Succeeded, nil
+}
+
+func isCardNumberValid(cardNumber uint32, formats ...types.CardFormat) bool {
+	if len(formats) == 0 {
+		return true
+	}
+
+	for _, f := range formats {
+		switch f {
+		case types.Wiegand26:
+			if isWiegand26(cardNumber) {
+				return true
+			}
+
+		case types.WiegandAny:
+			if isWiegandAny(cardNumber) {
+				return true
+			}
+		}
+	}
+
+	return false
 }
 
 func isWiegand26(card uint32) bool {
