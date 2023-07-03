@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 )
 
@@ -11,6 +12,8 @@ const (
 	WiegandAny CardFormat = iota
 	Wiegand26
 )
+
+var re = regexp.MustCompile(`[ \-]`)
 
 func (f CardFormat) String() string {
 	return []string{"any", "Wiegand-26"}[f]
@@ -24,10 +27,10 @@ func (f *CardFormat) UnmarshalConf(tag string, values map[string]string) (any, e
 	if v, ok := values[tag]; ok && v != "" {
 		if strings.ToLower(v) == "any" {
 			*f = WiegandAny
-		} else if strings.ToLower(v) == "wiegand-26" {
+		} else if strings.ToLower(re.ReplaceAllString(v, "")) == "wiegand26" {
 			*f = Wiegand26
 		}
 	}
 
-	return f, nil
+	return *f, nil
 }

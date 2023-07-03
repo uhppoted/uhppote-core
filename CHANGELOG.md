@@ -6,7 +6,7 @@
 1. Implemented `activate-keypad` function.
 
 ### Updated
-1. Reworked `put-card` implementation to allow for multiple card formats
+1. Reworked `put-card` implementation to allow for validation against multiple card formats.
 
 
 ## [0.8.5](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.5) - 2023-06-13
