@@ -3,7 +3,6 @@ package types
 import (
 	"fmt"
 	"regexp"
-	"strings"
 )
 
 type CardFormat uint8
@@ -13,7 +12,8 @@ const (
 	Wiegand26
 )
 
-var re = regexp.MustCompile(`[ \-]`)
+var wAny = regexp.MustCompile(`(?i)\s*any\s*`)
+var w26 = regexp.MustCompile(`(?i)\s*wiegand([ \-])?26\s*`)
 
 func (f CardFormat) String() string {
 	return []string{"any", "Wiegand-26"}[f]
@@ -25,10 +25,12 @@ func (f CardFormat) MarshalConf(tag string) ([]byte, error) {
 
 func (f *CardFormat) UnmarshalConf(tag string, values map[string]string) (any, error) {
 	if v, ok := values[tag]; ok && v != "" {
-		if strings.ToLower(v) == "any" {
+		if wAny.MatchString(v) {
 			*f = WiegandAny
-		} else if strings.ToLower(re.ReplaceAllString(v, "")) == "wiegand26" {
+		} else if w26.MatchString(v) {
 			*f = Wiegand26
+		} else {
+			return WiegandAny, fmt.Errorf("invalid card format (%v)", v)
 		}
 	}
 

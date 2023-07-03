@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestCardFormatUmarshalConf(t *testing.T) {
+func TestValidCardFormatUmarshalConf(t *testing.T) {
 	tests := []struct {
 		format   string
 		expected CardFormat
@@ -33,6 +33,28 @@ func TestCardFormatUmarshalConf(t *testing.T) {
 			t.Errorf("incorrected unmarshalled card format - expected:%#v, got:%#v", test.expected, v)
 		} else if f != test.expected {
 			t.Errorf("incorrected unmarshalled card format - expected:%v, got:%v", test.expected, f)
+		}
+	}
+}
+
+func TestInvalidCardFormatUmarshalConf(t *testing.T) {
+	tests := []struct {
+		format string
+	}{
+		{"none"},
+		{"anny"},
+		{"Wiegand#26"},
+		{"Wiegand-34"},
+	}
+
+	for _, test := range tests {
+		var f CardFormat
+		var values = map[string]string{
+			"card.format": test.format,
+		}
+
+		if _, err := f.UnmarshalConf("card.format", values); err == nil {
+			t.Fatalf("expeced error unmarshalling invalid card format '%v', got:%v", test.format, err)
 		}
 	}
 }
