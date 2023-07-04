@@ -46,6 +46,7 @@ type IUHPPOTE interface {
 	OpenDoor(controllerID uint32, door uint8) (*types.Result, error)
 	SetPCControl(controllerID uint32, enable bool) (bool, error)
 	SetInterlock(controllerID uint32, interlock types.Interlock) (bool, error)
+	ActivateKeypads(controllerID uint32, readers map[uint8]bool) (bool, error)
 
 	// TODO: REMOVE (interim functions used by health-check)
 	DeviceList() map[uint32]Device
