@@ -93,7 +93,7 @@ go build -trimpath -o bin ./...
 - [`SetEventIndex`](#seteventindex)
 - [`OpenDoor`](#opendoor)
 - [`SetPCControl`](#setpccontrol)
-- [`ActivateKeypad`](#activatekeypad)
+- [`ActivateKeypads`](#activatekeypads)
 - [`SetInterlock`](#setinterlock)
 - [`Listen`](#listen)
 
@@ -245,9 +245,9 @@ communication is not required to be a 'set-pc-control' command - any command is 
 controller has reverted to local control because no message has been received from the host for more than
 30 seconds, any subsequent communication from the remote host will re-establish remote control mode again.
 
-#### `ActivateKeypad`
+#### `ActivateKeypads`
 
-Enables or disables the reader access keypads. 
+Enables or disables the reader access keypads.
 
 #### `SetInterlock`
 

@@ -3,7 +3,7 @@
 ## Unreleased
 
 ### Added
-1. Implemented `activate-keypad` function.
+1. Implemented `activate-keypads` function.
 
 ### Updated
 1. Reworked `put-card` implementation to allow for validation against multiple card formats.
