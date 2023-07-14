@@ -58,6 +58,30 @@ func (tt TaskType) MarshalJSON() ([]byte, error) {
 	return json.Marshal(tt.String())
 }
 
+/*
+Unmarshals a TaskType from a JSON field that may be either a numeric task type ID
+or a task description string. Numeric task type IDs range from 1..13, corresponding
+to the tasks:
+
+- control door
+- unlock door
+- lock door
+- disable time profile
+- enable time profile
+- enable card, no password
+- enable card+in password
+- enable card+password
+- enable more cards
+- disable more cards
+- trigger once
+- disable push button
+- enable push button
+
+Task description strings are case- and space-insensitive.
+
+Note that the task type IDs used by the UHPPOTE range from 0..12 - the uhppote-core
+'bumps' this by one so that the default JSON value of 0 can be discarded as invalid.
+*/
 func (tt *TaskType) UnmarshalJSON(b []byte) error {
 	// ... numeric task type?
 	if regexp.MustCompile("^[0-9]+$").Match(b) {
