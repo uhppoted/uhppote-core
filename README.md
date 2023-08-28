@@ -15,7 +15,8 @@ Supported operating systems:
 
 | *Version* | *Description*                                                                              |
 | --------- | ------------------------------------------------------------------------------------------ |
-| v0.8.5    | Adds set-interlock function, uhppoted-app-db project and PicoW support in uhppoted-wiegand |
+| v0.8.6    | Adds activate-keypads function                                                             |
+| v0.8.5    | Adds set-interlock function                                                                |
 | v0.8.4    | Adds set-pc-control function and card keypad PIN support                                   |
 | v0.8.3    | Maintenance release                                                                        |
 | v0.8.2    | Bumping Go version to 1.19                                                                 |
