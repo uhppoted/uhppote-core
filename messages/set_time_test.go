@@ -1,11 +1,12 @@
 package messages
 
 import (
-	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
-	"github.com/uhppoted/uhppote-core/types"
 	"reflect"
 	"testing"
 	"time"
+
+	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
+	"github.com/uhppoted/uhppote-core/types"
 )
 
 func TestMarshalSetTimeRequest(t *testing.T) {
@@ -46,16 +47,20 @@ func TestFactoryUnmarshalSetTimeRequest(t *testing.T) {
 	}
 
 	if request == nil {
-		t.Fatalf("Unexpected request: %v\n", request)
+		t.Fatalf("Unexpected request: %v", request)
 	}
 
 	rq, ok := request.(*SetTimeRequest)
 	if !ok {
-		t.Fatalf("Invalid request type - expected:%T, got: %T\n", &SetTimeRequest{}, request)
+		t.Fatalf("Invalid request type - expected:%T, got: %T", &SetTimeRequest{}, request)
 	}
 
 	if rq.MsgType != 0x30 {
-		t.Errorf("Incorrect 'message type' from valid message: %02x\n", rq.MsgType)
+		t.Errorf("Incorrect 'message type' from valid message: %02x", rq.MsgType)
+	}
+
+	if rq.SerialNumber != 423187757 {
+		t.Errorf("Incorrect 'serial number' from valid message - expected:%v, got:%v", 423187757, rq.SerialNumber)
 	}
 }
 
@@ -75,16 +80,16 @@ func TestUnmarshalSetTimeResponse(t *testing.T) {
 	}
 
 	if reply.MsgType != 0x30 {
-		t.Errorf("Incorrect 'message type' - expected:%02X, got:%02x\n", 0x30, reply.MsgType)
+		t.Errorf("Incorrect 'message type' - expected:%02x, got:%02x", 0x30, reply.MsgType)
 	}
 
 	if reply.SerialNumber != 423187757 {
-		t.Errorf("Incorrect 'serial number' from valid message: %v\n", reply.SerialNumber)
+		t.Errorf("Incorrect 'serial number' from valid message: %v", reply.SerialNumber)
 	}
 
 	datetime, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-12-29 12:34:56", time.Local)
 	if reply.DateTime != types.DateTime(datetime) {
-		t.Errorf("Incorrect 'date/time' - expected:%v, got:%v\n", datetime.Format("2006-01-02 15:04:05"), reply.DateTime)
+		t.Errorf("Incorrect 'date/time' - expected:%v, got:%v", datetime.Format("2006-01-02 15:04:05"), reply.DateTime)
 	}
 }
 
@@ -98,27 +103,27 @@ func TestFactoryUnmarshalSetTimeResponse(t *testing.T) {
 
 	response, err := UnmarshalResponse(message)
 	if err != nil {
-		t.Fatalf("Unexpected error: %v\n", err)
+		t.Fatalf("Unexpected error: %v", err)
 	} else if response == nil {
-		t.Fatalf("Unexpected response: %v\n", response)
+		t.Fatalf("Unexpected response: %v", response)
 	}
 
 	reply, ok := response.(*SetTimeResponse)
 	if !ok {
-		t.Fatalf("Invalid response type - expected:%T, got: %T\n", &SetTimeResponse{}, response)
+		t.Fatalf("Invalid response type - expected:%T, got: %T", &SetTimeResponse{}, response)
 	}
 
 	if reply.MsgType != 0x30 {
-		t.Errorf("Incorrect 'message type' - expected:%02X, got:%02x\n", 0x30, reply.MsgType)
+		t.Errorf("Incorrect 'message type' - expected:%02x, got:%02x", 0x30, reply.MsgType)
 	}
 
 	if reply.SerialNumber != 423187757 {
-		t.Errorf("Incorrect 'serial number' from valid message: %v\n", reply.SerialNumber)
+		t.Errorf("Incorrect 'serial number' from valid message: %v", reply.SerialNumber)
 	}
 
 	datetime, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-12-29 12:34:56", time.Local)
 	if reply.DateTime != types.DateTime(datetime) {
-		t.Errorf("Incorrect 'date/time' - expected:%v, got:%v\n", datetime.Format("2006-01-02 15:04:05"), reply.DateTime)
+		t.Errorf("Incorrect 'date/time' - expected:%v, got:%v", datetime.Format("2006-01-02 15:04:05"), reply.DateTime)
 	}
 }
 

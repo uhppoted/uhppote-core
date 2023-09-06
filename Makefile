@@ -1,7 +1,7 @@
 DIST     ?= development
 DEBUG    ?= --debug
 
-.DEFAULT_GOAL := debug
+.DEFAULT_GOAL := test
 .PHONY: bump
 .PHONY: update
 .PHONY: update-release

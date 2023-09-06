@@ -1,25 +1,15 @@
 # TODO
 
-- [x] Add support for Wiegand-34 (cf. https://github.com/uhppoted/uhppote-cli/issues/12)
-      - [x] `put-card` with card formats
-      - [x] ~~Wiegand-34 validation~~
-      - [x] _any_ validation
-      - [x] CHANGELOG
 
-- [x] Implement _Activate Keypad_ function (cf. https://github.com/uhppoted/uhppoted/issues/35)
-      - [x] Add to messages
+- [x] Implement _SetSuperPassword_ function (cf. https://github.com/uhppoted/uhppoted/issues/40)
+      - [x] messages
       - [x] CHANGELOG
       - [x] README
+      - [x] godoc
+
 
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
-- [ ] What to do about bad/zero card numbers? e.g.
-```
-      8165537  2021-01-01 2021-12-31 Y N N N
-      8165539  2021-01-01 2021-12-31 N N N N
-      8165538  2023-01-01 2023-12-31 Y N Y 29 7531
-      192837465 2023-01-01 2023-12-31 Y N 55 Y 7531
-      4294967295
-```
+- [ ] `put-card`: error on bad card numbers (0,0xffffffff,0x00ffffff)
 
 ## TODO
 
