@@ -17,7 +17,7 @@ import (
 // from the host for more than 30 seconds, any subsequent communication from the remote host
 // will re-establish remote control again.
 //
-// Returns true if the controller 'PC control' was successfully enabled or disabled,
+// Returns true if the controller 'PC control' was successfully enabled (or disabled),
 // false if the request failed for any reason. Returns an error if the request could not
 // be sent or the response is invalid.
 func (u *uhppote) SetPCControl(deviceID uint32, enable bool) (bool, error) {

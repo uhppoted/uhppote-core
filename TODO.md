@@ -3,6 +3,7 @@
 
 - [x] Implement _SetSuperPassword_ function (cf. https://github.com/uhppoted/uhppoted/issues/40)
       - [x] messages
+      - [x] `uhppoted.SetSuperPassword`
       - [x] CHANGELOG
       - [x] README
       - [x] godoc

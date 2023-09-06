@@ -19,7 +19,6 @@ type IUHPPOTE interface {
 	SetTime(deviceID uint32, datetime time.Time) (*types.Time, error)
 	GetDoorControlState(deviceID uint32, door byte) (*types.DoorControlState, error)
 	SetDoorControlState(deviceID uint32, door uint8, state types.ControlState, delay uint8) (*types.DoorControlState, error)
-	RecordSpecialEvents(deviceID uint32, enable bool) (bool, error)
 
 	GetStatus(deviceID uint32) (*types.Status, error)
 
@@ -38,15 +37,50 @@ type IUHPPOTE interface {
 	AddTask(deviceID uint32, task types.Task) (bool, error)
 	RefreshTaskList(deviceID uint32) (bool, error)
 
+	// Sends a RecordSpecialEvents request to the designated controller, to enable or
+	// disable door open, door closed and door button pressed events.
+	//
+	// Returns true if the controller 'record special events' flag was updated, false
+	// if the request failed for any reason. Returns an error if the request could not
+	// be sent or the response is invalid.
+	RecordSpecialEvents(deviceID uint32, enable bool) (bool, error)
+
 	GetEvent(deviceID, index uint32) (*types.Event, error)
 	GetEventIndex(deviceID uint32) (*types.EventIndex, error)
 	SetEventIndex(deviceID, index uint32) (*types.EventIndexResult, error)
 	Listen(listener Listener, q chan os.Signal) error
 
-	OpenDoor(controllerID uint32, door uint8) (*types.Result, error)
+	OpenDoor(controllerID uint32, door uint8) (*types.Result, error) // remotely opens door
+
+	// Sends a SetPCControl request to the designated controller, to enable or disable
+	// remote host control of access.
+	//
+	// The access controller expects the host to communicate at least once every 30 seconds
+	// otherwise it reverts to local control of access using the stored list of cards (the
+	// communication is not required to be a 'set-pc-control' command - any command is sufficient).
+	// If the access controller has reverted to local control because no message has been received
+	// from the host for more than 30 seconds, any subsequent communication from the remote host
+	// will re-establish remote control again.
+	//
+	// Returns true if the controller 'PC control' was successfully enabled (or disabled),
+	// false if the request failed for any reason. Returns an error if the request could not
+	// be sent or the response is invalid.
 	SetPCControl(controllerID uint32, enable bool) (bool, error)
-	SetInterlock(controllerID uint32, interlock types.Interlock) (bool, error)
-	ActivateKeypads(controllerID uint32, readers map[uint8]bool) (bool, error)
+
+	SetInterlock(controllerID uint32, interlock types.Interlock) (bool, error) // sets door interlock mode
+	ActivateKeypads(controllerID uint32, readers map[uint8]bool) (bool, error) // enables/disables reader keypads
+
+	// Sends a SetSuperPassword request to the designated controller, to set the override
+	// PIN codes for a door managed by the access controller.
+	//
+	// Each door may be individually assigned up to four super password, with valid passwords
+	// being in the range [1..999999]. The function uses the first four passwords from the
+	// supplied list. Invalid passwords are disabled by setting the password to 0 (disabled).
+	// If the supplied list contains less than 4 passwords, the remaining entries on the
+	// controller will be set to 0 (disabled).
+	//
+	// Returns true if the super passwords were accepted by the access controller.
+	SetSuperPassword(controllerID uint32, door uint8, passwords []uint32) (bool, error)
 
 	// TODO: REMOVE (interim functions used by health-check)
 	DeviceList() map[uint32]Device

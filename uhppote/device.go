@@ -5,14 +5,17 @@ import (
 	"time"
 )
 
+// Configuration information for an access controller declared in the common
+// uhppoted.conf configuration.
 type Device struct {
-	Name     string
-	DeviceID uint32
-	Address  *net.UDPAddr
-	Doors    []string
-	TimeZone *time.Location
+	Name     string         // controller name
+	DeviceID uint32         // controller serial number
+	Address  *net.UDPAddr   // controller IPv4 address
+	Doors    []string       // controller door names (required for ACL functions)
+	TimeZone *time.Location // controller timezone (required when controller is located in a different time zone to the application)
 }
 
+// Convenience function to instantiate a configured controller from the information in a configuration file.
 func NewDevice(name string, serialNumber uint32, address *net.UDPAddr, doors []string) *Device {
 	return &Device{
 		Name:     name,
@@ -23,6 +26,7 @@ func NewDevice(name string, serialNumber uint32, address *net.UDPAddr, doors []s
 	}
 }
 
+// Returns a deep copy of the configured controller information.
 func (d Device) Clone() Device {
 	device := Device{
 		Name:     d.Name,
@@ -45,6 +49,8 @@ func (d Device) Clone() Device {
 	return device
 }
 
+// Safe function to get a controller serial number - returns 0 if the
+// device is nil.
 func (d *Device) ID() uint32 {
 	if d != nil {
 		return d.DeviceID
