@@ -70,7 +70,7 @@ type IUHPPOTE interface {
 	SetInterlock(controllerID uint32, interlock types.Interlock) (bool, error) // sets door interlock mode
 	ActivateKeypads(controllerID uint32, readers map[uint8]bool) (bool, error) // enables/disables reader keypads
 
-	// Sends a SetSuperPassword request to the designated controller, to set the override
+	// Sends a SetSuperPasswords request to the designated controller, to set the override
 	// PIN codes for a door managed by the access controller.
 	//
 	// Each door may be individually assigned up to four super password, with valid passwords
@@ -80,7 +80,7 @@ type IUHPPOTE interface {
 	// controller will be set to 0 (disabled).
 	//
 	// Returns true if the super passwords were accepted by the access controller.
-	SetSuperPassword(controllerID uint32, door uint8, passwords ...uint32) (bool, error)
+	SetSuperPasswords(controllerID uint32, door uint8, passwords ...uint32) (bool, error)
 
 	// TODO: REMOVE (interim functions used by health-check)
 	DeviceList() map[uint32]Device

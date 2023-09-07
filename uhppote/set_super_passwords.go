@@ -7,7 +7,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-// Sends a SetSuperPassword request to the designated controller, to set the override
+// Sends a SetSuperPasswords request to the designated controller, to set the override
 // PIN codes for a door managed by the access controller.
 //
 // Each door may be individually assigned up to four super password, with valid passwords
@@ -17,7 +17,7 @@ import (
 // controller will be set to 0 (disabled).
 //
 // Returns true if the super passwords were accepted by the access controller.
-func (u *uhppote) SetSuperPassword(controller uint32, door uint8, passwords ...uint32) (bool, error) {
+func (u *uhppote) SetSuperPasswords(controller uint32, door uint8, passwords ...uint32) (bool, error) {
 	if controller == 0 {
 		return false, fmt.Errorf("invalid controller ID (%v)", controller)
 	}
@@ -26,7 +26,7 @@ func (u *uhppote) SetSuperPassword(controller uint32, door uint8, passwords ...u
 		return false, fmt.Errorf("invalid controller door (%v) - valid range is 1..4", door)
 	}
 
-	request := messages.SetSuperPasswordRequest{
+	request := messages.SetSuperPasswordsRequest{
 		SerialNumber: types.SerialNumber(controller),
 		Door:         door,
 		Password1:    0,
@@ -51,7 +51,7 @@ func (u *uhppote) SetSuperPassword(controller uint32, door uint8, passwords ...u
 		request.Password4 = passwords[3]
 	}
 
-	response := messages.SetSuperPasswordResponse{}
+	response := messages.SetSuperPasswordsResponse{}
 
 	err := u.send(controller, request, &response)
 	if err != nil {

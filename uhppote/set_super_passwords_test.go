@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestSetSuperPassword(t *testing.T) {
+func TestSetSuperPasswords(t *testing.T) {
 	message := []byte{
 		0x17, 0x8c, 0x00, 0x00, 0x78, 0x37, 0x2a, 0x18, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -22,7 +22,7 @@ func TestSetSuperPassword(t *testing.T) {
 		},
 	}
 
-	ok, err := u.SetSuperPassword(405419896, 3, []uint32{12345, 0, 1000000, 999999}...)
+	ok, err := u.SetSuperPasswords(405419896, 3, []uint32{12345, 0, 1000000, 999999}...)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from SetSuperPassword (%v)", err)
 	}
@@ -32,10 +32,10 @@ func TestSetSuperPassword(t *testing.T) {
 	}
 }
 
-func TestSetPCControlWithInvalidControllerID(t *testing.T) {
+func TestSetSuperPasswordsWithInvalidControllerID(t *testing.T) {
 	u := uhppote{}
 
-	_, err := u.SetSuperPassword(0, 3, []uint32{12345, 0, 999999, 1000000}...)
+	_, err := u.SetSuperPasswords(0, 3, []uint32{12345, 0, 999999, 1000000}...)
 	if err == nil {
 		t.Fatalf("Expected 'Invalid device ID' error, got %v", err)
 	}

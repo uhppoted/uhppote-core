@@ -21,7 +21,7 @@ var requests = map[byte]func() Request{
 	0x82: func() Request { return new(GetDoorControlStateRequest) },
 	0x88: func() Request { return new(SetTimeProfileRequest) },
 	0x8a: func() Request { return new(ClearTimeProfilesRequest) },
-	0x8c: func() Request { return new(SetSuperPasswordRequest) },
+	0x8c: func() Request { return new(SetSuperPasswordsRequest) },
 	0x8e: func() Request { return new(RecordSpecialEventsRequest) },
 	0x90: func() Request { return new(SetListenerRequest) },
 	0x92: func() Request { return new(GetListenerRequest) },

@@ -3,7 +3,7 @@
 ## Unreleased
 
 ### Added
-1. Implemented `set-super-password` function.
+1. Implemented `set-super-passwords` function.
 
 
 ## [0.8.6](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.6) - 2023-08-30
