@@ -17,7 +17,7 @@ import (
 // controller will be set to 0 (disabled).
 //
 // Returns true if the super passwords were accepted by the access controller.
-func (u *uhppote) SetSuperPassword(controller uint32, door uint8, passwords []uint32) (bool, error) {
+func (u *uhppote) SetSuperPassword(controller uint32, door uint8, passwords ...uint32) (bool, error) {
 	if controller == 0 {
 		return false, fmt.Errorf("invalid controller ID (%v)", controller)
 	}

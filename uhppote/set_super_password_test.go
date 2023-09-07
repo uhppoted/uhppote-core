@@ -22,7 +22,7 @@ func TestSetSuperPassword(t *testing.T) {
 		},
 	}
 
-	ok, err := u.SetSuperPassword(405419896, 3, []uint32{12345, 0, 1000000, 999999})
+	ok, err := u.SetSuperPassword(405419896, 3, []uint32{12345, 0, 1000000, 999999}...)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from SetSuperPassword (%v)", err)
 	}
@@ -35,7 +35,7 @@ func TestSetSuperPassword(t *testing.T) {
 func TestSetPCControlWithInvalidControllerID(t *testing.T) {
 	u := uhppote{}
 
-	_, err := u.SetSuperPassword(0, 3, []uint32{12345, 0, 999999, 1000000})
+	_, err := u.SetSuperPassword(0, 3, []uint32{12345, 0, 999999, 1000000}...)
 	if err == nil {
 		t.Fatalf("Expected 'Invalid device ID' error, got %v", err)
 	}

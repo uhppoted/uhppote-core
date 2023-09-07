@@ -80,7 +80,7 @@ type IUHPPOTE interface {
 	// controller will be set to 0 (disabled).
 	//
 	// Returns true if the super passwords were accepted by the access controller.
-	SetSuperPassword(controllerID uint32, door uint8, passwords []uint32) (bool, error)
+	SetSuperPassword(controllerID uint32, door uint8, passwords ...uint32) (bool, error)
 
 	// TODO: REMOVE (interim functions used by health-check)
 	DeviceList() map[uint32]Device
