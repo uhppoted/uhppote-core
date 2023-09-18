@@ -50,6 +50,17 @@ type IUHPPOTE interface {
 	SetEventIndex(deviceID, index uint32) (*types.EventIndexResult, error)
 	Listen(listener Listener, q chan os.Signal) error
 
+	// Sends a SetDoorPasscodes request to the designated controller, to set the override
+	// PIN codes for a door managed by the access controller.
+	//
+	// Each door may be individually assigned up to four passcodes, with valid codes being
+	// in the range [1..999999]. The function uses the first four codes from the supplied
+	// and invalid codes are replaced by 0 (disabled). If the supplied list contains less
+	// than four codes, the remaining entries on the controller will be set to 0 (disabled).
+	//
+	// Returns true if the door passcodes were accepted by the access controller.
+	SetDoorPasscodes(controllerID uint32, door uint8, passcodes ...uint32) (bool, error)
+
 	OpenDoor(controllerID uint32, door uint8) (*types.Result, error) // remotely opens door
 
 	// Sends a SetPCControl request to the designated controller, to enable or disable
@@ -69,18 +80,6 @@ type IUHPPOTE interface {
 
 	SetInterlock(controllerID uint32, interlock types.Interlock) (bool, error) // sets door interlock mode
 	ActivateKeypads(controllerID uint32, readers map[uint8]bool) (bool, error) // enables/disables reader keypads
-
-	// Sends a SetSuperPasswords request to the designated controller, to set the override
-	// PIN codes for a door managed by the access controller.
-	//
-	// Each door may be individually assigned up to four super password, with valid passwords
-	// being in the range [1..999999]. The function uses the first four passwords from the
-	// supplied list. Invalid passwords are disabled by setting the password to 0 (disabled).
-	// If the supplied list contains less than 4 passwords, the remaining entries on the
-	// controller will be set to 0 (disabled).
-	//
-	// Returns true if the super passwords were accepted by the access controller.
-	SetSuperPasswords(controllerID uint32, door uint8, passwords ...uint32) (bool, error)
 
 	// TODO: REMOVE (interim functions used by health-check)
 	DeviceList() map[uint32]Device
