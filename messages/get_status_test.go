@@ -177,6 +177,36 @@ func TestUnmarshalGetStatusResponse(t *testing.T) {
 	}
 }
 
+// Ref. https://github.com/uhppoted/uhppoted-dll/issues/7
+func TestUnmarshalGetStatusResponseWithoutEvent(t *testing.T) {
+	message := []byte{
+		0x17, 0x20, 0x00, 0x00, 0x78, 0x37, 0x2a, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x83, 0x11, 0x16, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x23, 0x09, 0x29, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	}
+
+	expected := GetStatusResponse{
+		MsgType:      0x20,
+		SerialNumber: 405419896,
+		SystemError:  0x83,
+		SystemDate:   mustParseSystemDate("230929"),
+		SystemTime:   mustParseSystemTime("11:16:20"),
+	}
+
+	reply := GetStatusResponse{}
+
+	err := codec.Unmarshal(message, &reply)
+
+	if err != nil {
+		t.Fatalf("unexpected error: %v\n", err)
+	}
+
+	if !reflect.DeepEqual(reply, expected) {
+		t.Errorf("incorrect response:\n   expected: %#v\n   got:      %#v\n", expected, reply)
+	}
+}
+
 func TestFactoryUnmarshalGetStatusResponse(t *testing.T) {
 	message := []byte{
 		0x17, 0x20, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0x39, 0x00, 0x00, 0x00, 0x01, 0x00, 0x03, 0x01,
@@ -442,5 +472,21 @@ func TestUnmarshalGetStatusResponseWithNoEvent(t *testing.T) {
 
 	if reply.InputState != 0x00 {
 		t.Errorf("Incorrect 'input state' - expected:%v, got:%v", 0x00, reply.InputState)
+	}
+}
+
+func mustParseSystemDate(s string) types.SystemDate {
+	if yymmdd, err := time.ParseInLocation("060102", s, time.Local); err != nil {
+		return types.SystemDate(time.Time{})
+	} else {
+		return types.SystemDate(yymmdd)
+	}
+}
+
+func mustParseSystemTime(s string) types.SystemTime {
+	if hhmmss, err := time.ParseInLocation("15:04:05", s, time.Local); err != nil {
+		return types.SystemTime(time.Time{})
+	} else {
+		return types.SystemTime(hhmmss)
 	}
 }
