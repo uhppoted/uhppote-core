@@ -52,7 +52,7 @@ func (u *uhppote) GetStatus(serialNumber uint32) (*types.Status, error) {
 	}
 
 	if reply.EventIndex != 0 {
-		status.Event = &types.StatusEvent{
+		status.Event = types.StatusEvent{
 			Index:      reply.EventIndex,
 			Type:       reply.EventType,
 			Granted:    reply.Granted,

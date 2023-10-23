@@ -25,14 +25,22 @@ type Event struct {
 	Reason       uint8
 }
 
-func (s *EventIndex) String() string {
-	return fmt.Sprintf("%s %d", s.SerialNumber, s.Index)
+func (e *EventIndex) String() string {
+	return fmt.Sprintf("%v %v", e.SerialNumber, e.Index)
 }
 
-func (s *EventIndexResult) String() string {
-	return fmt.Sprintf("%s %-8d %v", s.SerialNumber, s.Index, s.Changed)
+func (e *EventIndexResult) String() string {
+	return fmt.Sprintf("%v %-8v %v", e.SerialNumber, e.Index, e.Changed)
 }
 
-func (s *Event) String() string {
-	return fmt.Sprintf("%s %-6d %s %-12d %1d %-5v %d", s.SerialNumber, s.Index, s.Timestamp.String(), s.CardNumber, s.Door, s.Granted, s.Reason)
+func (e Event) IsZero() bool {
+	return e.Index == 0
+}
+
+func (e Event) String() string {
+	if e.IsZero() {
+		return ""
+	} else {
+		return fmt.Sprintf("%v %-6v %v %-12v %1v %-5v %v", e.SerialNumber, e.Index, e.Timestamp, e.CardNumber, e.Door, e.Granted, e.Reason)
+	}
 }

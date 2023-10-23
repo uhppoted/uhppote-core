@@ -15,7 +15,7 @@ type Status struct {
 	SpecialInfo    uint8
 	RelayState     uint8
 	InputState     uint8
-	Event          *StatusEvent
+	Event          StatusEvent // using zero value for 'no event'
 }
 
 type StatusEvent struct {
@@ -25,8 +25,12 @@ type StatusEvent struct {
 	Door       byte
 	Direction  uint8
 	CardNumber uint32
-	Timestamp  *DateTime
+	Timestamp  DateTime
 	Reason     uint8
+}
+
+func (e StatusEvent) IsZero() bool {
+	return e.Index == 0
 }
 
 func (s Status) String() string {
@@ -38,8 +42,8 @@ func (s Status) String() string {
 		}
 	}
 
-	timestamp := func(t *DateTime) string {
-		if t == nil || t.IsZero() {
+	timestamp := func(t DateTime) string {
+		if t.IsZero() {
 			return "---"
 		} else {
 			return fmt.Sprintf("%v", t)
@@ -58,7 +62,7 @@ func (s Status) String() string {
 	b.WriteString(fmt.Sprintf(" %02X", s.RelayState))
 	b.WriteString(fmt.Sprintf(" %02X", s.InputState))
 
-	if s.Event != nil {
+	if s.Event.Index > 0 {
 		b.WriteString(fmt.Sprintf(" | %-7d", s.Event.Index))
 		b.WriteString(fmt.Sprintf(" %-3d", s.Event.Type))
 		b.WriteString(fmt.Sprintf(" %-5v", s.Event.Granted))

@@ -54,7 +54,7 @@ func (u *uhppote) Listen(listener Listener, q chan os.Signal) error {
 				}
 
 				if e.EventIndex != 0 {
-					status.Event = &types.StatusEvent{
+					status.Event = types.StatusEvent{
 						Index:      e.EventIndex,
 						Type:       e.EventType,
 						Granted:    e.Granted,

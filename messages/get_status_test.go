@@ -106,7 +106,7 @@ func TestUnmarshalGetStatusResponse(t *testing.T) {
 	}
 
 	swiped, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-04-19 17:00:09", time.Local)
-	if reply.Timestamp == nil || *reply.Timestamp != types.DateTime(swiped) {
+	if reply.Timestamp.IsZero() || reply.Timestamp != types.DateTime(swiped) {
 		t.Errorf("Incorrect 'event timestamp' - expected:%v, got:%v", swiped.Format("2006-01-02 15:04:05"), reply.Timestamp)
 	}
 
@@ -263,7 +263,7 @@ func TestFactoryUnmarshalGetStatusResponse(t *testing.T) {
 	}
 
 	swiped, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-04-19 17:00:09", time.Local)
-	if reply.Timestamp == nil || *reply.Timestamp != types.DateTime(swiped) {
+	if reply.Timestamp.IsZero() || reply.Timestamp != types.DateTime(swiped) {
 		t.Errorf("Incorrect 'event timestamp' - expected:%v, got:%v", swiped.Format("2006-01-02 15:04:05"), reply.Timestamp)
 	}
 
@@ -404,8 +404,8 @@ func TestUnmarshalGetStatusResponseWithNoEvent(t *testing.T) {
 		t.Errorf("Incorrect 'card number' - expected:%v, got:%v", 0, reply.CardNumber)
 	}
 
-	if reply.Timestamp != nil {
-		t.Errorf("Incorrect 'event timestamp' - expected:%v, got:%v", nil, reply.Timestamp)
+	if !reply.Timestamp.IsZero() {
+		t.Errorf("Incorrect 'event timestamp' - expected:%v, got:%v", types.DateTime{}, reply.Timestamp)
 	}
 
 	if reply.Reason != 0 {
