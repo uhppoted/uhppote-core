@@ -2,12 +2,7 @@
 
 
 - [x] Implement _SetSuperPassword_ function (cf. https://github.com/uhppoted/uhppoted/issues/40)
-      - [x] messages
-      - [x] `uhppoted.SetSuperPassword`
-      - [x] CHANGELOG
-      - [x] README
-      - [x] godoc
-
+- [ ] Replace Event pointer in GetStatusResponse with zero value  (cf. https://github.com/uhppoted/uhppote-core/issues/18)
 
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
 - [ ] `put-card`: error on bad card numbers (0,0xffffffff,0x00ffffff)
