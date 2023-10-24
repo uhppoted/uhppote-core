@@ -5,6 +5,9 @@
 ### Added
 1. Implemented `set-super-passwords` function.
 
+### Updated
+1. Reworked `nil` event pointers as zero values.
+
 
 ## [0.8.6](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.6) - 2023-08-30
 
