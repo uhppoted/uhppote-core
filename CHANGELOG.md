@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [0.8.7](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.7) - 2023-12-01
 
 ### Added
 1. Implemented `set-super-passwords` function.
@@ -104,3 +104,49 @@
 
 ### Changed
 1. Rearchitected UHPPOTE implementation to use internal driver to send and receive UDP packets
+
+## [0.6.12](https//github.com/uhppoted/uhppote-core/releases/tag/v0.6.12)
+
+Improved handling of concurrent requests and invalid responses
+
+## [0.6.10](https//github.com/uhppoted/uhppote-core/releases/tag/v0.6.10)
+
+Bumped version to 0.6.10 for initial `uhppoted-app-wild-apricot` release
+
+## [0.6.8](https//github.com/uhppoted/uhppote-core/releases/tag/v0.6.8)
+
+Improved internal support for UHPPOTE v6.62 firmware
+
+## [0.6.7](https//github.com/uhppoted/uhppote-core/releases/tag/v0.6.7)
+
+Implements `record-special-events` for enabling and disabling door events
+
+## [0.6.5](https//github.com/uhppoted/uhppote-core/releases/tag/v0.6.5)
+
+Maintenance release for version compatibility with NodeRED module
+
+## [0.6.4](https//github.com/uhppoted/uhppote-core/releases/tag/v0.6.4)
+
+Added support for uhppoted-app-sheets
+
+## [0.6.3](https//github.com/uhppoted/uhppote-core/releases/tag/v0.6.3)
+
+Added support for MQTT ACL API
+
+## [0.6.2](https//github.com/uhppoted/uhppote-core/releases/tag/v0.6.2)
+
+Added support for REST ACL API
+
+## [v0.6.1](https//github.com/uhppoted/uhppote-core/releases/tag/v0.6.1)
+
+Added support for CLI ACL commands
+
+## [v0.6.0](https//github.com/uhppoted/uhppote-core/releases/tag/v0.6.0)
+
+Added `IDevice` interface to support `uhppoted-api` ACL functionality
+
+## [0.5.1](https//github.com/uhppoted/uhppote-core/releases/tag/v0.5.1)
+
+Initial release following restructuring into standalone Go *modules* and *git submodules*
+
+
