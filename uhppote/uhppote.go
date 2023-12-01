@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	VERSION string = "v0.8.7" // common version number used across uhppoted ecosystem
+	VERSION string = "v0.8.8" // common version number used across uhppoted ecosystem
 )
 
 type driver interface {
