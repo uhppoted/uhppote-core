@@ -80,6 +80,7 @@ go build -trimpath -o bin ./...
 - [`ActivateKeypads`](#activatekeypads)
 - [`SetSuperPasswords`](#setsuperpasswords)
 - [`SetInterlock`](#setinterlock)
+- [`RestoreDefaultParameters`](#restoredefaultparameters)
 - [`Listen`](#listen)
 
 Other than `GetDevices` API which specifically uses UDP broadcast to issue a request, the API will use the configured controller IP address if possible, falling back to a broadcast request if necessary.
@@ -249,6 +250,10 @@ Sets the interlocking between doors, with support for the following operational 
 - `doors 1&2 and 3&4`
 - `doors 1&2&3`
 - `doors 1&2&3&4`
+
+#### `RestoreDefaultParameters`
+
+Resets the controller to the default manufacturer configuration.
 
 #### `Listen`
 

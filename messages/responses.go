@@ -37,6 +37,7 @@ var responses = map[byte]func() Response{
 	0xb0: func() Response { return new(GetEventResponse) },
 	0xb2: func() Response { return new(SetEventIndexResponse) },
 	0xb4: func() Response { return new(GetEventIndexResponse) },
+	0xc8: func() Response { return new(RestoreDefaultParametersResponse) },
 }
 
 func UnmarshalResponse(bytes []byte) (Response, error) {

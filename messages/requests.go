@@ -38,6 +38,7 @@ var requests = map[byte]func() Request{
 	0xb0: func() Request { return new(GetEventRequest) },
 	0xb2: func() Request { return new(SetEventIndexRequest) },
 	0xb4: func() Request { return new(GetEventIndexRequest) },
+	0xc8: func() Request { return new(RestoreDefaultParametersRequest) },
 }
 
 func UnmarshalRequest(bytes []byte) (Request, error) {

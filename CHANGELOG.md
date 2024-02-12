@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Added
+1. Implemented `restore-default-parameters` function.
+
+### Updated
+1. Bumped Go version to 1.22
+
 
 ## [0.8.7](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.7) - 2023-12-01
 
