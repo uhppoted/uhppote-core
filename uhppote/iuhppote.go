@@ -81,6 +81,13 @@ type IUHPPOTE interface {
 	SetInterlock(controllerID uint32, interlock types.Interlock) (bool, error) // sets door interlock mode
 	ActivateKeypads(controllerID uint32, readers map[uint8]bool) (bool, error) // enables/disables reader keypads
 
+	// Sends a RestoreDefaultParameters request to the designated controller, to reset it to the
+	// manufacturer default configuration.
+	//
+	// Returns true if the controller was successfully reset, false if the request failed for any reason.
+	// Returns an error if the request could not be sent or the response is invalid.
+	RestoreDefaultParameters(controllerID uint32) (bool, error)
+
 	// TODO: REMOVE (interim functions used by health-check)
 	DeviceList() map[uint32]Device
 	ListenAddr() *net.UDPAddr

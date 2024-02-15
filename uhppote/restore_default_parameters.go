@@ -13,19 +13,19 @@ import (
 // Returns true if the controller configuration was successfully reset, false if the request
 // failed internally to the controller for any reason. Returns an error if the request could
 // not be sent or the response is invalid.
-func (u *uhppote) RestoreDefaultParameters(deviceID uint32) (bool, error) {
-	if deviceID == 0 {
-		return false, fmt.Errorf("invalid device ID (%v)", deviceID)
+func (u *uhppote) RestoreDefaultParameters(controller uint32) (bool, error) {
+	if controller == 0 {
+		return false, fmt.Errorf("invalid controller ID (%v)", controller)
 	}
 
 	request := messages.RestoreDefaultParametersRequest{
-		SerialNumber: types.SerialNumber(deviceID),
+		SerialNumber: types.SerialNumber(controller),
 		MagicWord:    0x55aaaa55,
 	}
 
 	reply := messages.RestoreDefaultParametersResponse{}
 
-	if err := u.send(deviceID, request, &reply); err != nil {
+	if err := u.send(controller, request, &reply); err != nil {
 		return false, err
 	} else {
 		return reply.Succeeded, nil
