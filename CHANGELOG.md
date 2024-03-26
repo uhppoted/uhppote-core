@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [0.8.8](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.8) - 2024-03-26
 
 ### Added
 1. Implemented `restore-default-parameters` function.

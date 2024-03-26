@@ -16,10 +16,10 @@ Supported operating systems:
 
 ### Current Release
 
-**[v0.8.7](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.7) - 2023-12-01**
+**[v0.8.8](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.8) - 2024-03-26**
 
-1. Implemented `set-super-passwords` function.
-2. Reworked `nil` event pointers as zero values.
+1. Implemented `restore-default-parameters` function.
+2. Bumped Go version to 1.22
 
 
 ## Development
