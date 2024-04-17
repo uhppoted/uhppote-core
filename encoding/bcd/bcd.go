@@ -1,3 +1,6 @@
+/*
+ * This package provides functions for encoding and decoding between strings and Binary-Coded Decimal (BCD) format.
+ */
 package bcd
 
 import (
@@ -5,6 +8,13 @@ import (
 	"strings"
 )
 
+/*
+ * Encode takes a string `s` containing only numeric characters ('0' to '9') and encodes it to BCD, prepending a
+ * leading zero if necessary. Returns an error if the input string contains any non-numeric characters.
+ *
+ * The function returns a pointer to a newly allocated slice containing the BCD encoded bytes or a `nil` result 
+ * and an error if the input string cannot be encoded.
+ */
 func Encode(s string) (*[]byte, error) {
 	N := (len(s) + 1) / 2
 	bytes := make([]byte, N)
@@ -46,6 +56,12 @@ func Encode(s string) (*[]byte, error) {
 	return &bytes, nil
 }
 
+/*
+ * Decode takes a BCD encoded slice of bytes and decodes it to a numeric string, returning an error if the input
+ * contains invalid BCD values.
+ *
+ * The function returns the numeric string or an empty string and an error.
+ */
 func Decode(bytes []byte) (string, error) {
 	var s strings.Builder
 
