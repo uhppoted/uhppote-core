@@ -1,6 +1,17 @@
 # TODO
 
-- [x] [`restore-default-parameters`](https://github.com/uhppoted/uhppoted/issues/48)
+- [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
+      - [x] Verify TCP with real controller
+      - [ ] Add protocol field to UHPPOTE controller struct
+            - [ ] Rework address as *netip.AddrPort
+            - [ ] Update uhppoted-lib::conf
+      - [ ] TCP 'driver'
+      - [ ] CHANGELOG
+      - [ ] README
+
+- [ ] https://github.com/uhppoted/uhppote-simulator/issues/9
+      - Rework UDP to use connected sockets
+
 
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
 - [ ] `put-card`: error on bad card numbers (0,0xffffffff,0x00ffffff)

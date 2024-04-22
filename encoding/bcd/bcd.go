@@ -12,7 +12,7 @@ import (
  * Encode takes a string `s` containing only numeric characters ('0' to '9') and encodes it to BCD, prepending a
  * leading zero if necessary. Returns an error if the input string contains any non-numeric characters.
  *
- * The function returns a pointer to a newly allocated slice containing the BCD encoded bytes or a `nil` result 
+ * The function returns a pointer to a newly allocated slice containing the BCD encoded bytes or a `nil` result
  * and an error if the input string cannot be encoded.
  */
 func Encode(s string) (*[]byte, error) {

@@ -2,10 +2,13 @@ package uhppote
 
 import (
 	"net"
+	"net/netip"
 	"reflect"
 	"testing"
 	"time"
 
+	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
+	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
 )
 
@@ -388,3 +391,47 @@ func TestGetDeviceWithInvalidDeviceID(t *testing.T) {
 		t.Fatalf("Expected 'Invalid device ID' error, got %v", err)
 	}
 }
+
+// func TestGetDeviceTCP(t *testing.T) {
+// 	MAC, _ := net.ParseMAC("00:66:19:39:55:2d")
+// 	date, _ := time.ParseInLocation("20060102", "20180816", time.Local)
+//
+// 	expected := messages.GetDeviceResponse{
+// 		MsgType:      0x94,
+// 		SerialNumber: 423187757,
+// 		IpAddress:    net.IPv4(192, 168, 1, 125),
+// 		SubnetMask:   net.IPv4(255, 255, 255, 0),
+// 		Gateway:      net.IPv4(192, 168, 1, 1),
+// 		MacAddress:   types.MacAddress(MAC),
+// 		Version:      0x0892,
+// 		Date:         types.Date(date),
+// 	}
+//
+// 	request := messages.GetDeviceRequest{
+// 		SerialNumber: types.SerialNumber(423187757),
+// 	}
+//
+// 	addr := net.TCPAddrFromAddrPort(netip.MustParseAddrPort("192.168.1.125:60000"))
+//
+// 	if m, err := codec.Marshal(request); err != nil {
+// 		t.Errorf("%v", err)
+// 	} else if c, err := net.DialTCP("tcp4", nil, addr); err != nil {
+// 		t.Errorf("%v", err)
+// 	} else {
+// 		defer c.Close()
+//
+// 		var buffer []byte = make([]byte, 1024)
+//
+// 		if N, err := c.Write(m); err != nil || N != 64 {
+// 			t.Errorf("%v,%v", N, err)
+// 		} else if N, err := c.Read(buffer); err != nil {
+// 			t.Errorf("%v,%v", N, err)
+// 		} else {
+// 			if v, err := codec.UnmarshalAs(buffer[0:64], messages.GetDeviceResponse{}); err != nil {
+// 				t.Errorf("%v", err)
+// 			} else if !reflect.DeepEqual(v, expected) {
+// 				t.Errorf(">>>>>\nexpected: %+v\ngot:      %+v\n", expected, v)
+// 			}
+// 		}
+// 	}
+// }
