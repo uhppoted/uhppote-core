@@ -3,6 +3,7 @@ package uhppote
 import (
 	"fmt"
 	"net"
+	"net/netip"
 	"reflect"
 	"sync"
 	"testing"
@@ -48,12 +49,12 @@ func TestBroadcastAddressRequest(t *testing.T) {
 		CardNumber:   6154412,
 	}
 
-	bind := resolve("127.0.0.1:12345", t)
+	bind := udpaddr("127.0.0.1:12345")
 	u := uhppote{
 		devices:       make(map[uint32]Device),
 		debug:         false,
 		bindAddr:      bind,
-		broadcastAddr: resolve("127.0.0.1:60000", t),
+		broadcastAddr: udpaddr("127.0.0.1:60000"),
 		driver: &udp{
 			bindAddr: *bind,
 			timeout:  5000 * time.Millisecond,
@@ -97,19 +98,19 @@ func TestSequentialRequests(t *testing.T) {
 		CardNumber:   6154412,
 	}
 
-	bind := resolve("127.0.0.1:12345", t)
+	bind := udpaddr("127.0.0.1:12345")
 	u := uhppote{
 		debug:         false,
 		bindAddr:      bind,
-		broadcastAddr: resolve("127.0.0.1:60000", t),
+		broadcastAddr: udpaddr("127.0.0.1:60000"),
 		devices: map[uint32]Device{
 			423187757: Device{
-				Address: resolve("127.0.0.1:65001", t),
+				Address: addrport("127.0.0.1:65001"),
 				Doors:   []string{},
 			},
 
 			757781324: Device{
-				Address: resolve("127.0.0.1:65002", t),
+				Address: addrport("127.0.0.1:65002"),
 				Doors:   []string{},
 			},
 		},
@@ -168,18 +169,18 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 		CardNumber:   6154412,
 	}
 
-	bind := resolve("127.0.0.1:0", t)
+	bind := udpaddr("127.0.0.1:0")
 	u := uhppote{
 		debug:         false,
 		broadcastAddr: bind,
 		devices: map[uint32]Device{
 			423187757: Device{
-				Address: resolve("127.0.0.1:65001", t),
+				Address: addrport("127.0.0.1:65001"),
 				Doors:   []string{},
 			},
 
 			757781324: Device{
-				Address: resolve("127.0.0.1:65002", t),
+				Address: addrport("127.0.0.1:65002"),
 				Doors:   []string{},
 			},
 		},
@@ -254,19 +255,19 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 		CardNumber:   6154412,
 	}
 
-	bind := resolve("127.0.0.1:12345", t)
+	bind := udpaddr("127.0.0.1:12345")
 	u := uhppote{
 		debug:         false,
 		bindAddr:      bind,
-		broadcastAddr: resolve("127.0.0.1:60000", t),
+		broadcastAddr: udpaddr("127.0.0.1:60000"),
 		devices: map[uint32]Device{
 			423187757: Device{
-				Address: resolve("127.0.0.1:65001", t),
+				Address: addrport("127.0.0.1:65001"),
 				Doors:   []string{},
 			},
 
 			757781324: Device{
-				Address: resolve("127.0.0.1:65002", t),
+				Address: addrport("127.0.0.1:65002"),
 				Doors:   []string{},
 			},
 		},
@@ -377,11 +378,14 @@ func listen(deviceID uint32, address string, delay time.Duration, closed chan in
 	return c
 }
 
-func resolve(address string, t *testing.T) *net.UDPAddr {
-	addr, err := net.ResolveUDPAddr("udp", address)
-	if err != nil {
-		t.Fatalf("Error resolving UDP address '%s': %v", address, err)
-	}
+func udpaddr(address string) *net.UDPAddr {
+	addr := netip.MustParseAddrPort(address)
 
-	return addr
+	return net.UDPAddrFromAddrPort(addr)
+}
+
+func addrport(address string) *netip.AddrPort {
+	addr := netip.MustParseAddrPort(address)
+
+	return &addr
 }

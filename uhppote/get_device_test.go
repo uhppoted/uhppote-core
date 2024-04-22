@@ -7,8 +7,6 @@ import (
 	"testing"
 	"time"
 
-	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
-	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
 )
 
@@ -40,12 +38,8 @@ func TestGetDevices(t *testing.T) {
 		MacAddress:   types.MacAddress(MAC),
 		Version:      0x0892,
 		Date:         types.Date(date),
-		Address: net.UDPAddr{
-			IP:   net.IPv4(192, 168, 0, 0),
-			Port: 60000,
-			Zone: "",
-		},
-		TimeZone: time.Local,
+		Address:      netip.MustParseAddrPort("192.168.0.0:60000"),
+		TimeZone:     time.Local,
 	}
 
 	response, err := u.GetDevices()
@@ -135,12 +129,8 @@ func TestGetDevicesWithAltPort(t *testing.T) {
 		MacAddress:   types.MacAddress(MAC),
 		Version:      0x0892,
 		Date:         types.Date(date),
-		Address: net.UDPAddr{
-			IP:   net.IPv4(192, 168, 0, 0),
-			Port: 54321,
-			Zone: "",
-		},
-		TimeZone: time.Local,
+		Address:      netip.MustParseAddrPort("192.168.0.0:54321"),
+		TimeZone:     time.Local,
 	}
 
 	response, err := u.GetDevices()
@@ -225,12 +215,8 @@ func TestGetDevice(t *testing.T) {
 		MacAddress:   types.MacAddress(MAC),
 		Version:      0x0892,
 		Date:         types.Date(date),
-		Address: net.UDPAddr{
-			IP:   net.IPv4(192, 168, 0, 0),
-			Port: 60000,
-			Zone: "",
-		},
-		TimeZone: time.Local,
+		Address:      netip.MustParseAddrPort("192.168.0.0:60000"),
+		TimeZone:     time.Local,
 	}
 
 	response, err := u.GetDevice(423187757)
@@ -293,11 +279,7 @@ func TestGetDeviceWithAlternatePort(t *testing.T) {
 		},
 	}
 
-	addr := net.UDPAddr{
-		IP:   net.IPv4(192, 168, 0, 0),
-		Port: 54321,
-		Zone: "",
-	}
+	addr := netip.MustParseAddrPort("192.168.0.0:54321")
 
 	device := Device{
 		Address: &addr,
@@ -325,12 +307,8 @@ func TestGetDeviceWithAlternatePort(t *testing.T) {
 		MacAddress:   types.MacAddress(MAC),
 		Version:      0x0892,
 		Date:         types.Date(date),
-		Address: net.UDPAddr{
-			IP:   net.IPv4(192, 168, 0, 0),
-			Port: 54321,
-			Zone: "",
-		},
-		TimeZone: time.Local,
+		Address:      netip.MustParseAddrPort("192.168.0.0:54321"),
+		TimeZone:     time.Local,
 	}
 
 	response, err := u.GetDevice(423187757)

@@ -3,6 +3,7 @@ package types
 import (
 	"fmt"
 	"net"
+	"net/netip"
 	"regexp"
 	"strings"
 	"time"
@@ -17,7 +18,7 @@ type Device struct {
 	MacAddress   MacAddress
 	Version      Version
 	Date         Date
-	Address      net.UDPAddr
+	Address      netip.AddrPort
 	TimeZone     *time.Location
 }
 

@@ -2,7 +2,7 @@ package uhppote
 
 import (
 	"fmt"
-	"net"
+	"net/netip"
 	"time"
 
 	"github.com/uhppoted/uhppote-core/messages"
@@ -17,9 +17,9 @@ func (u *uhppote) GetDevices() ([]types.Device, error) {
 		return nil, err
 	}
 
-	port := 60000
+	port := uint16(60000)
 	if addr := u.BroadcastAddr(); addr != nil {
-		port = addr.Port
+		port = uint16(addr.Port)
 	}
 
 	devices := []types.Device{}
@@ -31,6 +31,11 @@ func (u *uhppote) GetDevices() ([]types.Device, error) {
 			name = device.Name
 		}
 
+		addr := netip.AddrPort{}
+		if v, ok := netip.AddrFromSlice(reply.IpAddress); ok {
+			addr = netip.AddrPortFrom(v, port)
+		}
+
 		devices = append(devices, types.Device{
 			Name:         name,
 			SerialNumber: reply.SerialNumber,
@@ -40,12 +45,8 @@ func (u *uhppote) GetDevices() ([]types.Device, error) {
 			MacAddress:   reply.MacAddress,
 			Version:      reply.Version,
 			Date:         reply.Date,
-			Address: net.UDPAddr{
-				IP:   reply.IpAddress,
-				Port: port,
-				Zone: "",
-			},
-			TimeZone: time.Local,
+			Address:      addr,
+			TimeZone:     time.Local,
 		})
 	}
 
@@ -66,14 +67,14 @@ func (u *uhppote) GetDevice(serialNumber uint32) (*types.Device, error) {
 		return nil, err
 	}
 
-	port := 60000
+	port := uint16(60000)
 	if addr := u.BroadcastAddr(); addr != nil {
-		port = addr.Port
+		port = uint16(addr.Port) // FIXME rework u.BroadCastAddr as netip.AddrPort
 	}
 
 	if device, ok := u.DeviceList()[serialNumber]; ok {
 		if device.Address != nil {
-			port = device.Address.Port
+			port = device.Address.Port()
 		}
 	}
 
@@ -85,6 +86,11 @@ func (u *uhppote) GetDevice(serialNumber uint32) (*types.Device, error) {
 				name = device.Name
 			}
 
+			addr := netip.AddrPort{}
+			if v, ok := netip.AddrFromSlice(reply.IpAddress); ok {
+				addr = netip.AddrPortFrom(v, port)
+			}
+
 			return &types.Device{
 				Name:         name,
 				SerialNumber: reply.SerialNumber,
@@ -94,12 +100,8 @@ func (u *uhppote) GetDevice(serialNumber uint32) (*types.Device, error) {
 				MacAddress:   reply.MacAddress,
 				Version:      reply.Version,
 				Date:         reply.Date,
-				Address: net.UDPAddr{
-					IP:   reply.IpAddress,
-					Port: port,
-					Zone: "",
-				},
-				TimeZone: time.Local,
+				Address:      addr,
+				TimeZone:     time.Local,
 			}, nil
 		}
 	}
