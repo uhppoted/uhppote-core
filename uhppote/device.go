@@ -13,6 +13,7 @@ type Device struct {
 	Address  *netip.AddrPort // controller IPv4 address
 	Doors    []string        // controller door names (required for ACL functions)
 	TimeZone *time.Location  // controller timezone (required when controller is located in a different time zone to the application)
+	Protocol string          // controller network protocol ("udp", "tcp", "any")
 }
 
 // Convenience function to instantiate a configured controller from the information in a configuration file.
@@ -23,6 +24,7 @@ func NewDevice(name string, serialNumber uint32, address *netip.AddrPort, doors 
 		Address:  address,
 		Doors:    doors,
 		TimeZone: time.Local,
+		Protocol: "udp",
 	}
 }
 
@@ -34,6 +36,7 @@ func (d Device) Clone() Device {
 		Address:  nil,
 		Doors:    make([]string, len(d.Doors)),
 		TimeZone: d.TimeZone,
+		Protocol: d.Protocol,
 	}
 
 	if d.Address != nil {

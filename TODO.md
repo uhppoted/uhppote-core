@@ -2,9 +2,19 @@
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
       - [x] Verify TCP with real controller
-      - [ ] Add protocol field to UHPPOTE controller struct
-            - [ ] Rework address as *netip.AddrPort
+      - [ ] Rework address as *netip.AddrPort
+            - [x] uhppote-core
             - [ ] Update uhppoted-lib::conf
+            - [ ] Update throughout
+                  - [x] uhppote-cli
+                  - [ ] uhppoted-lib
+            = [ ] Replace pointer with zero value
+      - [ ] Add protocol field to UHPPOTE controller struct
+            - [ ] uhppote-core
+            - [ ] Update uhppoted-lib::conf
+            - [ ] Update throughout
+                  - [ ] uhppote-cli
+                  - [ ] uhppoted-lib
       - [ ] TCP 'driver'
       - [ ] CHANGELOG
       - [ ] README
