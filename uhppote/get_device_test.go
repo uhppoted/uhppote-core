@@ -294,6 +294,10 @@ func TestGetDeviceWithAlternatePort(t *testing.T) {
 			broadcast: func(request []byte, addr *net.UDPAddr) ([][]byte, error) {
 				return replies, nil
 			},
+
+			sendto: func(addr *net.UDPAddr, request []byte) ([]byte, error) {
+				return replies[0], nil
+			},
 		},
 	}
 

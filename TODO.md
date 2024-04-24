@@ -2,26 +2,29 @@
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
       - [x] Verify TCP with real controller
+      - [ ] TCP 'driver'
       - [ ] Rework address as *netip.AddrPort
             - [x] uhppote-core
-            - [ ] Update uhppoted-lib::conf
+            - [x] Update uhppoted-lib::conf
             - [ ] Update throughout
                   - [x] uhppote-cli
-                  - [ ] uhppoted-lib
-            = [ ] Replace pointer with zero value
+                  - [x] uhppoted-lib
+                  - [ ] uhppoted-rest
+            - [ ] Replace pointer with zero value
+            - [ ] // FIXME rework u.BroadCastAddr as netip.AddrPort
       - [ ] Add protocol field to UHPPOTE controller struct
-            - [ ] uhppote-core
-            - [ ] Update uhppoted-lib::conf
+            - [x] uhppote-core
+            - [x] Update uhppoted-lib::conf
             - [ ] Update throughout
                   - [ ] uhppote-cli
                   - [ ] uhppoted-lib
-      - [ ] TCP 'driver'
+                  - [ ] uhppoted-rest
+      - [ ] Add TCP to simulator
       - [ ] CHANGELOG
       - [ ] README
 
 - [ ] https://github.com/uhppoted/uhppote-simulator/issues/9
       - Rework UDP to use connected sockets
-
 
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
 - [ ] `put-card`: error on bad card numbers (0,0xffffffff,0x00ffffff)

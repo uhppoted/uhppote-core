@@ -17,10 +17,15 @@ import (
 type stub struct {
 	broadcast func([]byte, *net.UDPAddr) ([][]byte, error)
 	send      func([]byte, *net.UDPAddr, func([]byte) bool) error
+	sendto    func(*net.UDPAddr, []byte) ([]byte, error)
 }
 
 func (d *stub) Broadcast(m []byte, addr *net.UDPAddr) ([][]byte, error) {
 	return d.broadcast(m, addr)
+}
+
+func (d *stub) SendTo(addr *net.UDPAddr, m []byte) ([]byte, error) {
+	return d.sendto(addr, m)
 }
 
 func (d *stub) Send(m []byte, addr *net.UDPAddr, handler func(bytes []byte) bool) error {

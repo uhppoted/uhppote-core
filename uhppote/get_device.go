@@ -62,20 +62,9 @@ func (u *uhppote) GetDevice(serialNumber uint32) (*types.Device, error) {
 		SerialNumber: types.SerialNumber(serialNumber),
 	}
 
-	replies, err := u.broadcastTo(serialNumber, request, messages.GetDeviceResponse{})
+	replies, err := u.sendTo(serialNumber, request, messages.GetDeviceResponse{})
 	if err != nil {
 		return nil, err
-	}
-
-	port := uint16(60000)
-	if addr := u.BroadcastAddr(); addr != nil {
-		port = uint16(addr.Port) // FIXME rework u.BroadCastAddr as netip.AddrPort
-	}
-
-	if device, ok := u.DeviceList()[serialNumber]; ok {
-		if device.Address != nil {
-			port = device.Address.Port()
-		}
 	}
 
 	for _, v := range replies {
@@ -84,6 +73,17 @@ func (u *uhppote) GetDevice(serialNumber uint32) (*types.Device, error) {
 			name := ""
 			if device, ok := u.devices[serialNumber]; ok {
 				name = device.Name
+			}
+
+			port := uint16(60000)
+			if addr := u.BroadcastAddr(); addr != nil {
+				port = uint16(addr.Port) // FIXME rework u.BroadCastAddr as netip.AddrPort
+			}
+
+			if device, ok := u.DeviceList()[serialNumber]; ok {
+				if device.Address != nil {
+					port = device.Address.Port()
+				}
 			}
 
 			addr := netip.AddrPort{}

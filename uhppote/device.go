@@ -17,14 +17,19 @@ type Device struct {
 }
 
 // Convenience function to instantiate a configured controller from the information in a configuration file.
-func NewDevice(name string, serialNumber uint32, address *netip.AddrPort, doors []string) *Device {
+func NewDevice(name string, serialNumber uint32, address *netip.AddrPort, protocol string, doors []string) *Device {
+	p := "udp"
+	if protocol == "tcp" {
+		p = "tcp"
+	}
+
 	return &Device{
 		Name:     name,
 		DeviceID: serialNumber,
 		Address:  address,
 		Doors:    doors,
 		TimeZone: time.Local,
-		Protocol: "udp",
+		Protocol: p,
 	}
 }
 

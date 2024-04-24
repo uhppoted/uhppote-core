@@ -24,7 +24,7 @@ func TestNewDevice(t *testing.T) {
 		Protocol: "udp",
 	}
 
-	device := NewDevice("Alpha", 405419896, &address, []string{
+	device := NewDevice("Alpha", 405419896, &address, "udp", []string{
 		"Gryffindor",
 		"Hufflepuff",
 		"Ravenclaw",
