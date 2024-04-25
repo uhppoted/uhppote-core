@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Added
+1. Added support for TCP/IP connections to UT0311-L0x driver.
+
 
 ## [0.8.8](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.8) - 2024-03-26
 

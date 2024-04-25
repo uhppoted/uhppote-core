@@ -4,13 +4,14 @@ import (
 	"encoding/hex"
 	"fmt"
 	"net"
+	"net/netip"
 	"regexp"
 	"sync"
 	"time"
 )
 
-type udp struct {
-	bindAddr   net.UDPAddr
+type ut0311 struct {
+	bindAddr   netip.AddrPort
 	listenAddr net.UDPAddr
 	timeout    time.Duration
 	debug      bool
@@ -25,17 +26,26 @@ var NONE = time.Time{}
  *
  * Returns an error if the UDP socket open, send or read failed.
  */
-func (u *udp) Broadcast(request []byte, addr *net.UDPAddr) ([][]byte, error) {
+func (u *ut0311) Broadcast(request []byte, addr *net.UDPAddr) ([][]byte, error) {
 	u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
 
-	bind := u.bindAddr
+	bind := net.UDPAddrFromAddrPort(u.bindAddr)
+
+	if bind == nil {
+		bind = &net.UDPAddr{
+			IP:   net.IPv4(0, 0, 0, 0),
+			Port: 0,
+			Zone: "",
+		}
+	}
+
 	if bind.Port != 0 {
 		guard.Lock()
 		defer guard.Unlock()
 	}
 
 	var connection *net.UDPConn
-	if conn, err := net.ListenUDP("udp", &bind); err != nil {
+	if conn, err := net.ListenUDP("udp", bind); err != nil {
 		return nil, fmt.Errorf("error creating UDP socket (%v)", err)
 	} else if conn == nil {
 		return nil, fmt.Errorf("open() created invalid UDP socket (%v)", conn)
@@ -89,14 +99,23 @@ func (u *udp) Broadcast(request []byte, addr *net.UDPAddr) ([][]byte, error) {
  * Returns an error if the UDP socket open, send or read failed or the read timed out, otherwise
  * returns a byte slice with the reply.
  */
-func (u *udp) SendTo(addr *net.UDPAddr, request []byte) ([]byte, error) {
-	bind := u.bindAddr
+func (u *ut0311) SendUDP(addr *net.UDPAddr, request []byte) ([]byte, error) {
+	bind := net.UDPAddrFromAddrPort(u.bindAddr)
+
+	if bind == nil {
+		bind = &net.UDPAddr{
+			IP:   net.IPv4(0, 0, 0, 0),
+			Port: 0,
+			Zone: "",
+		}
+	}
+
 	if bind.Port != 0 {
 		guard.Lock()
 		defer guard.Unlock()
 	}
 
-	if connection, err := net.DialUDP("udp4", &bind, addr); err != nil {
+	if connection, err := net.DialUDP("udp4", bind, addr); err != nil {
 		return nil, err
 	} else if connection == nil {
 		return nil, fmt.Errorf("invalid UDP socket (%v)", connection)
@@ -127,15 +146,77 @@ func (u *udp) SendTo(addr *net.UDPAddr, request []byte) ([]byte, error) {
 	}
 }
 
-func (u *udp) Send(request []byte, addr *net.UDPAddr, callback func([]byte) bool) error {
-	bind := u.bindAddr
+/*
+ * Opens a TCP socket to the destination address, sends the request and returns the reply (if any).
+ *
+ * Returns an error if the TCP socket open, send or read failed or the read timed out, otherwise
+ * returns a byte slice with the reply.
+ */
+func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
+	bind := net.TCPAddrFromAddrPort(u.bindAddr)
+
+	if bind == nil {
+		bind = &net.TCPAddr{
+			IP:   net.IPv4(0, 0, 0, 0),
+			Port: 0,
+			Zone: "",
+		}
+	}
+
+	if bind.Port != 0 {
+		guard.Lock()
+		defer guard.Unlock()
+	}
+
+	if connection, err := net.DialTCP("tcp4", bind, addr); err != nil {
+		return nil, err
+	} else if connection == nil {
+		return nil, fmt.Errorf("invalid TCP socket (%v)", connection)
+	} else {
+		defer connection.Close()
+
+		deadline := time.Now().Add(u.timeout)
+		buffer := make([]byte, 1024)
+
+		if err := connection.SetDeadline(deadline); err != nil {
+			return nil, err
+		}
+
+		if N, err := connection.Write(request); err != nil {
+			return nil, fmt.Errorf("failed to write to UDP socket [%v]", err)
+		} else {
+			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v\n", N, addr), nil)
+		}
+
+		u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
+
+		if N, err := connection.Read(buffer); err != nil {
+			u.debugf(" ... receive error", err)
+			return nil, err
+		} else {
+			return buffer[0:N], nil
+		}
+	}
+}
+
+func (u *ut0311) Send(request []byte, addr *net.UDPAddr, callback func([]byte) bool) error {
+	bind := net.UDPAddrFromAddrPort(u.bindAddr)
+
+	if bind == nil {
+		bind = &net.UDPAddr{
+			IP:   net.IPv4(0, 0, 0, 0),
+			Port: 0,
+			Zone: "",
+		}
+	}
+
 	if bind.Port != 0 {
 		guard.Lock()
 		defer guard.Unlock()
 	}
 
 	var connection *net.UDPConn
-	if conn, err := net.ListenUDP("udp", &bind); err != nil {
+	if conn, err := net.ListenUDP("udp", bind); err != nil {
 		return fmt.Errorf("error creating UDP socket (%v)", err)
 	} else if conn == nil {
 		return fmt.Errorf("open() created invalid UDP socket (%v)", conn)
@@ -186,7 +267,7 @@ func (u *udp) Send(request []byte, addr *net.UDPAddr, callback func([]byte) bool
 	return nil
 }
 
-func (u *udp) receive(c *net.UDPConn, callback func([]byte) bool) error {
+func (u *ut0311) receive(c *net.UDPConn, callback func([]byte) bool) error {
 	m := make([]byte, 2048)
 
 	for {
@@ -205,7 +286,7 @@ func (u *udp) receive(c *net.UDPConn, callback func([]byte) bool) error {
 	}
 }
 
-func (u *udp) Listen(signal chan interface{}, done chan interface{}, callback func([]byte)) error {
+func (u *ut0311) Listen(signal chan interface{}, done chan interface{}, callback func([]byte)) error {
 	bind := u.listenAddr
 	if bind.Port == 0 {
 		return fmt.Errorf("Listen requires a non-zero UDP port")
@@ -254,7 +335,7 @@ func (u *udp) Listen(signal chan interface{}, done chan interface{}, callback fu
 	return nil
 }
 
-func (u *udp) debugf(msg string, err error) {
+func (u *ut0311) debugf(msg string, err error) {
 	if u.debug {
 		if err != nil {
 			fmt.Printf("%v: %v\n", msg, err)

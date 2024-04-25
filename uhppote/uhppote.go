@@ -19,7 +19,8 @@ const (
 type driver interface {
 	Broadcast([]byte, *net.UDPAddr) ([][]byte, error)
 	Send([]byte, *net.UDPAddr, func([]byte) bool) error
-	SendTo(*net.UDPAddr, []byte) ([]byte, error)
+	SendUDP(*net.UDPAddr, []byte) ([]byte, error)
+	SendTCP(*net.TCPAddr, []byte) ([]byte, error)
 	Listen(chan any, chan any, func([]byte)) error
 }
 
@@ -48,8 +49,8 @@ func NewUHPPOTE(
 		broadcastAddr: &broadcast,
 		listenAddr:    &listen,
 		devices:       map[uint32]Device{},
-		driver: &udp{
-			bindAddr:   bind,
+		driver: &ut0311{
+			bindAddr:   bind.AddrPort(),
 			listenAddr: listen,
 			timeout:    timeout,
 			debug:      debug,
@@ -188,7 +189,7 @@ func (u *uhppote) udpBroadcastTo(request []byte) ([][]byte, error) {
 func (u *uhppote) udpSendTo(address netip.AddrPort, request []byte) ([][]byte, error) {
 	dest := net.UDPAddrFromAddrPort(address)
 
-	if response, err := u.driver.SendTo(dest, request); err != nil {
+	if response, err := u.driver.SendUDP(dest, request); err != nil {
 		return nil, err
 	} else {
 		return [][]byte{
@@ -201,17 +202,15 @@ func (u *uhppote) udpSendTo(address netip.AddrPort, request []byte) ([][]byte, e
  *
  */
 func (u *uhppote) tcpSendTo(address netip.AddrPort, request []byte) ([][]byte, error) {
-	// dest := net.UDPAddrFromAddrPort(address)
-	//
-	// if response, err := u.driver.SendTo(dest, request); err != nil {
-	// 	return nil, err
-	// } else {
-	// 	return [][]byte{
-	// 		response,
-	// 	}, nil
-	// }
+	dest := net.TCPAddrFromAddrPort(address)
 
-	return nil, fmt.Errorf("NOT IMPLEMENTED")
+	if response, err := u.driver.SendTCP(dest, request); err != nil {
+		return nil, err
+	} else {
+		return [][]byte{
+			response,
+		}, nil
+	}
 }
 
 func (u *uhppote) send(serialNumber uint32, request, reply any) error {

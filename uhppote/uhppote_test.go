@@ -17,15 +17,20 @@ import (
 type stub struct {
 	broadcast func([]byte, *net.UDPAddr) ([][]byte, error)
 	send      func([]byte, *net.UDPAddr, func([]byte) bool) error
-	sendto    func(*net.UDPAddr, []byte) ([]byte, error)
+	sendudp   func(*net.UDPAddr, []byte) ([]byte, error)
+	sendtcp   func(*net.TCPAddr, []byte) ([]byte, error)
 }
 
 func (d *stub) Broadcast(m []byte, addr *net.UDPAddr) ([][]byte, error) {
 	return d.broadcast(m, addr)
 }
 
-func (d *stub) SendTo(addr *net.UDPAddr, m []byte) ([]byte, error) {
-	return d.sendto(addr, m)
+func (d *stub) SendUDP(addr *net.UDPAddr, m []byte) ([]byte, error) {
+	return d.sendudp(addr, m)
+}
+
+func (d *stub) SendTCP(addr *net.TCPAddr, m []byte) ([]byte, error) {
+	return d.sendtcp(addr, m)
 }
 
 func (d *stub) Send(m []byte, addr *net.UDPAddr, handler func(bytes []byte) bool) error {
@@ -60,8 +65,8 @@ func TestBroadcastAddressRequest(t *testing.T) {
 		debug:         false,
 		bindAddr:      bind,
 		broadcastAddr: udpaddr("127.0.0.1:60000"),
-		driver: &udp{
-			bindAddr: *bind,
+		driver: &ut0311{
+			bindAddr: bind.AddrPort(),
 			timeout:  5000 * time.Millisecond,
 			debug:    false,
 		},
@@ -119,8 +124,8 @@ func TestSequentialRequests(t *testing.T) {
 				Doors:   []string{},
 			},
 		},
-		driver: &udp{
-			bindAddr: *bind,
+		driver: &ut0311{
+			bindAddr: bind.AddrPort(),
 			timeout:  5000 * time.Millisecond,
 			debug:    false,
 		},
@@ -189,8 +194,8 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 				Doors:   []string{},
 			},
 		},
-		driver: &udp{
-			bindAddr: *bind,
+		driver: &ut0311{
+			bindAddr: bind.AddrPort(),
 			timeout:  5000 * time.Millisecond,
 			debug:    false,
 		},
@@ -276,8 +281,8 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 				Doors:   []string{},
 			},
 		},
-		driver: &udp{
-			bindAddr: *bind,
+		driver: &ut0311{
+			bindAddr: bind.AddrPort(),
 			timeout:  5000 * time.Millisecond,
 			debug:    false,
 		},
