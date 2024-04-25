@@ -19,6 +19,12 @@ type udp struct {
 var guard sync.Mutex
 var NONE = time.Time{}
 
+/*
+ * Broadcasts a request to a UDP address and returns the replies collected within the duration of
+ * the 'timeout' of the 'udp' struct.
+ *
+ * Returns an error if the UDP socket open, send or read failed.
+ */
 func (u *udp) Broadcast(request []byte, addr *net.UDPAddr) ([][]byte, error) {
 	u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
 
@@ -80,8 +86,8 @@ func (u *udp) Broadcast(request []byte, addr *net.UDPAddr) ([][]byte, error) {
  * Opens a connected UDP socket to the destination address, sends the request and returns the reply
  * (if any).
  *
- * Returns an error the UDP socket open, send or read failed or the read timed out, otherwise returns
- * a byte slice with the reply.
+ * Returns an error if the UDP socket open, send or read failed or the read timed out, otherwise
+ * returns a byte slice with the reply.
  */
 func (u *udp) SendTo(addr *net.UDPAddr, request []byte) ([]byte, error) {
 	bind := u.bindAddr

@@ -62,49 +62,43 @@ func (u *uhppote) GetDevice(serialNumber uint32) (*types.Device, error) {
 		SerialNumber: types.SerialNumber(serialNumber),
 	}
 
-	replies, err := u.sendTo(serialNumber, request, messages.GetDeviceResponse{})
-	if err != nil {
+	if response, err := u.sendTo(serialNumber, request, messages.GetDeviceResponse{}); err != nil {
 		return nil, err
-	}
+	} else {
+		reply := response.(messages.GetDeviceResponse)
 
-	for _, v := range replies {
-		reply := v.(messages.GetDeviceResponse)
-		if uint32(reply.SerialNumber) == serialNumber {
-			name := ""
-			if device, ok := u.devices[serialNumber]; ok {
-				name = device.Name
-			}
-
-			port := uint16(60000)
-			if addr := u.BroadcastAddr(); addr != nil {
-				port = uint16(addr.Port) // FIXME rework u.BroadCastAddr as netip.AddrPort
-			}
-
-			if device, ok := u.DeviceList()[serialNumber]; ok {
-				if device.Address != nil {
-					port = device.Address.Port()
-				}
-			}
-
-			addr := netip.AddrPort{}
-			if v, ok := netip.AddrFromSlice(reply.IpAddress); ok {
-				addr = netip.AddrPortFrom(v, port)
-			}
-
-			return &types.Device{
-				Name:         name,
-				SerialNumber: reply.SerialNumber,
-				IpAddress:    reply.IpAddress,
-				SubnetMask:   reply.SubnetMask,
-				Gateway:      reply.Gateway,
-				MacAddress:   reply.MacAddress,
-				Version:      reply.Version,
-				Date:         reply.Date,
-				Address:      addr,
-				TimeZone:     time.Local,
-			}, nil
+		name := ""
+		if device, ok := u.devices[serialNumber]; ok {
+			name = device.Name
 		}
-	}
 
-	return nil, nil
+		port := uint16(60000)
+		if addr := u.BroadcastAddr(); addr != nil {
+			port = uint16(addr.Port) // FIXME rework u.BroadCastAddr as netip.AddrPort
+		}
+
+		if device, ok := u.devices[serialNumber]; ok {
+			if device.Address != nil {
+				port = device.Address.Port()
+			}
+		}
+
+		addr := netip.AddrPort{}
+		if v, ok := netip.AddrFromSlice(reply.IpAddress); ok {
+			addr = netip.AddrPortFrom(v, port)
+		}
+
+		return &types.Device{
+			Name:         name,
+			SerialNumber: reply.SerialNumber,
+			IpAddress:    reply.IpAddress,
+			SubnetMask:   reply.SubnetMask,
+			Gateway:      reply.Gateway,
+			MacAddress:   reply.MacAddress,
+			Version:      reply.Version,
+			Date:         reply.Date,
+			Address:      addr,
+			TimeZone:     time.Local,
+		}, nil
+	}
 }

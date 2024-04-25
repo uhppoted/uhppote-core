@@ -92,33 +92,9 @@ func (u *uhppote) ListenAddr() *net.UDPAddr {
 }
 
 func (u *uhppote) broadcast(request, reply any) ([]any, error) {
-	return u.sendTo(0, request, reply)
-}
-
-// Sends a UDP message to a specific device but anticipates replies from more than one device
-// because it may fall back to the broadcast address if the device ID has no configured IP
-// address.
-func (u *uhppote) sendTo(serialNumber uint32, request, reply any) ([]any, error) {
-	m, err := codec.Marshal(request)
-	if err != nil {
+	if m, err := codec.Marshal(request); err != nil {
 		return nil, err
-	}
-
-	f := func() ([][]byte, error) {
-		if serialNumber == 0 {
-			return u.udpBroadcastTo(m)
-		} else if controller, ok := u.devices[serialNumber]; !ok {
-			return u.udpBroadcastTo(m)
-		} else if controller.Address == nil {
-			return u.udpBroadcastTo(m)
-		} else if controller.Protocol == "tcp" {
-			return u.tcpSendTo(*controller.Address, m)
-		} else {
-			return u.udpSendTo(*controller.Address, m)
-		}
-	}
-
-	if responses, err := f(); err != nil {
+	} else if responses, err := u.udpBroadcastTo(m); err != nil {
 		return nil, err
 	} else {
 		replies := []any{}
@@ -127,12 +103,6 @@ func (u *uhppote) sendTo(serialNumber uint32, request, reply any) ([]any, error)
 			// ... discard invalid replies
 			if len(bytes) != 64 {
 				u.debugf(" ... receive error", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
-				continue
-			}
-
-			// ... discard replies without a valid device ID
-			if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); serialNumber != 0 && deviceID != serialNumber {
-				u.debugf(" ... receive error", fmt.Errorf("invalid device ID - expected:%v, got:%v", serialNumber, deviceID))
 				continue
 			}
 
@@ -147,6 +117,62 @@ func (u *uhppote) sendTo(serialNumber uint32, request, reply any) ([]any, error)
 		}
 
 		return replies, nil
+	}
+}
+
+/*
+ * Sends a UDP message to a specific device and returns the decoded response.
+ *
+ * The internal implementation anticipates replies from more than one device because the
+ * request may be broadcast - only the reply that matches the serial number is returned.
+ *
+ * Returns an error if the send, receive or decoding failed.
+ */
+func (u *uhppote) sendTo(serialNumber uint32, request, reply any) (any, error) {
+	m, err := codec.Marshal(request)
+	if err != nil {
+		return nil, err
+	}
+
+	f := func() ([][]byte, error) {
+		if serialNumber == 0 {
+			return u.udpBroadcastTo(m)
+		} else if controller, ok := u.devices[serialNumber]; !ok {
+			return u.udpBroadcastTo(m) // FIXME don't wait for timeout if reply is valid
+		} else if controller.Address == nil {
+			return u.udpBroadcastTo(m)
+		} else if controller.Protocol == "tcp" {
+			return u.tcpSendTo(*controller.Address, m)
+		} else {
+			return u.udpSendTo(*controller.Address, m)
+		}
+	}
+
+	if responses, err := f(); err != nil {
+		return nil, err
+	} else {
+		for _, bytes := range responses {
+			// ... discard invalid replies
+			if len(bytes) != 64 {
+				u.debugf(" ... receive error", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
+				continue
+			}
+
+			// ... discard replies without a valid device ID
+			if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); serialNumber != 0 && deviceID != serialNumber {
+				u.debugf(" ... receive error", fmt.Errorf("invalid device ID - expected:%v, got:%v", serialNumber, deviceID))
+				continue
+			}
+
+			// ... discard unparseable replies
+			if v, err := codec.UnmarshalAs(bytes, reply); err != nil {
+				u.debugf(" ... receive error", err)
+			} else {
+				return v, nil
+			}
+		}
+
+		return nil, fmt.Errorf("no reply to request")
 	}
 }
 
