@@ -22,7 +22,7 @@ func (u *uhppote) GetDevices() ([]types.Device, error) {
 		port = uint16(addr.Port)
 	}
 
-	devices := []types.Device{}
+	controllers := []types.Device{}
 	for _, v := range replies {
 		reply := v.(messages.GetDeviceResponse)
 
@@ -36,7 +36,7 @@ func (u *uhppote) GetDevices() ([]types.Device, error) {
 			addr = netip.AddrPortFrom(v, port)
 		}
 
-		devices = append(devices, types.Device{
+		controllers = append(controllers, types.Device{
 			Name:         name,
 			SerialNumber: reply.SerialNumber,
 			IpAddress:    reply.IpAddress,
@@ -50,7 +50,7 @@ func (u *uhppote) GetDevices() ([]types.Device, error) {
 		})
 	}
 
-	return devices, nil
+	return controllers, nil
 }
 
 func (u *uhppote) GetDevice(serialNumber uint32) (*types.Device, error) {

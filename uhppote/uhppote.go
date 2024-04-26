@@ -95,7 +95,7 @@ func (u *uhppote) ListenAddr() *net.UDPAddr {
 func (u *uhppote) broadcast(request, reply any) ([]any, error) {
 	if m, err := codec.Marshal(request); err != nil {
 		return nil, err
-	} else if responses, err := u.udpBroadcastTo(m); err != nil {
+	} else if responses, err := u.udpBroadcast(m); err != nil {
 		return nil, err
 	} else {
 		replies := []any{}
@@ -137,11 +137,11 @@ func (u *uhppote) sendTo(serialNumber uint32, request, reply any) (any, error) {
 
 	f := func() ([][]byte, error) {
 		if serialNumber == 0 {
-			return u.udpBroadcastTo(m)
+			return u.udpBroadcast(m)
 		} else if controller, ok := u.devices[serialNumber]; !ok {
-			return u.udpBroadcastTo(m) // FIXME don't wait for timeout if reply is valid
+			return u.udpBroadcast(m) // FIXME don't wait for timeout if reply is valid
 		} else if controller.Address == nil {
-			return u.udpBroadcastTo(m)
+			return u.udpBroadcast(m)
 		} else if controller.Protocol == "tcp" {
 			return u.tcpSendTo(*controller.Address, m)
 		} else {
@@ -178,7 +178,7 @@ func (u *uhppote) sendTo(serialNumber uint32, request, reply any) (any, error) {
 }
 
 // Broadcasts a UDP request and returns all received replies.
-func (u *uhppote) udpBroadcastTo(request []byte) ([][]byte, error) {
+func (u *uhppote) udpBroadcast(request []byte) ([][]byte, error) {
 	dest := u.broadcastAddress()
 
 	return u.driver.Broadcast(request, dest)

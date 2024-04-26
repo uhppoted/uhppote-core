@@ -3,7 +3,7 @@
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
       - [x] Verify TCP with real controller
       - [x] TCP 'driver'
-      - [ ] See if controller sends events to TCP listener
+      - [x] See if controller sends events to TCP listener
       - [ ] Unify send/sendto implementations
       - [ ] Rework bind address as netip.AddrPort
       - [ ] Rework broadcast address as netip.AddrPort
@@ -11,11 +11,8 @@
       - [ ] Rework address as *netip.AddrPort
             - [x] uhppote-core
             - [x] Update uhppoted-lib::conf
-            - [ ] Update throughout
-                  - [x] uhppote-cli
-                  - [x] uhppoted-lib
-                  - [ ] uhppoted-rest
-                  - [ ] uhppoted-mqtt
+            - [x] uhppote-cli
+            - [x] uhppoted-lib
             - [ ] Replace pointer with zero value
             - [ ] // FIXME rework u.BroadCastAddr as netip.AddrPort
       - [ ] Add protocol field to UHPPOTE controller struct
@@ -23,9 +20,17 @@
             - [x] Update uhppoted-lib::conf
             - [ ] Update throughout
                   - [x] uhppote-cli
-                  - [ ] uhppoted-lib
-                  - [ ] uhppoted-rest
-                  - [ ] uhppoted-mqtt
+                  - [x] uhppoted-lib
+                  - [x] uhppoted-rest
+                  - [x] uhppoted-mqtt
+                  - [ ] uhppoted-httpd
+                  - [x] uhppoted-app-db
+                  - [ ] uhppoted-app-s3
+                  - [ ] uhppoted-app-sheets
+                  - [ ] uhppoted-app-wild-apricot
+                  - [ ] uhppoted-codegen
+                  - [ ] uhppoted-dll
+                  - [ ] uhppoted-tunnel
       - [ ] Add TCP to simulator
       - [ ] CHANGELOG
       - [ ] README

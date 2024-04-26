@@ -100,6 +100,8 @@ func (u *ut0311) Broadcast(request []byte, addr *net.UDPAddr) ([][]byte, error) 
  * returns a byte slice with the reply.
  */
 func (u *ut0311) SendUDP(addr *net.UDPAddr, request []byte) ([]byte, error) {
+	deadline := time.Now().Add(u.timeout)
+	address := fmt.Sprintf("%v", addr)
 	bind := net.UDPAddrFromAddrPort(u.bindAddr)
 
 	if bind == nil {
@@ -115,7 +117,12 @@ func (u *ut0311) SendUDP(addr *net.UDPAddr, request []byte) ([]byte, error) {
 		defer guard.Unlock()
 	}
 
-	if connection, err := net.DialUDP("udp4", bind, addr); err != nil {
+	dialer := net.Dialer{
+		Deadline:  deadline,
+		LocalAddr: bind,
+	}
+
+	if connection, err := dialer.Dial("udp4", address); err != nil {
 		return nil, err
 	} else if connection == nil {
 		return nil, fmt.Errorf("invalid UDP socket (%v)", connection)
@@ -132,15 +139,16 @@ func (u *ut0311) SendUDP(addr *net.UDPAddr, request []byte) ([]byte, error) {
 		if N, err := connection.Write(request); err != nil {
 			return nil, fmt.Errorf("failed to write to UDP socket [%v]", err)
 		} else {
-			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v\n", N, addr), nil)
+			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v", N, addr), nil)
+			u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
 		}
-
-		u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
 
 		if N, err := connection.Read(buffer); err != nil {
 			u.debugf(" ... receive error", err)
 			return nil, err
 		} else {
+			u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n ... response\n%s", N, addr, dump(buffer[:N], " ...          ")), nil)
+
 			return buffer[0:N], nil
 		}
 	}
@@ -153,6 +161,8 @@ func (u *ut0311) SendUDP(addr *net.UDPAddr, request []byte) ([]byte, error) {
  * returns a byte slice with the reply.
  */
 func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
+	deadline := time.Now().Add(u.timeout)
+	address := fmt.Sprintf("%v", addr)
 	bind := net.TCPAddrFromAddrPort(u.bindAddr)
 
 	if bind == nil {
@@ -168,14 +178,18 @@ func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
 		defer guard.Unlock()
 	}
 
-	if connection, err := net.DialTCP("tcp4", bind, addr); err != nil {
+	dialer := net.Dialer{
+		Deadline:  deadline,
+		LocalAddr: bind,
+	}
+
+	if connection, err := dialer.Dial("tcp4", address); err != nil {
 		return nil, err
 	} else if connection == nil {
 		return nil, fmt.Errorf("invalid TCP socket (%v)", connection)
 	} else {
 		defer connection.Close()
 
-		deadline := time.Now().Add(u.timeout)
 		buffer := make([]byte, 1024)
 
 		if err := connection.SetDeadline(deadline); err != nil {
@@ -185,15 +199,20 @@ func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
 		if N, err := connection.Write(request); err != nil {
 			return nil, fmt.Errorf("failed to write to UDP socket [%v]", err)
 		} else {
-			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v\n", N, addr), nil)
+			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v", N, connection.RemoteAddr()), nil)
+			u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
 		}
-
-		u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
 
 		if N, err := connection.Read(buffer); err != nil {
 			u.debugf(" ... receive error", err)
 			return nil, err
 		} else {
+			u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n ... response\n%s",
+				N,
+				connection.RemoteAddr(),
+				dump(buffer[:N], " ...          ")),
+				nil)
+
 			return buffer[0:N], nil
 		}
 	}
