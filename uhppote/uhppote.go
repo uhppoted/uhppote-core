@@ -25,7 +25,6 @@ type driver interface {
 }
 
 type uhppote struct {
-	bindAddr      *net.UDPAddr
 	broadcastAddr *net.UDPAddr
 	listenAddr    *net.UDPAddr
 	devices       map[uint32]Device
@@ -40,12 +39,12 @@ func NewUHPPOTE(
 	timeout time.Duration,
 	devices []Device,
 	debug bool) IUHPPOTE {
-	bind := net.UDPAddr(bindAddr)
+
+	bind := bindAddr
 	broadcast := net.UDPAddr(broadcastAddr)
 	listen := net.UDPAddr(listenAddr)
 
 	uhppote := uhppote{
-		bindAddr:      &bind,
 		broadcastAddr: &broadcast,
 		listenAddr:    &listen,
 		devices:       map[uint32]Device{},

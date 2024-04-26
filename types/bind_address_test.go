@@ -98,5 +98,108 @@ func TestBindAddrMarshalJSON(t *testing.T) {
 			t.Errorf("Incorrect JSON string - expected:%v, got:%v", expected, s)
 		}
 	}
+}
 
+func TestBindAddrUnmarshalJSON(t *testing.T) {
+	tests := map[string]BindAddr{
+		`"192.168.1.100"`: BindAddr{
+			IP:   []byte{192, 168, 1, 100},
+			Port: 0,
+		},
+
+		`"192.168.1.100:12345"`: BindAddr{
+			IP:   []byte{192, 168, 1, 100},
+			Port: 12345,
+		},
+
+		`"192.168.1.100:0"`: BindAddr{
+			IP:   []byte{192, 168, 1, 100},
+			Port: 0,
+		},
+	}
+
+	for s, expected := range tests {
+		bind := BindAddr{}
+
+		if err := json.Unmarshal([]byte(s), &bind); err != nil {
+			t.Fatalf("Error unmarshaling BindAddr '%v' (%v)", s, err)
+		} else if !reflect.DeepEqual(bind, expected) {
+			t.Errorf("Incorrectly unmarshalled bind address '%v'\nexpected:%v\ngot:     %v", s, expected, bind)
+		}
+	}
+}
+
+func TestBindAddrEqual(t *testing.T) {
+	tests := []struct {
+		bind     BindAddr
+		address  Address
+		expected bool
+	}{
+		{
+			BindAddr{
+				IP:   []byte{192, 168, 1, 100},
+				Port: 0,
+			},
+			Address{
+				IP:   []byte{192, 168, 1, 100},
+				Port: 0,
+			},
+			true,
+		},
+		{
+			BindAddr{
+				IP:   []byte{192, 168, 1, 100},
+				Port: 0,
+			},
+			Address{
+				IP:   []byte{192, 168, 1, 100},
+				Port: 12345,
+			},
+			true,
+		},
+		{
+			BindAddr{
+				IP:   []byte{192, 168, 1, 100},
+				Port: 0,
+			},
+			Address{
+				IP:   []byte{192, 168, 1, 125},
+				Port: 0,
+			},
+			false,
+		},
+	}
+
+	for _, test := range tests {
+		equal := test.bind.Equal(&test.address)
+
+		if equal != test.expected {
+			t.Errorf("Error comparing bind address - expected:%v, got:%v", test.expected, equal)
+		}
+	}
+}
+
+func TestBindAddrClone(t *testing.T) {
+	bind := BindAddr{
+		IP:   []byte{192, 168, 1, 100},
+		Port: 12345,
+	}
+
+	expected := BindAddr{
+		IP:   []byte{192, 168, 1, 100},
+		Port: 12345,
+	}
+
+	clone := bind.Clone()
+
+	bind.IP = []byte{192, 168, 1, 125}
+	bind.Port = 54321
+
+	if !reflect.DeepEqual(*clone, expected) {
+		t.Errorf("Invalid BindAddress clone\nexpected:%#v\ngot:     %#v", expected, clone)
+	}
+
+	if reflect.DeepEqual(bind, expected) {
+		t.Errorf("Sanity check failed")
+	}
 }

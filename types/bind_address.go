@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
+	"net/netip"
 	"regexp"
 )
 
@@ -17,6 +18,10 @@ func (a BindAddr) String() string {
 	} else {
 		return (*net.UDPAddr)(&a).String()
 	}
+}
+
+func (a BindAddr) AddrPort() netip.AddrPort {
+	return (*net.UDPAddr)(&a).AddrPort()
 }
 
 func (a *BindAddr) Set(v string) error {

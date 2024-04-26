@@ -63,7 +63,6 @@ func TestBroadcastAddressRequest(t *testing.T) {
 	u := uhppote{
 		devices:       make(map[uint32]Device),
 		debug:         false,
-		bindAddr:      bind,
 		broadcastAddr: udpaddr("127.0.0.1:60000"),
 		driver: &ut0311{
 			bindAddr: bind.AddrPort(),
@@ -111,7 +110,6 @@ func TestSequentialRequests(t *testing.T) {
 	bind := udpaddr("127.0.0.1:12345")
 	u := uhppote{
 		debug:         false,
-		bindAddr:      bind,
 		broadcastAddr: udpaddr("127.0.0.1:60000"),
 		devices: map[uint32]Device{
 			423187757: Device{
@@ -268,7 +266,6 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 	bind := udpaddr("127.0.0.1:12345")
 	u := uhppote{
 		debug:         false,
-		bindAddr:      bind,
 		broadcastAddr: udpaddr("127.0.0.1:60000"),
 		devices: map[uint32]Device{
 			423187757: Device{
