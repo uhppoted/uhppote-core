@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
+	"net/netip"
 	"regexp"
 )
 
@@ -21,6 +22,16 @@ func (a *Address) String() string {
 	}
 
 	return ""
+}
+
+func (a *Address) AddrPort() *netip.AddrPort {
+	if a == nil {
+		return nil
+	} else {
+		addr := (*net.UDPAddr)(a).AddrPort()
+
+		return &addr
+	}
 }
 
 func (a *Address) MarshalJSON() ([]byte, error) {

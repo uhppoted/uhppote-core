@@ -18,7 +18,7 @@
       - [ ] Add protocol field to UHPPOTE controller struct
             - [x] uhppote-core
             - [x] Update uhppoted-lib::conf
-            - [ ] Update throughout
+            - [ ] Update dependencies
                   - [x] uhppote-cli
                   - [x] uhppoted-lib
                   - [x] uhppoted-rest
@@ -28,10 +28,9 @@
                   - [x] uhppoted-app-s3
                   - [x] uhppoted-app-sheets
                   - [x] uhppoted-app-wild-apricot
-                  - [ ] uhppoted-codegen
+                  - [x] uhppoted-codegen
                   - [ ] uhppoted-dll
                   - [ ] uhppoted-tunnel
-      - [ ] Add TCP to simulator
       - [ ] CHANGELOG
       - [ ] README
 
