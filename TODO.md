@@ -25,9 +25,9 @@
                   - [x] uhppoted-mqtt
                   - [ ] uhppoted-httpd
                   - [x] uhppoted-app-db
-                  - [ ] uhppoted-app-s3
-                  - [ ] uhppoted-app-sheets
-                  - [ ] uhppoted-app-wild-apricot
+                  - [x] uhppoted-app-s3
+                  - [x] uhppoted-app-sheets
+                  - [x] uhppoted-app-wild-apricot
                   - [ ] uhppoted-codegen
                   - [ ] uhppoted-dll
                   - [ ] uhppoted-tunnel
@@ -37,7 +37,7 @@
 
 - [ ] Rework UDP to use connected sockets
       - https://github.com/uhppoted/uhppote-simulator/issues/9
-      - // FIXME don't wait for timeout if reply is valid
+      - [x] // FIXME don't wait for timeout if reply is valid
 
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
 - [ ] `put-card`: error on bad card numbers (0,0xffffffff,0x00ffffff)

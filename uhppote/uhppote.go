@@ -18,6 +18,7 @@ const (
 
 type driver interface {
 	Broadcast([]byte, *net.UDPAddr) ([][]byte, error)
+	BroadcastTo([]byte, *net.UDPAddr, func([]byte) bool) ([]byte, error)
 	Send([]byte, *net.UDPAddr, func([]byte) bool) error
 	SendUDP(*net.UDPAddr, []byte) ([]byte, error)
 	SendTCP(*net.TCPAddr, []byte) ([]byte, error)
@@ -126,21 +127,24 @@ func (u *uhppote) broadcast(request, reply any) ([]any, error) {
  * The internal implementation anticipates replies from more than one device because the
  * request may be broadcast - only the reply that matches the serial number is returned.
  *
- * Returns an error if the send, receive or decoding failed.
+ * Returns an error if the send, receive or decoding failed or the controller serial number
+ * is invalid (0).
  */
 func (u *uhppote) sendTo(serialNumber uint32, request, reply any) (any, error) {
+	if serialNumber == 0 {
+		return nil, fmt.Errorf("invalid controller ID (%v)", serialNumber)
+	}
+
 	m, err := codec.Marshal(request)
 	if err != nil {
 		return nil, err
 	}
 
-	f := func() ([][]byte, error) {
-		if serialNumber == 0 {
-			return u.udpBroadcast(m)
-		} else if controller, ok := u.devices[serialNumber]; !ok {
-			return u.udpBroadcast(m) // FIXME don't wait for timeout if reply is valid
+	f := func() ([]byte, error) {
+		if controller, ok := u.devices[serialNumber]; !ok {
+			return u.udpBroadcastTo(serialNumber, m)
 		} else if controller.Address == nil {
-			return u.udpBroadcast(m)
+			return u.udpBroadcastTo(serialNumber, m)
 		} else if controller.Protocol == "tcp" {
 			return u.tcpSendTo(*controller.Address, m)
 		} else {
@@ -148,31 +152,25 @@ func (u *uhppote) sendTo(serialNumber uint32, request, reply any) (any, error) {
 		}
 	}
 
-	if responses, err := f(); err != nil {
+	if response, err := f(); err != nil {
 		return nil, err
 	} else {
-		for _, bytes := range responses {
-			// ... discard invalid replies
-			if len(bytes) != 64 {
-				u.debugf(" ... receive error", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
-				continue
-			}
-
-			// ... discard replies without a valid device ID
-			if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); serialNumber != 0 && deviceID != serialNumber {
-				u.debugf(" ... receive error", fmt.Errorf("invalid device ID - expected:%v, got:%v", serialNumber, deviceID))
-				continue
-			}
-
-			// ... discard unparseable replies
-			if v, err := codec.UnmarshalAs(bytes, reply); err != nil {
-				u.debugf(" ... receive error", err)
-			} else {
-				return v, nil
-			}
+		// ... invalid reply?
+		if len(response) != 64 {
+			return nil, fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(response))
 		}
 
-		return nil, fmt.Errorf("no reply to request")
+		// ... reply with incorrect controller ID ?
+		if ID := binary.LittleEndian.Uint32(response[4:8]); serialNumber != 0 && ID != serialNumber {
+			return nil, fmt.Errorf("invalid controller ID - expected:%v, got:%v", serialNumber, ID)
+		}
+
+		// ... unparseable replies ?
+		if v, err := codec.UnmarshalAs(response, reply); err != nil {
+			return nil, err
+		} else {
+			return v, nil
+		}
 	}
 }
 
@@ -183,33 +181,45 @@ func (u *uhppote) udpBroadcast(request []byte) ([][]byte, error) {
 	return u.driver.Broadcast(request, dest)
 }
 
+func (u *uhppote) udpBroadcastTo(serialNumber uint32, request []byte) ([]byte, error) {
+	dest := u.broadcastAddress()
+
+	var handler func([]byte) bool
+
+	handler = func(bytes []byte) bool {
+		// ... discard invalid replies
+		if len(bytes) != 64 {
+			u.debugf(" ... receive error", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
+			return false
+		}
+
+		// ... discard replies without a valid device ID
+		if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); deviceID != serialNumber {
+			u.debugf(" ... receive error", fmt.Errorf("invalid device ID - expected:%v, got:%v", serialNumber, deviceID))
+			return false
+		}
+
+		return true
+	}
+
+	return u.driver.BroadcastTo(request, dest, handler)
+}
+
 // Sends a UDP message to a specific device but anticipates replies from more than one device
 // because the controller address may be a broadcast address (unlikely but possible).
-func (u *uhppote) udpSendTo(address netip.AddrPort, request []byte) ([][]byte, error) {
+func (u *uhppote) udpSendTo(address netip.AddrPort, request []byte) ([]byte, error) {
 	dest := net.UDPAddrFromAddrPort(address)
 
-	if response, err := u.driver.SendUDP(dest, request); err != nil {
-		return nil, err
-	} else {
-		return [][]byte{
-			response,
-		}, nil
-	}
+	return u.driver.SendUDP(dest, request)
 }
 
 /* Sends the request as a TCP message and wraps the reply (if any) as slice of byte arrays.
  *
  */
-func (u *uhppote) tcpSendTo(address netip.AddrPort, request []byte) ([][]byte, error) {
+func (u *uhppote) tcpSendTo(address netip.AddrPort, request []byte) ([]byte, error) {
 	dest := net.TCPAddrFromAddrPort(address)
 
-	if response, err := u.driver.SendTCP(dest, request); err != nil {
-		return nil, err
-	} else {
-		return [][]byte{
-			response,
-		}, nil
-	}
+	return u.driver.SendTCP(dest, request)
 }
 
 func (u *uhppote) send(serialNumber uint32, request, reply any) error {

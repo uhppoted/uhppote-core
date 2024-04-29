@@ -93,6 +93,62 @@ func (u *ut0311) Broadcast(request []byte, addr *net.UDPAddr) ([][]byte, error) 
 }
 
 /*
+ * Broadcasts a request to a UDP address and returns the first valid reply.
+ *
+ * Returns an error if the UDP socket open, send or read failed.
+ */
+func (u *ut0311) BroadcastTo(request []byte, addr *net.UDPAddr, callback func([]byte) bool) ([]byte, error) {
+	u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
+
+	deadline := time.Now().Add(u.timeout)
+	bind := net.UDPAddrFromAddrPort(u.bindAddr)
+
+	if bind == nil {
+		bind = &net.UDPAddr{
+			IP:   net.IPv4(0, 0, 0, 0),
+			Port: 0,
+			Zone: "",
+		}
+	}
+
+	if bind.Port != 0 {
+		guard.Lock()
+		defer guard.Unlock()
+	}
+
+	if connection, err := net.ListenUDP("udp", bind); err != nil {
+		return nil, fmt.Errorf("error creating UDP socket (%v)", err)
+	} else if connection == nil {
+		return nil, fmt.Errorf("open() created invalid UDP socket (%v)", connection)
+	} else {
+
+		defer connection.Close()
+
+		if err := connection.SetDeadline(deadline); err != nil {
+			return nil, err
+		}
+
+		if N, err := connection.WriteToUDP(request, addr); err != nil {
+			return nil, fmt.Errorf("failed to write to UDP socket [%v]", err)
+		} else {
+			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v\n", N, addr), nil)
+		}
+
+		for {
+			reply := make([]byte, 2048)
+
+			if N, remote, err := connection.ReadFromUDP(reply); err != nil {
+				return nil, err
+			} else if callback(reply[:N]) {
+				u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n%s", N, remote, dump(reply[:N], " ...          ")), nil)
+
+				return reply[:N], err
+			}
+		}
+	}
+}
+
+/*
  * Opens a connected UDP socket to the destination address, sends the request and returns the reply
  * (if any).
  *
