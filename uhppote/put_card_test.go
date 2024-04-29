@@ -45,7 +45,7 @@ func TestPutCard(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				if !bytes.Equal(request, expected.request) {
 					return fmt.Errorf("invalid put-card request\n   expected:%v\n   got:     %v", expected.request, request)
 				} else {

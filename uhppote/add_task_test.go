@@ -36,9 +36,8 @@ func TestAddTask(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
-				handler(message)
-				return nil
+			broadcastTo: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) ([]byte, error) {
+				return message, nil
 			},
 		},
 	}
@@ -80,9 +79,8 @@ func TestAddTaskWithInvalidFromDate(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
-				handler(message)
-				return nil
+			broadcastTo: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) ([]byte, error) {
+				return message, nil
 			},
 		},
 	}
@@ -124,9 +122,8 @@ func TestAddTaskWithInvalidToDate(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
-				handler(message)
-				return nil
+			broadcastTo: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) ([]byte, error) {
+				return message, nil
 			},
 		},
 	}
@@ -169,9 +166,8 @@ func TestAddTaskWithInvalidResponse(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
-				handler(message)
-				return nil
+			broadcastTo: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) ([]byte, error) {
+				return message, nil
 			},
 		},
 	}

@@ -17,12 +17,9 @@ func (u *uhppote) ClearTaskList(deviceID uint32) (bool, error) {
 		MagicWord:    0x55aaaa55,
 	}
 
-	reply := messages.ClearTaskListResponse{}
-
-	err := u.send(deviceID, request, &reply)
-	if err != nil {
+	if reply, err := u.sendTo(deviceID, request, messages.ClearTaskListResponse{}); err != nil {
 		return false, err
+	} else {
+		return reply.(messages.ClearTaskListResponse).Succeeded, nil
 	}
-
-	return reply.Succeeded, nil
 }

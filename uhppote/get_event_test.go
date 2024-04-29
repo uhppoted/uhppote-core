@@ -20,7 +20,7 @@ func TestGetEvent(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -65,7 +65,7 @@ func TestGetEventWithNoEvents(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -92,7 +92,7 @@ func TestGetEventWithOverwrittenEvent(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -114,7 +114,7 @@ func TestGetEventWithOverwrittenEvent(t *testing.T) {
 func TestGetEventWithError(t *testing.T) {
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				return fmt.Errorf("EXPECTED")
 			},
 		},

@@ -32,7 +32,7 @@ func TestGetCardByID(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -76,7 +76,7 @@ func TestGetCardByIDWithInvalidFromDate(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -120,7 +120,7 @@ func TestGetCardByIDWithInvalidToDate(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -173,7 +173,7 @@ func TestGetCardByIndex(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -217,7 +217,7 @@ func TestGetCardByIndexWithInvalidFromDate(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -261,7 +261,7 @@ func TestGetCardByIndexWithInvalidToDate(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -292,7 +292,7 @@ func TestGetCardByIndexWithCardNotFound(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -319,7 +319,7 @@ func TestGetCardByIndexWithCardDeleted(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},

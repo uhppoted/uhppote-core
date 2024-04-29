@@ -17,8 +17,8 @@ const (
 )
 
 type driver interface {
-	Broadcast([]byte, *net.UDPAddr) ([][]byte, error)
-	BroadcastTo([]byte, *net.UDPAddr, func([]byte) bool) ([]byte, error)
+	Broadcast(*net.UDPAddr, []byte) ([][]byte, error)
+	BroadcastTo(*net.UDPAddr, []byte, func([]byte) bool) ([]byte, error)
 	Send([]byte, *net.UDPAddr, func([]byte) bool) error
 	SendUDP(*net.UDPAddr, []byte) ([]byte, error)
 	SendTCP(*net.TCPAddr, []byte) ([]byte, error)
@@ -92,6 +92,12 @@ func (u *uhppote) ListenAddr() *net.UDPAddr {
 	return nil
 }
 
+/*
+ * Broadcasts the request as a UDP message and returns the replies collected within the configured
+ * time limit. Invalid responses are discarded without raising an error.
+ *
+ * Returns an error if the send or receive failed.
+ */
 func (u *uhppote) broadcast(request, reply any) ([]any, error) {
 	if m, err := codec.Marshal(request); err != nil {
 		return nil, err
@@ -174,13 +180,16 @@ func (u *uhppote) sendTo(serialNumber uint32, request, reply any) (any, error) {
 	}
 }
 
-// Broadcasts a UDP request and returns all received replies.
+/*
+ * Broadcasts a UDP request and returns all received replies.
+ */
 func (u *uhppote) udpBroadcast(request []byte) ([][]byte, error) {
-	dest := u.broadcastAddress()
-
-	return u.driver.Broadcast(request, dest)
+	return u.driver.Broadcast(u.broadcastAddress(), request)
 }
 
+/*
+ * Broadcasts the UDP request and returns the first valid reply to the request.
+ */
 func (u *uhppote) udpBroadcastTo(serialNumber uint32, request []byte) ([]byte, error) {
 	dest := u.broadcastAddress()
 
@@ -202,19 +211,20 @@ func (u *uhppote) udpBroadcastTo(serialNumber uint32, request []byte) ([]byte, e
 		return true
 	}
 
-	return u.driver.BroadcastTo(request, dest, handler)
+	return u.driver.BroadcastTo(dest, request, handler)
 }
 
-// Sends a UDP message to a specific device but anticipates replies from more than one device
-// because the controller address may be a broadcast address (unlikely but possible).
+/*
+ * Sends a UDP message to a specific controller address.
+ */
 func (u *uhppote) udpSendTo(address netip.AddrPort, request []byte) ([]byte, error) {
 	dest := net.UDPAddrFromAddrPort(address)
 
 	return u.driver.SendUDP(dest, request)
 }
 
-/* Sends the request as a TCP message and wraps the reply (if any) as slice of byte arrays.
- *
+/*
+ * Sends the request as a TCP message and returns the reply (if any).
  */
 func (u *uhppote) tcpSendTo(address netip.AddrPort, request []byte) ([]byte, error) {
 	dest := net.TCPAddrFromAddrPort(address)

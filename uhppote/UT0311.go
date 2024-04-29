@@ -26,7 +26,7 @@ var NONE = time.Time{}
  *
  * Returns an error if the UDP socket open, send or read failed.
  */
-func (u *ut0311) Broadcast(request []byte, addr *net.UDPAddr) ([][]byte, error) {
+func (u *ut0311) Broadcast(addr *net.UDPAddr, request []byte) ([][]byte, error) {
 	u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
 
 	bind := net.UDPAddrFromAddrPort(u.bindAddr)
@@ -97,7 +97,7 @@ func (u *ut0311) Broadcast(request []byte, addr *net.UDPAddr) ([][]byte, error) 
  *
  * Returns an error if the UDP socket open, send or read failed.
  */
-func (u *ut0311) BroadcastTo(request []byte, addr *net.UDPAddr, callback func([]byte) bool) ([]byte, error) {
+func (u *ut0311) BroadcastTo(addr *net.UDPAddr, request []byte, callback func([]byte) bool) ([]byte, error) {
 	u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
 
 	deadline := time.Now().Add(u.timeout)

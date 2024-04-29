@@ -17,16 +17,9 @@ func (u *uhppote) DeleteCard(deviceID uint32, cardNumber uint32) (bool, error) {
 		CardNumber:   cardNumber,
 	}
 
-	reply := messages.DeleteCardResponse{}
-
-	err := u.send(deviceID, request, &reply)
-	if err != nil {
+	if reply, err := u.sendTo(deviceID, request, messages.DeleteCardResponse{}); err != nil {
 		return false, err
+	} else {
+		return reply.(messages.DeleteCardResponse).Succeeded, nil
 	}
-
-	if uint32(reply.SerialNumber) != deviceID {
-		return false, fmt.Errorf("incorrect serial number in response - expected '%v', received '%v'", deviceID, reply.SerialNumber)
-	}
-
-	return reply.Succeeded, nil
 }

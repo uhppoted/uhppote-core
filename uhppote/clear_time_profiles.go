@@ -17,12 +17,9 @@ func (u *uhppote) ClearTimeProfiles(deviceID uint32) (bool, error) {
 		MagicWord:    0x55aaaa55,
 	}
 
-	reply := messages.ClearTimeProfilesResponse{}
-
-	err := u.send(deviceID, request, &reply)
-	if err != nil {
+	if reply, err := u.sendTo(deviceID, request, messages.ClearTimeProfilesResponse{}); err != nil {
 		return false, err
+	} else {
+		return reply.(messages.ClearTimeProfilesResponse).Succeeded, nil
 	}
-
-	return reply.Succeeded, nil
 }

@@ -22,7 +22,7 @@ func TestGetDevices(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			broadcast: func(request []byte, addr *net.UDPAddr) ([][]byte, error) {
+			broadcast: func(addr *net.UDPAddr, request []byte) ([][]byte, error) {
 				return replies, nil
 			},
 		},
@@ -113,7 +113,7 @@ func TestGetDevicesWithAltPort(t *testing.T) {
 		},
 
 		driver: &stub{
-			broadcast: func(request []byte, addr *net.UDPAddr) ([][]byte, error) {
+			broadcast: func(addr *net.UDPAddr, request []byte) ([][]byte, error) {
 				return replies, nil
 			},
 		},
@@ -199,8 +199,8 @@ func TestGetDevice(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			broadcast: func(request []byte, addr *net.UDPAddr) ([][]byte, error) {
-				return replies, nil
+			broadcastTo: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) ([]byte, error) {
+				return replies[0], nil
 			},
 		},
 	}
@@ -291,7 +291,7 @@ func TestGetDeviceWithAlternatePort(t *testing.T) {
 		},
 
 		driver: &stub{
-			broadcast: func(request []byte, addr *net.UDPAddr) ([][]byte, error) {
+			broadcast: func(addr *net.UDPAddr, request []byte) ([][]byte, error) {
 				return replies, nil
 			},
 

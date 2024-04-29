@@ -30,16 +30,9 @@ func (u *uhppote) AddTask(deviceID uint32, task types.Task) (bool, error) {
 		MoreCards:    task.Cards,
 	}
 
-	response := messages.AddTaskResponse{}
-
-	err := u.send(deviceID, request, &response)
-	if err != nil {
+	if reply, err := u.sendTo(deviceID, request, messages.AddTaskResponse{}); err != nil {
 		return false, err
+	} else {
+		return reply.(messages.AddTaskResponse).Succeeded, nil
 	}
-
-	if uint32(response.SerialNumber) != deviceID {
-		return false, fmt.Errorf("incorrect device ID in response - expected '%v', received '%v'", deviceID, response.SerialNumber)
-	}
-
-	return response.Succeeded, nil
 }

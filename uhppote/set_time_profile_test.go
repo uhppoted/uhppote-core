@@ -39,7 +39,7 @@ func TestSetTimeProfile(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -86,7 +86,7 @@ func TestSetTimeProfileWithInvalidFromDate(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -133,7 +133,7 @@ func TestSetTimeProfileWithInvalidToDate(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -180,7 +180,7 @@ func TestSetTimeProfileWithMissingSegment1(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -227,7 +227,7 @@ func TestSetTimeProfileWithMissingSegment2(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -274,7 +274,7 @@ func TestSetTimeProfileWithMissingSegment3(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -322,7 +322,7 @@ func TestSetTimeProfileWithMissingSegment1End(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -370,7 +370,7 @@ func TestSetTimeProfileWithInvalidSegment1End(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -418,7 +418,7 @@ func TestSetTimeProfileWithMissingSegment2End(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -466,7 +466,7 @@ func TestSetTimeProfileWithInvalidSegment2End(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -514,7 +514,7 @@ func TestSetTimeProfileWithInvalidSegment3Start(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -562,7 +562,7 @@ func TestSetTimeProfileWithInvalidSegment3End(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},
@@ -610,7 +610,7 @@ func TestSetTimeProfileWithInvalidResponse(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(request []byte, addr *net.UDPAddr, handler func([]byte) bool) error {
+			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
 				handler(message)
 				return nil
 			},

@@ -20,11 +20,9 @@ func (u *uhppote) ActivateKeypads(controllerID uint32, readers map[uint8]bool) (
 		Reader4:      readers[4],
 	}
 
-	reply := messages.ActivateAccessKeypadsResponse{}
-
-	if err := u.send(controllerID, request, &reply); err != nil {
+	if reply, err := u.sendTo(controllerID, request, messages.ActivateAccessKeypadsResponse{}); err != nil {
 		return false, err
 	} else {
-		return reply.Succeeded, nil
+		return reply.(messages.ActivateAccessKeypadsResponse).Succeeded, nil
 	}
 }

@@ -15,14 +15,19 @@ import (
 )
 
 type stub struct {
-	broadcast func([]byte, *net.UDPAddr) ([][]byte, error)
-	send      func([]byte, *net.UDPAddr, func([]byte) bool) error
-	sendudp   func(*net.UDPAddr, []byte) ([]byte, error)
-	sendtcp   func(*net.TCPAddr, []byte) ([]byte, error)
+	broadcast   func(*net.UDPAddr, []byte) ([][]byte, error)
+	broadcastTo func(*net.UDPAddr, []byte, func([]byte) bool) ([]byte, error)
+	send        func(*net.UDPAddr, []byte, func([]byte) bool) error
+	sendudp     func(*net.UDPAddr, []byte) ([]byte, error)
+	sendtcp     func(*net.TCPAddr, []byte) ([]byte, error)
 }
 
-func (d *stub) Broadcast(m []byte, addr *net.UDPAddr) ([][]byte, error) {
-	return d.broadcast(m, addr)
+func (d *stub) Broadcast(addr *net.UDPAddr, m []byte) ([][]byte, error) {
+	return d.broadcast(addr, m)
+}
+
+func (d *stub) BroadcastTo(addr *net.UDPAddr, m []byte, f func([]byte) bool) ([]byte, error) {
+	return d.broadcastTo(addr, m, f)
 }
 
 func (d *stub) SendUDP(addr *net.UDPAddr, m []byte) ([]byte, error) {
@@ -34,7 +39,7 @@ func (d *stub) SendTCP(addr *net.TCPAddr, m []byte) ([]byte, error) {
 }
 
 func (d *stub) Send(m []byte, addr *net.UDPAddr, handler func(bytes []byte) bool) error {
-	return d.send(m, addr, handler)
+	return d.send(addr, m, handler)
 }
 
 func (d *stub) Listen(signal chan interface{}, done chan interface{}, handler func(bytes []byte)) error {
