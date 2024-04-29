@@ -193,16 +193,12 @@ func (u *uhppote) udpBroadcast(request []byte) ([][]byte, error) {
 func (u *uhppote) udpBroadcastTo(serialNumber uint32, request []byte) ([]byte, error) {
 	dest := u.broadcastAddress()
 
-	var handler func([]byte) bool
-
-	handler = func(bytes []byte) bool {
-		// ... discard invalid replies
+	handler := func(bytes []byte) bool {
 		if len(bytes) != 64 {
 			u.debugf(" ... receive error", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
 			return false
 		}
 
-		// ... discard replies without a valid device ID
 		if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); deviceID != serialNumber {
 			u.debugf(" ... receive error", fmt.Errorf("invalid device ID - expected:%v, got:%v", serialNumber, deviceID))
 			return false
