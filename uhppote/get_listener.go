@@ -17,14 +17,12 @@ func (u *uhppote) GetListener(serialNumber uint32) (*types.Listener, error) {
 		SerialNumber: types.SerialNumber(serialNumber),
 	}
 
-	if reply, err := u.sendTo(serialNumber, request, messages.GetListenerResponse{}); err != nil {
+	if reply, err := sendto[messages.GetListenerResponse](u, serialNumber, request); err != nil {
 		return nil, err
 	} else {
-		response := reply.(messages.GetListenerResponse)
-
 		return &types.Listener{
-			SerialNumber: response.SerialNumber,
-			Address:      net.UDPAddr{IP: response.Address, Port: int(response.Port)},
+			SerialNumber: reply.SerialNumber,
+			Address:      net.UDPAddr{IP: reply.Address, Port: int(reply.Port)},
 		}, nil
 	}
 }

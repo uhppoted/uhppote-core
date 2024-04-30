@@ -16,14 +16,12 @@ func (u *uhppote) GetEventIndex(deviceID uint32) (*types.EventIndex, error) {
 		SerialNumber: types.SerialNumber(deviceID),
 	}
 
-	if reply, err := u.sendTo(deviceID, request, messages.GetEventIndexResponse{}); err != nil {
+	if reply, err := sendto[messages.GetEventIndexResponse](u, deviceID, request); err != nil {
 		return nil, err
 	} else {
-		response := reply.(messages.GetEventIndexResponse)
-
 		return &types.EventIndex{
-			SerialNumber: response.SerialNumber,
-			Index:        response.Index,
+			SerialNumber: reply.SerialNumber,
+			Index:        reply.Index,
 		}, nil
 	}
 }

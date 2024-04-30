@@ -17,38 +17,36 @@ func (u *uhppote) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) 
 		CardNumber:   cardNumber,
 	}
 
-	if reply, err := u.sendTo(deviceID, request, messages.GetCardByIDResponse{}); err != nil {
+	if reply, err := sendto[messages.GetCardByIDResponse](u, deviceID, request); err != nil {
 		return nil, err
 	} else {
-		response := reply.(messages.GetCardByIDResponse)
-
-		if response.CardNumber == 0 {
+		if reply.CardNumber == 0 {
 			return nil, nil
 		}
 
-		if response.CardNumber != cardNumber {
-			return nil, fmt.Errorf("incorrect card number in response - expected '%v', received '%v'", cardNumber, response.CardNumber)
+		if reply.CardNumber != cardNumber {
+			return nil, fmt.Errorf("incorrect card number in response - expected '%v', received '%v'", cardNumber, reply.CardNumber)
 		}
 
-		// if response.From.IsZero() {
+		// if reply.From.IsZero() {
 		// 	return nil, fmt.Errorf("invalid 'from' date in response")
 		// }
 
-		// if response.To.IsZero() {
+		// if reply.To.IsZero() {
 		// 	return nil, fmt.Errorf("invalid 'to' date in response")
 		// }
 
 		card := types.Card{
-			CardNumber: response.CardNumber,
-			From:       response.From,
-			To:         response.To,
+			CardNumber: reply.CardNumber,
+			From:       reply.From,
+			To:         reply.To,
 			Doors: map[uint8]uint8{
-				1: response.Door1,
-				2: response.Door2,
-				3: response.Door3,
-				4: response.Door4,
+				1: reply.Door1,
+				2: reply.Door2,
+				3: reply.Door3,
+				4: reply.Door4,
 			},
-			PIN: response.PIN,
+			PIN: reply.PIN,
 		}
 
 		return &card, nil

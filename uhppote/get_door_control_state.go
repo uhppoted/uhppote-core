@@ -17,16 +17,14 @@ func (u *uhppote) GetDoorControlState(serialNumber uint32, door byte) (*types.Do
 		Door:         door,
 	}
 
-	if reply, err := u.sendTo(serialNumber, request, messages.GetDoorControlStateResponse{}); err != nil {
+	if reply, err := sendto[messages.GetDoorControlStateResponse](u, serialNumber, request); err != nil {
 		return nil, err
 	} else {
-		response := reply.(messages.GetDoorControlStateResponse)
-
 		return &types.DoorControlState{
-			SerialNumber: response.SerialNumber,
-			Door:         response.Door,
-			ControlState: types.ControlState(response.ControlState),
-			Delay:        response.Delay,
+			SerialNumber: reply.SerialNumber,
+			Door:         reply.Door,
+			ControlState: types.ControlState(reply.ControlState),
+			Delay:        reply.Delay,
 		}, nil
 	}
 }

@@ -136,6 +136,25 @@ func (u *uhppote) broadcast(request, reply any) ([]any, error) {
  * Returns an error if the send, receive or decoding failed or the controller serial number
  * is invalid (0).
  */
+func sendto[T any](u *uhppote, serialNumber uint32, request any) (T, error) {
+	var v T
+
+	if reply, err := u.sendTo(serialNumber, request, v); err != nil {
+		return v, err
+	} else {
+		return reply.(T), err
+	}
+}
+
+/*
+ * Sends a UDP message to a specific device and returns the decoded response.
+ *
+ * The internal implementation anticipates replies from more than one device because the
+ * request may be broadcast - only the reply that matches the serial number is returned.
+ *
+ * Returns an error if the send, receive or decoding failed or the controller serial number
+ * is invalid (0).
+ */
 func (u *uhppote) sendTo(serialNumber uint32, request, reply any) (any, error) {
 	if serialNumber == 0 {
 		return nil, fmt.Errorf("invalid controller ID (%v)", serialNumber)

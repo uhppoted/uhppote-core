@@ -14,6 +14,8 @@
             - [x] get_listener
             - [x] get_status
             - [x] get_time
+            - [x] get_time_profile
+      - [x] Rework `sendto` as generic function
       - [ ] Rework bind address as netip.AddrPort
       - [ ] Rework broadcast address as netip.AddrPort
       - [ ] Rework listen address as netip.AddrPort

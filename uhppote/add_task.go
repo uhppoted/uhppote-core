@@ -30,9 +30,9 @@ func (u *uhppote) AddTask(deviceID uint32, task types.Task) (bool, error) {
 		MoreCards:    task.Cards,
 	}
 
-	if reply, err := u.sendTo(deviceID, request, messages.AddTaskResponse{}); err != nil {
+	if reply, err := sendto[messages.AddTaskResponse](u, deviceID, request); err != nil {
 		return false, err
 	} else {
-		return reply.(messages.AddTaskResponse).Succeeded, nil
+		return reply.Succeeded, nil
 	}
 }

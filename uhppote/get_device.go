@@ -62,11 +62,9 @@ func (u *uhppote) GetDevice(serialNumber uint32) (*types.Device, error) {
 		SerialNumber: types.SerialNumber(serialNumber),
 	}
 
-	if response, err := u.sendTo(serialNumber, request, messages.GetDeviceResponse{}); err != nil {
+	if reply, err := sendto[messages.GetDeviceResponse](u, serialNumber, request); err != nil {
 		return nil, err
 	} else {
-		reply := response.(messages.GetDeviceResponse)
-
 		name := ""
 		if device, ok := u.devices[serialNumber]; ok {
 			name = device.Name

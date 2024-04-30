@@ -17,33 +17,31 @@ func (u *uhppote) GetEvent(deviceID, index uint32) (*types.Event, error) {
 		Index:        index,
 	}
 
-	if reply, err := u.sendTo(deviceID, request, messages.GetEventResponse{}); err != nil {
+	if reply, err := sendto[messages.GetEventResponse](u, deviceID, request); err != nil {
 		return nil, err
 	} else {
-		response := reply.(messages.GetEventResponse)
-
-		if response.Type == 0xff {
+		if reply.Type == 0xff {
 			return nil, fmt.Errorf("event at index %v has been overwritten", index)
 		}
 
-		if response.Index == 0 {
+		if reply.Index == 0 {
 			return nil, nil
 		}
 
-		//	if response.Timestamp.IsZero() == nil {
+		//	if reply.Timestamp.IsZero() == nil {
 		//		return nil, fmt.Errorf("invalid 'timestamp' in response")
 		//	}
 
 		return &types.Event{
-			SerialNumber: response.SerialNumber,
-			Index:        response.Index,
-			Type:         response.Type,
-			Granted:      response.Granted,
-			Door:         response.Door,
-			Direction:    response.Direction,
-			CardNumber:   response.CardNumber,
-			Timestamp:    response.Timestamp,
-			Reason:       response.Reason,
+			SerialNumber: reply.SerialNumber,
+			Index:        reply.Index,
+			Type:         reply.Type,
+			Granted:      reply.Granted,
+			Door:         reply.Door,
+			Direction:    reply.Direction,
+			CardNumber:   reply.CardNumber,
+			Timestamp:    reply.Timestamp,
+			Reason:       reply.Reason,
 		}, nil
 	}
 }

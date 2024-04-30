@@ -16,14 +16,12 @@ func (u *uhppote) GetTime(serialNumber uint32) (*types.Time, error) {
 		SerialNumber: types.SerialNumber(serialNumber),
 	}
 
-	if reply, err := u.sendTo(serialNumber, request, messages.GetTimeResponse{}); err != nil {
+	if reply, err := sendto[messages.GetTimeResponse](u, serialNumber, request); err != nil {
 		return nil, err
 	} else {
-		response := reply.(messages.GetTimeResponse)
-
 		return &types.Time{
-			SerialNumber: response.SerialNumber,
-			DateTime:     response.DateTime,
+			SerialNumber: reply.SerialNumber,
+			DateTime:     reply.DateTime,
 		}, nil
 	}
 }
