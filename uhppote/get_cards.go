@@ -16,12 +16,9 @@ func (u *uhppote) GetCards(deviceID uint32) (uint32, error) {
 		SerialNumber: types.SerialNumber(deviceID),
 	}
 
-	reply := messages.GetCardsResponse{}
-
-	err := u.send(deviceID, request, &reply)
-	if err != nil {
+	if reply, err := u.sendTo(deviceID, request, messages.GetCardsResponse{}); err != nil {
 		return 0, err
+	} else {
+		return reply.(messages.GetCardsResponse).Records, nil
 	}
-
-	return reply.Records, nil
 }

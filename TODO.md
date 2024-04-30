@@ -5,6 +5,15 @@
       - [x] TCP 'driver'
       - [x] See if controller sends events to TCP listener
       - [ ] Unify send/sendto implementations
+            - [x] delete_cards
+            - [x] get_card
+            - [x] get_cards
+            - [x] get_door_control_state
+            - [x] get_event
+            - [x] get_event_index
+            - [x] get_listener
+            - [x] get_status
+            - [x] get_time
       - [ ] Rework bind address as netip.AddrPort
       - [ ] Rework broadcast address as netip.AddrPort
       - [ ] Rework listen address as netip.AddrPort
@@ -31,6 +40,7 @@
                   - [x] uhppoted-codegen
                   - [ ] uhppoted-dll
                   - [ ] uhppoted-tunnel
+      - [ ] Rework GetListenerResponse to use AddrPort
       - [ ] CHANGELOG
       - [ ] README
 

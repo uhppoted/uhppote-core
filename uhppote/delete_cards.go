@@ -17,12 +17,9 @@ func (u *uhppote) DeleteCards(deviceID uint32) (bool, error) {
 		MagicWord:    0x55aaaa55,
 	}
 
-	reply := messages.DeleteCardsResponse{}
-
-	err := u.send(deviceID, request, &reply)
-	if err != nil {
+	if reply, err := u.sendTo(deviceID, request, messages.DeleteCardsResponse{}); err != nil {
 		return false, err
+	} else {
+		return reply.(messages.DeleteCardsResponse).Succeeded, nil
 	}
-
-	return reply.Succeeded, nil
 }
