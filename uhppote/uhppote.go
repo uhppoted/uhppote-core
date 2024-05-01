@@ -168,7 +168,7 @@ func (u *uhppote) sendTo(serialNumber uint32, request, reply any) (any, error) {
 	f := func() ([]byte, error) {
 		if controller, ok := u.devices[serialNumber]; !ok {
 			return u.udpBroadcastTo(serialNumber, m)
-		} else if controller.Address == nil {
+		} else if controller.Address == nil || !controller.Address.IsValid() || controller.Address.Addr() == netip.IPv4Unspecified() {
 			return u.udpBroadcastTo(serialNumber, m)
 		} else if controller.Protocol == "tcp" {
 			return u.tcpSendTo(*controller.Address, m)

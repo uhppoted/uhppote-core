@@ -4,6 +4,7 @@
       - [x] Verify TCP with real controller
       - [x] TCP 'driver'
       - [x] See if controller sends events to TCP listener
+      - [x] Use UDP broadcast if addrport is nil **OR** zero value **OR** INADDR_ANY
       - [ ] Unify send/sendto implementations
             - [x] delete_cards
             - [x] get_card
@@ -26,6 +27,7 @@
             - [x] uhppoted-lib
             - [ ] Replace pointer with zero value
             - [ ] // FIXME rework u.BroadCastAddr as netip.AddrPort
+      - [ ] Add timezone to NewDevice
       - [ ] Add protocol field to UHPPOTE controller struct
             - [x] uhppote-core
             - [x] Update uhppoted-lib::conf
@@ -40,8 +42,8 @@
                   - [x] uhppoted-app-sheets
                   - [x] uhppoted-app-wild-apricot
                   - [x] uhppoted-codegen
-                  - [ ] uhppoted-dll
-                  - [ ] uhppoted-tunnel
+                  - [x] uhppoted-tunnel
+                  - [x] uhppoted-dll
       - [ ] Rework GetListenerResponse to use AddrPort
       - [ ] CHANGELOG
       - [ ] README
