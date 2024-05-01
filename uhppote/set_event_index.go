@@ -18,16 +18,13 @@ func (u *uhppote) SetEventIndex(deviceID, index uint32) (*types.EventIndexResult
 		MagicWord:    0x55aaaa55,
 	}
 
-	reply := messages.SetEventIndexResponse{}
-
-	err := u.send(deviceID, request, &reply)
-	if err != nil {
+	if reply, err := sendto[messages.SetEventIndexResponse](u, deviceID, request); err != nil {
 		return nil, err
+	} else {
+		return &types.EventIndexResult{
+			SerialNumber: reply.SerialNumber,
+			Index:        index,
+			Changed:      reply.Changed,
+		}, nil
 	}
-
-	return &types.EventIndexResult{
-		SerialNumber: reply.SerialNumber,
-		Index:        index,
-		Changed:      reply.Changed,
-	}, nil
 }

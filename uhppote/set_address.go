@@ -36,13 +36,13 @@ func (u *uhppote) SetAddress(serialNumber uint32, address, mask, gateway net.IP)
 	// UT0311-L04 doesn't seem to send a response. The reported remote IP address doesn't change on subsequent commands
 	// (both internally and onl Wireshark) but the UT0311-L04 only replies to ping's on the new IP address. Wireshark
 	// reports a 'Gratuitous ARP request' which looks correct after a set-address. Might be something to do with the
-	// TPLink or OSX ARP implementation.
-	if err := u.send(serialNumber, request, nil); err != nil {
+	// TPLink or MacOS ARP implementation.
+	if _, err := sendto[none](u, serialNumber, request); err != nil {
 		return nil, err
+	} else {
+		return &types.Result{
+			SerialNumber: types.SerialNumber(serialNumber),
+			Succeeded:    true,
+		}, nil
 	}
-
-	return &types.Result{
-		SerialNumber: types.SerialNumber(serialNumber),
-		Succeeded:    true,
-	}, nil
 }

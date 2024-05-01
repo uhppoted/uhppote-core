@@ -23,9 +23,7 @@ func (u *uhppote) RestoreDefaultParameters(controller uint32) (bool, error) {
 		MagicWord:    0x55aaaa55,
 	}
 
-	reply := messages.RestoreDefaultParametersResponse{}
-
-	if err := u.send(controller, request, &reply); err != nil {
+	if reply, err := sendto[messages.RestoreDefaultParametersResponse](u, controller, request); err != nil {
 		return false, err
 	} else {
 		return reply.Succeeded, nil

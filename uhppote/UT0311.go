@@ -18,7 +18,7 @@ type ut0311 struct {
 }
 
 var guard sync.Mutex
-var NONE = time.Time{}
+var NOTIMEOUT = time.Time{}
 
 /*
  * Broadcasts a request to a UDP address and returns the replies collected within the duration of
@@ -59,7 +59,7 @@ func (u *ut0311) Broadcast(addr *net.UDPAddr, request []byte) ([][]byte, error) 
 		return nil, fmt.Errorf("failed to set UDP write timeout [%v]", err)
 	}
 
-	if err := connection.SetReadDeadline(NONE); err != nil {
+	if err := connection.SetReadDeadline(NOTIMEOUT); err != nil {
 		return nil, fmt.Errorf("failed to set UDP read timeout [%v]", err)
 	}
 
@@ -72,20 +72,23 @@ func (u *ut0311) Broadcast(addr *net.UDPAddr, request []byte) ([][]byte, error) 
 	var replies = make([][]byte, 0)
 	var err error
 
-	go func() {
-		for {
-			reply := make([]byte, 2048)
+	// NTS: set-ip doesn't return a reply
+	if request[1] != 0x96 {
+		go func() {
+			for {
+				reply := make([]byte, 2048)
 
-			if N, remote, errx := connection.ReadFromUDP(reply); errx != nil {
-				err = errx
-				return
-			} else {
-				replies = append(replies, reply[:N])
+				if N, remote, errx := connection.ReadFromUDP(reply); errx != nil {
+					err = errx
+					return
+				} else {
+					replies = append(replies, reply[:N])
 
-				u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n%s", N, remote, dump(reply[:N], " ...          ")), nil)
+					u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n%s", N, remote, dump(reply[:N], " ...          ")), nil)
+				}
 			}
-		}
-	}()
+		}()
+	}
 
 	time.Sleep(u.timeout)
 
@@ -134,6 +137,11 @@ func (u *ut0311) BroadcastTo(addr *net.UDPAddr, request []byte, callback func([]
 			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v\n", N, addr), nil)
 		}
 
+		// NTS: set-ip doesn't return a reply
+		if request[1] == 0x96 {
+			return nil, nil
+		}
+
 		for {
 			reply := make([]byte, 2048)
 
@@ -146,6 +154,7 @@ func (u *ut0311) BroadcastTo(addr *net.UDPAddr, request []byte, callback func([]
 			}
 		}
 	}
+
 }
 
 /*
@@ -197,6 +206,11 @@ func (u *ut0311) SendUDP(addr *net.UDPAddr, request []byte) ([]byte, error) {
 		} else {
 			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v", N, addr), nil)
 			u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
+		}
+
+		// NTS: set-ip doesn't return a reply
+		if request[1] == 0x96 {
+			return nil, nil
 		}
 
 		if N, err := connection.Read(buffer); err != nil {
@@ -259,6 +273,11 @@ func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
 			u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
 		}
 
+		// NTS: set-ip doesn't return a reply
+		if request[1] == 0x96 {
+			return nil, nil
+		}
+
 		if N, err := connection.Read(buffer); err != nil {
 			u.debugf(" ... receive error", err)
 			return nil, err
@@ -305,7 +324,7 @@ func (u *ut0311) Send(request []byte, addr *net.UDPAddr, callback func([]byte) b
 		return fmt.Errorf("failed to set UDP write timeout [%v]", err)
 	}
 
-	if err := connection.SetReadDeadline(NONE); err != nil {
+	if err := connection.SetReadDeadline(NOTIMEOUT); err != nil {
 		return fmt.Errorf("failed to set UDP read timeout [%v]", err)
 	}
 

@@ -33,18 +33,11 @@ func (u *uhppote) PutCard(deviceID uint32, card types.Card, formats ...types.Car
 		PIN:          card.PIN,
 	}
 
-	reply := messages.PutCardResponse{}
-
-	err := u.send(deviceID, request, &reply)
-	if err != nil {
+	if reply, err := sendto[messages.PutCardResponse](u, deviceID, request); err != nil {
 		return false, err
+	} else {
+		return reply.Succeeded, nil
 	}
-
-	if uint32(reply.SerialNumber) != deviceID {
-		return false, fmt.Errorf("incorrect serial number in response - expect '%v', received '%v'", deviceID, reply.SerialNumber)
-	}
-
-	return reply.Succeeded, nil
 }
 
 func isCardNumberValid(cardNumber uint32, formats ...types.CardFormat) bool {

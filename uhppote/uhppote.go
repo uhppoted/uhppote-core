@@ -16,6 +16,8 @@ const (
 	VERSION string = "v0.8.9" // common version number used across uhppoted ecosystem
 )
 
+type none struct{}
+
 type driver interface {
 	Broadcast(*net.UDPAddr, []byte) ([][]byte, error)
 	BroadcastTo(*net.UDPAddr, []byte, func([]byte) bool) ([]byte, error)
@@ -142,7 +144,7 @@ func sendto[T any](u *uhppote, serialNumber uint32, request any) (T, error) {
 	if reply, err := u.sendTo(serialNumber, request, v); err != nil {
 		return v, err
 	} else {
-		return reply.(T), err
+		return reply.(T), nil
 	}
 }
 
@@ -179,6 +181,8 @@ func (u *uhppote) sendTo(serialNumber uint32, request, reply any) (any, error) {
 
 	if response, err := f(); err != nil {
 		return nil, err
+	} else if response == nil { // only for set-ip which doesn't return a response
+		return reply, nil
 	} else {
 		// ... invalid reply?
 		if len(response) != 64 {

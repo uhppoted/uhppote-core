@@ -16,6 +16,17 @@
             - [x] get_status
             - [x] get_time
             - [x] get_time_profile
+            - [x] get_card-by-index
+            - [x] open
+            - [x] put_card
+            - [x] record_special_events
+            - [x] refresh_tasklist
+            - [x] restore_default_parameters
+            - [x] set_door_control_state
+            - [x] set_door_passcodes.go
+            - [x] set_event_index
+            - [x] set_address
+
       - [x] Rework `sendto` as generic function
       - [ ] Rework bind address as netip.AddrPort
       - [ ] Rework broadcast address as netip.AddrPort

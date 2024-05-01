@@ -15,9 +15,8 @@ func TestSetDoorPasscodes(t *testing.T) {
 
 	u := uhppote{
 		driver: &stub{
-			send: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) error {
-				handler(message)
-				return nil
+			broadcastTo: func(addr *net.UDPAddr, request []byte, handler func([]byte) bool) ([]byte, error) {
+				return message, nil
 			},
 		},
 	}

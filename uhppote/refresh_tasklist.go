@@ -17,12 +17,9 @@ func (u *uhppote) RefreshTaskList(deviceID uint32) (bool, error) {
 		MagicWord:    0x55aaaa55,
 	}
 
-	reply := messages.RefreshTaskListResponse{}
-
-	err := u.send(deviceID, request, &reply)
-	if err != nil {
+	if reply, err := sendto[messages.RefreshTaskListResponse](u, deviceID, request); err != nil {
 		return false, err
+	} else {
+		return reply.Refreshed, nil
 	}
-
-	return reply.Refreshed, nil
 }

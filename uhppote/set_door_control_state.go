@@ -19,17 +19,14 @@ func (u *uhppote) SetDoorControlState(serialNumber uint32, door uint8, state typ
 		Delay:        delay,
 	}
 
-	reply := messages.SetDoorControlStateResponse{}
-
-	err := u.send(serialNumber, request, &reply)
-	if err != nil {
+	if reply, err := sendto[messages.SetDoorControlStateResponse](u, serialNumber, request); err != nil {
 		return nil, err
+	} else {
+		return &types.DoorControlState{
+			SerialNumber: reply.SerialNumber,
+			Door:         reply.Door,
+			ControlState: types.ControlState(reply.ControlState),
+			Delay:        reply.Delay,
+		}, nil
 	}
-
-	return &types.DoorControlState{
-		SerialNumber: reply.SerialNumber,
-		Door:         reply.Door,
-		ControlState: types.ControlState(reply.ControlState),
-		Delay:        reply.Delay,
-	}, nil
 }

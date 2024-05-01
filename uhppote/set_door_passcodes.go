@@ -51,18 +51,9 @@ func (u *uhppote) SetDoorPasscodes(controller uint32, door uint8, passcodes ...u
 		request.Passcode4 = passcodes[3]
 	}
 
-	response := messages.SetDoorPasscodesResponse{}
-
-	err := u.send(controller, request, &response)
-	if err != nil {
+	if reply, err := sendto[messages.SetDoorPasscodesResponse](u, controller, request); err != nil {
 		return false, err
+	} else {
+		return reply.Succeeded, nil
 	}
-
-	if uint32(response.SerialNumber) != controller {
-		return false, fmt.Errorf("incorrect controller ID in response - expected '%v', received '%v'",
-			controller,
-			response.SerialNumber)
-	}
-
-	return response.Succeeded, nil
 }

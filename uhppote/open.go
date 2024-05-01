@@ -17,15 +17,12 @@ func (u *uhppote) OpenDoor(deviceID uint32, door uint8) (*types.Result, error) {
 		Door:         door,
 	}
 
-	reply := messages.OpenDoorResponse{}
-
-	err := u.send(deviceID, request, &reply)
-	if err != nil {
+	if reply, err := sendto[messages.OpenDoorResponse](u, deviceID, request); err != nil {
 		return nil, err
+	} else {
+		return &types.Result{
+			SerialNumber: reply.SerialNumber,
+			Succeeded:    reply.Succeeded,
+		}, nil
 	}
-
-	return &types.Result{
-		SerialNumber: reply.SerialNumber,
-		Succeeded:    reply.Succeeded,
-	}, nil
 }
