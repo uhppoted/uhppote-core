@@ -5,6 +5,8 @@
       - [x] TCP 'driver'
       - [x] See if controller sends events to TCP listener
       - [x] Use UDP broadcast if addrport is nil **OR** zero value **OR** INADDR_ANY
+      - [x] Rework `sendto` as generic function
+      - [x] sendto:broadcast - don't wait for timeout if reply is valid
       - [x] Unify send/sendto implementations
             - [x] delete_cards
             - [x] get_card
@@ -32,7 +34,6 @@
             - [x] set_time
             - [x] set_time_profile
 
-      - [x] Rework `sendto` as generic function
       - [ ] Rework bind address as netip.AddrPort
       - [ ] Rework broadcast address as netip.AddrPort
       - [ ] Rework listen address as netip.AddrPort
@@ -64,9 +65,8 @@
       - [ ] CHANGELOG
       - [ ] README
 
-- [ ] Rework UDP to use connected sockets
+- [x] Rework UDP to use connected sockets
       - https://github.com/uhppoted/uhppote-simulator/issues/9
-      - [x] // FIXME don't wait for timeout if reply is valid
 
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
 - [ ] `put-card`: error on bad card numbers (0,0xffffffff,0x00ffffff)

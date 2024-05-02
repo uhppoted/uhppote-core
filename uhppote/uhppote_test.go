@@ -17,7 +17,6 @@ import (
 type stub struct {
 	broadcast   func(*net.UDPAddr, []byte) ([][]byte, error)
 	broadcastTo func(*net.UDPAddr, []byte, func([]byte) bool) ([]byte, error)
-	send        func(*net.UDPAddr, []byte, func([]byte) bool) error
 	sendudp     func(*net.UDPAddr, []byte) ([]byte, error)
 	sendtcp     func(*net.TCPAddr, []byte) ([]byte, error)
 }
@@ -36,10 +35,6 @@ func (d *stub) SendUDP(addr *net.UDPAddr, m []byte) ([]byte, error) {
 
 func (d *stub) SendTCP(addr *net.TCPAddr, m []byte) ([]byte, error) {
 	return d.sendtcp(addr, m)
-}
-
-func (d *stub) Send(m []byte, addr *net.UDPAddr, handler func(bytes []byte) bool) error {
-	return d.send(addr, m, handler)
 }
 
 func (d *stub) Listen(signal chan interface{}, done chan interface{}, handler func(bytes []byte)) error {

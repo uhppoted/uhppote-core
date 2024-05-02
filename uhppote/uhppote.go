@@ -21,7 +21,6 @@ type none struct{}
 type driver interface {
 	Broadcast(*net.UDPAddr, []byte) ([][]byte, error)
 	BroadcastTo(*net.UDPAddr, []byte, func([]byte) bool) ([]byte, error)
-	Send([]byte, *net.UDPAddr, func([]byte) bool) error
 	SendUDP(*net.UDPAddr, []byte) ([]byte, error)
 	SendTCP(*net.TCPAddr, []byte) ([]byte, error)
 	Listen(chan any, chan any, func([]byte)) error
@@ -139,32 +138,15 @@ func (u *uhppote) broadcast(request, reply any) ([]any, error) {
  * is invalid (0).
  */
 func sendto[T any](u *uhppote, serialNumber uint32, request any) (T, error) {
-	var v T
+	var reply T
 
-	if reply, err := u.sendTo(serialNumber, request, v); err != nil {
-		return v, err
-	} else {
-		return reply.(T), nil
-	}
-}
-
-/*
- * Sends a UDP message to a specific device and returns the decoded response.
- *
- * The internal implementation anticipates replies from more than one device because the
- * request may be broadcast - only the reply that matches the serial number is returned.
- *
- * Returns an error if the send, receive or decoding failed or the controller serial number
- * is invalid (0).
- */
-func (u *uhppote) sendTo(serialNumber uint32, request, reply any) (any, error) {
 	if serialNumber == 0 {
-		return nil, fmt.Errorf("invalid controller ID (%v)", serialNumber)
+		return reply, fmt.Errorf("invalid controller ID (%v)", serialNumber)
 	}
 
 	m, err := codec.Marshal(request)
 	if err != nil {
-		return nil, err
+		return reply, err
 	}
 
 	f := func() ([]byte, error) {
@@ -180,25 +162,25 @@ func (u *uhppote) sendTo(serialNumber uint32, request, reply any) (any, error) {
 	}
 
 	if response, err := f(); err != nil {
-		return nil, err
+		return reply, err
 	} else if response == nil { // only for set-ip which doesn't return a response
 		return reply, nil
 	} else {
 		// ... invalid reply?
 		if len(response) != 64 {
-			return nil, fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(response))
+			return reply, fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(response))
 		}
 
 		// ... reply with incorrect controller ID ?
 		if ID := binary.LittleEndian.Uint32(response[4:8]); serialNumber != 0 && ID != serialNumber {
-			return nil, fmt.Errorf("invalid controller ID - expected:%v, got:%v", serialNumber, ID)
+			return reply, fmt.Errorf("invalid controller ID - expected:%v, got:%v", serialNumber, ID)
 		}
 
-		// ... unparseable replies ?
+		// ... unparseable reply ?
 		if v, err := codec.UnmarshalAs(response, reply); err != nil {
-			return nil, err
+			return reply, err
 		} else {
-			return v, nil
+			return v.(T), nil
 		}
 	}
 }
