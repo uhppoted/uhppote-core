@@ -251,52 +251,6 @@ func (u *uhppote) tcpSendTo(address netip.AddrPort, request []byte) ([]byte, err
 	return u.driver.SendTCP(dest, request)
 }
 
-func (u *uhppote) send(serialNumber uint32, request, reply any) error {
-	dest := u.broadcastAddress()
-	if device, ok := u.devices[serialNumber]; ok {
-		if device.Address != nil {
-			dest = net.UDPAddrFromAddrPort(*device.Address)
-		}
-	}
-
-	m, err := codec.Marshal(request)
-	if err != nil {
-		return err
-	}
-
-	var handler func([]byte) bool
-
-	if reply != nil {
-		handler = func(bytes []byte) bool {
-			// ... discard invalid replies
-			if len(bytes) != 64 {
-				u.debugf(" ... receive error", fmt.Errorf("invalid message length - expected:%v, got:%v", 64, len(bytes)))
-				return false
-			}
-
-			// ... discard replies without a valid device ID
-			if deviceID := binary.LittleEndian.Uint32(bytes[4:8]); deviceID != serialNumber {
-				u.debugf(" ... receive error", fmt.Errorf("invalid device ID - expected:%v, got:%v", serialNumber, deviceID))
-				return false
-			}
-
-			// .. discard unparseable messages
-			if err := codec.Unmarshal(bytes, reply); err != nil {
-				u.debugf(" ... receive error", err)
-				return false
-			}
-
-			return true
-		}
-	}
-
-	if err := u.driver.Send(m, dest, handler); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (u *uhppote) listen(p chan *event, q chan os.Signal, listener Listener) error {
 	handler := func(bytes []byte) {
 		// ... discard invalid events

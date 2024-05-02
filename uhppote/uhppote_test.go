@@ -85,15 +85,10 @@ func TestBroadcastAddressRequest(t *testing.T) {
 		}()
 	}
 
-	response := messages.DeleteCardResponse{}
-
-	err := u.send(423187757, request, &response)
-	if err != nil {
+	if reply, err := sendto[messages.DeleteCardResponse](&u, 423187757, request); err != nil {
 		t.Fatalf("%v", err)
-	}
-
-	if !reflect.DeepEqual(response, expected) {
-		t.Fatalf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected, response)
+	} else if !reflect.DeepEqual(reply, expected) {
+		t.Fatalf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected, reply)
 	}
 
 	c.Close()
@@ -148,19 +143,16 @@ func TestSequentialRequests(t *testing.T) {
 		}
 	}()
 
-	response := messages.DeleteCardResponse{}
-
-	if err := u.send(423187757, request, &response); err != nil {
+	if reply, err := sendto[messages.DeleteCardResponse](&u, 423187757, request); err != nil {
 		t.Fatalf("%v", err)
-	} else if !reflect.DeepEqual(response, expected[0]) {
-		t.Fatalf("Incorrect reply - expected:%v, got:%v", expected[0], response)
+	} else if !reflect.DeepEqual(reply, expected[0]) {
+		t.Fatalf("Incorrect reply - expected:%v, got:%v", expected[0], reply)
 	}
 
-	response = messages.DeleteCardResponse{}
-	if err := u.send(757781324, request, &response); err != nil {
+	if reply, err := sendto[messages.DeleteCardResponse](&u, 757781324, request); err != nil {
 		t.Fatalf("%v", err)
-	} else if !reflect.DeepEqual(response, expected[1]) {
-		t.Fatalf("Incorrect reply - expected:%v, got:%v", expected[1], response)
+	} else if !reflect.DeepEqual(reply, expected[1]) {
+		t.Fatalf("Incorrect reply - expected:%v, got:%v", expected[1], reply)
 	}
 
 	for _, c := range listening {
@@ -224,12 +216,10 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 	go func() {
 		defer wg.Done()
 
-		response := messages.DeleteCardResponse{}
-
-		if err := u.send(423187757, request, &response); err != nil {
+		if reply, err := sendto[messages.DeleteCardResponse](&u, 423187757, request); err != nil {
 			t.Errorf("%v", err)
-		} else if !reflect.DeepEqual(response, expected[0]) {
-			t.Errorf("Incorrect response:\nexpected:\n%v\ngot:\n%v", expected[0], response)
+		} else if !reflect.DeepEqual(reply, expected[0]) {
+			t.Errorf("Incorrect response:\nexpected:\n%v\ngot:\n%v", expected[0], reply)
 		}
 	}()
 
@@ -238,12 +228,10 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 
 		time.Sleep(500 * time.Millisecond)
 
-		response := messages.DeleteCardResponse{}
-
-		if err := u.send(757781324, request, &response); err != nil {
+		if reply, err := sendto[messages.DeleteCardResponse](&u, 757781324, request); err != nil {
 			t.Errorf("%v", err)
-		} else if !reflect.DeepEqual(response, expected[1]) {
-			t.Errorf("Incorrect reply:\nexpected:\n%v\ngot:     \n%v", expected[1], response)
+		} else if !reflect.DeepEqual(reply, expected[1]) {
+			t.Errorf("Incorrect reply:\nexpected:\n%v\ngot:     \n%v", expected[1], reply)
 		}
 	}()
 
@@ -310,12 +298,10 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 	go func() {
 		defer wg.Done()
 
-		response := messages.DeleteCardResponse{}
-
-		if err := u.send(423187757, request, &response); err != nil {
+		if reply, err := sendto[messages.DeleteCardResponse](&u, 423187757, request); err != nil {
 			t.Errorf("%v", err)
-		} else if !reflect.DeepEqual(response, expected[0]) {
-			t.Errorf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected, response)
+		} else if !reflect.DeepEqual(reply, expected[0]) {
+			t.Errorf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected, reply)
 		}
 	}()
 
@@ -324,12 +310,10 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 
 		time.Sleep(500 * time.Millisecond)
 
-		response := messages.DeleteCardResponse{}
-
-		if err := u.send(757781324, request, &response); err != nil {
+		if reply, err := sendto[messages.DeleteCardResponse](&u, 757781324, request); err != nil {
 			t.Errorf("%v", err)
-		} else if !reflect.DeepEqual(response, expected[1]) {
-			t.Errorf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected[1], response)
+		} else if !reflect.DeepEqual(reply, expected[1]) {
+			t.Errorf("Incorrect reply:\nExpected:\n%v\nReturned:\n%v", expected[1], reply)
 		}
 	}()
 

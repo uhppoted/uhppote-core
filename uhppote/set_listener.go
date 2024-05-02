@@ -23,15 +23,12 @@ func (u *uhppote) SetListener(serialNumber uint32, address net.UDPAddr) (*types.
 		Port:         uint16(address.Port),
 	}
 
-	reply := messages.SetListenerResponse{}
-
-	err := u.send(serialNumber, request, &reply)
-	if err != nil {
+	if reply, err := sendto[messages.SetListenerResponse](u, serialNumber, request); err != nil {
 		return nil, err
+	} else {
+		return &types.Result{
+			SerialNumber: reply.SerialNumber,
+			Succeeded:    reply.Succeeded,
+		}, nil
 	}
-
-	return &types.Result{
-		SerialNumber: reply.SerialNumber,
-		Succeeded:    reply.Succeeded,
-	}, nil
 }

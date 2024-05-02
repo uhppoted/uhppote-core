@@ -5,7 +5,7 @@
       - [x] TCP 'driver'
       - [x] See if controller sends events to TCP listener
       - [x] Use UDP broadcast if addrport is nil **OR** zero value **OR** INADDR_ANY
-      - [ ] Unify send/sendto implementations
+      - [x] Unify send/sendto implementations
             - [x] delete_cards
             - [x] get_card
             - [x] get_cards
@@ -26,6 +26,11 @@
             - [x] set_door_passcodes.go
             - [x] set_event_index
             - [x] set_address
+            - [x] set_interlock
+            - [x] set_listener
+            - [x] set_pc_control
+            - [x] set_time
+            - [x] set_time_profile
 
       - [x] Rework `sendto` as generic function
       - [ ] Rework bind address as netip.AddrPort

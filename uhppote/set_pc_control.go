@@ -31,16 +31,9 @@ func (u *uhppote) SetPCControl(deviceID uint32, enable bool) (bool, error) {
 		Enable:       enable,
 	}
 
-	response := messages.SetPCControlResponse{}
-
-	err := u.send(deviceID, request, &response)
-	if err != nil {
+	if reply, err := sendto[messages.SetPCControlResponse](u, deviceID, request); err != nil {
 		return false, err
+	} else {
+		return reply.Succeeded, nil
 	}
-
-	if uint32(response.SerialNumber) != deviceID {
-		return false, fmt.Errorf("incorrect device ID in response - expected '%v', received '%v'", deviceID, response.SerialNumber)
-	}
-
-	return response.Succeeded, nil
 }
