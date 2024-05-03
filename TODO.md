@@ -7,33 +7,8 @@
       - [x] Use UDP broadcast if addrport is nil **OR** zero value **OR** INADDR_ANY
       - [x] Rework `sendto` as generic function
       - [x] sendto:broadcast - don't wait for timeout if reply is valid
+      - [x] Rework UDP to use connected sockets
       - [x] Unify send/sendto implementations
-            - [x] delete_cards
-            - [x] get_card
-            - [x] get_cards
-            - [x] get_door_control_state
-            - [x] get_event
-            - [x] get_event_index
-            - [x] get_listener
-            - [x] get_status
-            - [x] get_time
-            - [x] get_time_profile
-            - [x] get_card-by-index
-            - [x] open
-            - [x] put_card
-            - [x] record_special_events
-            - [x] refresh_tasklist
-            - [x] restore_default_parameters
-            - [x] set_door_control_state
-            - [x] set_door_passcodes.go
-            - [x] set_event_index
-            - [x] set_address
-            - [x] set_interlock
-            - [x] set_listener
-            - [x] set_pc_control
-            - [x] set_time
-            - [x] set_time_profile
-
       - [ ] Rework bind address as netip.AddrPort
       - [ ] Rework broadcast address as netip.AddrPort
       - [ ] Rework listen address as netip.AddrPort
@@ -44,29 +19,15 @@
             - [x] uhppoted-lib
             - [ ] Replace pointer with zero value
             - [ ] // FIXME rework u.BroadCastAddr as netip.AddrPort
-      - [ ] Add timezone to NewDevice
-      - [ ] Add protocol field to UHPPOTE controller struct
+      - [x] Add protocol field to UHPPOTE controller struct
             - [x] uhppote-core
             - [x] Update uhppoted-lib::conf
-            - [ ] Update dependencies
-                  - [x] uhppote-cli
-                  - [x] uhppoted-lib
-                  - [x] uhppoted-rest
-                  - [x] uhppoted-mqtt
-                  - [ ] uhppoted-httpd
-                  - [x] uhppoted-app-db
-                  - [x] uhppoted-app-s3
-                  - [x] uhppoted-app-sheets
-                  - [x] uhppoted-app-wild-apricot
-                  - [x] uhppoted-codegen
-                  - [x] uhppoted-tunnel
-                  - [x] uhppoted-dll
+            - [x] Update dependencies
+      - [ ] Add timezone to NewDevice
       - [ ] Rework GetListenerResponse to use AddrPort
+      - [ ] Replace (* UHPPOTE) in API functions with non-pointer version
       - [ ] CHANGELOG
       - [ ] README
-
-- [x] Rework UDP to use connected sockets
-      - https://github.com/uhppoted/uhppote-simulator/issues/9
 
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
 - [ ] `put-card`: error on bad card numbers (0,0xffffffff,0x00ffffff)
