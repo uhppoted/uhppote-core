@@ -16,7 +16,7 @@ func TestBindAddrString(t *testing.T) {
 
 	for p, expected := range tests {
 		addr := netip.AddrFrom4([4]byte{192, 168, 1, 100})
-		bind := BindAddr(netip.AddrPortFrom(addr, p))
+		bind := BindAddrFrom(addr, p)
 
 		if s := bind.String(); s != expected {
 			t.Errorf("Incorrect string - expected:%v, got:%v", expected, s)
@@ -26,10 +26,10 @@ func TestBindAddrString(t *testing.T) {
 
 func TestBindAddrResolve(t *testing.T) {
 	tests := map[string]BindAddr{
-		"192.168.1.100":       BindAddr(netip.MustParseAddrPort("192.168.1.100:0")),
-		"192.168.1.100:0":     BindAddr(netip.MustParseAddrPort("192.168.1.100:0")),
-		"192.168.1.100:10001": BindAddr(netip.MustParseAddrPort("192.168.1.100:10001")),
-		"192.168.1.100:60001": BindAddr(netip.MustParseAddrPort("192.168.1.100:60001")),
+		"192.168.1.100":       MustParseBindAddr("192.168.1.100:0"),
+		"192.168.1.100:0":     MustParseBindAddr("192.168.1.100:0"),
+		"192.168.1.100:10001": MustParseBindAddr("192.168.1.100:10001"),
+		"192.168.1.100:60001": MustParseBindAddr("192.168.1.100:60001"),
 	}
 
 	for s, expected := range tests {
@@ -58,10 +58,10 @@ func TestInvalidBindAddrResolve(t *testing.T) {
 
 func TestBindAddrSet(t *testing.T) {
 	tests := map[string]BindAddr{
-		"192.168.1.100":       BindAddr(netip.MustParseAddrPort("192.168.1.100:0")),
-		"192.168.1.100:0":     BindAddr(netip.MustParseAddrPort("192.168.1.100:0")),
-		"192.168.1.100:1":     BindAddr(netip.MustParseAddrPort("192.168.1.100:1")),
-		"192.168.1.100:60001": BindAddr(netip.MustParseAddrPort("192.168.1.100:60001")),
+		"192.168.1.100":       MustParseBindAddr("192.168.1.100:0"),
+		"192.168.1.100:0":     MustParseBindAddr("192.168.1.100:0"),
+		"192.168.1.100:1":     MustParseBindAddr("192.168.1.100:1"),
+		"192.168.1.100:60001": MustParseBindAddr("192.168.1.100:60001"),
 	}
 
 	for s, expected := range tests {
@@ -87,7 +87,7 @@ func TestBindAddrMarshalJSON(t *testing.T) {
 
 	for p, expected := range tests {
 		addr := netip.AddrFrom4([4]byte{192, 168, 1, 100})
-		bind := BindAddr(netip.AddrPortFrom(addr, p))
+		bind := BindAddrFrom(addr, p)
 
 		if bytes, err := json.Marshal(bind); err != nil {
 			t.Fatalf("Error marshaling BindAddr (%v)", err)
@@ -99,9 +99,9 @@ func TestBindAddrMarshalJSON(t *testing.T) {
 
 func TestBindAddrUnmarshalJSON(t *testing.T) {
 	tests := map[string]BindAddr{
-		`"192.168.1.100"`:       BindAddr(netip.MustParseAddrPort("192.168.1.100:0")),
-		`"192.168.1.100:12345"`: BindAddr(netip.MustParseAddrPort("192.168.1.100:12345")),
-		`"192.168.1.100:0"`:     BindAddr(netip.MustParseAddrPort("192.168.1.100:0")),
+		`"192.168.1.100"`:       MustParseBindAddr("192.168.1.100:0"),
+		`"192.168.1.100:12345"`: MustParseBindAddr("192.168.1.100:12345"),
+		`"192.168.1.100:0"`:     MustParseBindAddr("192.168.1.100:0"),
 	}
 
 	for s, expected := range tests {
@@ -122,7 +122,7 @@ func TestBindAddrEqual(t *testing.T) {
 		expected bool
 	}{
 		{
-			BindAddr(netip.MustParseAddrPort("192.168.1.100:0")),
+			MustParseBindAddr("192.168.1.100:0"),
 			Address{
 				IP:   []byte{192, 168, 1, 100},
 				Port: 0,
@@ -130,7 +130,7 @@ func TestBindAddrEqual(t *testing.T) {
 			true,
 		},
 		{
-			BindAddr(netip.MustParseAddrPort("192.168.1.100:0")),
+			MustParseBindAddr("192.168.1.100:0"),
 			Address{
 				IP:   []byte{192, 168, 1, 100},
 				Port: 12345,
@@ -138,7 +138,7 @@ func TestBindAddrEqual(t *testing.T) {
 			true,
 		},
 		{
-			BindAddr(netip.MustParseAddrPort("192.168.1.100:0")),
+			MustParseBindAddr("192.168.1.100:0"),
 			Address{
 				IP:   []byte{192, 168, 1, 125},
 				Port: 0,
@@ -157,11 +157,11 @@ func TestBindAddrEqual(t *testing.T) {
 }
 
 func TestBindAddrClone(t *testing.T) {
-	bind := BindAddr(netip.MustParseAddrPort("192.168.1.100:12345"))
-	expected := BindAddr(netip.MustParseAddrPort("192.168.1.100:12345"))
+	bind := MustParseBindAddr("192.168.1.100:12345")
+	expected := MustParseBindAddr("192.168.1.100:12345")
 
 	clone := bind.Clone()
-	bind = BindAddr(netip.MustParseAddrPort("192.168.1.100:54321"))
+	bind = MustParseBindAddr("192.168.1.100:54321")
 
 	if !reflect.DeepEqual(*clone, expected) {
 		t.Errorf("Invalid BindAddress clone\nexpected:%#v\ngot:     %#v", expected, clone)
@@ -169,5 +169,27 @@ func TestBindAddrClone(t *testing.T) {
 
 	if reflect.DeepEqual(bind, expected) {
 		t.Errorf("Sanity check failed")
+	}
+}
+
+func TestBindAddrAddr(t *testing.T) {
+	bind := MustParseBindAddr("192.168.1.100:12345")
+	expected := netip.AddrFrom4([4]byte{192, 168, 1, 100})
+
+	addr := bind.Addr()
+
+	if !reflect.DeepEqual(addr, expected) {
+		t.Errorf("BindAddress::Addr returned incorrect address - expected:%v, got:%v", expected, addr)
+	}
+}
+
+func TestBindAddrPort(t *testing.T) {
+	bind := MustParseBindAddr("192.168.1.100:12345")
+	expected := uint16(12345)
+
+	port := bind.Port()
+
+	if port != expected {
+		t.Errorf("BindAddress::Port returned incorrect port - expected:%v, got:%v", expected, port)
 	}
 }

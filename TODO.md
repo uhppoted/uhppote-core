@@ -10,7 +10,12 @@
       - [x] Rework UDP to use connected sockets
       - [x] Unify send/sendto implementations
       - [ ] Rework bind address as netip.AddrPort
+            - // FIXME BindAddr.Port()
+            - // FIXME BindAddr.Addr()
+            - // FIXME BindAddrFrom
+            - (?) rework as struct with embedded netip.AddrPort
       - [ ] Rework broadcast address as netip.AddrPort
+            - [ ] // FIXME rework u.BroadCastAddr as netip.AddrPort
       - [ ] Rework listen address as netip.AddrPort
       - [ ] Rework address as *netip.AddrPort
             - [x] uhppote-core
@@ -18,7 +23,6 @@
             - [x] uhppote-cli
             - [x] uhppoted-lib
             - [ ] Replace pointer with zero value
-            - [ ] // FIXME rework u.BroadCastAddr as netip.AddrPort
       - [x] Add protocol field to UHPPOTE controller struct
             - [x] uhppote-core
             - [x] Update uhppoted-lib::conf

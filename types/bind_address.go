@@ -11,14 +11,69 @@ type BindAddr netip.AddrPort
 
 const BIND_PORT = 0
 
+/*
+ * MustParseBindAddr invokes ParseBindAddr and panics on error.
+ *
+ * It is intended for use in tests with hard-coded strings.
+ */
+func MustParseBindAddr(s string) BindAddr {
+	if addr, err := ParseBindAddr(s); err != nil {
+		panic(err)
+	} else {
+		return addr
+	}
+}
+
+/*
+ * ParseBindAddr parses a string as a bind address.
+ *
+ * It doesn't do any name resolution i.e.: both the address and the port must be numeric.
+ */
+func ParseBindAddr(s string) (BindAddr, error) {
+	if addr, err := netip.ParseAddrPort(s); err != nil {
+		return BindAddr{}, err
+	} else {
+		return BindAddr(addr), nil
+	}
+}
+
+/*
+ * BindAddrFrom contructs a BindAddr from an address and port.
+ */
+func BindAddrFrom(addr netip.Addr, port uint16) BindAddr {
+	return BindAddr(netip.AddrPortFrom(addr, port))
+}
+
+/*
+ * Returns the BindAddr as a netip.AddrPort.
+ */
 func (a BindAddr) AddrPort() netip.AddrPort {
 	return netip.AddrPort(a)
+}
+
+/*
+ * Returns the BindAddr IP address.
+ */
+func (a BindAddr) Addr() netip.Addr {
+	return netip.AddrPort(a).Addr()
+}
+
+/*
+ * Returns the BindAddr port.
+ */
+func (a BindAddr) Port() uint16 {
+	return netip.AddrPort(a).Port()
 }
 
 func (a BindAddr) IsValid() bool {
 	return netip.AddrPort(a).IsValid()
 }
 
+/*
+ * Formats the bind address and port as an address:port string.
+ *
+ * Return only the bind address if bind port is the default port (60000).
+ */
 func (a BindAddr) String() string {
 	addr := netip.AddrPort(a)
 
