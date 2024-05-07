@@ -7,7 +7,9 @@ import (
 	"regexp"
 )
 
-type BindAddr netip.AddrPort
+type BindAddr struct {
+	netip.AddrPort
+}
 
 const BIND_PORT = 0
 
@@ -33,7 +35,9 @@ func ParseBindAddr(s string) (BindAddr, error) {
 	if addr, err := netip.ParseAddrPort(s); err != nil {
 		return BindAddr{}, err
 	} else {
-		return BindAddr(addr), nil
+		return BindAddr{
+			addr,
+		}, nil
 	}
 }
 
@@ -41,32 +45,9 @@ func ParseBindAddr(s string) (BindAddr, error) {
  * BindAddrFrom contructs a BindAddr from an address and port.
  */
 func BindAddrFrom(addr netip.Addr, port uint16) BindAddr {
-	return BindAddr(netip.AddrPortFrom(addr, port))
-}
-
-/*
- * Returns the BindAddr as a netip.AddrPort.
- */
-func (a BindAddr) AddrPort() netip.AddrPort {
-	return netip.AddrPort(a)
-}
-
-/*
- * Returns the BindAddr IP address.
- */
-func (a BindAddr) Addr() netip.Addr {
-	return netip.AddrPort(a).Addr()
-}
-
-/*
- * Returns the BindAddr port.
- */
-func (a BindAddr) Port() uint16 {
-	return netip.AddrPort(a).Port()
-}
-
-func (a BindAddr) IsValid() bool {
-	return netip.AddrPort(a).IsValid()
+	return BindAddr{
+		netip.AddrPortFrom(addr, port),
+	}
 }
 
 /*
@@ -75,12 +56,10 @@ func (a BindAddr) IsValid() bool {
  * Return only the bind address if bind port is the default port (60000).
  */
 func (a BindAddr) String() string {
-	addr := netip.AddrPort(a)
-
-	if addr.Port() == BIND_PORT {
-		return fmt.Sprintf("%v", addr.Addr())
+	if a.Port() == BIND_PORT {
+		return fmt.Sprintf("%v", a.Addr())
 	} else {
-		return fmt.Sprintf("%v", addr)
+		return fmt.Sprintf("%v", a.AddrPort)
 	}
 }
 
@@ -88,11 +67,12 @@ func (a *BindAddr) Set(v string) error {
 	addr, err := ResolveBindAddr(v)
 	if err != nil {
 		return err
-	} else if !netip.AddrPort(addr).IsValid() {
+	} else if !addr.IsValid() {
 		return fmt.Errorf("invalid bind address '%v'", v)
 	}
 
 	*a = addr
+
 	return nil
 }
 
@@ -123,7 +103,7 @@ func (a *BindAddr) Equal(addr *Address) bool {
 		return true
 
 	case a != nil && addr != nil:
-		p := fmt.Sprintf("%v", netip.AddrPort(*a).Addr())
+		p := fmt.Sprintf("%v", a.Addr())
 		q := fmt.Sprintf("%v", addr.IP)
 		return p == q
 
@@ -151,7 +131,7 @@ func ResolveBindAddr(s string) (BindAddr, error) {
 		} else if addr.Port() == DEFAULT_PORT {
 			return BindAddr{}, fmt.Errorf("%v: invalid 'bind' port (%v)", addr, addr.Port())
 		} else {
-			return BindAddr(addr), nil
+			return BindAddr{addr}, nil
 		}
 	}
 
@@ -161,7 +141,7 @@ func ResolveBindAddr(s string) (BindAddr, error) {
 		if addr, err := netip.ParseAddr(s); err != nil {
 			return BindAddr{}, err
 		} else {
-			return BindAddr(netip.AddrPortFrom(addr, BIND_PORT)), nil
+			return BindAddrFrom(addr, BIND_PORT), nil
 		}
 	}
 

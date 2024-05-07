@@ -51,7 +51,7 @@ func NewUHPPOTE(
 		listenAddr:    &listen,
 		devices:       map[uint32]Device{},
 		driver: &ut0311{
-			bindAddr:   bind.AddrPort(),
+			bindAddr:   bind.AddrPort,
 			listenAddr: listen,
 			timeout:    timeout,
 			debug:      debug,

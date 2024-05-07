@@ -1,6 +1,7 @@
 # TODO
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
+      - [x] Add protocol field to UHPPOTE controller struct
       - [x] Verify TCP with real controller
       - [x] TCP 'driver'
       - [x] See if controller sends events to TCP listener
@@ -10,10 +11,10 @@
       - [x] Rework UDP to use connected sockets
       - [x] Unify send/sendto implementations
       - [ ] Rework bind address as netip.AddrPort
-            - // FIXME BindAddr.Port()
-            - // FIXME BindAddr.Addr()
-            - // FIXME BindAddrFrom
-            - (?) rework as struct with embedded netip.AddrPort
+            - [x] BindAddr.Port()
+            - [x] BindAddr.Addr()
+            - [x] BindAddrFrom
+            - [x] Rework as struct with embedded netip.AddrPort
       - [ ] Rework broadcast address as netip.AddrPort
             - [ ] // FIXME rework u.BroadCastAddr as netip.AddrPort
       - [ ] Rework listen address as netip.AddrPort
@@ -23,10 +24,6 @@
             - [x] uhppote-cli
             - [x] uhppoted-lib
             - [ ] Replace pointer with zero value
-      - [x] Add protocol field to UHPPOTE controller struct
-            - [x] uhppote-core
-            - [x] Update uhppoted-lib::conf
-            - [x] Update dependencies
       - [ ] Add timezone to NewDevice
       - [ ] Rework GetListenerResponse to use AddrPort
       - [ ] Replace (* UHPPOTE) in API functions with non-pointer version
