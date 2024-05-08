@@ -72,7 +72,7 @@ func (u *uhppote) GetDevice(serialNumber uint32) (*types.Device, error) {
 
 		port := uint16(60000)
 		if addr := u.BroadcastAddr(); addr != nil {
-			port = addr.Port()
+			port = uint16(addr.Port) // FIXME rework u.BroadCastAddr as netip.AddrPort
 		}
 
 		if device, ok := u.devices[serialNumber]; ok {
