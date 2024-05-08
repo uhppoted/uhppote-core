@@ -43,11 +43,11 @@ func NewUHPPOTE(
 	debug bool) IUHPPOTE {
 
 	bind := bindAddr
-	broadcast := net.UDPAddr(broadcastAddr)
+	broadcast := net.UDPAddrFromAddrPort(broadcastAddr.AddrPort)
 	listen := net.UDPAddr(listenAddr)
 
 	uhppote := uhppote{
-		broadcastAddr: &broadcast,
+		broadcastAddr: broadcast,
 		listenAddr:    &listen,
 		devices:       map[uint32]Device{},
 		driver: &ut0311{

@@ -108,7 +108,6 @@ func (a *BindAddr) Equal(addr *Address) bool {
 		return p == q
 
 	default:
-		println(">>> AWOOGAH/3")
 		return false
 	}
 }

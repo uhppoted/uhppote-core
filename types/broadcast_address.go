@@ -3,19 +3,63 @@ package types
 import (
 	"encoding/json"
 	"fmt"
-	"net"
+	"net/netip"
 	"regexp"
 )
 
-type BroadcastAddr net.UDPAddr
+type BroadcastAddr struct {
+	netip.AddrPort
+}
 
 const BROADCAST_PORT = 60000
 
-func (a BroadcastAddr) String() string {
-	if a.Port == BROADCAST_PORT {
-		return a.IP.String()
+/*
+ * MustParseBroadcastAddr invokes ParseBroadcastAddr and panics on error.
+ *
+ * It is intended for use in tests with hard-coded strings.
+ */
+func MustParseBroadcastAddr(s string) BroadcastAddr {
+	if addr, err := ParseBroadcastAddr(s); err != nil {
+		panic(err)
 	} else {
-		return (*net.UDPAddr)(&a).String()
+		return addr
+	}
+}
+
+/*
+ * ParseBroadcastAddr parses a string as a UDP broadcast address.
+ *
+ * It doesn't do any name resolution i.e.: both the address and the port must be numeric.
+ */
+func ParseBroadcastAddr(s string) (BroadcastAddr, error) {
+	if addr, err := netip.ParseAddrPort(s); err != nil {
+		return BroadcastAddr{}, err
+	} else {
+		return BroadcastAddr{
+			addr,
+		}, nil
+	}
+}
+
+/*
+ * BroadcastAddrFrom contructs a BroadcastAddr from an address and port.
+ */
+func BroadcastAddrFrom(addr netip.Addr, port uint16) BroadcastAddr {
+	return BroadcastAddr{
+		netip.AddrPortFrom(addr, port),
+	}
+}
+
+/*
+ * Formats the broadcast address and port as an address:port string.
+ *
+ * Return only the bind address if bind port is the default port (60000).
+ */
+func (a BroadcastAddr) String() string {
+	if a.Port() == BROADCAST_PORT {
+		return fmt.Sprintf("%v", a.Addr())
+	} else {
+		return fmt.Sprintf("%v", a.AddrPort)
 	}
 }
 
@@ -23,11 +67,12 @@ func (a *BroadcastAddr) Set(v string) error {
 	addr, err := ResolveBroadcastAddr(v)
 	if err != nil {
 		return err
-	} else if addr == nil {
+	} else if !addr.IsValid() {
 		return fmt.Errorf("invalid broadcast address '%v'", v)
 	}
 
-	*a = *addr
+	*a = addr
+
 	return nil
 }
 
@@ -47,7 +92,7 @@ func (a *BroadcastAddr) UnmarshalJSON(bytes []byte) error {
 		return err
 	}
 
-	*a = *addr
+	*a = addr
 
 	return nil
 }
@@ -58,7 +103,9 @@ func (a *BroadcastAddr) Equal(addr *BroadcastAddr) bool {
 		return true
 
 	case a != nil && addr != nil:
-		return a.IP.Equal(addr.IP)
+		p := fmt.Sprintf("%v", a.Addr())
+		q := fmt.Sprintf("%v", addr.Addr())
+		return p == q
 
 	default:
 		return false
@@ -74,32 +121,28 @@ func (a *BroadcastAddr) Clone() *BroadcastAddr {
 	return nil
 }
 
-func ResolveBroadcastAddr(s string) (*BroadcastAddr, error) {
+func ResolveBroadcastAddr(s string) (BroadcastAddr, error) {
 	if matched, err := regexp.MatchString(`[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}:[0-9]{1,5}`, s); err != nil {
-		return nil, err
+		return BroadcastAddr{}, err
 	} else if matched {
-		if addr, err := net.ResolveUDPAddr("udp", s); err != nil {
-			return nil, err
-		} else if addr.Port == 0 {
-			return nil, fmt.Errorf("%v: invalid 'broadcast' port (%v)", addr, addr.Port)
+		if addr, err := netip.ParseAddrPort(s); err != nil {
+			return BroadcastAddr{}, err
+		} else if addr.Port() == 0 {
+			return BroadcastAddr{}, fmt.Errorf("%v: invalid 'broadcast' port (%v)", addr, addr.Port())
 		} else {
-			return &BroadcastAddr{
-				IP:   addr.IP.To4(),
-				Port: addr.Port,
-			}, nil
+			return BroadcastAddr{addr}, nil
 		}
 	}
 
 	if matched, err := regexp.MatchString(`[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}`, s); err != nil {
-		return nil, err
+		return BroadcastAddr{}, err
 	} else if matched {
-		if ip := net.ParseIP(s); ip != nil {
-			return &BroadcastAddr{
-				IP:   ip.To4(),
-				Port: BROADCAST_PORT,
-			}, nil
+		if addr, err := netip.ParseAddr(s); err != nil {
+			return BroadcastAddr{}, err
+		} else {
+			return BroadcastAddrFrom(addr, BROADCAST_PORT), nil
 		}
 	}
 
-	return nil, fmt.Errorf("%s is not a valid UDP address:port", s)
+	return BroadcastAddr{}, fmt.Errorf("%s is not a valid UDP broadcast address:port", s)
 }

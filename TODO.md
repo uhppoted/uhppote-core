@@ -10,12 +10,14 @@
       - [x] sendto:broadcast - don't wait for timeout if reply is valid
       - [x] Rework UDP to use connected sockets
       - [x] Unify send/sendto implementations
-      - [ ] Rework bind address as netip.AddrPort
+      - [x] Rework bind address as netip.AddrPort
             - [x] BindAddr.Port()
             - [x] BindAddr.Addr()
             - [x] BindAddrFrom
             - [x] Rework as struct with embedded netip.AddrPort
       - [ ] Rework broadcast address as netip.AddrPort
+            - [x] Rework as struct with embedded netip.AddrPort
+            - [ ] Update dependencies
             - [ ] // FIXME rework u.BroadCastAddr as netip.AddrPort
       - [ ] Rework listen address as netip.AddrPort
       - [ ] Rework address as *netip.AddrPort
@@ -26,7 +28,7 @@
             - [ ] Replace pointer with zero value
       - [ ] Add timezone to NewDevice
       - [ ] Rework GetListenerResponse to use AddrPort
-      - [ ] Replace (* UHPPOTE) in API functions with non-pointer version
+      - (?) Replace (* UHPPOTE) in API functions with non-pointer version
       - [ ] CHANGELOG
       - [ ] README
 
