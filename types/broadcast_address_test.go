@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestBroadcastAddrString(t *testing.T) {
+func TestBroadcastAddrStringer(t *testing.T) {
 	tests := map[uint16]string{
 		0:     "192.168.1.100:0",
 		1:     "192.168.1.100:1",
@@ -24,7 +24,7 @@ func TestBroadcastAddrString(t *testing.T) {
 	}
 }
 
-func TestBroadcastAddrResolve(t *testing.T) {
+func TestParseBroadcastAddr(t *testing.T) {
 	tests := map[string]BroadcastAddr{
 		"192.168.1.100":       MustParseBroadcastAddr("192.168.1.100:60000"),
 		"192.168.1.100:60000": MustParseBroadcastAddr("192.168.1.100:60000"),
@@ -33,7 +33,7 @@ func TestBroadcastAddrResolve(t *testing.T) {
 	}
 
 	for s, expected := range tests {
-		addr, err := ResolveBroadcastAddr(s)
+		addr, err := ParseBroadcastAddr(s)
 
 		if err != nil {
 			t.Fatalf("Unexpected error resolving broadcast address %v (%v)", s, err)
@@ -49,7 +49,7 @@ func TestBroadcastAddrResolve(t *testing.T) {
 
 func TestInvalidBroadcastAddrResolve(t *testing.T) {
 	s := "192.168.1.100:0"
-	addr, err := ResolveBroadcastAddr(s)
+	addr, err := ParseBroadcastAddr(s)
 
 	if err == nil {
 		t.Errorf("Expected error resolving broadcast address %v, got:%v (%v)", s, addr, err)

@@ -19,8 +19,8 @@
       - [ ] Rework broadcast address as netip.AddrPort
             - [x] Rework as struct with embedded netip.AddrPort
             - [x] Update dependencies
+            - [x] MustParse should default to port 60000
             - [ ] FIXME: rework u.BroadCastAddr as netip.AddrPort
-            - [ ] MustParse should default to port 60000
       - [ ] Rework listen address as netip.AddrPort
       - [ ] Rework address as *netip.AddrPort
             - [x] uhppote-core

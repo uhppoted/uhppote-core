@@ -29,7 +29,8 @@ func MustParseBindAddr(s string) BindAddr {
 /*
  * ParseBindAddr parses a string as a bind address.
  *
- * It doesn't do any name resolution i.e.: both the address and the port must be numeric.
+ * It doesn't do any name resolution i.e.: both the address and the port must be numeric. Defaults
+ * to port 0 if the port is not specified.
  */
 func ParseBindAddr(s string) (BindAddr, error) {
 	if matched, err := regexp.MatchString(`[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}:[0-9]{1,5}`, s); err != nil {
@@ -102,14 +103,13 @@ func (a *BindAddr) UnmarshalJSON(bytes []byte) error {
 		return err
 	}
 
-	addr, err := ParseBindAddr(s)
-	if err != nil {
+	if addr, err := ParseBindAddr(s); err != nil {
 		return err
+	} else {
+		*a = addr
+
+		return nil
 	}
-
-	*a = addr
-
-	return nil
 }
 
 func (a *BindAddr) Equal(addr *Address) bool {
