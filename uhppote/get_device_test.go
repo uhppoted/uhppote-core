@@ -107,10 +107,7 @@ func TestGetDevicesWithAltPort(t *testing.T) {
 	}
 
 	u := uhppote{
-		broadcastAddr: &net.UDPAddr{
-			IP:   net.IPv4(192, 168, 1, 255),
-			Port: 54321,
-		},
+		broadcastAddr: types.MustParseBroadcastAddr("192.168.1.255:54321"),
 
 		driver: &stub{
 			broadcast: func(addr *net.UDPAddr, request []byte) ([][]byte, error) {

@@ -27,7 +27,7 @@ type driver interface {
 }
 
 type uhppote struct {
-	broadcastAddr *net.UDPAddr
+	broadcastAddr types.BroadcastAddr
 	listenAddr    *net.UDPAddr
 	devices       map[uint32]Device
 	debug         bool
@@ -42,16 +42,14 @@ func NewUHPPOTE(
 	devices []Device,
 	debug bool) IUHPPOTE {
 
-	bind := bindAddr
-	broadcast := net.UDPAddrFromAddrPort(broadcastAddr.AddrPort)
 	listen := net.UDPAddr(listenAddr)
 
 	uhppote := uhppote{
-		broadcastAddr: broadcast,
+		broadcastAddr: broadcastAddr,
 		listenAddr:    &listen,
 		devices:       map[uint32]Device{},
 		driver: &ut0311{
-			bindAddr:   bind.AddrPort,
+			bindAddr:   bindAddr.AddrPort,
 			listenAddr: listen,
 			timeout:    timeout,
 			debug:      debug,
@@ -75,14 +73,6 @@ func (u *uhppote) DeviceList() map[uint32]Device {
 	}
 
 	return list
-}
-
-func (u *uhppote) BroadcastAddr() *net.UDPAddr {
-	if u != nil {
-		return u.broadcastAddr
-	}
-
-	return nil
 }
 
 func (u *uhppote) ListenAddr() *net.UDPAddr {
@@ -275,8 +265,8 @@ func (u *uhppote) listen(p chan *event, q chan os.Signal, listener Listener) err
 }
 
 func (u *uhppote) broadcastAddress() *net.UDPAddr {
-	if u.broadcastAddr != nil {
-		return u.broadcastAddr
+	if u != nil && u.broadcastAddr.IsValid() {
+		return net.UDPAddrFromAddrPort(u.broadcastAddr.AddrPort)
 	}
 
 	addr := net.UDPAddr{

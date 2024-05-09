@@ -18,8 +18,8 @@ func (u *uhppote) GetDevices() ([]types.Device, error) {
 	}
 
 	port := uint16(60000)
-	if addr := u.BroadcastAddr(); addr != nil {
-		port = uint16(addr.Port)
+	if u.broadcastAddr.IsValid() {
+		port = u.broadcastAddr.Port()
 	}
 
 	controllers := []types.Device{}
@@ -71,8 +71,8 @@ func (u *uhppote) GetDevice(serialNumber uint32) (*types.Device, error) {
 		}
 
 		port := uint16(60000)
-		if addr := u.BroadcastAddr(); addr != nil {
-			port = uint16(addr.Port) // FIXME rework u.BroadCastAddr as netip.AddrPort
+		if u.broadcastAddr.IsValid() {
+			port = u.broadcastAddr.Port()
 		}
 
 		if device, ok := u.devices[serialNumber]; ok {

@@ -59,13 +59,13 @@ func TestBroadcastAddressRequest(t *testing.T) {
 		CardNumber:   6154412,
 	}
 
-	bind := udpaddr("127.0.0.1:12345")
+	bind := types.MustParseBindAddr("127.0.0.1:12345")
 	u := uhppote{
 		devices:       make(map[uint32]Device),
 		debug:         false,
-		broadcastAddr: udpaddr("127.0.0.1:60000"),
+		broadcastAddr: types.MustParseBroadcastAddr("127.0.0.1:60000"),
 		driver: &ut0311{
-			bindAddr: bind.AddrPort(),
+			bindAddr: bind.AddrPort,
 			timeout:  5000 * time.Millisecond,
 			debug:    false,
 		},
@@ -102,10 +102,10 @@ func TestSequentialRequests(t *testing.T) {
 		CardNumber:   6154412,
 	}
 
-	bind := udpaddr("127.0.0.1:12345")
+	bind := types.MustParseBindAddr("127.0.0.1:12345")
 	u := uhppote{
 		debug:         false,
-		broadcastAddr: udpaddr("127.0.0.1:60000"),
+		broadcastAddr: types.MustParseBroadcastAddr("127.0.0.1:60000"),
 		devices: map[uint32]Device{
 			423187757: Device{
 				Address: addrport("127.0.0.1:65001"),
@@ -118,7 +118,7 @@ func TestSequentialRequests(t *testing.T) {
 			},
 		},
 		driver: &ut0311{
-			bindAddr: bind.AddrPort(),
+			bindAddr: bind.AddrPort,
 			timeout:  5000 * time.Millisecond,
 			debug:    false,
 		},
@@ -169,10 +169,10 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 		CardNumber:   6154412,
 	}
 
-	bind := udpaddr("127.0.0.1:0")
+	bind := types.MustParseBindAddr("127.0.0.1")
 	u := uhppote{
 		debug:         false,
-		broadcastAddr: bind,
+		broadcastAddr: types.MustParseBroadcastAddr("127.0.0.1"),
 		devices: map[uint32]Device{
 			423187757: Device{
 				Address: addrport("127.0.0.1:65001"),
@@ -185,7 +185,7 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 			},
 		},
 		driver: &ut0311{
-			bindAddr: bind.AddrPort(),
+			bindAddr: bind.AddrPort,
 			timeout:  5000 * time.Millisecond,
 			debug:    false,
 		},
@@ -251,10 +251,10 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 		CardNumber:   6154412,
 	}
 
-	bind := udpaddr("127.0.0.1:12345")
+	bind := types.MustParseBindAddr("127.0.0.1:12345")
 	u := uhppote{
 		debug:         false,
-		broadcastAddr: udpaddr("127.0.0.1:60000"),
+		broadcastAddr: types.MustParseBroadcastAddr("127.0.0.1:60000"),
 		devices: map[uint32]Device{
 			423187757: Device{
 				Address: addrport("127.0.0.1:65001"),
@@ -267,7 +267,7 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 			},
 		},
 		driver: &ut0311{
-			bindAddr: bind.AddrPort(),
+			bindAddr: bind.AddrPort,
 			timeout:  5000 * time.Millisecond,
 			debug:    false,
 		},
@@ -367,12 +367,6 @@ func listen(deviceID uint32, address string, delay time.Duration, closed chan in
 	}()
 
 	return c
-}
-
-func udpaddr(address string) *net.UDPAddr {
-	addr := netip.MustParseAddrPort(address)
-
-	return net.UDPAddrFromAddrPort(addr)
 }
 
 func addrport(address string) *netip.AddrPort {

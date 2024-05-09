@@ -20,7 +20,8 @@
             - [x] Rework as struct with embedded netip.AddrPort
             - [x] Update dependencies
             - [x] MustParse should default to port 60000
-            - [ ] FIXME: rework u.BroadCastAddr as netip.AddrPort
+            - [x] FIXME: rework u.BroadCastAddr as netip.AddrPort
+            - [ ] Rename BroadcastAddress() function to BroadcastAddr()
       - [ ] Rework listen address as netip.AddrPort
       - [ ] Rework address as *netip.AddrPort
             - [x] uhppote-core
