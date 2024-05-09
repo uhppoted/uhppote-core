@@ -32,13 +32,29 @@ func MustParseBindAddr(s string) BindAddr {
  * It doesn't do any name resolution i.e.: both the address and the port must be numeric.
  */
 func ParseBindAddr(s string) (BindAddr, error) {
-	if addr, err := netip.ParseAddrPort(s); err != nil {
+	if matched, err := regexp.MatchString(`[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}:[0-9]{1,5}`, s); err != nil {
 		return BindAddr{}, err
-	} else {
-		return BindAddr{
-			addr,
-		}, nil
+	} else if matched {
+		if addr, err := netip.ParseAddrPort(s); err != nil {
+			return BindAddr{}, err
+		} else if addr.Port() == DEFAULT_PORT {
+			return BindAddr{}, fmt.Errorf("%v: invalid 'bind' port (%v)", addr, addr.Port()) // avoid broadcastto-self
+		} else {
+			return BindAddr{addr}, nil
+		}
 	}
+
+	if matched, err := regexp.MatchString(`[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}`, s); err != nil {
+		return BindAddr{}, err
+	} else if matched {
+		if addr, err := netip.ParseAddr(s); err != nil {
+			return BindAddr{}, err
+		} else {
+			return BindAddrFrom(addr, BIND_PORT), nil
+		}
+	}
+
+	return BindAddr{}, fmt.Errorf("%s is not a valid bind address:port", s)
 }
 
 /*
@@ -64,16 +80,15 @@ func (a BindAddr) String() string {
 }
 
 func (a *BindAddr) Set(v string) error {
-	addr, err := ResolveBindAddr(v)
-	if err != nil {
+	if addr, err := ParseBindAddr(v); err != nil {
 		return err
 	} else if !addr.IsValid() {
 		return fmt.Errorf("invalid bind address '%v'", v)
+	} else {
+		*a = addr
+
+		return nil
 	}
-
-	*a = addr
-
-	return nil
 }
 
 func (a BindAddr) MarshalJSON() ([]byte, error) {
@@ -87,7 +102,7 @@ func (a *BindAddr) UnmarshalJSON(bytes []byte) error {
 		return err
 	}
 
-	addr, err := ResolveBindAddr(s)
+	addr, err := ParseBindAddr(s)
 	if err != nil {
 		return err
 	}
@@ -119,30 +134,4 @@ func (a *BindAddr) Clone() *BindAddr {
 	}
 
 	return nil
-}
-
-func ResolveBindAddr(s string) (BindAddr, error) {
-	if matched, err := regexp.MatchString(`[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}:[0-9]{1,5}`, s); err != nil {
-		return BindAddr{}, err
-	} else if matched {
-		if addr, err := netip.ParseAddrPort(s); err != nil {
-			return BindAddr{}, err
-		} else if addr.Port() == DEFAULT_PORT {
-			return BindAddr{}, fmt.Errorf("%v: invalid 'bind' port (%v)", addr, addr.Port())
-		} else {
-			return BindAddr{addr}, nil
-		}
-	}
-
-	if matched, err := regexp.MatchString(`[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}`, s); err != nil {
-		return BindAddr{}, err
-	} else if matched {
-		if addr, err := netip.ParseAddr(s); err != nil {
-			return BindAddr{}, err
-		} else {
-			return BindAddrFrom(addr, BIND_PORT), nil
-		}
-	}
-
-	return BindAddr{}, fmt.Errorf("%s is not a valid address:port", s)
 }

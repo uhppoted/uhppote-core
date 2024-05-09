@@ -24,7 +24,7 @@ func TestBindAddrString(t *testing.T) {
 	}
 }
 
-func TestBindAddrResolve(t *testing.T) {
+func TestParseBindAddr(t *testing.T) {
 	tests := map[string]BindAddr{
 		"192.168.1.100":       MustParseBindAddr("192.168.1.100:0"),
 		"192.168.1.100:0":     MustParseBindAddr("192.168.1.100:0"),
@@ -33,7 +33,7 @@ func TestBindAddrResolve(t *testing.T) {
 	}
 
 	for s, expected := range tests {
-		addr, err := ResolveBindAddr(s)
+		addr, err := ParseBindAddr(s)
 
 		if err != nil {
 			t.Fatalf("Unexpected error resolving bind address %v (%v)", s, err)
@@ -47,9 +47,9 @@ func TestBindAddrResolve(t *testing.T) {
 	}
 }
 
-func TestInvalidBindAddrResolve(t *testing.T) {
+func TestParseBindAddrWithInvalidPort(t *testing.T) {
 	s := "192.168.1.100:60000"
-	addr, err := ResolveBindAddr(s)
+	addr, err := ParseBindAddr(s)
 
 	if err == nil {
 		t.Errorf("Expected error resolving bind address %v, got:%v (%v)", s, addr, err)

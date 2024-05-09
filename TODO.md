@@ -15,7 +15,7 @@
             - [x] BindAddr.Addr()
             - [x] BindAddrFrom
             - [x] Rework as struct with embedded netip.AddrPort
-            - [ ] MustParse should default to port 0
+            - [x] MustParse should default to port 0
       - [ ] Rework broadcast address as netip.AddrPort
             - [x] Rework as struct with embedded netip.AddrPort
             - [x] Update dependencies
