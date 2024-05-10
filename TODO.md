@@ -23,6 +23,9 @@
             - [x] FIXME: rework u.BroadCastAddr as netip.AddrPort
             - [x] Rename BroadcastAddress() function to BroadcastAddr()
       - [ ] Rework listen address as netip.AddrPort
+            - [x] Rework as struct with embedded netip.AddrPort
+            - [ ] Update dependencies
+            - [ ] // FIXME Required? Convert to AddrPort ?
       - [ ] Rework address as *netip.AddrPort
             - [x] uhppote-core
             - [x] Update uhppoted-lib::conf

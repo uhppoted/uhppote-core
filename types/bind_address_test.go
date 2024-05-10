@@ -26,10 +26,10 @@ func TestBindAddrString(t *testing.T) {
 
 func TestParseBindAddr(t *testing.T) {
 	tests := map[string]BindAddr{
-		"192.168.1.100":       MustParseBindAddr("192.168.1.100:0"),
-		"192.168.1.100:0":     MustParseBindAddr("192.168.1.100:0"),
-		"192.168.1.100:10001": MustParseBindAddr("192.168.1.100:10001"),
-		"192.168.1.100:60001": MustParseBindAddr("192.168.1.100:60001"),
+		"192.168.1.100":       BindAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 0),
+		"192.168.1.100:0":     BindAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 0),
+		"192.168.1.100:10001": BindAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 10001),
+		"192.168.1.100:60001": BindAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 60001),
 	}
 
 	for s, expected := range tests {

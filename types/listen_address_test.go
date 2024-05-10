@@ -2,22 +2,21 @@ package types
 
 import (
 	"encoding/json"
+	"net/netip"
 	"reflect"
 	"testing"
 )
 
 func TestListenAddrString(t *testing.T) {
-	tests := map[int]string{
+	tests := map[uint16]string{
 		0:     "192.168.1.100:0",
 		1:     "192.168.1.100:1",
 		60001: "192.168.1.100:60001",
 	}
 
 	for p, expected := range tests {
-		listen := ListenAddr{
-			IP:   []byte{192, 168, 1, 100},
-			Port: p,
-		}
+		addr := netip.AddrFrom4([4]byte{192, 168, 1, 100})
+		listen := ListenAddrFrom(addr, p)
 
 		if s := listen.String(); s != expected {
 			t.Errorf("Incorrect string - expected:%v, got:%v", expected, s)
@@ -25,35 +24,35 @@ func TestListenAddrString(t *testing.T) {
 	}
 }
 
-func TestListenAddrResolve(t *testing.T) {
+func TestParseListenAddr(t *testing.T) {
 	tests := map[string]ListenAddr{
-		"192.168.1.100:1":     ListenAddr{IP: []byte{192, 168, 1, 100}, Port: 1},
-		"192.168.1.100:60001": ListenAddr{IP: []byte{192, 168, 1, 100}, Port: 60001},
+		"192.168.1.100:1":     ListenAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 1),
+		"192.168.1.100:60001": ListenAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 60001),
 	}
 
 	for s, expected := range tests {
-		addr, err := ResolveListenAddr(s)
+		addr, err := ParseListenAddr(s)
 
 		if err != nil {
 			t.Fatalf("Unexpected error resolving listen address %v (%v)", s, err)
-		} else if addr == nil {
+		} else if !addr.IsValid() {
 			t.Fatalf("Failed to resolve valid listen address %v (%v)", s, addr)
 		}
 
-		if !reflect.DeepEqual(*addr, expected) {
-			t.Errorf("Incorrectly resolved listen address %v - expected:%v, got:%v", s, expected, *addr)
+		if !reflect.DeepEqual(addr, expected) {
+			t.Errorf("Incorrectly resolved listen address %v - expected:%v, got:%v", s, expected, addr)
 		}
 	}
 }
 
-func TestInvalidListenAddrResolve(t *testing.T) {
+func TestParseListenAddrWithInvalidPort(t *testing.T) {
 	tests := []string{
 		"192.168.1.100:0",
 		"192.168.1.100:60000",
 	}
 
 	for _, s := range tests {
-		addr, err := ResolveListenAddr(s)
+		addr, err := ParseListenAddr(s)
 		if err == nil {
 			t.Errorf("Expected error resolving listen address %v, got:%v (%v)", s, addr, err)
 		}
@@ -61,17 +60,15 @@ func TestInvalidListenAddrResolve(t *testing.T) {
 }
 
 func TestListenAddrMarshalJSON(t *testing.T) {
-	tests := map[int]string{
+	tests := map[uint16]string{
 		0:     `"192.168.1.100:0"`,
 		1:     `"192.168.1.100:1"`,
 		60001: `"192.168.1.100:60001"`,
 	}
 
 	for p, expected := range tests {
-		listen := ListenAddr{
-			IP:   []byte{192, 168, 1, 100},
-			Port: p,
-		}
+		addr := netip.AddrFrom4([4]byte{192, 168, 1, 100})
+		listen := ListenAddrFrom(addr, p)
 
 		if bytes, err := json.Marshal(listen); err != nil {
 			t.Fatalf("Error marshaling ListenAddr (%v)", err)

@@ -12,7 +12,7 @@ import (
 
 type ut0311 struct {
 	bindAddr   netip.AddrPort
-	listenAddr net.UDPAddr
+	listenAddr netip.AddrPort
 	timeout    time.Duration
 	debug      bool
 }
@@ -294,12 +294,12 @@ func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
 }
 
 func (u *ut0311) Listen(signal chan interface{}, done chan interface{}, callback func([]byte)) error {
-	bind := u.listenAddr
+	bind := net.UDPAddrFromAddrPort(u.listenAddr)
 	if bind.Port == 0 {
 		return fmt.Errorf("Listen requires a non-zero UDP port")
 	}
 
-	c, err := net.ListenUDP("udp", &bind)
+	c, err := net.ListenUDP("udp", bind)
 	if err != nil {
 		return fmt.Errorf("error opening UDP listen socket (%v)", err)
 	} else if c == nil {

@@ -26,10 +26,10 @@ func TestBroadcastAddrStringer(t *testing.T) {
 
 func TestParseBroadcastAddr(t *testing.T) {
 	tests := map[string]BroadcastAddr{
-		"192.168.1.100":       MustParseBroadcastAddr("192.168.1.100:60000"),
-		"192.168.1.100:60000": MustParseBroadcastAddr("192.168.1.100:60000"),
-		"192.168.1.100:10001": MustParseBroadcastAddr("192.168.1.100:10001"),
-		"192.168.1.100:60001": MustParseBroadcastAddr("192.168.1.100:60001"),
+		"192.168.1.100":       BroadcastAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 60000),
+		"192.168.1.100:60000": BroadcastAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 60000),
+		"192.168.1.100:10001": BroadcastAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 10001),
+		"192.168.1.100:60001": BroadcastAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 60001),
 	}
 
 	for s, expected := range tests {

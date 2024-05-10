@@ -28,7 +28,7 @@ type driver interface {
 
 type uhppote struct {
 	broadcastAddr types.BroadcastAddr
-	listenAddr    *net.UDPAddr
+	listenAddr    types.ListenAddr
 	devices       map[uint32]Device
 	debug         bool
 	driver        driver
@@ -42,15 +42,13 @@ func NewUHPPOTE(
 	devices []Device,
 	debug bool) IUHPPOTE {
 
-	listen := net.UDPAddr(listenAddr)
-
 	uhppote := uhppote{
 		broadcastAddr: broadcastAddr,
-		listenAddr:    &listen,
+		listenAddr:    listenAddr,
 		devices:       map[uint32]Device{},
 		driver: &ut0311{
 			bindAddr:   bindAddr.AddrPort,
-			listenAddr: listen,
+			listenAddr: listenAddr.AddrPort,
 			timeout:    timeout,
 			debug:      debug,
 		},
@@ -75,9 +73,10 @@ func (u *uhppote) DeviceList() map[uint32]Device {
 	return list
 }
 
+// FIXME Required? Convert to AddrPort ?
 func (u *uhppote) ListenAddr() *net.UDPAddr {
 	if u != nil {
-		return u.listenAddr
+		return net.UDPAddrFromAddrPort(u.listenAddr.AddrPort)
 	}
 
 	return nil
