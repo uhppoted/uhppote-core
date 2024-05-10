@@ -1,6 +1,11 @@
 # TODO
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
+      - [ ]  CLI get-devices EOF
+```
+   ... receive error: EOF
+   WARN:  EOF
+```
       - [x] Add protocol field to UHPPOTE controller struct
       - [x] Verify TCP with real controller
       - [x] TCP 'driver'
@@ -11,17 +16,12 @@
       - [x] Rework UDP to use connected sockets
       - [x] Unify send/sendto implementations
       - [x] Rework bind address as netip.AddrPort
-            - [x] BindAddr.Port()
-            - [x] BindAddr.Addr()
-            - [x] BindAddrFrom
-            - [x] Rework as struct with embedded netip.AddrPort
-            - [x] MustParse should default to port 0
-      - [ ] Rework broadcast address as netip.AddrPort
+      - [x] Rework broadcast address as netip.AddrPort
             - [x] Rework as struct with embedded netip.AddrPort
             - [x] Update dependencies
             - [x] MustParse should default to port 60000
             - [x] FIXME: rework u.BroadCastAddr as netip.AddrPort
-            - [ ] Rename BroadcastAddress() function to BroadcastAddr()
+            - [x] Rename BroadcastAddress() function to BroadcastAddr()
       - [ ] Rework listen address as netip.AddrPort
       - [ ] Rework address as *netip.AddrPort
             - [x] uhppote-core

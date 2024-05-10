@@ -179,14 +179,16 @@ func sendto[T any](u *uhppote, serialNumber uint32, request any) (T, error) {
  * Broadcasts a UDP request and returns all received replies.
  */
 func (u *uhppote) udpBroadcast(request []byte) ([][]byte, error) {
-	return u.driver.Broadcast(u.broadcastAddress(), request)
+	addr := resolve(u.broadcastAddr)
+
+	return u.driver.Broadcast(addr, request)
 }
 
 /*
  * Broadcasts the UDP request and returns the first valid reply to the request.
  */
 func (u *uhppote) udpBroadcastTo(serialNumber uint32, request []byte) ([]byte, error) {
-	dest := u.broadcastAddress()
+	addr := resolve(u.broadcastAddr)
 
 	handler := func(bytes []byte) bool {
 		if len(bytes) != 64 {
@@ -202,7 +204,7 @@ func (u *uhppote) udpBroadcastTo(serialNumber uint32, request []byte) ([]byte, e
 		return true
 	}
 
-	return u.driver.BroadcastTo(dest, request, handler)
+	return u.driver.BroadcastTo(addr, request, handler)
 }
 
 /*
@@ -264,9 +266,9 @@ func (u *uhppote) listen(p chan *event, q chan os.Signal, listener Listener) err
 	return nil
 }
 
-func (u *uhppote) broadcastAddress() *net.UDPAddr {
-	if u != nil && u.broadcastAddr.IsValid() {
-		return net.UDPAddrFromAddrPort(u.broadcastAddr.AddrPort)
+func resolve(address types.BroadcastAddr) *net.UDPAddr {
+	if address.IsValid() {
+		return net.UDPAddrFromAddrPort(address.AddrPort)
 	}
 
 	addr := net.UDPAddr{
