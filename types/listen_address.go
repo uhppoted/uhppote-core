@@ -92,6 +92,10 @@ func (a *ListenAddr) UnmarshalJSON(bytes []byte) error {
 	}
 }
 
+func (a *ListenAddr) IsValid() bool {
+	return a.AddrPort.Addr().IsValid() && a.AddrPort.Port() != 0
+}
+
 func (a *ListenAddr) Equal(addr *ListenAddr) bool {
 	switch {
 	case a == nil && addr == nil:

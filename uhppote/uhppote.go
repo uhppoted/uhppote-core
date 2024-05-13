@@ -73,21 +73,45 @@ func (u *uhppote) DeviceList() map[uint32]Device {
 	return list
 }
 
-// FIXME Required? Convert to AddrPort ?
-func (u *uhppote) ListenAddr() *net.UDPAddr {
-	if u != nil {
-		return net.UDPAddrFromAddrPort(u.listenAddr.AddrPort)
+// Returns a list of netip.AddrPort on which the system is listening for controller events.
+//
+// The list is:
+// - empty if the internal 'listen address' is not valid
+// - a single value if the internal 'listen address' is explicitly specified
+// - a list of all the IPv4 interfaces if the 'listen address' is INADDR_ANY
+func (u *uhppote) ListenAddrList() []netip.AddrPort {
+	list := []netip.AddrPort{}
+
+	if u != nil && u.listenAddr.IsValid() {
+		if !u.listenAddr.Addr().IsUnspecified() {
+			list = append(list, u.listenAddr.AddrPort)
+		} else if ifaces, err := net.Interfaces(); err == nil {
+			port := u.listenAddr.Port()
+
+			for _, i := range ifaces {
+				if addrs, err := i.Addrs(); err == nil {
+					for _, a := range addrs {
+						switch v := a.(type) {
+						case *net.IPNet:
+							if v.IP.To4() != nil && i.Flags&net.FlagLoopback == 0 {
+								if addr, ok := netip.AddrFromSlice(v.IP.To4()); ok {
+									list = append(list, netip.AddrPortFrom(addr, port))
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
-	return nil
+	return list
 }
 
-/*
- * Broadcasts the request as a UDP message and returns the replies collected within the configured
- * time limit. Invalid responses are discarded without raising an error.
- *
- * Returns an error if the send or receive failed.
- */
+// Broadcasts the request as a UDP message and returns the replies collected within the configured
+// time limit. Invalid responses are discarded without raising an error.
+//
+// Returns an error if the send or receive failed.
 func (u *uhppote) broadcast(request, reply any) ([]any, error) {
 	if m, err := codec.Marshal(request); err != nil {
 		return nil, err
@@ -117,15 +141,13 @@ func (u *uhppote) broadcast(request, reply any) ([]any, error) {
 	}
 }
 
-/*
- * Sends a UDP message to a specific device and returns the decoded response.
- *
- * The internal implementation anticipates replies from more than one device because the
- * request may be broadcast - only the reply that matches the serial number is returned.
- *
- * Returns an error if the send, receive or decoding failed or the controller serial number
- * is invalid (0).
- */
+// Sends a UDP message to a specific device and returns the decoded response.
+//
+// The internal implementation anticipates replies from more than one device because the
+// request may be broadcast - only the reply that matches the serial number is returned.
+//
+// Returns an error if the send, receive or decoding failed or the controller serial number
+// is invalid (0).
 func sendto[T any](u *uhppote, serialNumber uint32, request any) (T, error) {
 	var reply T
 
@@ -174,18 +196,14 @@ func sendto[T any](u *uhppote, serialNumber uint32, request any) (T, error) {
 	}
 }
 
-/*
- * Broadcasts a UDP request and returns all received replies.
- */
+// Broadcasts a UDP request and returns all received replies.
 func (u *uhppote) udpBroadcast(request []byte) ([][]byte, error) {
 	addr := resolve(u.broadcastAddr)
 
 	return u.driver.Broadcast(addr, request)
 }
 
-/*
- * Broadcasts the UDP request and returns the first valid reply to the request.
- */
+// Broadcasts the UDP request and returns the first valid reply to the request.
 func (u *uhppote) udpBroadcastTo(serialNumber uint32, request []byte) ([]byte, error) {
 	addr := resolve(u.broadcastAddr)
 
@@ -206,18 +224,14 @@ func (u *uhppote) udpBroadcastTo(serialNumber uint32, request []byte) ([]byte, e
 	return u.driver.BroadcastTo(addr, request, handler)
 }
 
-/*
- * Sends a UDP message to a specific controller address.
- */
+// Sends a UDP message to a specific controller address.
 func (u *uhppote) udpSendTo(address netip.AddrPort, request []byte) ([]byte, error) {
 	dest := net.UDPAddrFromAddrPort(address)
 
 	return u.driver.SendUDP(dest, request)
 }
 
-/*
- * Sends the request as a TCP message and returns the reply (if any).
- */
+// Sends the request as a TCP message and returns the reply (if any).
 func (u *uhppote) tcpSendTo(address netip.AddrPort, request []byte) ([]byte, error) {
 	dest := net.TCPAddrFromAddrPort(address)
 

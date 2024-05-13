@@ -7,23 +7,6 @@ import (
 	"testing"
 )
 
-func TestListenAddrString(t *testing.T) {
-	tests := map[uint16]string{
-		0:     "192.168.1.100:0",
-		1:     "192.168.1.100:1",
-		60001: "192.168.1.100:60001",
-	}
-
-	for p, expected := range tests {
-		addr := netip.AddrFrom4([4]byte{192, 168, 1, 100})
-		listen := ListenAddrFrom(addr, p)
-
-		if s := listen.String(); s != expected {
-			t.Errorf("Incorrect string - expected:%v, got:%v", expected, s)
-		}
-	}
-}
-
 func TestParseListenAddr(t *testing.T) {
 	tests := map[string]ListenAddr{
 		"192.168.1.100:1":     ListenAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 1),
@@ -74,6 +57,42 @@ func TestListenAddrMarshalJSON(t *testing.T) {
 			t.Fatalf("Error marshaling ListenAddr (%v)", err)
 		} else if s := string(bytes); s != expected {
 			t.Errorf("Incorrect JSON string - expected:%v, got:%v", expected, s)
+		}
+	}
+}
+
+func TestListenAddrIsValid(t *testing.T) {
+	tests := []struct {
+		address  ListenAddr
+		expected bool
+	}{
+		{MustParseListenAddr("192.168.1.100:60001"), true},
+		{ListenAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 0), false},
+		{ListenAddr{}, false},
+	}
+
+	for _, test := range tests {
+		v := test.address.IsValid()
+
+		if v != test.expected {
+			t.Errorf("IsValid failed for %v - expected:%v, got:%v", test.address, test.expected, v)
+		}
+	}
+}
+
+func TestListenAddrString(t *testing.T) {
+	tests := map[uint16]string{
+		0:     "192.168.1.100:0",
+		1:     "192.168.1.100:1",
+		60001: "192.168.1.100:60001",
+	}
+
+	for p, expected := range tests {
+		addr := netip.AddrFrom4([4]byte{192, 168, 1, 100})
+		listen := ListenAddrFrom(addr, p)
+
+		if s := listen.String(); s != expected {
+			t.Errorf("Incorrect string - expected:%v, got:%v", expected, s)
 		}
 	}
 }

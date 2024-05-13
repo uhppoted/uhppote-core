@@ -2,6 +2,7 @@ package uhppote
 
 import (
 	"net"
+	"net/netip"
 	"os"
 	"time"
 
@@ -90,5 +91,12 @@ type IUHPPOTE interface {
 
 	// TODO: REMOVE (interim functions used by health-check)
 	DeviceList() map[uint32]Device
-	ListenAddr() *net.UDPAddr
+
+	// Returns a list of netip.AddrPort on which the system is listening for controller events.
+	//
+	// The list is:
+	// - empty if the internal 'listen address' is not valid
+	// - a single value if the internal 'listen address' is explicitly specified
+	// - a list of all the IPv4 interfaces if the 'listen address' is INADDR_ANY
+	ListenAddrList() []netip.AddrPort
 }

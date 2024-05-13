@@ -17,24 +17,22 @@
       - [x] Unify send/sendto implementations
       - [x] Rework bind address as netip.AddrPort
       - [x] Rework broadcast address as netip.AddrPort
+      - [x] Rework listen address as netip.AddrPort
             - [x] Rework as struct with embedded netip.AddrPort
             - [x] Update dependencies
-            - [x] MustParse should default to port 60000
-            - [x] FIXME: rework u.BroadCastAddr as netip.AddrPort
-            - [x] Rename BroadcastAddress() function to BroadcastAddr()
-      - [ ] Rework listen address as netip.AddrPort
-            - [x] Rework as struct with embedded netip.AddrPort
-            - [ ] Update dependencies
-            - [ ] // FIXME Required? Convert to AddrPort ?
-      - [ ] Rework address as *netip.AddrPort
+            - [x] Rework ListenAddr() func to return list of AddrPort
+      - [ ] Rework Address as *netip.AddrPort
+            - [ ] Rename to `ControllerAddress`
+            - [ ] Rework as struct with embedded netip.AddrPort
             - [x] uhppote-core
             - [x] Update uhppoted-lib::conf
             - [x] uhppote-cli
             - [x] uhppoted-lib
             - [ ] Replace pointer with zero value
-      - [ ] Add timezone to NewDevice
       - [ ] Rework GetListenerResponse to use AddrPort
+      - [ ] Add timezone to NewDevice
       - (?) Replace (* UHPPOTE) in API functions with non-pointer version
+      - [ ] Update _uhppoted.conf_ documentation
       - [ ] CHANGELOG
       - [ ] README
 
