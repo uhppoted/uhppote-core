@@ -18,11 +18,8 @@
       - [x] Rework bind address as netip.AddrPort
       - [x] Rework broadcast address as netip.AddrPort
       - [x] Rework listen address as netip.AddrPort
-            - [x] Rework as struct with embedded netip.AddrPort
-            - [x] Update dependencies
-            - [x] Rework ListenAddr() func to return list of AddrPort
       - [ ] Rework Address as *netip.AddrPort
-            - [ ] Rename to `ControllerAddress`
+            - [x] Rename to `ControllerAddr`
             - [ ] Rework as struct with embedded netip.AddrPort
             - [x] uhppote-core
             - [x] Update uhppoted-lib::conf
