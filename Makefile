@@ -62,7 +62,7 @@ publish: release
 	gh release create "$(VERSION)" --draft --prerelease --title "$(VERSION)-beta" --notes-file release-notes.md
 
 debug: build
-	go test ./... -run TestBindAddrSet
+	go test ./... -run TestControllerAddrMarshalJSON
 
 godoc:
 	godoc -http=:80	-index_interval=60s

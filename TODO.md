@@ -1,11 +1,6 @@
 # TODO
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
-      - [ ]  CLI get-devices EOF
-```
-   ... receive error: EOF
-   WARN:  EOF
-```
       - [x] Add protocol field to UHPPOTE controller struct
       - [x] Verify TCP with real controller
       - [x] TCP 'driver'
@@ -18,15 +13,20 @@
       - [x] Rework bind address as netip.AddrPort
       - [x] Rework broadcast address as netip.AddrPort
       - [x] Rework listen address as netip.AddrPort
-      - [ ] Rework Address as *netip.AddrPort
+      - [ ] Rework Address as netip.AddrPort
             - [x] Rename to `ControllerAddr`
-            - [ ] Rework as struct with embedded netip.AddrPort
+            - [x] Rework as struct with embedded netip.AddrPort
             - [x] uhppote-core
             - [x] Update uhppoted-lib::conf
-            - [x] uhppote-cli
             - [x] uhppoted-lib
+            - [x] uhppoted-httpd
             - [ ] Replace pointer with zero value
       - [ ] Rework GetListenerResponse to use AddrPort
+      - [ ] CLI get-devices EOF
+            ```
+            ... receive error: EOF
+            WARN:  EOF
+            ```
       - [ ] Add timezone to NewDevice
       - (?) Replace (* UHPPOTE) in API functions with non-pointer version
       - [ ] Update _uhppoted.conf_ documentation
