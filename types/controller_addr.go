@@ -112,17 +112,8 @@ func (a *ControllerAddr) UnmarshalJSON(bytes []byte) error {
 	}
 }
 
-func (a *ControllerAddr) Equal(addr *ControllerAddr) bool {
-	switch {
-	case a == nil && addr == nil:
-		return true
-
-	case a != nil && addr != nil:
-		return a.Addr() == addr.Addr()
-
-	default:
-		return false
-	}
+func (a ControllerAddr) Equal(addr ControllerAddr) bool {
+	return a.Addr() == addr.Addr()
 }
 
 func (a *ControllerAddr) Clone() *ControllerAddr {
