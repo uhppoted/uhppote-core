@@ -194,7 +194,7 @@ func TestControllerAddrEqual(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		equal := test.controller.Equal(&test.address)
+		equal := test.controller.Equal(test.address)
 
 		if equal != test.expected {
 			t.Errorf("Error comparing controller address %v - expected:%v, got:%v", test.address, test.expected, equal)
