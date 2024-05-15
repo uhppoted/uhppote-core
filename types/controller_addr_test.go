@@ -24,6 +24,22 @@ func TestControllerAddrString(t *testing.T) {
 	}
 }
 
+func TestControllerAddrStringWithInvalidValue(t *testing.T) {
+	addr := ControllerAddr{}
+
+	if s := addr.String(); s != "" {
+		t.Errorf("Incorrect string - expected:'%v', got:'%v'", "", s)
+	}
+
+	addr = ControllerAddr{
+		netip.AddrPort{},
+	}
+
+	if s := addr.String(); s != "" {
+		t.Errorf("Incorrect string - expected:'%v', got:'%v'", "", s)
+	}
+}
+
 func TestParseControllerAddr(t *testing.T) {
 	tests := map[string]ControllerAddr{
 		"192.168.1.100":       ControllerAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 60000),
@@ -113,6 +129,26 @@ func TestControllerAddrPointerMarshalJSON(t *testing.T) {
 		} else if s := string(bytes); s != expected {
 			t.Errorf("Incorrect JSON string - expected:%v, got:%v", expected, s)
 		}
+	}
+}
+
+func TestControllerAddrMarshalJSONWithInvalidValue(t *testing.T) {
+	addr := ControllerAddr{}
+
+	if bytes, err := json.Marshal(addr); err != nil {
+		t.Fatalf("Error marshaling ControllerAddr (%v)", err)
+	} else if s := string(bytes); s != `""` {
+		t.Errorf("Incorrect JSON string - expected:'%v', got:'%v'", `""`, s)
+	}
+
+	addr = ControllerAddr{
+		netip.AddrPort{},
+	}
+
+	if bytes, err := json.Marshal(addr); err != nil {
+		t.Fatalf("Error marshaling ControllerAddr (%v)", err)
+	} else if s := string(bytes); s != `""` {
+		t.Errorf("Incorrect JSON string - expected:'%v', got:'%v'", `""`, s)
 	}
 }
 

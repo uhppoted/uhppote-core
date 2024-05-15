@@ -73,7 +73,9 @@ func BroadcastAddrFrom(addr netip.Addr, port uint16) BroadcastAddr {
  * Return only the bind address if bind port is the default port (60000).
  */
 func (a BroadcastAddr) String() string {
-	if a.Port() == BROADCAST_PORT {
+	if !a.IsValid() {
+		return ""
+	} else if a.Port() == BROADCAST_PORT {
 		return fmt.Sprintf("%v", a.Addr())
 	} else {
 		return fmt.Sprintf("%v", a.AddrPort)

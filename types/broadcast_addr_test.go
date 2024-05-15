@@ -7,23 +7,6 @@ import (
 	"testing"
 )
 
-func TestBroadcastAddrStringer(t *testing.T) {
-	tests := map[uint16]string{
-		0:     "192.168.1.100:0",
-		1:     "192.168.1.100:1",
-		60000: "192.168.1.100",
-	}
-
-	for p, expected := range tests {
-		addr := netip.AddrFrom4([4]byte{192, 168, 1, 100})
-		broadcast := BroadcastAddrFrom(addr, p)
-
-		if s := broadcast.String(); s != expected {
-			t.Errorf("Incorrect string - expected:%v, got:%v", expected, s)
-		}
-	}
-}
-
 func TestParseBroadcastAddr(t *testing.T) {
 	tests := map[string]BroadcastAddr{
 		"192.168.1.100":       BroadcastAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 60000),
@@ -77,6 +60,39 @@ func TestBroadcastAddrSet(t *testing.T) {
 	}
 }
 
+func TestBroadcastAddrString(t *testing.T) {
+	tests := map[uint16]string{
+		0:     "192.168.1.100:0",
+		1:     "192.168.1.100:1",
+		60000: "192.168.1.100",
+	}
+
+	for p, expected := range tests {
+		addr := netip.AddrFrom4([4]byte{192, 168, 1, 100})
+		broadcast := BroadcastAddrFrom(addr, p)
+
+		if s := broadcast.String(); s != expected {
+			t.Errorf("Incorrect string - expected:%v, got:%v", expected, s)
+		}
+	}
+}
+
+func TestBroadcastAddrStringWithInvalidValue(t *testing.T) {
+	broadcast := BroadcastAddr{}
+
+	if s := broadcast.String(); s != "" {
+		t.Errorf("Incorrect string - expected:'%v', got:'%v'", "", s)
+	}
+
+	broadcast = BroadcastAddr{
+		netip.AddrPort{},
+	}
+
+	if s := broadcast.String(); s != "" {
+		t.Errorf("Incorrect string - expected:'%v', got:'%v'", "", s)
+	}
+}
+
 func TestBroadcastAddrMarshalJSON(t *testing.T) {
 	tests := map[uint16]string{
 		0:     `"192.168.1.100:0"`,
@@ -93,6 +109,26 @@ func TestBroadcastAddrMarshalJSON(t *testing.T) {
 		} else if s := string(bytes); s != expected {
 			t.Errorf("Incorrect JSON string - expected:%v, got:%v", expected, s)
 		}
+	}
+}
+
+func TestBroadcastAddrMarshalJSONWithInvalidValue(t *testing.T) {
+	broadcast := BroadcastAddr{}
+
+	if bytes, err := json.Marshal(broadcast); err != nil {
+		t.Fatalf("Error marshaling BroadcastAddr (%v)", err)
+	} else if s := string(bytes); s != `""` {
+		t.Errorf("Incorrect JSON string - expected:'%v', got:'%v'", `""`, s)
+	}
+
+	broadcast = BroadcastAddr{
+		netip.AddrPort{},
+	}
+
+	if bytes, err := json.Marshal(broadcast); err != nil {
+		t.Fatalf("Error marshaling BroadcastAddr (%v)", err)
+	} else if s := string(bytes); s != `""` {
+		t.Errorf("Incorrect JSON string - expected:'%v', got:'%v'", `""`, s)
 	}
 }
 

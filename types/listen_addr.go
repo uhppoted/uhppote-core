@@ -59,7 +59,11 @@ func ListenAddrFrom(addr netip.Addr, port uint16) ListenAddr {
  *
  */
 func (a ListenAddr) String() string {
-	return fmt.Sprintf("%v", a.AddrPort)
+	if !a.IsValid() {
+		return ""
+	} else {
+		return fmt.Sprintf("%v", a.AddrPort)
+	}
 }
 
 func (a *ListenAddr) Set(v string) error {

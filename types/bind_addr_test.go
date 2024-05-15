@@ -24,6 +24,22 @@ func TestBindAddrString(t *testing.T) {
 	}
 }
 
+func TestBindAddrStringWithInvalidValue(t *testing.T) {
+	bind := BindAddr{}
+
+	if s := bind.String(); s != "" {
+		t.Errorf("Incorrect string - expected:'%v', got:'%v'", "", s)
+	}
+
+	bind = BindAddr{
+		netip.AddrPort{},
+	}
+
+	if s := bind.String(); s != "" {
+		t.Errorf("Incorrect string - expected:'%v', got:'%v'", "", s)
+	}
+}
+
 func TestParseBindAddr(t *testing.T) {
 	tests := map[string]BindAddr{
 		"192.168.1.100":       BindAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 0),
@@ -113,6 +129,26 @@ func TestBindAddrPointerMarshalJSON(t *testing.T) {
 		} else if s := string(bytes); s != expected {
 			t.Errorf("Incorrect JSON string - expected:%v, got:%v", expected, s)
 		}
+	}
+}
+
+func TestBindAddrMarshalJSONWithInvalidValue(t *testing.T) {
+	bind := BindAddr{}
+
+	if bytes, err := json.Marshal(bind); err != nil {
+		t.Fatalf("Error marshaling BindAddr (%v)", err)
+	} else if s := string(bytes); s != `""` {
+		t.Errorf("Incorrect JSON string - expected:'%v', got:'%v'", `""`, s)
+	}
+
+	bind = BindAddr{
+		netip.AddrPort{},
+	}
+
+	if bytes, err := json.Marshal(bind); err != nil {
+		t.Fatalf("Error marshaling BindAddr (%v)", err)
+	} else if s := string(bytes); s != `""` {
+		t.Errorf("Incorrect JSON string - expected:'%v', got:'%v'", `""`, s)
 	}
 }
 

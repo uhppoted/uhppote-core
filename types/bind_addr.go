@@ -73,7 +73,9 @@ func BindAddrFrom(addr netip.Addr, port uint16) BindAddr {
  * Return only the bind address if bind port is the default port (60000).
  */
 func (a BindAddr) String() string {
-	if a.Port() == BIND_PORT {
+	if !a.IsValid() {
+		return ""
+	} else if a.Port() == BIND_PORT {
 		return fmt.Sprintf("%v", a.Addr())
 	} else {
 		return fmt.Sprintf("%v", a.AddrPort)
