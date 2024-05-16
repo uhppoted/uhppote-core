@@ -8,12 +8,10 @@ import (
 )
 
 func TestNewDevice(t *testing.T) {
-	address := netip.MustParseAddrPort("192.168.1.100:60000")
-
 	expected := Device{
 		Name:     "Alpha",
 		DeviceID: 405419896,
-		Address:  &address,
+		Address:  netip.MustParseAddrPort("192.168.1.100:60000"),
 		Doors: []string{
 			"Gryffindor",
 			"Hufflepuff",
@@ -24,7 +22,7 @@ func TestNewDevice(t *testing.T) {
 		Protocol: "udp",
 	}
 
-	device := NewDevice("Alpha", 405419896, &address, "udp", []string{
+	device := NewDevice("Alpha", 405419896, netip.MustParseAddrPort("192.168.1.100:60000"), "udp", []string{
 		"Gryffindor",
 		"Hufflepuff",
 		"Ravenclaw",
@@ -41,12 +39,10 @@ func TestNewDevice(t *testing.T) {
 }
 
 func TestDeviceClone(t *testing.T) {
-	address := netip.MustParseAddrPort("192.168.1.100:60000")
-
 	expected := Device{
 		Name:     "Alpha",
 		DeviceID: 405419896,
-		Address:  &address,
+		Address:  netip.MustParseAddrPort("192.168.1.100:60000"),
 		Doors: []string{
 			"Gryffindor",
 			"Hufflepuff",
@@ -60,7 +56,7 @@ func TestDeviceClone(t *testing.T) {
 	device := Device{
 		Name:     "Alpha",
 		DeviceID: 405419896,
-		Address:  &address,
+		Address:  netip.MustParseAddrPort("192.168.1.100:60000"),
 		Doors: []string{
 			"Gryffindor",
 			"Hufflepuff",

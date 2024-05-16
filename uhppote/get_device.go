@@ -76,7 +76,7 @@ func (u *uhppote) GetDevice(serialNumber uint32) (*types.Device, error) {
 		}
 
 		if device, ok := u.devices[serialNumber]; ok {
-			if device.Address != nil {
+			if device.Address.IsValid() {
 				port = device.Address.Port()
 			}
 		}

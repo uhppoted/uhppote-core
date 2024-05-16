@@ -2,42 +2,11 @@ package types
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/netip"
 	"reflect"
 	"testing"
 )
-
-func TestControllerAddrString(t *testing.T) {
-	tests := map[uint16]string{
-		1:     "192.168.1.100:1",
-		60000: "192.168.1.100",
-	}
-
-	for p, expected := range tests {
-		addr := netip.AddrFrom4([4]byte{192, 168, 1, 100})
-		controller := ControllerAddrFrom(addr, p)
-
-		if s := controller.String(); s != expected {
-			t.Errorf("Incorrect string - expected:%v, got:%v", expected, s)
-		}
-	}
-}
-
-func TestControllerAddrStringWithInvalidValue(t *testing.T) {
-	addr := ControllerAddr{}
-
-	if s := addr.String(); s != "" {
-		t.Errorf("Incorrect string - expected:'%v', got:'%v'", "", s)
-	}
-
-	addr = ControllerAddr{
-		netip.AddrPort{},
-	}
-
-	if s := addr.String(); s != "" {
-		t.Errorf("Incorrect string - expected:'%v', got:'%v'", "", s)
-	}
-}
 
 func TestParseControllerAddr(t *testing.T) {
 	tests := map[string]ControllerAddr{
@@ -90,6 +59,39 @@ func TestControllerAddrSet(t *testing.T) {
 		if !reflect.DeepEqual(addr, expected) {
 			t.Errorf("Incorrect 'controller' address '%v' - expected:%v, got:%v", s, expected, addr)
 		}
+	}
+}
+
+func TestControllerAddrString(t *testing.T) {
+	tests := []struct {
+		addr     ControllerAddr
+		expected string
+	}{
+		{MustParseControllerAddr("192.168.1.100"), "192.168.1.100"},
+		{MustParseControllerAddr("192.168.1.100:60000"), "192.168.1.100"},
+		{MustParseControllerAddr("192.168.1.100:12345"), "192.168.1.100:12345"},
+	}
+
+	for _, test := range tests {
+		if s := fmt.Sprintf("%v", test.addr); s != test.expected {
+			t.Errorf("Incorrect string - expected:%v, got:%v", test.expected, s)
+		}
+	}
+}
+
+func TestControllerAddrStringWithInvalidValue(t *testing.T) {
+	addr := ControllerAddr{}
+
+	if s := addr.String(); s != "" {
+		t.Errorf("Incorrect string - expected:'%v', got:'%v'", "", s)
+	}
+
+	addr = ControllerAddr{
+		netip.AddrPort{},
+	}
+
+	if s := addr.String(); s != "" {
+		t.Errorf("Incorrect string - expected:'%v', got:'%v'", "", s)
 	}
 }
 

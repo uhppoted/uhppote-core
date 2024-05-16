@@ -276,10 +276,8 @@ func TestGetDeviceWithAlternatePort(t *testing.T) {
 		},
 	}
 
-	addr := netip.MustParseAddrPort("192.168.0.0:54321")
-
 	device := Device{
-		Address: &addr,
+		Address: netip.MustParseAddrPort("192.168.0.0:54321"),
 	}
 
 	u := uhppote{
