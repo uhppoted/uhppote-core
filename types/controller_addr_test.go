@@ -9,7 +9,6 @@ import (
 
 func TestControllerAddrString(t *testing.T) {
 	tests := map[uint16]string{
-		0:     "192.168.1.100:0",
 		1:     "192.168.1.100:1",
 		60000: "192.168.1.100",
 	}
@@ -96,7 +95,6 @@ func TestControllerAddrSet(t *testing.T) {
 
 func TestControllerAddrMarshalJSON(t *testing.T) {
 	tests := map[uint16]string{
-		0:     `"192.168.1.100:0"`,
 		1:     `"192.168.1.100:1"`,
 		60000: `"192.168.1.100"`,
 	}
@@ -115,7 +113,6 @@ func TestControllerAddrMarshalJSON(t *testing.T) {
 
 func TestControllerAddrPointerMarshalJSON(t *testing.T) {
 	tests := map[uint16]string{
-		0:     `"192.168.1.100:0"`,
 		1:     `"192.168.1.100:1"`,
 		60000: `"192.168.1.100"`,
 	}
@@ -237,5 +234,27 @@ func TestControllerAddrPort(t *testing.T) {
 
 	if port != expected {
 		t.Errorf("BindControllerAddr::Port returned incorrect port - expected:%v, got:%v", expected, port)
+	}
+}
+
+func TestControllerAddrIsValid(t *testing.T) {
+	tests := []struct {
+		address  ControllerAddr
+		expected bool
+	}{
+		{ControllerAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 60000), true},
+		{ControllerAddrFrom(netip.AddrFrom4([4]byte{192, 168, 1, 100}), 0), false},
+		{ControllerAddr{}, false},
+		{ControllerAddr{
+			netip.AddrPort{},
+		}, false},
+	}
+
+	for _, test := range tests {
+		v := test.address.IsValid()
+
+		if v != test.expected {
+			t.Errorf("IsValid failed for %v - expected:%v, got:%v", test.address, test.expected, v)
+		}
 	}
 }

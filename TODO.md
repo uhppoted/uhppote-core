@@ -11,14 +11,8 @@
       - [x] Rework UDP to use connected sockets
       - [x] Unify send/sendto implementations
       - [x] Rework bind address as netip.AddrPort
-            - [x] string: "" for invalid values
-            - [x] json: "" for invalid values
       - [x] Rework broadcast address as netip.AddrPort
-            - [x] "" string for invalid values
-            - [x] json: "" for invalid values
       - [x] Rework listen address as netip.AddrPort
-            - [x] string: "" for invalid values
-            - [x] json: "" for invalid values
       - [ ] Rework Address as netip.AddrPort
             - [x] Rename to `ControllerAddr`
             - [x] Rework as struct with embedded netip.AddrPort
@@ -27,7 +21,7 @@
             - [x] uhppoted-lib
             - [x] string: "" for invalid values
             - [x] json: "" for invalid values
-            - [ ] uhppoted-httpd:replace pointer with zero value
+            - [x] uhppoted-httpd:replace pointer with zero value
             - [ ] uhppoted-dll: replace pointer with zero value
       - [ ] Rework GetListenerResponse to use AddrPort
       - [ ] CLI get-devices EOF

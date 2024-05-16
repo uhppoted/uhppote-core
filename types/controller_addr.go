@@ -112,6 +112,10 @@ func (a *ControllerAddr) UnmarshalJSON(bytes []byte) error {
 	}
 }
 
+func (a ControllerAddr) IsValid() bool {
+	return a.AddrPort.Addr().IsValid() && a.AddrPort.Port() != 0
+}
+
 func (a ControllerAddr) Equal(addr ControllerAddr) bool {
 	return a.Addr() == addr.Addr()
 }
