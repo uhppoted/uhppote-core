@@ -3,7 +3,6 @@ package uhppote
 import (
 	"fmt"
 	"net"
-	"net/netip"
 	"reflect"
 	"sync"
 	"testing"
@@ -108,12 +107,12 @@ func TestSequentialRequests(t *testing.T) {
 		broadcastAddr: types.MustParseBroadcastAddr("127.0.0.1:60000"),
 		devices: map[uint32]Device{
 			423187757: Device{
-				Address: netip.MustParseAddrPort("127.0.0.1:65001"),
+				Address: types.MustParseControllerAddr("127.0.0.1:65001"),
 				Doors:   []string{},
 			},
 
 			757781324: Device{
-				Address: netip.MustParseAddrPort("127.0.0.1:65002"),
+				Address: types.MustParseControllerAddr("127.0.0.1:65002"),
 				Doors:   []string{},
 			},
 		},
@@ -175,12 +174,12 @@ func TestConcurrentRequestsWithUnboundPort(t *testing.T) {
 		broadcastAddr: types.MustParseBroadcastAddr("127.0.0.1"),
 		devices: map[uint32]Device{
 			423187757: Device{
-				Address: netip.MustParseAddrPort("127.0.0.1:65001"),
+				Address: types.MustParseControllerAddr("127.0.0.1:65001"),
 				Doors:   []string{},
 			},
 
 			757781324: Device{
-				Address: netip.MustParseAddrPort("127.0.0.1:65002"),
+				Address: types.MustParseControllerAddr("127.0.0.1:65002"),
 				Doors:   []string{},
 			},
 		},
@@ -257,12 +256,12 @@ func TestConcurrentRequestsWithBoundPort(t *testing.T) {
 		broadcastAddr: types.MustParseBroadcastAddr("127.0.0.1:60000"),
 		devices: map[uint32]Device{
 			423187757: Device{
-				Address: netip.MustParseAddrPort("127.0.0.1:65001"),
+				Address: types.MustParseControllerAddr("127.0.0.1:65001"),
 				Doors:   []string{},
 			},
 
 			757781324: Device{
-				Address: netip.MustParseAddrPort("127.0.0.1:65002"),
+				Address: types.MustParseControllerAddr("127.0.0.1:65002"),
 				Doors:   []string{},
 			},
 		},

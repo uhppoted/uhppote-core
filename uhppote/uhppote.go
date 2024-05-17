@@ -166,9 +166,9 @@ func sendto[T any](u *uhppote, serialNumber uint32, request any) (T, error) {
 		} else if !controller.Address.IsValid() || controller.Address.Addr() == netip.IPv4Unspecified() {
 			return u.udpBroadcastTo(serialNumber, m)
 		} else if controller.Protocol == "tcp" {
-			return u.tcpSendTo(controller.Address, m)
+			return u.tcpSendTo(controller.Address.AddrPort, m)
 		} else {
-			return u.udpSendTo(controller.Address, m)
+			return u.udpSendTo(controller.Address.AddrPort, m)
 		}
 	}
 

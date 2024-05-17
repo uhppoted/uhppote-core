@@ -1,17 +1,18 @@
 package uhppote
 
 import (
-	"net/netip"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/uhppoted/uhppote-core/types"
 )
 
 func TestNewDevice(t *testing.T) {
 	expected := Device{
 		Name:     "Alpha",
 		DeviceID: 405419896,
-		Address:  netip.MustParseAddrPort("192.168.1.100:60000"),
+		Address:  types.MustParseControllerAddr("192.168.1.100"),
 		Doors: []string{
 			"Gryffindor",
 			"Hufflepuff",
@@ -22,7 +23,7 @@ func TestNewDevice(t *testing.T) {
 		Protocol: "udp",
 	}
 
-	device := NewDevice("Alpha", 405419896, netip.MustParseAddrPort("192.168.1.100:60000"), "udp", []string{
+	device := NewDevice("Alpha", 405419896, types.MustParseControllerAddr("192.168.1.100"), "udp", []string{
 		"Gryffindor",
 		"Hufflepuff",
 		"Ravenclaw",
@@ -42,7 +43,7 @@ func TestDeviceClone(t *testing.T) {
 	expected := Device{
 		Name:     "Alpha",
 		DeviceID: 405419896,
-		Address:  netip.MustParseAddrPort("192.168.1.100:60000"),
+		Address:  types.MustParseControllerAddr("192.168.1.100"),
 		Doors: []string{
 			"Gryffindor",
 			"Hufflepuff",
@@ -56,7 +57,7 @@ func TestDeviceClone(t *testing.T) {
 	device := Device{
 		Name:     "Alpha",
 		DeviceID: 405419896,
-		Address:  netip.MustParseAddrPort("192.168.1.100:60000"),
+		Address:  types.MustParseControllerAddr("192.168.1.100"),
 		Doors: []string{
 			"Gryffindor",
 			"Hufflepuff",

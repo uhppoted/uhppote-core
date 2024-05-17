@@ -23,7 +23,10 @@
             - [x] json: "" for invalid values
             - [x] uhppoted-httpd:replace pointer with zero value
             - [x] uhppoted-dll: replace pointer with zero value
-            - [ ] `Device` struct: replace *netip.AddrPort with ControllerAddr 
+            - [x] `Device` struct: replace netip.AddrPort with ControllerAddr 
+            - [ ] Rework uhppoted-lib::config Device
+            - [ ] Rework uhppote-cli::command Device
+            - (?) Rework uhppoted-httpd::controller EndPoint
       - [ ] Rework GetListenerResponse to use AddrPort
       - [ ] CLI get-devices EOF
             ```
