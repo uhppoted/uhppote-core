@@ -7,6 +7,7 @@ import (
 	"net/netip"
 	"regexp"
 	"sync"
+	"syscall"
 	"time"
 )
 
@@ -251,6 +252,26 @@ func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
 	dialer := net.Dialer{
 		Deadline:  deadline,
 		LocalAddr: bind,
+		Control: func(network, address string, connection syscall.RawConn) (err error) {
+			var operr error
+
+			f := func(fd uintptr) {
+				if operr = syscall.SetsockoptInt(int(fd), syscall.SOL_SOCKET, syscall.SO_REUSEADDR, 1); operr != nil {
+					return
+				} else if operr = syscall.SetsockoptInt(int(fd), syscall.SOL_SOCKET, syscall.SO_REUSEPORT, 1); operr != nil {
+					return
+				}
+
+				// NTS: TCP_QUICKACK not supported on MacOS,...?
+				// } else if operr = syscall.SetsockoptInt(int(fd), syscall.SOL_SOCKET, TCP_QUICKACK, 1); operr != nil {
+			}
+
+			if err := connection.Control(f); err != nil {
+				return err
+			} else {
+				return operr
+			}
+		},
 	}
 
 	if connection, err := dialer.Dial("tcp4", address); err != nil {

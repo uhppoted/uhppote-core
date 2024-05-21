@@ -13,6 +13,8 @@
       - [x] Rework bind address as netip.AddrPort
       - [x] Rework broadcast address as netip.AddrPort
       - [x] Rework listen address as netip.AddrPort
+      - [x] Set socket.SO_REUSEADDR if bound to a port
+            - https://stackoverflow.com/questions/14388706/how-do-so-reuseaddr-and-so-reuseport-differ
       - [ ] Rework Address as netip.AddrPort
             - [x] Rename to `ControllerAddr`
             - [x] Rework as struct with embedded netip.AddrPort
@@ -27,6 +29,7 @@
             - [ ] Rework uhppoted-lib::config Device
             - [ ] Rework uhppote-cli::command Device
             - (?) Rework uhppoted-httpd::controller EndPoint
+
       - [ ] Rework GetListenerResponse to use AddrPort
       - [ ] CLI get-devices EOF
             ```
