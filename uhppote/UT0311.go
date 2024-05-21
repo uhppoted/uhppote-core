@@ -256,19 +256,7 @@ func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
 			var operr error
 
 			f := func(fd uintptr) {
-				if operr = syscall.SetsockoptInt(int(fd), syscall.SOL_SOCKET, syscall.SO_REUSEADDR, 1); operr != nil {
-					return
-				}
-
-				// NTS: SO_REUSEPORT not supported on Ubuntu?
-				// if operr = syscall.SetsockoptInt(int(fd), syscall.SOL_SOCKET, syscall.SO_REUSEPORT, 1); operr != nil {
-				// 	return
-				// }
-
-				// NTS: TCP_QUICKACK not supported on MacOS,...?
-				// if operr = syscall.SetsockoptInt(int(fd), syscall.SOL_SOCKET, TCP_QUICKACK, 1); operr != nil {
-				// 	return
-				// }
+				operr = setSocketOptions(fd)
 			}
 
 			if err := connection.Control(f); err != nil {
