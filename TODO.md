@@ -25,22 +25,22 @@
             - [x] uhppoted-httpd:replace pointer with zero value
             - [x] uhppoted-dll: replace pointer with zero value
             - [x] `Device` struct: replace netip.AddrPort with ControllerAddr 
-            - [ ] Rework uhppoted-lib::config Device
-            - [ ] Rework uhppote-cli::command Device
+            - [x] Rework uhppoted-lib::config Device Address
+            - [x] Rework uhppote-cli::command Device
             - (?) Rework uhppoted-httpd::controller EndPoint
 
-      - [ ] Rework GetListenerResponse to use AddrPort
       - [ ] CLI get-devices EOF
             ```
             ... receive error: EOF
             WARN:  EOF
             ```
-      - [ ] Add timezone to NewDevice
-      - (?) Replace (* UHPPOTE) in API functions with non-pointer version
+      - [ ] Rework GetListenerResponse to use AddrPort
       - [ ] Update _uhppoted.conf_ documentation
       - [ ] CHANGELOG
       - [ ] README
 
+- [ ] Add timezone to NewDevice
+- [ ] Replace (* UHPPOTE) in API functions with non-pointer version
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
 - [ ] `put-card`: error on bad card numbers (0,0xffffffff,0x00ffffff)
 

@@ -30,12 +30,26 @@ func TestNewDevice(t *testing.T) {
 		"Slytherin",
 	})
 
-	if device == nil {
-		t.Fatalf("error creating Device (%v)", device)
+	if !reflect.DeepEqual(device, expected) {
+		t.Errorf("incorrectly created Device\nexpected: %+v\ngot:      %+v", expected, device)
+	}
+}
+
+func TestDeviceIsValid(t *testing.T) {
+	controller := Device{
+		DeviceID: 405419896,
 	}
 
-	if !reflect.DeepEqual(*device, expected) {
-		t.Errorf("incorrectly created Device\nexpected: %+v\ngot:      %+v", expected, *device)
+	if v := controller.IsValid(); !v {
+		t.Errorf("Incorrect IsValid() return - expected:%v, got:%v", true, v)
+	}
+
+	controller = Device{
+		DeviceID: 0,
+	}
+
+	if v := controller.IsValid(); v {
+		t.Errorf("Incorrect IsValid() return - expected:%v, got:%v", false, v)
 	}
 }
 

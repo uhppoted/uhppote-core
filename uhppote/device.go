@@ -17,14 +17,15 @@ type Device struct {
 	Protocol string               // controller network protocol ("udp", "tcp", "any")
 }
 
-// Convenience function to instantiate a configured controller from the information in a configuration file.
-func NewDevice(name string, serialNumber uint32, address types.ControllerAddr, protocol string, doors []string) *Device {
+// Factory function to initialise a configured controller from the information in
+// a 'conf' file.
+func NewDevice(name string, serialNumber uint32, address types.ControllerAddr, protocol string, doors []string) Device {
 	p := "udp"
 	if protocol == "tcp" {
 		p = "tcp"
 	}
 
-	return &Device{
+	return Device{
 		Name:     name,
 		DeviceID: serialNumber,
 		Address:  address,
@@ -32,6 +33,11 @@ func NewDevice(name string, serialNumber uint32, address types.ControllerAddr, p
 		TimeZone: time.Local,
 		Protocol: p,
 	}
+}
+
+// Returns false if the controller ID is 0.
+func (d Device) IsValid() bool {
+	return d.DeviceID > 0
 }
 
 // Returns a deep copy of the configured controller information.
