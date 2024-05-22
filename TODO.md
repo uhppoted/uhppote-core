@@ -13,8 +13,7 @@
       - [x] Rework bind address as netip.AddrPort
       - [x] Rework broadcast address as netip.AddrPort
       - [x] Rework listen address as netip.AddrPort
-      - [x] Set socket.SO_REUSEADDR if bound to a port
-            - https://stackoverflow.com/questions/14388706/how-do-so-reuseaddr-and-so-reuseport-differ
+      - [x] Set socket.SO_REUSEADDR
       - [ ] Rework Address as netip.AddrPort
             - [x] Rename to `ControllerAddr`
             - [x] Rework as struct with embedded netip.AddrPort

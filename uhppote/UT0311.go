@@ -186,6 +186,19 @@ func (u *ut0311) SendUDP(addr *net.UDPAddr, request []byte) ([]byte, error) {
 	dialer := net.Dialer{
 		Deadline:  deadline,
 		LocalAddr: bind,
+		Control: func(network, address string, connection syscall.RawConn) (err error) {
+			var operr error
+
+			f := func(fd uintptr) {
+				operr = setSocketOptions(fd)
+			}
+
+			if err := connection.Control(f); err != nil {
+				return err
+			} else {
+				return operr
+			}
+		},
 	}
 
 	if connection, err := dialer.Dial("udp4", address); err != nil {
