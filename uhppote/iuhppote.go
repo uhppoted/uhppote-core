@@ -14,7 +14,7 @@ type IUHPPOTE interface {
 	GetDevice(deviceID uint32) (*types.Device, error)
 
 	SetAddress(deviceID uint32, address, mask, gateway net.IP) (*types.Result, error)
-	GetListener(deviceID uint32) (*types.Listener, error)
+	GetListener(deviceID uint32) (netip.AddrPort, error)
 	SetListener(deviceID uint32, address net.UDPAddr) (*types.Result, error)
 	GetTime(deviceID uint32) (*types.Time, error)
 	SetTime(deviceID uint32, datetime time.Time) (*types.Time, error)

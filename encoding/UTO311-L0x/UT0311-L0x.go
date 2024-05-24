@@ -143,7 +143,7 @@ func marshal(s reflect.Value, bytes []byte) error {
 							if !v[1].IsNil() {
 								return v[1].Interface().(error)
 							} else if slice := v[0].Bytes(); len(slice) != 6 {
-								return fmt.Errorf("Invalid IPv4 address:port %v", slice)
+								return fmt.Errorf("invalid IPv4 address:port %v", slice)
 							} else {
 								copy(bytes[offset:offset+6], slice)
 							}

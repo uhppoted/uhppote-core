@@ -2,15 +2,15 @@ package uhppote
 
 import (
 	"fmt"
-	"net"
+	"net/netip"
 
 	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *uhppote) GetListener(serialNumber uint32) (*types.Listener, error) {
+func (u *uhppote) GetListener(serialNumber uint32) (netip.AddrPort, error) {
 	if serialNumber == 0 {
-		return nil, fmt.Errorf("invalid device ID (%v)", serialNumber)
+		return netip.AddrPort{}, fmt.Errorf("invalid device ID (%v)", serialNumber)
 	}
 
 	request := messages.GetListenerRequest{
@@ -18,11 +18,11 @@ func (u *uhppote) GetListener(serialNumber uint32) (*types.Listener, error) {
 	}
 
 	if reply, err := sendto[messages.GetListenerResponse](u, serialNumber, request); err != nil {
-		return nil, err
+		return netip.AddrPort{}, err
 	} else {
-		return &types.Listener{
-			SerialNumber: reply.SerialNumber,
-			Address:      net.UDPAddr{IP: reply.Address, Port: int(reply.Port)},
-		}, nil
+		addr := reply.Address.To4()
+		slice := [4]byte{addr[0], addr[1], addr[2], addr[3]}
+
+		return netip.AddrPortFrom(netip.AddrFrom4(slice), reply.Port), nil
 	}
 }

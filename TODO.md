@@ -29,6 +29,7 @@
             - [x] Rework uhppote-cli::command Device
             - [x] Rework uhppoted-httpd::controller EndPoint
             - [ ] Rework GetListenerResponse to use AddrPort
+                  - Remove types.Listener `// FIXME remove (unused)`
 
       - [ ] CLI get-devices EOF
             ```
