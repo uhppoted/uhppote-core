@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"github.com/uhppoted/uhppote-core/types"
 	"net"
+	"net/netip"
 	"reflect"
 	"regexp"
 	"testing"
@@ -61,7 +62,7 @@ func TestMarshal(t *testing.T) {
 		0x17, 0x5f, 0x7d, 0x00, 0x2d, 0x55, 0x39, 0x19, 0xd2, 0x04, 0x01, 0x00, 0xc0, 0xa8, 0x01, 0x02,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x19, 0x39, 0x55, 0x2d, 0x00, 0x66, 0x19, 0x39, 0x55, 0x2d,
 		0x2d, 0x55, 0x39, 0x19, 0x08, 0x92, 0x20, 0x18, 0x08, 0x16, 0x20, 0x19, 0x09, 0x17, 0x00, 0x00,
-		0x00, 0x00, 0x20, 0x19, 0x04, 0x16, 0x12, 0x34, 0x56, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x20, 0x19, 0x04, 0x16, 0x12, 0x34, 0x56, 0x00, 0xc0, 0xa8, 0x01, 0x64, 0x61, 0xea,
 	}
 
 	mac, _ := net.ParseMAC("00:66:19:39:55:2d")
@@ -87,6 +88,7 @@ func TestMarshal(t *testing.T) {
 		DatePtr      *types.Date        `uhppote:"offset:42"`
 		NilDatePtr   *types.Date        `uhppote:"offset:46"`
 		DateTime     types.DateTime     `uhppote:"offset:50"`
+		AddrPort     netip.AddrPort     `uhppote:"offset:58"`
 	}{
 		Byte:         0x7d,
 		Uint32:       423187757,
@@ -102,6 +104,7 @@ func TestMarshal(t *testing.T) {
 		DatePtr:      &dx20190917,
 		NilDatePtr:   nil,
 		DateTime:     types.DateTime(datetime),
+		AddrPort:     netip.MustParseAddrPort("192.168.1.100:60001"),
 	}
 
 	m, err := Marshal(request)
@@ -202,71 +205,102 @@ func TestUnmarshal(t *testing.T) {
 	}
 
 	if reply.MsgType != 0x94 {
-		t.Errorf("Expected 'byte':0x%02X, got: 0x%02X\n", 0x94, reply.MsgType)
+		t.Errorf("Expected 'byte' 0x%02X, got 0x%02X", 0x94, reply.MsgType)
 	}
 
 	if reply.Byte != 0x6e {
-		t.Errorf("Expected 'byte':%02x, got: %02x\n", 0x6e, reply.Byte)
+		t.Errorf("Expected 'byte' %02x, got %02x", 0x6e, reply.Byte)
 	}
 
 	if reply.Uint32 != 423187757 {
-		t.Errorf("Expected 'uint32':%d, got: %v\n", uint32(423187757), reply.Uint32)
+		t.Errorf("Expected 'uint32' %d, got %v", uint32(423187757), reply.Uint32)
 	}
 
 	if reply.Uint16 != 1234 {
-		t.Errorf("Expected 'uint16':%v, got: %v\n", 1234, reply.Uint16)
+		t.Errorf("Expected 'uint16':%v, got: %v", 1234, reply.Uint16)
 	}
 
 	if !reflect.DeepEqual(reply.Address, net.IPv4(192, 168, 0, 0)) {
-		t.Errorf("Expected IP address '%v', got: '%v'\n", net.IPv4(192, 168, 0, 0), reply.Address)
+		t.Errorf("Expected IP address '%v', got: '%v'", net.IPv4(192, 168, 0, 0), reply.Address)
 	}
 
 	if !reflect.DeepEqual(reply.SubnetMask, net.IPv4(255, 255, 255, 0)) {
-		t.Errorf("Expected subnet mask '%v', got: '%v'\n", net.IPv4(255, 255, 255, 0), reply.SubnetMask)
+		t.Errorf("Expected subnet mask '%v', got: '%v'", net.IPv4(255, 255, 255, 0), reply.SubnetMask)
 	}
 
 	if !reflect.DeepEqual(reply.Gateway, net.IPv4(0, 0, 0, 0)) {
-		t.Errorf("Expected subnet mask '%v', got: '%v'\n", net.IPv4(0, 0, 0, 0), reply.Gateway)
+		t.Errorf("Expected subnet mask '%v', got: '%v'", net.IPv4(0, 0, 0, 0), reply.Gateway)
 	}
 
 	MAC, _ := net.ParseMAC("00:66:19:39:55:2d")
 	if !reflect.DeepEqual(reply.MacAddress, types.MacAddress(MAC)) {
-		t.Errorf("Expected MAC address '%v', got: '%v'\n", MAC, reply.MacAddress)
+		t.Errorf("Expected MAC address '%v', got: '%v'", MAC, reply.MacAddress)
 	}
 
 	if !reflect.DeepEqual(reply.MAC, MAC) {
-		t.Errorf("Expected native MAC address '%v', got: '%v'\n", MAC, reply.MAC)
+		t.Errorf("Expected native MAC address '%v', got: '%v'", MAC, reply.MAC)
 	}
 
 	if reply.Version != 0x0892 {
-		t.Errorf("Expected version '0x%04X', got: '0x%04X'\n", 0x0892, reply.Version)
+		t.Errorf("Expected version '0x%04X', got: '0x%04X'", 0x0892, reply.Version)
 	}
 
 	d20180816, _ := time.ParseInLocation("2006-01-02", "2018-08-16", time.Local)
 	if reply.Date != types.Date(d20180816) {
-		t.Errorf("Expected date '%v', got: '%v'\n", d20180816, reply.Date)
+		t.Errorf("Expected date '%v', got: '%v'", d20180816, reply.Date)
 	}
 
 	d20190917, _ := time.ParseInLocation("2006-01-02", "2019-09-17", time.Local)
 	if reply.DatePtr == nil || *reply.DatePtr != types.Date(d20190917) {
-		t.Errorf("Expected date '%v', got: '%v'\n", d20190917, reply.DatePtr)
+		t.Errorf("Expected date '%v', got: '%v'", d20190917, reply.DatePtr)
 	}
 
 	if reply.NilDatePtr != nil {
-		t.Errorf("Expected nil date '%v', got: '%v'\n", nil, reply.NilDatePtr)
+		t.Errorf("Expected nil date '%v', got: '%v'", nil, reply.NilDatePtr)
 	}
 
 	datetime, _ := time.ParseInLocation("2006-01-02 15:04:05", "2018-12-31 12:23:34", time.Local)
 	if reply.DateTime != types.DateTime(datetime) {
-		t.Errorf("Expected date '%v', got: '%v'\n", datetime, reply.DateTime)
+		t.Errorf("Expected date '%v', got: '%v'", datetime, reply.DateTime)
 	}
 
 	if reply.True != true {
-		t.Errorf("Expected door 1 '%v', got: '%v\n", true, reply.True)
+		t.Errorf("Expected door 1 '%v', got: '%v", true, reply.True)
 	}
 
 	if reply.False != false {
-		t.Errorf("Expected door 2 '%v', got: '%v\n", false, reply.False)
+		t.Errorf("Expected door 2 '%v', got: '%v", false, reply.False)
+	}
+}
+
+func TestUnmarshalAddrPort(t *testing.T) {
+	message := []byte{
+		0x17, 0x92, 0x00, 0x00, 0x78, 0x37, 0x2a, 0x18, 0xc0, 0xa8, 0x01, 0x64, 0x61, 0xea, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	}
+
+	reply := struct {
+		MsgType    types.MsgType  `uhppote:"value:0x92"`
+		Controller uint32         `uhppote:"offset:4"`
+		AddrPort   netip.AddrPort `uhppote:"offset:8"`
+	}{}
+
+	if err := Unmarshal(message, &reply); err != nil {
+		t.Fatalf("Unexpected error: %v", err)
+	}
+
+	if reply.MsgType != 0x92 {
+		t.Errorf("Expected message type 0x%02X, got 0x%02X", 0x92, reply.MsgType)
+	}
+
+	if reply.Controller != 405419896 {
+		t.Errorf("Expected controller %v, got %v", 405419896, reply.Controller)
+	}
+
+	if reply.AddrPort != netip.MustParseAddrPort("192.168.1.100:60001") {
+		t.Errorf("Expected AddrPort %v, got %v", netip.MustParseAddrPort("192.168.1.100:60001"), reply.AddrPort)
 	}
 }
 

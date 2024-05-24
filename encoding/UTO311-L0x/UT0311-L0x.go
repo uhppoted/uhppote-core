@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"net"
+	"net/netip"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -20,14 +21,15 @@ type Unmarshaler interface {
 }
 
 var (
-	tBool    = reflect.TypeOf(bool(false))
-	tByte    = reflect.TypeOf(byte(0))
-	tUint16  = reflect.TypeOf(uint16(0))
-	tUint32  = reflect.TypeOf(uint32(0))
-	tIPv4    = reflect.TypeOf(net.IPv4(0, 0, 0, 0))
-	tMAC     = reflect.TypeOf(net.HardwareAddr{})
-	tSOM     = reflect.TypeOf(types.SOM(0))
-	tMsgType = reflect.TypeOf(types.MsgType(0))
+	tBool     = reflect.TypeOf(bool(false))
+	tByte     = reflect.TypeOf(byte(0))
+	tUint16   = reflect.TypeOf(uint16(0))
+	tUint32   = reflect.TypeOf(uint32(0))
+	tIPv4     = reflect.TypeOf(net.IPv4(0, 0, 0, 0))
+	tMAC      = reflect.TypeOf(net.HardwareAddr{})
+	tSOM      = reflect.TypeOf(types.SOM(0))
+	tMsgType  = reflect.TypeOf(types.MsgType(0))
+	tAddrPort = reflect.TypeOf(netip.AddrPort{})
 )
 
 var re = regexp.MustCompile(`offset:\s*([0-9]+)`)
@@ -135,6 +137,16 @@ func marshal(s reflect.Value, bytes []byte) error {
 
 						case tIPv4:
 							copy(bytes[offset:offset+4], f.MethodByName("To4").Call([]reflect.Value{})[0].Bytes())
+
+						case tAddrPort:
+							v := f.MethodByName("MarshalBinary").Call([]reflect.Value{})
+							if !v[1].IsNil() {
+								return v[1].Interface().(error)
+							} else if slice := v[0].Bytes(); len(slice) != 6 {
+								return fmt.Errorf("Invalid IPv4 address:port %v", slice)
+							} else {
+								copy(bytes[offset:offset+6], slice)
+							}
 
 						case tMAC:
 							copy(bytes[offset:offset+6], f.Bytes())
@@ -329,6 +341,14 @@ func unmarshal(bytes []byte, s reflect.Value) error {
 
 				case tIPv4:
 					f.SetBytes(net.IPv4(bytes[offset], bytes[offset+1], bytes[offset+2], bytes[offset+3]))
+
+				case tAddrPort:
+					var v netip.AddrPort
+					if err := v.UnmarshalBinary(bytes[offset : offset+6]); err != nil {
+						return err
+					} else {
+						f.Set(reflect.ValueOf(v))
+					}
 
 				case tMAC:
 					f.SetBytes(bytes[offset : offset+6])

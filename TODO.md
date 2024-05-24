@@ -27,14 +27,14 @@
             - [x] `Device` struct: replace netip.AddrPort with ControllerAddr 
             - [x] Rework uhppoted-lib::config Device Address
             - [x] Rework uhppote-cli::command Device
-            - (?) Rework uhppoted-httpd::controller EndPoint
+            - [x] Rework uhppoted-httpd::controller EndPoint
+            - [ ] Rework GetListenerResponse to use AddrPort
 
       - [ ] CLI get-devices EOF
             ```
             ... receive error: EOF
             WARN:  EOF
             ```
-      - [ ] Rework GetListenerResponse to use AddrPort
       - [ ] Update _uhppoted.conf_ documentation
       - [ ] CHANGELOG
       - [ ] README
