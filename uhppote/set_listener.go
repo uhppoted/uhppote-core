@@ -2,33 +2,35 @@ package uhppote
 
 import (
 	"fmt"
-	"net"
+	"net/netip"
 
 	"github.com/uhppoted/uhppote-core/messages"
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *uhppote) SetListener(serialNumber uint32, address net.UDPAddr) (*types.Result, error) {
-	if serialNumber == 0 {
-		return nil, fmt.Errorf("invalid device ID (%v)", serialNumber)
+func (u *uhppote) SetListener(controller uint32, address netip.AddrPort) (bool, error) {
+	if controller == 0 {
+		return false, fmt.Errorf("invalid device ID (%v)", controller)
 	}
 
-	if address.IP.To4() == nil {
-		return nil, fmt.Errorf("invalid IP address: %v", address)
+	if !address.IsValid() {
+		return false, ErrInvalidListenerAddress
+	}
+
+	if (address != netip.MustParseAddrPort("0.0.0.0:0")) && (!address.Addr().Is4() || (address.Port() == 0)) {
+		return false, fmt.Errorf("invalid listener address: %v", address)
 	}
 
 	request := messages.SetListenerRequest{
-		SerialNumber: types.SerialNumber(serialNumber),
-		Address:      address.IP,
-		Port:         uint16(address.Port),
+		SerialNumber: types.SerialNumber(controller),
+		AddrPort:     address,
 	}
 
-	if reply, err := sendto[messages.SetListenerResponse](u, serialNumber, request); err != nil {
-		return nil, err
+	if reply, err := sendto[messages.SetListenerResponse](u, controller, request); err != nil {
+		return false, err
+	} else if uint32(reply.SerialNumber) != controller {
+		return false, ErrIncorrectController
 	} else {
-		return &types.Result{
-			SerialNumber: reply.SerialNumber,
-			Succeeded:    reply.Succeeded,
-		}, nil
+		return reply.Succeeded, nil
 	}
 }

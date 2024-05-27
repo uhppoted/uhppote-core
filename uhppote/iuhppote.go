@@ -15,7 +15,14 @@ type IUHPPOTE interface {
 
 	SetAddress(deviceID uint32, address, mask, gateway net.IP) (*types.Result, error)
 	GetListener(deviceID uint32) (netip.AddrPort, error)
-	SetListener(deviceID uint32, address net.UDPAddr) (*types.Result, error)
+
+	// Sets the controller event listener address:port.
+	//
+	// The address must be either a valid IPv4 address and the port may not be 0 or
+	// 0.0.0.0:0.
+	// Returns true if the controller event listener address was set.
+	SetListener(deviceID uint32, address netip.AddrPort) (bool, error)
+
 	GetTime(deviceID uint32) (*types.Time, error)
 	SetTime(deviceID uint32, datetime time.Time) (*types.Time, error)
 	GetDoorControlState(deviceID uint32, door byte) (*types.DoorControlState, error)

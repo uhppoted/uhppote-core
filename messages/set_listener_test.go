@@ -2,7 +2,7 @@ package messages
 
 import (
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
-	"net"
+	"net/netip"
 	"reflect"
 	"testing"
 )
@@ -17,16 +17,12 @@ func TestMarshalSetListenerRequest(t *testing.T) {
 
 	request := SetListenerRequest{
 		SerialNumber: 423187757,
-		Address:      net.IPv4(192, 168, 1, 100),
-		Port:         40000,
+		AddrPort:     netip.MustParseAddrPort("192.168.1.100:40000"),
 	}
 
-	m, err := codec.Marshal(request)
-	if err != nil {
+	if m, err := codec.Marshal(request); err != nil {
 		t.Fatalf("Unexpected error: %v", err)
-	}
-
-	if !reflect.DeepEqual(m, expected) {
+	} else if !reflect.DeepEqual(m, expected) {
 		t.Errorf("Invalid byte array:\nExpected:\n%s\nReturned:\n%s", dump(expected, ""), dump(m, ""))
 	}
 }
@@ -42,8 +38,7 @@ func TestFactoryUnmarshalSetListenerRequest(t *testing.T) {
 	expected := SetListenerRequest{
 		MsgType:      0x90,
 		SerialNumber: 423187757,
-		Address:      net.IPv4(192, 168, 1, 100),
-		Port:         40000,
+		AddrPort:     netip.MustParseAddrPort("192.168.1.100:40000"),
 	}
 
 	request, err := UnmarshalRequest(message)

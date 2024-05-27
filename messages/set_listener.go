@@ -2,14 +2,13 @@ package messages
 
 import (
 	"github.com/uhppoted/uhppote-core/types"
-	"net"
+	"net/netip"
 )
 
 type SetListenerRequest struct {
 	MsgType      types.MsgType      `uhppote:"value:0x90"`
 	SerialNumber types.SerialNumber `uhppote:"offset:4"`
-	Address      net.IP             `uhppote:"offset:8"`
-	Port         uint16             `uhppote:"offset:12"`
+	AddrPort     netip.AddrPort     `uhppote:"offset:8"`
 }
 
 type SetListenerResponse struct {
