@@ -2,7 +2,7 @@ package messages
 
 import (
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
-	"net"
+	"net/netip"
 	"reflect"
 	"testing"
 )
@@ -73,19 +73,15 @@ func TestUnmarshalGetListenerResponse(t *testing.T) {
 	}
 
 	if reply.MsgType != 0x92 {
-		t.Errorf("Incorrect 'message type' - expected:%02X, got:%02x\n", 0x92, reply.MsgType)
+		t.Errorf("Incorrect 'message type' - expected:%02X, got:%02x", 0x92, reply.MsgType)
 	}
 
 	if reply.SerialNumber != 423187757 {
-		t.Errorf("Incorrect 'serial number' - expected:%v, got:%v\n", 423187757, reply.SerialNumber)
+		t.Errorf("Incorrect 'serial number' - expected:%v, got:%v", 423187757, reply.SerialNumber)
 	}
 
-	if !reflect.DeepEqual(reply.Address, net.IPv4(192, 168, 0, 225)) {
-		t.Errorf("Incorrect IP address - expected:'%v', got:'%v'\n", net.IPv4(192, 168, 0, 225), reply.Address)
-	}
-
-	if reply.Port != 9874 {
-		t.Errorf("Incorrect 'port' - expected:%d, got:%v\n", 9874, reply.Port)
+	if reply.AddrPort != netip.MustParseAddrPort("192.168.0.225:9874") {
+		t.Errorf("Incorrect IPv4 address:port - expected:'%v', got:'%v'", netip.MustParseAddrPort("192.168.0.225:9874"), reply.AddrPort)
 	}
 }
 
@@ -100,8 +96,7 @@ func TestFactoryUnmarshalGetListenerResponse(t *testing.T) {
 	expected := GetListenerResponse{
 		MsgType:      0x92,
 		SerialNumber: 423187757,
-		Address:      net.IPv4(192, 168, 0, 225),
-		Port:         9874,
+		AddrPort:     netip.MustParseAddrPort("192.168.0.225:9874"),
 	}
 
 	response, err := UnmarshalResponse(message)

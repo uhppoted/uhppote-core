@@ -14,7 +14,7 @@
       - [x] Rework broadcast address as netip.AddrPort
       - [x] Rework listen address as netip.AddrPort
       - [x] Set socket.SO_REUSEADDR
-      - [ ] Rework Address as netip.AddrPort
+      - [x] Rework Address as netip.AddrPort
             - [x] Rename to `ControllerAddr`
             - [x] Rework as struct with embedded netip.AddrPort
             - [x] uhppote-core
@@ -28,8 +28,8 @@
             - [x] Rework uhppoted-lib::config Device Address
             - [x] Rework uhppote-cli::command Device
             - [x] Rework uhppoted-httpd::controller EndPoint
-            - [ ] Rework GetListenerResponse to use AddrPort
-                  - Remove types.Listener `// FIXME remove (unused)`
+            - [x] Remove types.Listener
+            - [x] Rework Get/SetListener to use AddrPort
 
       - [ ] CLI get-devices EOF
             ```
