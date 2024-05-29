@@ -1,6 +1,6 @@
 # TODO
 
-- [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
+- [x] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
       - [x] Add protocol field to UHPPOTE controller struct
       - [x] Verify TCP with real controller
       - [x] TCP 'driver'
@@ -15,30 +15,10 @@
       - [x] Rework listen address as netip.AddrPort
       - [x] Set socket.SO_REUSEADDR
       - [x] Rework Address as netip.AddrPort
-            - [x] Rename to `ControllerAddr`
-            - [x] Rework as struct with embedded netip.AddrPort
-            - [x] uhppote-core
-            - [x] Update uhppoted-lib::conf
-            - [x] uhppoted-lib
-            - [x] string: "" for invalid values
-            - [x] json: "" for invalid values
-            - [x] uhppoted-httpd:replace pointer with zero value
-            - [x] uhppoted-dll: replace pointer with zero value
-            - [x] `Device` struct: replace netip.AddrPort with ControllerAddr 
-            - [x] Rework uhppoted-lib::config Device Address
-            - [x] Rework uhppote-cli::command Device
-            - [x] Rework uhppoted-httpd::controller EndPoint
-            - [x] Remove types.Listener
-            - [x] Rework Get/SetListener to use AddrPort
-
-      - [ ] CLI get-devices EOF
-            ```
-            ... receive error: EOF
-            WARN:  EOF
-            ```
-      - [ ] Update _uhppoted.conf_ documentation
-      - [ ] CHANGELOG
-      - [ ] README
+      - [x] ~~CLI get-devices EOF~~
+      - [x] Update _uhppoted.conf_ documentation
+      - [x] CHANGELOG
+      - [x] README
 
 - [ ] Add timezone to NewDevice
 - [ ] Replace (* UHPPOTE) in API functions with non-pointer version
