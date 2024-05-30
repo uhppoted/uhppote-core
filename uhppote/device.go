@@ -6,8 +6,7 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-// Configuration information for an access controller declared in the common
-// uhppoted.conf configuration.
+// Configuration information for an access controller declared in the common uhppoted.conf configuration.
 type Device struct {
 	Name     string               // controller name
 	DeviceID uint32               // controller serial number
@@ -17,12 +16,16 @@ type Device struct {
 	Protocol string               // controller network protocol ("udp", "tcp", "any")
 }
 
-// Factory function to initialise a configured controller from the information in
-// a 'conf' file.
-func NewDevice(name string, serialNumber uint32, address types.ControllerAddr, protocol string, doors []string) Device {
+// Factory function to initialise a configured controller from the information in a 'conf' file.
+func NewDevice(name string, serialNumber uint32, address types.ControllerAddr, protocol string, doors []string, timezone *time.Location) Device {
 	p := "udp"
 	if protocol == "tcp" {
 		p = "tcp"
+	}
+
+	tz := time.Local
+	if timezone != nil {
+		tz = timezone
 	}
 
 	return Device{
@@ -30,7 +33,7 @@ func NewDevice(name string, serialNumber uint32, address types.ControllerAddr, p
 		DeviceID: serialNumber,
 		Address:  address,
 		Doors:    doors,
-		TimeZone: time.Local,
+		TimeZone: tz,
 		Protocol: p,
 	}
 }

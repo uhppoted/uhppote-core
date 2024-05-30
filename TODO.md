@@ -1,25 +1,6 @@
 # TODO
 
 - [x] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
-      - [x] Add protocol field to UHPPOTE controller struct
-      - [x] Verify TCP with real controller
-      - [x] TCP 'driver'
-      - [x] See if controller sends events to TCP listener
-      - [x] Use UDP broadcast if addrport is nil **OR** zero value **OR** INADDR_ANY
-      - [x] Rework `sendto` as generic function
-      - [x] sendto:broadcast - don't wait for timeout if reply is valid
-      - [x] Rework UDP to use connected sockets
-      - [x] Unify send/sendto implementations
-      - [x] Rework bind address as netip.AddrPort
-      - [x] Rework broadcast address as netip.AddrPort
-      - [x] Rework listen address as netip.AddrPort
-      - [x] Set socket.SO_REUSEADDR
-      - [x] Rework Address as netip.AddrPort
-      - [x] ~~CLI get-devices EOF~~
-      - [x] Update _uhppoted.conf_ documentation
-      - [x] CHANGELOG
-      - [x] README
-
 - [ ] Add timezone to NewDevice
 - [ ] Replace (* UHPPOTE) in API functions with non-pointer version
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
