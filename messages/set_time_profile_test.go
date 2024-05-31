@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
+	"github.com/uhppoted/uhppote-core/types"
 )
 
 func TestMarshalSetTimeProfileRequest(t *testing.T) {
@@ -18,8 +19,8 @@ func TestMarshalSetTimeProfileRequest(t *testing.T) {
 	request := SetTimeProfileRequest{
 		SerialNumber:    423187757,
 		ProfileID:       4,
-		From:            yyyymmdd("2021-04-01"),
-		To:              yyyymmdd("2021-12-29"),
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
 		Monday:          true,
 		Tuesday:         true,
 		Wednesday:       false,
@@ -55,8 +56,8 @@ func TestFactoryUnmarshalSetTimeProfileRequest(t *testing.T) {
 		MsgType:         0x88,
 		SerialNumber:    423187757,
 		ProfileID:       4,
-		From:            yyyymmdd("2021-04-01"),
-		To:              yyyymmdd("2021-12-29"),
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
 		Monday:          true,
 		Tuesday:         true,
 		Wednesday:       false,

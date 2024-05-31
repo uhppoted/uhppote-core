@@ -34,7 +34,7 @@ func TestDateString(t *testing.T) {
 func TestDateFromString(t *testing.T) {
 	expected := Date(time.Date(2021, time.February, 28, 0, 0, 0, 0, time.Local))
 
-	date, err := DateFromString("2021-02-28")
+	date, err := ParseDate("2021-02-28")
 	if err != nil {
 		t.Fatalf("Unexpected error parsing Date (%v)", err)
 	}
@@ -126,7 +126,7 @@ func TestDateBefore(t *testing.T) {
 
 func TestDateBeforeToday(t *testing.T) {
 	today := Date(time.Now())
-	date, _ := DateFromString(today.String())
+	date := MustParseDate(today.String())
 
 	if date.Before(today) {
 		t.Errorf("date '%v' should not be before today (%v)", date, today)
@@ -165,7 +165,7 @@ func TestDateAfter(t *testing.T) {
 
 func TestDateAfterToday(t *testing.T) {
 	today := Date(time.Now())
-	date, _ := DateFromString(today.String())
+	date := MustParseDate(today.String())
 
 	if date.After(today) {
 		t.Errorf("date '%v' should not be after today (%v)", date, today)

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
+	"github.com/uhppoted/uhppote-core/types"
 )
 
 func TestMarshalAddTaskRequest(t *testing.T) {
@@ -17,8 +18,8 @@ func TestMarshalAddTaskRequest(t *testing.T) {
 
 	request := AddTaskRequest{
 		SerialNumber: 423187757,
-		From:         yyyymmdd("2021-04-01"),
-		To:           yyyymmdd("2021-12-29"),
+		From:         types.MustParseDate("2021-04-01"),
+		To:           types.MustParseDate("2021-12-29"),
 		Monday:       true,
 		Tuesday:      true,
 		Wednesday:    false,
@@ -50,8 +51,8 @@ func TestFactoryUnmarshalAddTaskRequest(t *testing.T) {
 	expected := AddTaskRequest{
 		MsgType:      0xA8,
 		SerialNumber: 423187757,
-		From:         yyyymmdd("2021-04-01"),
-		To:           yyyymmdd("2021-12-29"),
+		From:         types.MustParseDate("2021-04-01"),
+		To:           types.MustParseDate("2021-12-29"),
 		Monday:       true,
 		Tuesday:      true,
 		Wednesday:    false,

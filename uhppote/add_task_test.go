@@ -19,8 +19,8 @@ func TestAddTask(t *testing.T) {
 	task := types.Task{
 		Task: types.EnableTimeProfile,
 		Door: 3,
-		From: *date("2021-04-01"),
-		To:   *date("2021-12-29"),
+		From: types.MustParseDate("2021-04-01"),
+		To:   types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -63,7 +63,7 @@ func TestAddTaskWithInvalidFromDate(t *testing.T) {
 	task := types.Task{
 		Task: types.EnableTimeProfile,
 		Door: 3,
-		To:   *date("2021-12-29"),
+		To:   types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -106,7 +106,7 @@ func TestAddTaskWithInvalidToDate(t *testing.T) {
 	task := types.Task{
 		Task: types.EnableTimeProfile,
 		Door: 3,
-		From: *date("2021-04-01"),
+		From: types.MustParseDate("2021-04-01"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -149,8 +149,8 @@ func TestAddTaskWithInvalidResponse(t *testing.T) {
 	task := types.Task{
 		Task: types.EnableTimeProfile,
 		Door: 3,
-		From: *date("2021-04-01"),
-		To:   *date("2021-12-29"),
+		From: types.MustParseDate("2021-04-01"),
+		To:   types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -182,8 +182,8 @@ func TestAddTaskWithInvalidDeviceID(t *testing.T) {
 	task := types.Task{
 		Task: types.EnableTimeProfile,
 		Door: 3,
-		From: *date("2021-04-01"),
-		To:   *date("2021-12-29"),
+		From: types.MustParseDate("2021-04-01"),
+		To:   types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,

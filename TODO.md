@@ -1,9 +1,14 @@
 # TODO
 
 - [x] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
-- [ ] Add timezone to NewDevice
-- [ ] Replace (* UHPPOTE) in API functions with non-pointer version
+- [x] Add timezone to NewDevice
+- (?) Replace (* UHPPOTE) in API functions with non-pointer version
 - [ ] Rework any remaining Date/DateTime pointers to rather use IsZero/IsValid
+      - [ ] GetTimeProfile
+      - [ ] lib::encoding/tsv
+      - [ ] simulator get-device ReleaseDate
+      - [ ] uhppoted-app-wild-apricot types.Date
+      - [ ] uhppoted-rest acl.go
 - [ ] `put-card`: error on bad card numbers (0,0xffffffff,0x00ffffff)
 
 ## TODO

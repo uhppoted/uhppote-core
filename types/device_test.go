@@ -7,7 +7,7 @@ import (
 
 func TestDeviceString(t *testing.T) {
 	MAC, _ := net.ParseMAC("00:66:19:39:55:2d")
-	released, _ := DateFromString("2020-12-05")
+	released := MustParseDate("2020-12-05")
 
 	device := Device{
 		Name:         "Alpha",
@@ -30,7 +30,7 @@ func TestDeviceString(t *testing.T) {
 
 func TestDeviceStringWithoutName(t *testing.T) {
 	MAC, _ := net.ParseMAC("00:66:19:39:55:2d")
-	released, _ := DateFromString("2020-12-05")
+	released := MustParseDate("2020-12-05")
 
 	device := Device{
 		SerialNumber: 405419896,
@@ -52,7 +52,7 @@ func TestDeviceStringWithoutName(t *testing.T) {
 
 func TestDeviceStringWithPaddedName(t *testing.T) {
 	MAC, _ := net.ParseMAC("00:66:19:39:55:2d")
-	released, _ := DateFromString("2020-12-05")
+	released := MustParseDate("2020-12-05")
 
 	device := Device{
 		Name:         "    Al   Pha  ",

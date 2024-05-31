@@ -67,8 +67,8 @@ func TestUnmarshalGetTimeProfileResponse(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	from := yyyymmdd("2021-04-01")
-	to := yyyymmdd("2021-12-29")
+	from := types.MustParseDate("2021-04-01")
+	to := types.MustParseDate("2021-12-29")
 
 	expected := GetTimeProfileResponse{
 		MsgType:         0x98,
@@ -111,8 +111,8 @@ func TestFactoryUnmarshalGetTimeProfileResponse(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	from := yyyymmdd("2021-04-01")
-	to := yyyymmdd("2021-12-29")
+	from := types.MustParseDate("2021-04-01")
+	to := types.MustParseDate("2021-12-29")
 
 	expected := GetTimeProfileResponse{
 		MsgType:         0x98,
@@ -210,12 +210,6 @@ func TestUnmarshalGetTimeProfileResponseWithInvalidMsgType(t *testing.T) {
 	if err := codec.Unmarshal(message, &reply); err == nil {
 		t.Fatalf("Expected error: '%v'", "Invalid value in message - expected 0x98, received 0x94")
 	}
-}
-
-func yyyymmdd(s string) types.Date {
-	d, _ := types.DateFromString(s)
-
-	return d
 }
 
 func hhmm(s string) *types.HHmm {
