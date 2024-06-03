@@ -13,6 +13,10 @@ func (u *uhppote) PutCard(deviceID uint32, card types.Card, formats ...types.Car
 		return false, fmt.Errorf("invalid device ID (%v)", deviceID)
 	}
 
+	if card.CardNumber == 0 || card.CardNumber == 0xffffffff || card.CardNumber == 0x00ffffff {
+		return false, ErrInvalidCard
+	}
+
 	if !isCardNumberValid(card.CardNumber, formats...) {
 		return false, fmt.Errorf("invalid card number (%v)", card.CardNumber)
 	}

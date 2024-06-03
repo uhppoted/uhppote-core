@@ -9,6 +9,7 @@
 1. Reworked UT0311-L0x driver to use connected UDP sockets.
 2. Renamed _master_ branch to _main_ branch.
 3. Updated network stack to use modern Go IP constructs.
+4. `put-card` fails with 'invalid card' for card numbers 0, 0xffffffff and 0x00ffffff (as per SDK).
 
 
 ## [0.8.8](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.8) - 2024-03-26

@@ -2,6 +2,7 @@ package uhppote
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"net"
 	"testing"
@@ -81,6 +82,35 @@ func TestPutCardWithInvalidDeviceID(t *testing.T) {
 	_, err := u.PutCard(0, types.Card{})
 	if err == nil {
 		t.Fatalf("Expected 'Invalid device ID' error, got %v", err)
+	}
+}
+
+func TestPutCardWithInvalidCardNumber(t *testing.T) {
+	u := uhppote{}
+
+	cards := []uint32{
+		0,
+		0xffffffff,
+		0x00ffffff,
+	}
+
+	for _, v := range cards {
+		card := types.Card{
+			CardNumber: v,
+			From:       types.ToDate(2023, time.January, 1),
+			To:         types.ToDate(2023, time.December, 31),
+			Doors: map[uint8]uint8{
+				1: 1,
+				2: 0,
+				3: 29,
+				4: 1,
+			},
+			PIN: 54321,
+		}
+
+		if _, err := u.PutCard(405419896, card); err == nil || !errors.Is(err, ErrInvalidCard) {
+			t.Errorf("Expected 'invalid card' error, got %v", err)
+		}
 	}
 }
 

@@ -6,3 +6,4 @@ import (
 
 var ErrInvalidListenerAddress = errors.New("invalid listener address")
 var ErrIncorrectController = errors.New("response from incorrect controller")
+var ErrInvalidCard = errors.New("invalid card")
