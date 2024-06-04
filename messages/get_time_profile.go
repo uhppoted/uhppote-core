@@ -14,8 +14,8 @@ type GetTimeProfileResponse struct {
 	MsgType         types.MsgType      `uhppote:"value:0x98"`
 	SerialNumber    types.SerialNumber `uhppote:"offset:4"`
 	ProfileID       uint8              `uhppote:"offset:8"`
-	From            *types.Date        `uhppote:"offset:9"`
-	To              *types.Date        `uhppote:"offset:13"`
+	From            types.Date         `uhppote:"offset:9"`
+	To              types.Date         `uhppote:"offset:13"`
 	Monday          bool               `uhppote:"offset:17"`
 	Tuesday         bool               `uhppote:"offset:18"`
 	Wednesday       bool               `uhppote:"offset:19"`

@@ -67,15 +67,53 @@ func TestUnmarshalGetTimeProfileResponse(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	from := types.MustParseDate("2021-04-01")
-	to := types.MustParseDate("2021-12-29")
+	expected := GetTimeProfileResponse{
+		MsgType:         0x98,
+		SerialNumber:    423187757,
+		ProfileID:       4,
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
+		Monday:          true,
+		Tuesday:         true,
+		Wednesday:       false,
+		Thursday:        true,
+		Friday:          false,
+		Saturday:        true,
+		Sunday:          true,
+		Segment1Start:   hhmm("08:30"),
+		Segment1End:     hhmm("09:45"),
+		Segment2Start:   hhmm("11:35"),
+		Segment2End:     hhmm("13:15"),
+		Segment3Start:   hhmm("14:01"),
+		Segment3End:     hhmm("17:59"),
+		LinkedProfileID: 19,
+	}
+
+	reply := GetTimeProfileResponse{}
+
+	if err := codec.Unmarshal(message, &reply); err != nil {
+		t.Fatalf("Unexpected error: %v\n", err)
+	}
+
+	if !reflect.DeepEqual(reply, expected) {
+		t.Errorf("Incorrect reply\n   expected:%+v\n   got:     %+v", expected, reply)
+	}
+}
+
+func TestUnmarshalGetTimeProfileResponseWithZeroFromAndToDate(t *testing.T) {
+	message := []byte{
+		0x17, 0x98, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x01, 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x08, 0x30, 0x09, 0x45, 0x11, 0x35, 0x13, 0x15,
+		0x14, 0x01, 0x17, 0x59, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	}
 
 	expected := GetTimeProfileResponse{
 		MsgType:         0x98,
 		SerialNumber:    423187757,
 		ProfileID:       4,
-		From:            &from,
-		To:              &to,
+		From:            types.Date{},
+		To:              types.Date{},
 		Monday:          true,
 		Tuesday:         true,
 		Wednesday:       false,
@@ -111,15 +149,12 @@ func TestFactoryUnmarshalGetTimeProfileResponse(t *testing.T) {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	}
 
-	from := types.MustParseDate("2021-04-01")
-	to := types.MustParseDate("2021-12-29")
-
 	expected := GetTimeProfileResponse{
 		MsgType:         0x98,
 		SerialNumber:    423187757,
 		ProfileID:       4,
-		From:            &from,
-		To:              &to,
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
 		Monday:          true,
 		Tuesday:         true,
 		Wednesday:       false,
@@ -168,8 +203,8 @@ func TestUnmarshalGetTimeProfileDeactivatedResponse(t *testing.T) {
 		MsgType:         0x98,
 		SerialNumber:    423187757,
 		ProfileID:       0,
-		From:            nil,
-		To:              nil,
+		From:            types.Date{},
+		To:              types.Date{},
 		Monday:          false,
 		Tuesday:         false,
 		Wednesday:       false,

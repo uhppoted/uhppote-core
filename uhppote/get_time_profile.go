@@ -30,13 +30,15 @@ func (u *uhppote) GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeP
 			return nil, nil
 		}
 
-		if reply.From == nil {
-			return nil, fmt.Errorf("invalid 'from' date in response")
-		}
+		// NTS: nil pointer replaced with zero value and zero value is (possibly) valid
+		// if reply.From == nil {
+		// 	return nil, fmt.Errorf("invalid 'from' date in response")
+		// }
 
-		if reply.To == nil {
-			return nil, fmt.Errorf("invalid 'to' date in response")
-		}
+		// NTS: nil pointer replaced with zero value and zero value is (possibly) valid
+		// if reply.To == nil {
+		// 	return nil, fmt.Errorf("invalid 'to' date in response")
+		// }
 
 		segments := []types.Segment{types.Segment{}, types.Segment{}, types.Segment{}}
 
@@ -67,8 +69,8 @@ func (u *uhppote) GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeP
 		profile := types.TimeProfile{
 			ID:              reply.ProfileID,
 			LinkedProfileID: reply.LinkedProfileID,
-			From:            reply.From,
-			To:              reply.To,
+			From:            &reply.From,
+			To:              &reply.To,
 
 			Weekdays: types.Weekdays{
 				time.Monday:    reply.Monday,

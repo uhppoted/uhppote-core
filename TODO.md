@@ -4,7 +4,9 @@
 - [x] Add timezone to NewDevice
 - [x] `put-card`: error on bad card numbers (0,0xffffffff,0x00ffffff)
 - [ ] Rework any remaining Date pointers to rather use IsZero/IsValid
-      - [ ] GetTimeProfile
+      - [x] GetTimeProfile
+      - [ ] types.TimeProfile
+      - [ ] // FIXME: replace From in types.TimeProfile
       - [ ] lib::encoding/tsv
       - [ ] simulator get-device ReleaseDate
       - [ ] uhppoted-app-wild-apricot types.Date
