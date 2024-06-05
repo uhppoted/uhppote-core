@@ -5,13 +5,13 @@
 - [x] `put-card`: error on bad card numbers (0,0xffffffff,0x00ffffff)
 - [ ] Rework any remaining Date pointers to rather use IsZero/IsValid
       - [x] GetTimeProfile
-      - [ ] types.TimeProfile
-      - [ ] // FIXME: replace From in types.TimeProfile
+      - [x] types.TimeProfile
+      - [x] // FIXME: replace From in types.TimeProfile
       - [ ] lib::encoding/tsv
       - [ ] simulator get-device ReleaseDate
       - [ ] uhppoted-app-wild-apricot types.Date
       - [ ] uhppoted-rest acl.go
-      - (?) Remove types.ToDate (test only afaik)
+      - (?) Remove types.ToDate (test only AFAIK)
 - [ ] Rework any remaining DateTime pointers to rather use IsZero/IsValid
 - [ ] Rework any remaining Time pointers to rather use IsZero/IsValid
 - (?) Replace (* UHPPOTE) in API functions with non-pointer version
