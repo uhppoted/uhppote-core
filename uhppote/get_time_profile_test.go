@@ -20,8 +20,8 @@ func TestGetTimeProfile(t *testing.T) {
 	expected := types.TimeProfile{
 		ID:              4,
 		LinkedProfileID: 19,
-		From:            date("2021-04-01"),
-		To:              date("2021-12-29"),
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,

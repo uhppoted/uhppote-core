@@ -13,11 +13,13 @@ func (u *uhppote) SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bo
 		return false, fmt.Errorf("invalid device ID (%v)", deviceID)
 	}
 
-	if profile.From == nil {
+	// NTS: zero value 'from' date may be allowed albeit invalid
+	if profile.From.IsZero() {
 		return false, fmt.Errorf("time profile requires a valid 'from' date")
 	}
 
-	if profile.To == nil {
+	// NTS: zero value 'to' date may be allowed albeit invalid
+	if profile.To.IsZero() {
 		return false, fmt.Errorf("time profile requires a valid 'to' date")
 	}
 
@@ -32,8 +34,8 @@ func (u *uhppote) SetTimeProfile(deviceID uint32, profile types.TimeProfile) (bo
 	request := messages.SetTimeProfileRequest{
 		SerialNumber:    types.SerialNumber(deviceID),
 		ProfileID:       profile.ID,
-		From:            *profile.From,
-		To:              *profile.To,
+		From:            profile.From,
+		To:              profile.To,
 		Monday:          profile.Weekdays[time.Monday],
 		Tuesday:         profile.Weekdays[time.Tuesday],
 		Wednesday:       profile.Weekdays[time.Wednesday],

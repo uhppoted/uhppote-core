@@ -11,6 +11,7 @@
       - [ ] simulator get-device ReleaseDate
       - [ ] uhppoted-app-wild-apricot types.Date
       - [ ] uhppoted-rest acl.go
+      - (?) Remove types.ToDate (test only afaik)
 - [ ] Rework any remaining DateTime pointers to rather use IsZero/IsValid
 - [ ] Rework any remaining Time pointers to rather use IsZero/IsValid
 - (?) Replace (* UHPPOTE) in API functions with non-pointer version

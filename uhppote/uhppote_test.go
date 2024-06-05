@@ -40,12 +40,6 @@ func (d *stub) Listen(signal chan interface{}, done chan interface{}, handler fu
 	return fmt.Errorf("NOT IMPLEMENTED")
 }
 
-var date = func(s string) *types.Date {
-	d, _ := time.ParseInLocation("2006-01-02", s, time.Local)
-	p := types.Date(d)
-	return &p
-}
-
 func TestBroadcastAddressRequest(t *testing.T) {
 	expected := messages.DeleteCardResponse{
 		MsgType:      0x52,

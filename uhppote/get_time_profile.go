@@ -30,12 +30,12 @@ func (u *uhppote) GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeP
 			return nil, nil
 		}
 
-		// NTS: nil pointer replaced with zero value and zero value is (possibly) valid
+		// NTS: nil pointer replaced with zero value and zero value is theoretically possible (albeit invalid)
 		// if reply.From == nil {
 		// 	return nil, fmt.Errorf("invalid 'from' date in response")
 		// }
 
-		// NTS: nil pointer replaced with zero value and zero value is (possibly) valid
+		// NTS: nil pointer replaced with zero value and zero value is theoretically possible (albeit invalid)
 		// if reply.To == nil {
 		// 	return nil, fmt.Errorf("invalid 'to' date in response")
 		// }
@@ -69,8 +69,8 @@ func (u *uhppote) GetTimeProfile(deviceID uint32, profileID uint8) (*types.TimeP
 		profile := types.TimeProfile{
 			ID:              reply.ProfileID,
 			LinkedProfileID: reply.LinkedProfileID,
-			From:            &reply.From,
-			To:              &reply.To,
+			From:            reply.From,
+			To:              reply.To,
 
 			Weekdays: types.Weekdays{
 				time.Monday:    reply.Monday,

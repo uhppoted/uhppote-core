@@ -19,8 +19,8 @@ func TestSetTimeProfile(t *testing.T) {
 	profile := types.TimeProfile{
 		ID:              4,
 		LinkedProfileID: 19,
-		From:            date("2021-04-01"),
-		To:              date("2021-12-29"),
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -66,7 +66,7 @@ func TestSetTimeProfileWithInvalidFromDate(t *testing.T) {
 	profile := types.TimeProfile{
 		ID:              4,
 		LinkedProfileID: 19,
-		To:              date("2021-12-29"),
+		To:              types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -112,7 +112,7 @@ func TestSetTimeProfileWithInvalidToDate(t *testing.T) {
 	profile := types.TimeProfile{
 		ID:              4,
 		LinkedProfileID: 19,
-		From:            date("2021-04-01"),
+		From:            types.MustParseDate("2021-04-01"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -158,8 +158,8 @@ func TestSetTimeProfileWithMissingSegment1(t *testing.T) {
 	profile := types.TimeProfile{
 		ID:              4,
 		LinkedProfileID: 19,
-		From:            date("2021-04-01"),
-		To:              date("2021-12-29"),
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -204,8 +204,8 @@ func TestSetTimeProfileWithMissingSegment2(t *testing.T) {
 	profile := types.TimeProfile{
 		ID:              4,
 		LinkedProfileID: 19,
-		From:            date("2021-04-01"),
-		To:              date("2021-12-29"),
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -250,8 +250,8 @@ func TestSetTimeProfileWithMissingSegment3(t *testing.T) {
 	profile := types.TimeProfile{
 		ID:              4,
 		LinkedProfileID: 19,
-		From:            date("2021-04-01"),
-		To:              date("2021-12-29"),
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -296,8 +296,8 @@ func TestSetTimeProfileWithMissingSegment1End(t *testing.T) {
 	profile := types.TimeProfile{
 		ID:              4,
 		LinkedProfileID: 19,
-		From:            date("2021-04-01"),
-		To:              date("2021-12-29"),
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -343,8 +343,8 @@ func TestSetTimeProfileWithInvalidSegment1End(t *testing.T) {
 	profile := types.TimeProfile{
 		ID:              4,
 		LinkedProfileID: 19,
-		From:            date("2021-04-01"),
-		To:              date("2021-12-29"),
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -390,8 +390,8 @@ func TestSetTimeProfileWithMissingSegment2End(t *testing.T) {
 	profile := types.TimeProfile{
 		ID:              4,
 		LinkedProfileID: 19,
-		From:            date("2021-04-01"),
-		To:              date("2021-12-29"),
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -437,8 +437,8 @@ func TestSetTimeProfileWithInvalidSegment2End(t *testing.T) {
 	profile := types.TimeProfile{
 		ID:              4,
 		LinkedProfileID: 19,
-		From:            date("2021-04-01"),
-		To:              date("2021-12-29"),
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -484,8 +484,8 @@ func TestSetTimeProfileWithInvalidSegment3Start(t *testing.T) {
 	profile := types.TimeProfile{
 		ID:              4,
 		LinkedProfileID: 19,
-		From:            date("2021-04-01"),
-		To:              date("2021-12-29"),
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -531,8 +531,8 @@ func TestSetTimeProfileWithInvalidSegment3End(t *testing.T) {
 	profile := types.TimeProfile{
 		ID:              4,
 		LinkedProfileID: 19,
-		From:            date("2021-04-01"),
-		To:              date("2021-12-29"),
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -578,8 +578,8 @@ func TestSetTimeProfileWithInvalidResponse(t *testing.T) {
 	profile := types.TimeProfile{
 		ID:              4,
 		LinkedProfileID: 19,
-		From:            date("2021-04-01"),
-		To:              date("2021-12-29"),
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -614,8 +614,8 @@ func TestSetTimeProfileWithInvalidDeviceID(t *testing.T) {
 	profile := types.TimeProfile{
 		ID:              4,
 		LinkedProfileID: 19,
-		From:            date("2021-04-01"),
-		To:              date("2021-12-29"),
+		From:            types.MustParseDate("2021-04-01"),
+		To:              types.MustParseDate("2021-12-29"),
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
