@@ -31,7 +31,25 @@ func TestDateString(t *testing.T) {
 	}
 }
 
-func TestDateFromString(t *testing.T) {
+func TestToDate(t *testing.T) {
+	expected := Date(time.Date(2021, time.February, 28, 0, 0, 0, 0, time.Local))
+	date := ToDate(2021, time.February, 28)
+
+	if !reflect.DeepEqual(date, expected) {
+		t.Errorf("Date incorrectly unmarshaled - expected:%v, got:%v", time.Time(expected), time.Time(date))
+	}
+}
+
+func TestMustParseDate(t *testing.T) {
+	expected := Date(time.Date(2021, time.February, 28, 0, 0, 0, 0, time.Local))
+	date := MustParseDate("2021-02-28")
+
+	if !reflect.DeepEqual(date, expected) {
+		t.Errorf("Date incorrectly unmarshaled - expected:%v, got:%v", time.Time(expected), time.Time(date))
+	}
+}
+
+func TestParseDate(t *testing.T) {
 	expected := Date(time.Date(2021, time.February, 28, 0, 0, 0, 0, time.Local))
 
 	date, err := ParseDate("2021-02-28")
@@ -104,17 +122,17 @@ func TestDateBefore(t *testing.T) {
 		q        Date
 		expected bool
 	}{
-		{ToDate(2020, time.May, 5), ToDate(2021, time.May, 5), true},
-		{ToDate(2021, time.May, 5), ToDate(2021, time.May, 5), false},
-		{ToDate(2022, time.May, 5), ToDate(2021, time.May, 5), false},
+		{MustParseDate("2020-05-05"), MustParseDate("2021-05-05"), true},
+		{MustParseDate("2021-05-05"), MustParseDate("2021-05-05"), false},
+		{MustParseDate("2022-05-05"), MustParseDate("2021-05-05"), false},
 
-		{ToDate(2021, time.April, 5), ToDate(2021, time.May, 5), true},
-		{ToDate(2021, time.May, 5), ToDate(2021, time.May, 5), false},
-		{ToDate(2021, time.June, 5), ToDate(2021, time.May, 5), false},
+		{MustParseDate("2021-04-05"), MustParseDate("2021-05-05"), true},
+		{MustParseDate("2021-05-05"), MustParseDate("2021-05-05"), false},
+		{MustParseDate("2021-06-05"), MustParseDate("2021-05-05"), false},
 
-		{ToDate(2021, time.May, 4), ToDate(2021, time.May, 5), true},
-		{ToDate(2021, time.May, 5), ToDate(2021, time.May, 5), false},
-		{ToDate(2021, time.May, 6), ToDate(2021, time.May, 5), false},
+		{MustParseDate("2021-05-04"), MustParseDate("2021-05-05"), true},
+		{MustParseDate("2021-05-05"), MustParseDate("2021-05-05"), false},
+		{MustParseDate("2021-05-06"), MustParseDate("2021-05-05"), false},
 	}
 
 	for _, v := range tests {
@@ -143,17 +161,17 @@ func TestDateAfter(t *testing.T) {
 		q        Date
 		expected bool
 	}{
-		{ToDate(2020, time.May, 5), ToDate(2021, time.May, 5), false},
-		{ToDate(2021, time.May, 5), ToDate(2021, time.May, 5), false},
-		{ToDate(2022, time.May, 5), ToDate(2021, time.May, 5), true},
+		{MustParseDate("2020-05-05"), MustParseDate("2021-05-05"), false},
+		{MustParseDate("2021-05-05"), MustParseDate("2021-05-05"), false},
+		{MustParseDate("2022-05-05"), MustParseDate("2021-05-05"), true},
 
-		{ToDate(2021, time.April, 5), ToDate(2021, time.May, 5), false},
-		{ToDate(2021, time.May, 5), ToDate(2021, time.May, 5), false},
-		{ToDate(2021, time.June, 5), ToDate(2021, time.May, 5), true},
+		{MustParseDate("2021-04-05"), MustParseDate("2021-05-05"), false},
+		{MustParseDate("2021-05-05"), MustParseDate("2021-05-05"), false},
+		{MustParseDate("2021-06-05"), MustParseDate("2021-05-05"), true},
 
-		{ToDate(2021, time.May, 4), ToDate(2021, time.May, 5), false},
-		{ToDate(2021, time.May, 5), ToDate(2021, time.May, 5), false},
-		{ToDate(2021, time.May, 6), ToDate(2021, time.May, 5), true},
+		{MustParseDate("2021-05-04"), MustParseDate("2021-05-05"), false},
+		{MustParseDate("2021-05-05"), MustParseDate("2021-05-05"), false},
+		{MustParseDate("2021-05-06"), MustParseDate("2021-05-05"), true},
 	}
 
 	for _, v := range tests {
@@ -243,7 +261,7 @@ func TestDateUnmarshalUT0311L0x(t *testing.T) {
 		expected Date
 		isZero   bool
 	}{
-		{[]byte{0x20, 0x21, 0x02, 0x28}, ToDate(2021, time.February, 28), false},
+		{[]byte{0x20, 0x21, 0x02, 0x28}, MustParseDate("2021-02-28"), false},
 		{[]byte{0x00, 0x00, 0x00, 0x00}, Date{}, true},
 		{[]byte{0x00, 0x01, 0x01, 0x01}, Date{}, true},
 	}
@@ -281,7 +299,7 @@ func TestDateUnmarshalUT0311L0xWithInvalidDate(t *testing.T) {
 }
 
 func TestDatePtrUnmarshalUT0311L0x(t *testing.T) {
-	d20210228 := ToDate(2021, time.February, 28)
+	d20210228 := MustParseDate("2021-02-28")
 
 	tests := []struct {
 		bytes    []byte

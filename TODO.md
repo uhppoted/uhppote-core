@@ -7,11 +7,11 @@
       - [x] GetTimeProfile
       - [x] types.TimeProfile
       - [x] // FIXME: replace From in types.TimeProfile
-      - [ ] lib::encoding/tsv
+      - [x] Replace test usage of types.ToDate with types.MustParseDate
       - [ ] simulator get-device ReleaseDate
+      - [ ] lib::encoding/tsv
       - [ ] uhppoted-app-wild-apricot types.Date
       - [ ] uhppoted-rest acl.go
-      - (?) Remove types.ToDate (test only AFAIK)
 - [ ] Rework any remaining DateTime pointers to rather use IsZero/IsValid
 - [ ] Rework any remaining Time pointers to rather use IsZero/IsValid
 - (?) Replace (* UHPPOTE) in API functions with non-pointer version

@@ -5,7 +5,6 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 	"reflect"
 	"testing"
-	"time"
 )
 
 func TestMarshalGetCardByIndexRequest(t *testing.T) {
@@ -74,12 +73,12 @@ func TestUnmarshalGetCardByIndexResponse(t *testing.T) {
 		t.Errorf("Incorrect 'card number' - expected:%v, got:%v", 6154412, reply.CardNumber)
 	}
 
-	from := types.ToDate(2019, time.February, 3)
+	from := types.MustParseDate("2019-02-03")
 	if reply.From != from {
 		t.Errorf("Incorrect 'from date' - expected:%v, got:%v", from, reply.From)
 	}
 
-	to := types.ToDate(2019, time.December, 29)
+	to := types.MustParseDate("2019-12-29")
 	if reply.To != types.Date(to) {
 		t.Errorf("Incorrect 'to date' - expected:%v, got:%v", to, reply.To)
 	}
@@ -131,12 +130,12 @@ func TestUnmarshalGetCardWithPINByIndexResponse(t *testing.T) {
 		t.Errorf("Incorrect 'card number' - expected:%v, got:%v", 6154412, reply.CardNumber)
 	}
 
-	from := types.ToDate(2019, time.February, 3)
+	from := types.MustParseDate("2019-02-03")
 	if reply.From != from {
 		t.Errorf("Incorrect 'from date' - expected:%v, got:%v", from, reply.From)
 	}
 
-	to := types.ToDate(2019, time.December, 29)
+	to := types.MustParseDate("2019-12-29")
 	if reply.To != to {
 		t.Errorf("Incorrect 'to date' - expected:%v, got:%v", to, reply.To)
 	}
@@ -239,12 +238,12 @@ func TestUnmarshalGetCardByIdResponse(t *testing.T) {
 		t.Errorf("Incorrect 'card number' - expected:%v, got:%v", 6154412, reply.CardNumber)
 	}
 
-	from := types.ToDate(2019, time.February, 03)
+	from := types.MustParseDate("2019-02-03")
 	if reply.From != from {
 		t.Errorf("Incorrect 'from date' - expected:%v, got:%v", from, reply.From)
 	}
 
-	to := types.ToDate(2019, time.December, 29)
+	to := types.MustParseDate("2019-12-29")
 	if reply.To != to {
 		t.Errorf("Incorrect 'to date' - expected:%v, got:%v", to, reply.To)
 	}
@@ -296,12 +295,12 @@ func TestUnmarshalGetCardWithPINByIdResponse(t *testing.T) {
 		t.Errorf("Incorrect 'card number' - expected:%v, got:%v", 6154412, reply.CardNumber)
 	}
 
-	from := types.ToDate(2019, time.February, 3)
+	from := types.MustParseDate("2019-02-03")
 	if reply.From != from {
 		t.Errorf("Incorrect 'from date' - expected:%v, got:%v", from, reply.From)
 	}
 
-	to := types.ToDate(2019, time.December, 29)
+	to := types.MustParseDate("2019-12-29")
 	if reply.To != to {
 		t.Errorf("Incorrect 'to date' - expected:%v, got:%v", to, reply.To)
 	}

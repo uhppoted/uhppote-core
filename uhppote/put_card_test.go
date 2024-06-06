@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net"
 	"testing"
-	"time"
 
 	"github.com/uhppoted/uhppote-core/types"
 )
@@ -32,8 +31,8 @@ func TestPutCard(t *testing.T) {
 		},
 		card: types.Card{
 			CardNumber: 6129876,
-			From:       types.ToDate(2023, time.January, 1),
-			To:         types.ToDate(2023, time.December, 31),
+			From:       types.MustParseDate("2023-01-01"),
+			To:         types.MustParseDate("2023-12-31"),
 			Doors: map[uint8]uint8{
 				1: 1,
 				2: 0,
@@ -58,8 +57,8 @@ func TestPutCard(t *testing.T) {
 
 	card := types.Card{
 		CardNumber: 6129876,
-		From:       types.ToDate(2023, time.January, 1),
-		To:         types.ToDate(2023, time.December, 31),
+		From:       types.MustParseDate("2023-01-01"),
+		To:         types.MustParseDate("2023-12-31"),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -97,8 +96,8 @@ func TestPutCardWithInvalidCardNumber(t *testing.T) {
 	for _, v := range cards {
 		card := types.Card{
 			CardNumber: v,
-			From:       types.ToDate(2023, time.January, 1),
-			To:         types.ToDate(2023, time.December, 31),
+			From:       types.MustParseDate("2023-01-01"),
+			To:         types.MustParseDate("2023-12-31"),
 			Doors: map[uint8]uint8{
 				1: 1,
 				2: 0,

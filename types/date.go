@@ -10,17 +10,9 @@ import (
 
 type Date time.Time
 
-func ToDate(year int, month time.Month, day int) Date {
-	date := time.Date(year, month, day, 0, 0, 0, 0, time.Local)
-
-	return Date(date)
-}
-
-/*
- * MustParseDate invokes ParseDate and panics on error.
- *
- * It is intended for use in tests with hard-coded strings.
- */
+// MustParseDate invokes ParseDate and panics on error.
+//
+// It is intended for use in tests with hard-coded strings.
 func MustParseDate(s string) Date {
 	if date, err := ParseDate(s); err != nil {
 		panic(err)
@@ -29,11 +21,8 @@ func MustParseDate(s string) Date {
 	}
 }
 
-/*
- * Parses a date string, returning a zero value Date{} and an
- * error if the string is blank or not a valid date.
- *
- */
+// Parses a date string, returning a zero value Date{} and an
+// error if the string is blank or not a valid date.
 func ParseDate(s string) (Date, error) {
 	if s == "" {
 		return Date{}, fmt.Errorf("blank date string")
@@ -42,6 +31,13 @@ func ParseDate(s string) (Date, error) {
 	} else {
 		return Date(date), nil
 	}
+}
+
+// Utility function to explicitly construct a Date from year, month and day.
+func ToDate(year int, month time.Month, day int) Date {
+	date := time.Date(year, month, day, 0, 0, 0, 0, time.Local)
+
+	return Date(date)
 }
 
 func (d Date) IsZero() bool {

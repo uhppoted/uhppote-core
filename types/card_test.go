@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
-	"time"
 )
 
 func TestCardToString(t *testing.T) {
@@ -13,8 +12,8 @@ func TestCardToString(t *testing.T) {
 
 	card := Card{
 		CardNumber: 12345,
-		From:       ToDate(2020, time.January, 1),
-		To:         ToDate(2020, time.December, 31),
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -35,8 +34,8 @@ func TestCardWithPINToString(t *testing.T) {
 
 	card := Card{
 		CardNumber: 12345,
-		From:       ToDate(2020, time.January, 1),
-		To:         ToDate(2020, time.December, 31),
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -58,8 +57,8 @@ func TestCardWithInvalidPINToString(t *testing.T) {
 
 	card := Card{
 		CardNumber: 12345,
-		From:       ToDate(2020, time.January, 1),
-		To:         ToDate(2020, time.December, 31),
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -81,7 +80,7 @@ func TestCardToStringWithMissingFromDate(t *testing.T) {
 
 	card := Card{
 		CardNumber: 12345,
-		To:         ToDate(2020, time.December, 31),
+		To:         MustParseDate("2020-12-31"),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -100,7 +99,7 @@ func TestCardToStringWithMissingFromDate(t *testing.T) {
 func TestCardToStringWithMissingToDate(t *testing.T) {
 	expected := "12345    2020-01-01 -          Y N N Y"
 
-	from := ToDate(2020, time.January, 1)
+	from := MustParseDate("2020-01-01")
 	card := Card{
 		CardNumber: 12345,
 		From:       from,
@@ -124,8 +123,8 @@ func TestCardToStringWithMissingDoors(t *testing.T) {
 
 	card := Card{
 		CardNumber: 12345,
-		From:       ToDate(2020, time.January, 1),
-		To:         ToDate(2020, time.December, 31),
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -144,8 +143,8 @@ func TestCardToStringWithExtraDoors(t *testing.T) {
 
 	card := Card{
 		CardNumber: 12345,
-		From:       ToDate(2020, time.January, 1),
-		To:         ToDate(2020, time.December, 31),
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -167,8 +166,8 @@ func TestCardMarshalJSON(t *testing.T) {
 
 	card := Card{
 		CardNumber: 12345,
-		From:       ToDate(2020, time.January, 1),
-		To:         ToDate(2020, time.December, 31),
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -203,8 +202,8 @@ func TestCardMarshalJSON(t *testing.T) {
 func TestCardWithPINMarshalJSON(t *testing.T) {
 	card := Card{
 		CardNumber: 12345,
-		From:       ToDate(2020, time.January, 1),
-		To:         ToDate(2020, time.December, 31),
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -241,8 +240,8 @@ func TestCardWithPINMarshalJSON(t *testing.T) {
 func TestCardWithInvalidPINMarshalJSON(t *testing.T) {
 	card := Card{
 		CardNumber: 12345,
-		From:       ToDate(2020, time.January, 1),
-		To:         ToDate(2020, time.December, 31),
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -278,8 +277,8 @@ func TestCardWithInvalidPINMarshalJSON(t *testing.T) {
 func TestUnmarshalCard(t *testing.T) {
 	expected := Card{
 		CardNumber: 12345,
-		From:       ToDate(2020, time.January, 1),
-		To:         ToDate(2020, time.December, 31),
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -316,8 +315,8 @@ func TestUnmarshalCard(t *testing.T) {
 func TestUnmarshalCardWithPIN(t *testing.T) {
 	expected := Card{
 		CardNumber: 12345,
-		From:       ToDate(2020, time.January, 1),
-		To:         ToDate(2020, time.December, 31),
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -355,8 +354,8 @@ func TestUnmarshalCardWithPIN(t *testing.T) {
 func TestUnmarshalCardWithMissingCardNumber(t *testing.T) {
 	expected := Card{
 		CardNumber: 0,
-		From:       ToDate(2020, time.January, 1),
-		To:         ToDate(2020, time.December, 31),
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
@@ -429,8 +428,8 @@ func TestUnmarshalCardWithMissingEndDate(t *testing.T) {
 func TestUnmarshalCardWithMissingDoors(t *testing.T) {
 	expected := Card{
 		CardNumber: 12345,
-		From:       ToDate(2020, time.January, 1),
-		To:         ToDate(2020, time.December, 31),
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
 		Doors: map[uint8]uint8{
 			1: 0,
 			2: 1,
@@ -463,8 +462,8 @@ func TestUnmarshalCardWithMissingDoors(t *testing.T) {
 func TestUnmarshalCardWithInvalidDoors(t *testing.T) {
 	expected := Card{
 		CardNumber: 12345,
-		From:       ToDate(2020, time.January, 1),
-		To:         ToDate(2020, time.December, 31),
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,

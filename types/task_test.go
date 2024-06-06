@@ -14,8 +14,8 @@ func TestTaskToString(t *testing.T) {
 	task := Task{
 		Task: EnableTimeProfile,
 		Door: 3,
-		From: ToDate(2021, time.April, 1),
-		To:   ToDate(2021, time.December, 29),
+		From: MustParseDate("2021-04-01"),
+		To:   MustParseDate("2021-12-29"),
 		Weekdays: Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -42,8 +42,8 @@ func TestTaskToStringWithEnableMoreCards(t *testing.T) {
 	task := Task{
 		Task: EnableMoreCards,
 		Door: 3,
-		From: ToDate(2021, time.April, 1),
-		To:   ToDate(2021, time.December, 29),
+		From: MustParseDate("2021-04-01"),
+		To:   MustParseDate("2021-12-29"),
 		Weekdays: Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -78,8 +78,8 @@ func TestTaskJSONMarshal(t *testing.T) {
 	task := Task{
 		Task: EnableTimeProfile,
 		Door: 3,
-		From: ToDate(2021, time.April, 1),
-		To:   ToDate(2021, time.December, 29),
+		From: MustParseDate("2021-04-01"),
+		To:   MustParseDate("2021-12-29"),
 		Weekdays: Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -105,8 +105,8 @@ func TestTaskJSONMarshal(t *testing.T) {
 
 func TestTaskJSONUnmarshal(t *testing.T) {
 	expected := Task{
-		From: ToDate(2021, time.April, 1),
-		To:   ToDate(2021, time.December, 29),
+		From: MustParseDate("2021-04-01"),
+		To:   MustParseDate("2021-12-29"),
 		Weekdays: Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
