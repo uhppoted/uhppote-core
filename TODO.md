@@ -3,17 +3,17 @@
 - [x] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
 - [x] Add timezone to NewDevice
 - [x] `put-card`: error on bad card numbers (0,0xffffffff,0x00ffffff)
-- [ ] Rework any remaining Date pointers to rather use IsZero/IsValid
+- [x] Rework any remaining Date pointers to rather use IsZero
       - [x] GetTimeProfile
       - [x] types.TimeProfile
       - [x] // FIXME: replace From in types.TimeProfile
       - [x] Replace test usage of types.ToDate with types.MustParseDate
-      - [ ] simulator get-device ReleaseDate
-      - [ ] lib::encoding/tsv
-      - [ ] uhppoted-app-wild-apricot types.Date
-      - [ ] uhppoted-rest acl.go
-- [ ] Rework any remaining DateTime pointers to rather use IsZero/IsValid
-- [ ] Rework any remaining Time pointers to rather use IsZero/IsValid
+      - [x] simulator get-device ReleaseDate
+      - [x] lib::encoding/tsv
+      - [x] uhppoted-app-wild-apricot types.Date
+      - [x] uhppoted-rest acl.go
+- [ ] Rework any remaining DateTime pointers to rather use IsZero
+- [ ] Rework any remaining Time pointers
 - (?) Replace (* UHPPOTE) in API functions with non-pointer version
 
 ## TODO

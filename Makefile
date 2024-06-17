@@ -62,7 +62,7 @@ publish: release
 	gh release create "$(VERSION)" --draft --prerelease --title "$(VERSION)-beta" --notes-file release-notes.md
 
 debug: build
-	go test -v ./... -run TestSetListener
+	go test -v ./... -run TestGetDevices
 
 godoc:
 	godoc -http=:80	-index_interval=60s

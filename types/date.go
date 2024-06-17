@@ -40,10 +40,12 @@ func ToDate(year int, month time.Month, day int) Date {
 	return Date(date)
 }
 
+// Returns true if the date is the zero value.
 func (d Date) IsZero() bool {
 	return time.Time(d).IsZero()
 }
 
+// Returns true if the year,month and day are the same.
 func (d Date) Equals(date Date) bool {
 	p := time.Time(d)
 	q := time.Time(date)

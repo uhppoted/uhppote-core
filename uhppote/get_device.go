@@ -32,7 +32,7 @@ func (u *uhppote) GetDevices() ([]types.Device, error) {
 		}
 
 		addr := netip.AddrPort{}
-		if v, ok := netip.AddrFromSlice(reply.IpAddress); ok {
+		if v, ok := netip.AddrFromSlice(reply.IpAddress.To4()); ok {
 			addr = netip.AddrPortFrom(v, port)
 		}
 
@@ -82,7 +82,7 @@ func (u *uhppote) GetDevice(serialNumber uint32) (*types.Device, error) {
 		}
 
 		addr := netip.AddrPort{}
-		if v, ok := netip.AddrFromSlice(reply.IpAddress); ok {
+		if v, ok := netip.AddrFromSlice(reply.IpAddress.To4()); ok {
 			addr = netip.AddrPortFrom(v, port)
 		}
 

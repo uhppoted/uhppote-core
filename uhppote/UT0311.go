@@ -320,7 +320,7 @@ func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
 	}
 }
 
-func (u *ut0311) Listen(signal chan interface{}, done chan interface{}, callback func([]byte)) error {
+func (u *ut0311) Listen(signal chan any, done chan any, callback func([]byte)) error {
 	bind := net.UDPAddrFromAddrPort(u.listenAddr)
 	if bind.Port == 0 {
 		return fmt.Errorf("Listen requires a non-zero UDP port")

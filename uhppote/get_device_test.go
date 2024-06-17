@@ -1,6 +1,7 @@
 package uhppote
 
 import (
+	"fmt"
 	"net"
 	"net/netip"
 	"reflect"
@@ -13,7 +14,7 @@ import (
 func TestGetDevices(t *testing.T) {
 	replies := [][]byte{
 		{
-			0x17, 0x94, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0xc0, 0xa8, 0x00, 0x00, 0xff, 0xff, 0xff, 0x00,
+			0x17, 0x94, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0xc0, 0xa8, 0x01, 0x64, 0xff, 0xff, 0xff, 0x00,
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x19, 0x39, 0x55, 0x2d, 0x08, 0x92, 0x20, 0x18, 0x08, 0x16,
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -32,13 +33,13 @@ func TestGetDevices(t *testing.T) {
 	date, _ := time.ParseInLocation("20060102", "20180816", time.Local)
 	expected := types.Device{
 		SerialNumber: 423187757,
-		IpAddress:    net.IPv4(192, 168, 0, 0),
+		IpAddress:    net.IPv4(192, 168, 1, 100),
 		SubnetMask:   net.IPv4(255, 255, 255, 0),
 		Gateway:      net.IPv4(0, 0, 0, 0),
 		MacAddress:   types.MacAddress(MAC),
 		Version:      0x0892,
 		Date:         types.Date(date),
-		Address:      netip.MustParseAddrPort("192.168.0.0:60000"),
+		Address:      netip.MustParseAddrPort("192.168.1.100:60000"),
 		TimeZone:     time.Local,
 	}
 
@@ -87,6 +88,10 @@ func TestGetDevices(t *testing.T) {
 		t.Errorf("Incorrect 'address' - expected:'%v', got:'%v'\n", expected.Address, response[0].Address)
 	}
 
+	if fmt.Sprintf("%v", response[0].Address) != "192.168.1.100:60000" {
+		t.Errorf("Incorrect 'address' - expected:'%v', got:'%v'\n", "192.168.1.100:60000", response[0].Address)
+	}
+
 	if response[0].TimeZone != expected.TimeZone {
 		t.Errorf("Incorrect 'timezone' from valid message: %v\n", response[0].TimeZone)
 	}
@@ -99,7 +104,7 @@ func TestGetDevices(t *testing.T) {
 func TestGetDevicesWithAltPort(t *testing.T) {
 	replies := [][]byte{
 		{
-			0x17, 0x94, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0xc0, 0xa8, 0x00, 0x00, 0xff, 0xff, 0xff, 0x00,
+			0x17, 0x94, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0xc0, 0xa8, 0x01, 0x64, 0xff, 0xff, 0xff, 0x00,
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x19, 0x39, 0x55, 0x2d, 0x08, 0x92, 0x20, 0x18, 0x08, 0x16,
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -120,13 +125,13 @@ func TestGetDevicesWithAltPort(t *testing.T) {
 	date, _ := time.ParseInLocation("20060102", "20180816", time.Local)
 	expected := types.Device{
 		SerialNumber: 423187757,
-		IpAddress:    net.IPv4(192, 168, 0, 0),
+		IpAddress:    net.IPv4(192, 168, 1, 100),
 		SubnetMask:   net.IPv4(255, 255, 255, 0),
 		Gateway:      net.IPv4(0, 0, 0, 0),
 		MacAddress:   types.MacAddress(MAC),
 		Version:      0x0892,
 		Date:         types.Date(date),
-		Address:      netip.MustParseAddrPort("192.168.0.0:54321"),
+		Address:      netip.MustParseAddrPort("192.168.1.100:54321"),
 		TimeZone:     time.Local,
 	}
 
@@ -175,6 +180,10 @@ func TestGetDevicesWithAltPort(t *testing.T) {
 		t.Errorf("Incorrect 'address' - expected:'%v', got:'%v'\n", expected.Address, response[0].Address)
 	}
 
+	if fmt.Sprintf("%v", response[0].Address) != "192.168.1.100:54321" {
+		t.Errorf("Incorrect 'address' - expected:'%v', got:'%v'\n", "192.168.1.100:54321", response[0].Address)
+	}
+
 	if response[0].TimeZone != expected.TimeZone {
 		t.Errorf("Incorrect 'timezone' from valid message: %v\n", response[0].TimeZone)
 	}
@@ -187,7 +196,7 @@ func TestGetDevicesWithAltPort(t *testing.T) {
 func TestGetDevice(t *testing.T) {
 	replies := [][]byte{
 		{
-			0x17, 0x94, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0xc0, 0xa8, 0x00, 0x00, 0xff, 0xff, 0xff, 0x00,
+			0x17, 0x94, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0xc0, 0xa8, 0x01, 0x64, 0xff, 0xff, 0xff, 0x00,
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x19, 0x39, 0x55, 0x2d, 0x08, 0x92, 0x20, 0x18, 0x08, 0x16,
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -206,13 +215,13 @@ func TestGetDevice(t *testing.T) {
 	date, _ := time.ParseInLocation("20060102", "20180816", time.Local)
 	expected := types.Device{
 		SerialNumber: 423187757,
-		IpAddress:    net.IPv4(192, 168, 0, 0),
+		IpAddress:    net.IPv4(192, 168, 1, 100),
 		SubnetMask:   net.IPv4(255, 255, 255, 0),
 		Gateway:      net.IPv4(0, 0, 0, 0),
 		MacAddress:   types.MacAddress(MAC),
 		Version:      0x0892,
 		Date:         types.Date(date),
-		Address:      netip.MustParseAddrPort("192.168.0.0:60000"),
+		Address:      netip.MustParseAddrPort("192.168.1.100:60000"),
 		TimeZone:     time.Local,
 	}
 
@@ -257,6 +266,10 @@ func TestGetDevice(t *testing.T) {
 		t.Errorf("Incorrect 'address' - expected:'%v', got:'%v'\n", expected.Address, response.Address)
 	}
 
+	if fmt.Sprintf("%v", response.Address) != "192.168.1.100:60000" {
+		t.Errorf("Incorrect 'address' - expected:'%v', got:'%v'\n", "192.168.1.100:60000", response.Address)
+	}
+
 	if response.TimeZone != expected.TimeZone {
 		t.Errorf("Incorrect 'timezone' from valid message: %v\n", response.TimeZone)
 	}
@@ -269,7 +282,7 @@ func TestGetDevice(t *testing.T) {
 func TestGetDeviceWithAlternatePort(t *testing.T) {
 	replies := [][]byte{
 		{
-			0x17, 0x94, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0xc0, 0xa8, 0x00, 0x00, 0xff, 0xff, 0xff, 0x00,
+			0x17, 0x94, 0x00, 0x00, 0x2d, 0x55, 0x39, 0x19, 0xc0, 0xa8, 0x01, 0x64, 0xff, 0xff, 0xff, 0x00,
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x66, 0x19, 0x39, 0x55, 0x2d, 0x08, 0x92, 0x20, 0x18, 0x08, 0x16,
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -300,13 +313,13 @@ func TestGetDeviceWithAlternatePort(t *testing.T) {
 	date, _ := time.ParseInLocation("20060102", "20180816", time.Local)
 	expected := types.Device{
 		SerialNumber: 423187757,
-		IpAddress:    net.IPv4(192, 168, 0, 0),
+		IpAddress:    net.IPv4(192, 168, 1, 100),
 		SubnetMask:   net.IPv4(255, 255, 255, 0),
 		Gateway:      net.IPv4(0, 0, 0, 0),
 		MacAddress:   types.MacAddress(MAC),
 		Version:      0x0892,
 		Date:         types.Date(date),
-		Address:      netip.MustParseAddrPort("192.168.0.0:54321"),
+		Address:      netip.MustParseAddrPort("192.168.1.100:54321"),
 		TimeZone:     time.Local,
 	}
 
@@ -349,6 +362,10 @@ func TestGetDeviceWithAlternatePort(t *testing.T) {
 
 	if !reflect.DeepEqual(response.Address, expected.Address) {
 		t.Errorf("Incorrect 'address' - expected:'%v', got:'%v'\n", expected.Address, response.Address)
+	}
+
+	if fmt.Sprintf("%v", response.Address) != "192.168.1.100:54321" {
+		t.Errorf("Incorrect 'address' - expected:'%v', got:'%v'\n", "192.168.1.100:54321", response.Address)
 	}
 
 	if response.TimeZone != expected.TimeZone {
