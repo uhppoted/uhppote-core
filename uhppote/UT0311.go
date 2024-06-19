@@ -67,7 +67,7 @@ func (u *ut0311) Broadcast(addr *net.UDPAddr, request []byte) ([][]byte, error) 
 	if N, err := connection.WriteToUDP(request, addr); err != nil {
 		return nil, fmt.Errorf("failed to write to UDP socket [%v]", err)
 	} else {
-		u.debugf(fmt.Sprintf(" ... sent %v bytes to %v\n", N, addr), nil)
+		u.debugf(fmt.Sprintf(" ... sent %v bytes to %v (UDP)\n", N, addr), nil)
 	}
 
 	var replies = make([][]byte, 0)
@@ -85,7 +85,7 @@ func (u *ut0311) Broadcast(addr *net.UDPAddr, request []byte) ([][]byte, error) 
 				} else {
 					replies = append(replies, reply[:N])
 
-					u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n%s", N, remote, dump(reply[:N], " ...          ")), nil)
+					u.debugf(fmt.Sprintf(" ... received %v bytes from %v (UDP)\n%s", N, remote, dump(reply[:N], " ...          ")), nil)
 				}
 			}
 		}()
@@ -135,7 +135,7 @@ func (u *ut0311) BroadcastTo(addr *net.UDPAddr, request []byte, callback func([]
 		if N, err := connection.WriteToUDP(request, addr); err != nil {
 			return nil, fmt.Errorf("failed to write to UDP socket [%v]", err)
 		} else {
-			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v\n", N, addr), nil)
+			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v (UDP)\n", N, addr), nil)
 		}
 
 		// NTS: set-ip doesn't return a reply
@@ -149,7 +149,7 @@ func (u *ut0311) BroadcastTo(addr *net.UDPAddr, request []byte, callback func([]
 			if N, remote, err := connection.ReadFromUDP(reply); err != nil {
 				return nil, err
 			} else if callback(reply[:N]) {
-				u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n%s", N, remote, dump(reply[:N], " ...          ")), nil)
+				u.debugf(fmt.Sprintf(" ... received %v bytes from %v (UDP)\n%s", N, remote, dump(reply[:N], " ...          ")), nil)
 
 				return reply[:N], err
 			}
@@ -218,7 +218,7 @@ func (u *ut0311) SendUDP(addr *net.UDPAddr, request []byte) ([]byte, error) {
 		if N, err := connection.Write(request); err != nil {
 			return nil, fmt.Errorf("failed to write to UDP socket [%v]", err)
 		} else {
-			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v", N, addr), nil)
+			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v (TCP)", N, addr), nil)
 			u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
 		}
 
@@ -231,7 +231,7 @@ func (u *ut0311) SendUDP(addr *net.UDPAddr, request []byte) ([]byte, error) {
 			u.debugf(" ... receive error", err)
 			return nil, err
 		} else {
-			u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n ... response\n%s", N, addr, dump(buffer[:N], " ...          ")), nil)
+			u.debugf(fmt.Sprintf(" ... received %v bytes from %v (UDP)\n ... response\n%s", N, addr, dump(buffer[:N], " ...          ")), nil)
 
 			return buffer[0:N], nil
 		}
@@ -296,7 +296,7 @@ func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
 		if N, err := connection.Write(request); err != nil {
 			return nil, fmt.Errorf("failed to write to UDP socket [%v]", err)
 		} else {
-			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v", N, connection.RemoteAddr()), nil)
+			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v (TCP)", N, connection.RemoteAddr()), nil)
 			u.debugf(fmt.Sprintf(" ... request\n%s\n", dump(request, " ...          ")), nil)
 		}
 
@@ -309,7 +309,7 @@ func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
 			u.debugf(" ... receive error", err)
 			return nil, err
 		} else {
-			u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n ... response\n%s",
+			u.debugf(fmt.Sprintf(" ... received %v bytes from %v (TCP)\n ... response\n%s",
 				N,
 				connection.RemoteAddr(),
 				dump(buffer[:N], " ...          ")),
@@ -358,7 +358,7 @@ func (u *ut0311) Listen(signal chan any, done chan any, callback func([]byte)) e
 				continue
 			}
 
-			u.debugf(fmt.Sprintf(" ... received %v bytes from %v\n ... response\n%s\n", N, remote, dump(m[:N], " ...          ")), nil)
+			u.debugf(fmt.Sprintf(" ... received %v bytes from %v (UDP)\n ... response\n%s\n", N, remote, dump(m[:N], " ...          ")), nil)
 
 			callback(m[:N])
 		}

@@ -4,17 +4,13 @@
 - [x] Add timezone to NewDevice
 - [x] `put-card`: error on bad card numbers (0,0xffffffff,0x00ffffff)
 - [x] Rework any remaining Date pointers to rather use IsZero
-      - [x] GetTimeProfile
-      - [x] types.TimeProfile
-      - [x] // FIXME: replace From in types.TimeProfile
-      - [x] Replace test usage of types.ToDate with types.MustParseDate
-      - [x] simulator get-device ReleaseDate
-      - [x] lib::encoding/tsv
-      - [x] uhppoted-app-wild-apricot types.Date
-      - [x] uhppoted-rest acl.go
 - [ ] Rework any remaining DateTime pointers to rather use IsZero
 - [ ] Rework any remaining Time pointers
 - (?) Replace (* UHPPOTE) in API functions with non-pointer version
+- [ ] `dump`
+      - [ ] Remove extraneous ASCII
+      - [ ] Remove trailing spaces
+      - [ ] Identify UDP/TCP packets
 
 ## TODO
 
