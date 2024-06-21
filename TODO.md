@@ -8,9 +8,9 @@
 - [ ] Rework any remaining Time pointers
 - (?) Replace (* UHPPOTE) in API functions with non-pointer version
 - [ ] `dump`
-      - [ ] Remove extraneous ASCII
+      - [x] Remove extraneous ASCII
       - [ ] Remove trailing spaces
-      - [ ] Identify UDP/TCP packets
+- [ ] logging: identify UDP/TCP packets
 
 ## TODO
 
