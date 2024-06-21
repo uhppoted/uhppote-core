@@ -60,4 +60,3 @@ func BenchmarkDump(b *testing.B) {
 		dump(m, "")
 	}
 }
-
