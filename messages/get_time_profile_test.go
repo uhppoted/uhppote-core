@@ -24,7 +24,7 @@ func TestMarshalGetTimeProfileRequest(t *testing.T) {
 	if m, err := codec.Marshal(request); err != nil {
 		t.Fatalf("Unexpected error: %v", err)
 	} else if !reflect.DeepEqual(m, expected) {
-		t.Errorf("Invalid byte array:\nExpected:\n%s\nReturned:\n%s", dump(expected, ""), dump(m, ""))
+		t.Errorf("Invalid byte array:\nExpected:\n%s\nReturned:\n%s", codec.Dump(expected, ""), codec.Dump(m, ""))
 	}
 }
 

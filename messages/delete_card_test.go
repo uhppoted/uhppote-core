@@ -25,7 +25,7 @@ func TestMarshalDeleteCardRequest(t *testing.T) {
 	}
 
 	if !reflect.DeepEqual(m, expected) {
-		t.Fatalf("Invalid byte array:\nExpected:\n%s\nReturned:\n%s", dump(expected, ""), dump(m, ""))
+		t.Fatalf("Invalid byte array:\nExpected:\n%s\nReturned:\n%s", codec.Dump(expected, ""), codec.Dump(m, ""))
 	}
 }
 
