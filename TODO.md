@@ -7,9 +7,10 @@
 - [ ] Rework any remaining DateTime pointers to rather use IsZero
 - [ ] Rework any remaining Time pointers
 - (?) Replace (* UHPPOTE) in API functions with non-pointer version
-- [ ] `dump`
-      - [x] Remove extraneous ASCII
-      - [ ] Remove trailing spaces
+- [x] `dump`
+      - [x] Remove extraneous ASCII from messages.dump
+      - [x] Remove extraneous ASCII from UHPPOTE.dump
+      - [x] Remove trailing spaces
 - [ ] logging: identify UDP/TCP packets
 
 ## TODO

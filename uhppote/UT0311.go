@@ -1,11 +1,10 @@
 package uhppote
 
 import (
-	"encoding/hex"
 	"fmt"
 	"net"
 	"net/netip"
-	"regexp"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -380,7 +379,23 @@ func (u *ut0311) debugf(msg string, err error) {
 }
 
 func dump(m []byte, prefix string) string {
-	regex := regexp.MustCompile("(?m)^(.*)")
+	var b strings.Builder
 
-	return regex.ReplaceAllString(hex.Dump(m), prefix+"$1")
+	for ix := 0; ix < len(m); ix += 16 {
+		chunk := m[ix:]
+
+		fmt.Fprintf(&b, "%s%08x ", prefix, ix)
+		for i := 0; i < 8 && i < len(chunk); i++ {
+			fmt.Fprintf(&b, " %02x", chunk[i])
+		}
+
+		fmt.Fprintf(&b, " ")
+		for i := 8; i < 16 && i < len(chunk); i++ {
+			fmt.Fprintf(&b, " %02x", chunk[i])
+		}
+
+		fmt.Fprintln(&b)
+	}
+
+	return b.String()
 }
