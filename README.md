@@ -41,12 +41,6 @@ mkdir bin
 go build -trimpath -o bin ./...
 ```
 
-#### Dependencies
-
-| *Dependency*                        | *Description*                                          |
-| ----------------------------------- | ------------------------------------------------------ |
-|                                     |                                                        |
-
 ## API
 
 - [`GetDevices`](#getdevices)

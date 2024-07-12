@@ -3,7 +3,7 @@
 ## Unreleased
 
 ### Added
-1. Added support for TCP/IP connections to UT0311-L0x driver.
+1. Implemented TCP/IP transport support.
 
 ### Updated
 1. Reworked UT0311-L0x driver to use connected UDP sockets.

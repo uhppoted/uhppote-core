@@ -218,7 +218,7 @@ func (u *ut0311) SendUDP(addr *net.UDPAddr, request []byte) ([]byte, error) {
 		if N, err := connection.Write(request); err != nil {
 			return nil, fmt.Errorf("failed to write to UDP socket [%v]", err)
 		} else {
-			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v (TCP)", N, addr), nil)
+			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v (UDP)", N, addr), nil)
 			u.debugf(fmt.Sprintf(" ... request\n%s\n", codec.Dump(request, " ...          ")), nil)
 		}
 
