@@ -294,7 +294,7 @@ func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
 		}
 
 		if N, err := connection.Write(request); err != nil {
-			return nil, fmt.Errorf("failed to write to UDP socket [%v]", err)
+			return nil, fmt.Errorf("failed to write to TCP socket [%v]", err)
 		} else {
 			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v (TCP)", N, connection.RemoteAddr()), nil)
 			u.debugf(fmt.Sprintf(" ... request\n%s\n", codec.Dump(request, " ...          ")), nil)
