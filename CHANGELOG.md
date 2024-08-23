@@ -10,6 +10,7 @@
 2. Renamed _master_ branch to _main_ branch.
 3. Updated network stack to use modern Go IP constructs.
 4. `put-card` fails with 'invalid card' for card numbers 0, 0xffffffff and 0x00ffffff (as per SDK).
+5. Updated to Go 1.23.
 
 
 ## [0.8.8](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.8) - 2024-03-26
