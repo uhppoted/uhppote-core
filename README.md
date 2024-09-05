@@ -15,10 +15,12 @@ Supported operating systems:
 
 ### Current Release
 
-**[v0.8.8](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.8) - 2024-03-26**
+**[v0.8.9](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.9) - 2024-09-06**
 
-1. Implemented `restore-default-parameters` function.
-2. Bumped Go version to 1.22
+1. Implemented TCP/IP transport support.
+2. Reworked UT0311-L0x driver to use connected UDP sockets.
+4. Updated `put-card` API to fail with 'invalid card' for card numbers 0, 0xffffffff and 0x00ffffff.
+5. Updated to Go 1.23.
 
 
 ## Development
