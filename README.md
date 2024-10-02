@@ -95,7 +95,7 @@ Sets the IPv4 address, subnet mask and gateway address for a controller.
 
 #### `GetListener`
 
-Retrieves the IPv4 address of the host configured to receive events from the controller.
+Retrieves the IPv4 configured address:port to which events are sent from the controller, along with the auto-send interval.
 
 #### `SetListener`
 

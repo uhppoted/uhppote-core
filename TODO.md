@@ -1,7 +1,8 @@
 # TODO
 
-- [x] set-event-listener: add listen interval (cf. https://github.com/uhppoted/uhppote-core/issues/21)
+- [x] event listener: add listen auto-send interval (cf. https://github.com/uhppoted/uhppote-core/issues/21)
       - [x] set-event-listener
+      - [x] get-event-listener
       - [x] CHANGELOG
       - [x] README
 
