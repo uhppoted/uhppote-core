@@ -16,12 +16,18 @@ type IUHPPOTE interface {
 	SetAddress(deviceID uint32, address, mask, gateway net.IP) (*types.Result, error)
 	GetListener(deviceID uint32) (netip.AddrPort, error)
 
-	// Sets the controller event listener address:port.
+	// Sets the controller event listener address:port and auto-send interval.
 	//
 	// The address must be either a valid IPv4 address and the port may not be 0 or
 	// 0.0.0.0:0.
-	// Returns true if the controller event listener address was set.
-	SetListener(deviceID uint32, address netip.AddrPort) (bool, error)
+	//
+	// The interval is the interval in seconds at which the controller will repeatedly
+	// send the most recent event (in addition to events sent as as they occur). A zero
+	// interval (the default) will only send events on occurrence.
+	//
+	// Returns true if the controller event listener address was set, error if something
+	// the address:port was invalid or the controller did not respohd.
+	SetListener(deviceID uint32, address netip.AddrPort, interval uint8) (bool, error)
 
 	GetTime(deviceID uint32) (*types.Time, error)
 	SetTime(deviceID uint32, datetime time.Time) (*types.Time, error)

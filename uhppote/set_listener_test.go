@@ -24,7 +24,7 @@ func TestSetListener(t *testing.T) {
 		},
 	}
 
-	if ok, err := u.SetListener(405419896, netip.MustParseAddrPort("192.168.1.100:60001")); err != nil {
+	if ok, err := u.SetListener(405419896, netip.MustParseAddrPort("192.168.1.100:60001"), 13); err != nil {
 		t.Errorf("unexpected error (%v)", err)
 	} else if !ok {
 		t.Errorf("invalid response - expected:%v, got:%v", true, ok)
@@ -47,7 +47,7 @@ func TestSetListenerWithANYAddr(t *testing.T) {
 		},
 	}
 
-	if ok, err := u.SetListener(405419896, netip.MustParseAddrPort("0.0.0.0:0")); err != nil {
+	if ok, err := u.SetListener(405419896, netip.MustParseAddrPort("0.0.0.0:0"), 13); err != nil {
 		t.Errorf("unexpected error (%v)", err)
 	} else if !ok {
 		t.Errorf("invalid response - expected:%v, got:%v", true, ok)
@@ -70,7 +70,7 @@ func TestSetListenerWithResponseFromIncorrectController(t *testing.T) {
 		},
 	}
 
-	if ok, err := u.SetListener(405419896, netip.MustParseAddrPort("192.168.1.100:60001")); err == nil {
+	if ok, err := u.SetListener(405419896, netip.MustParseAddrPort("192.168.1.100:60001"), 13); err == nil {
 		t.Errorf("expected 'invalid controller' error, got %v", err)
 	} else if fmt.Sprintf("%v", err) != "invalid controller ID - expected:405419896, got:423187757" {
 		t.Errorf("expected 'woot', got:%v", err)
@@ -82,7 +82,7 @@ func TestSetListenerWithResponseFromIncorrectController(t *testing.T) {
 func TestSetListenerWithInvalidDeviceID(t *testing.T) {
 	u := uhppote{}
 
-	if _, err := u.SetListener(0, netip.MustParseAddrPort("192.168.1.100:60001")); err == nil {
+	if _, err := u.SetListener(0, netip.MustParseAddrPort("192.168.1.100:60001"), 13); err == nil {
 		t.Errorf("Expected 'invalid device ID' error, got %v", err)
 	}
 }
@@ -90,7 +90,7 @@ func TestSetListenerWithInvalidDeviceID(t *testing.T) {
 func TestSetListenerWithInvalidAddrPort(t *testing.T) {
 	u := uhppote{}
 
-	if _, err := u.SetListener(405419896, netip.AddrPort{}); !errors.Is(err, ErrInvalidListenerAddress) {
+	if _, err := u.SetListener(405419896, netip.AddrPort{}, 13); !errors.Is(err, ErrInvalidListenerAddress) {
 		t.Errorf("Expected 'invalid listener address' error, got %v", err)
 	}
 }
@@ -98,7 +98,7 @@ func TestSetListenerWithInvalidAddrPort(t *testing.T) {
 func TestSetListenerWithIPv6Address(t *testing.T) {
 	u := uhppote{}
 
-	if _, err := u.SetListener(405419896, netip.MustParseAddrPort("[2001:db8::68]:60001")); err == nil {
+	if _, err := u.SetListener(405419896, netip.MustParseAddrPort("[2001:db8::68]:60001"), 13); err == nil {
 		t.Errorf("Expected 'invalid listener address: [2001:db8::68]:60001', got %v", err)
 	} else if fmt.Sprintf("%v", err) != "invalid listener address: [2001:db8::68]:60001" {
 		t.Errorf("Expected 'invalid listener address: [2001:db8::68]:60001', got %v", err)
@@ -108,7 +108,7 @@ func TestSetListenerWithIPv6Address(t *testing.T) {
 func TestSetListenerWithInvalidPort(t *testing.T) {
 	u := uhppote{}
 
-	if _, err := u.SetListener(405419896, netip.MustParseAddrPort("192.168.1.100:0")); err == nil {
+	if _, err := u.SetListener(405419896, netip.MustParseAddrPort("192.168.1.100:0"), 13); err == nil {
 		t.Errorf("Expected 'invalid listener address: 192.168.1.100:0', got %v", err)
 	} else if fmt.Sprintf("%v", err) != "invalid listener address: 192.168.1.100:0" {
 		t.Errorf("Expected 'invalid listener address: 192.168.1.100:0', got %v", err)

@@ -1,15 +1,14 @@
 # TODO
 
-- [x] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
-- [x] Update to Go 1.23 (cf. https://github.com/uhppoted/uhppoted/issues/53)
-- [x] Add timezone to NewDevice
-- [x] `put-card`: error on bad card numbers (0,0xffffffff,0x00ffffff)
-- [x] Rework any remaining Date pointers to rather use IsZero
+- [x] set-event-listener: add listen interval (cf. https://github.com/uhppoted/uhppote-core/issues/21)
+      - [x] set-event-listener
+      - [x] CHANGELOG
+      - [x] README
+
+
 - [ ] Rework any remaining DateTime pointers to rather use IsZero
 - [ ] Rework any remaining Time pointers
 - (?) Replace (* UHPPOTE) in API functions with non-pointer version
-- [x] `dump`
-- [ ] logging: identify UDP/TCP packets
 
 ## TODO
 
