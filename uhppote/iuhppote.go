@@ -27,8 +27,9 @@ type IUHPPOTE interface {
 	// 0.0.0.0:0.
 	//
 	// The interval is the interval in seconds at which the controller will repeatedly
-	// send the most recent event (in addition to events sent as as they occur). A zero
-	// interval (the default) will only send events on occurrence.
+	// send the most recent event (in addition to events sent as as they occur) along with
+	// the current system status. A zero interval (the default) will only send events on
+	// occurrence.
 	//
 	// Returns true if the controller event listener address was set, error if something
 	// the address:port was invalid or the controller did not respohd.
