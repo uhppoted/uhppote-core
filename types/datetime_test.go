@@ -3,6 +3,7 @@ package types
 import (
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"testing"
 	"time"
 )
@@ -18,6 +19,28 @@ func TestDateTimeNow(t *testing.T) {
 
 	if time.Time(then).Nanosecond() != 0 {
 		t.Errorf("DateTimeNow returned non-zero nanoseconds (%v)", then)
+	}
+}
+
+func TestMustParseDateTime(t *testing.T) {
+	expected := DateTime(time.Date(2024, time.February, 28, 23, 34, 45, 0, time.Local))
+	datetime := MustParseDateTime("2024-02-28 23:34:45")
+
+	if !reflect.DeepEqual(datetime, expected) {
+		t.Errorf("DateTime incorrectly parsed - expected:%v, got:%v", time.Time(expected), time.Time(datetime))
+	}
+}
+
+func TestParseDateTime(t *testing.T) {
+	expected := DateTime(time.Date(2024, time.February, 28, 23, 34, 45, 0, time.Local))
+
+	datetime, err := ParseDateTime("2024-02-28 23:34:45")
+	if err != nil {
+		t.Fatalf("Unexpected error parsing DateTie (%v)", err)
+	}
+
+	if !reflect.DeepEqual(datetime, expected) {
+		t.Errorf("DateTime incorrectly parsed - expected:%v, got:%v", time.Time(expected), time.Time(datetime))
 	}
 }
 

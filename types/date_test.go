@@ -36,7 +36,7 @@ func TestToDate(t *testing.T) {
 	date := ToDate(2021, time.February, 28)
 
 	if !reflect.DeepEqual(date, expected) {
-		t.Errorf("Date incorrectly unmarshaled - expected:%v, got:%v", time.Time(expected), time.Time(date))
+		t.Errorf("Date incorrectly parsed - expected:%v, got:%v", time.Time(expected), time.Time(date))
 	}
 }
 
@@ -45,7 +45,7 @@ func TestMustParseDate(t *testing.T) {
 	date := MustParseDate("2021-02-28")
 
 	if !reflect.DeepEqual(date, expected) {
-		t.Errorf("Date incorrectly unmarshaled - expected:%v, got:%v", time.Time(expected), time.Time(date))
+		t.Errorf("Date incorrectly parsed - expected:%v, got:%v", time.Time(expected), time.Time(date))
 	}
 }
 

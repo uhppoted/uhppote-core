@@ -15,6 +15,29 @@ func DateTimeNow() DateTime {
 	return DateTime(time.Now().Truncate(1 * time.Second))
 }
 
+// MustParseDateTime invokes ParseDateTime and panics on error.
+//
+// It is intended for use in tests with hard-coded strings.
+func MustParseDateTime(s string) DateTime {
+	if datetime, err := ParseDateTime(s); err != nil {
+		panic(err)
+	} else {
+		return datetime
+	}
+}
+
+// Parses a datetime string, returning a zero value DateTime{} and an
+// error if the string is blank or not a valid date/time.
+func ParseDateTime(s string) (DateTime, error) {
+	if s == "" {
+		return DateTime{}, fmt.Errorf("blank date/time string")
+	} else if datetime, err := time.ParseInLocation("2006-01-02 15:04:05", s, time.Local); err != nil {
+		return DateTime{}, err
+	} else {
+		return DateTime(datetime), nil
+	}
+}
+
 func (d DateTime) IsZero() bool {
 	return time.Time(d).IsZero()
 }

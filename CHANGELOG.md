@@ -4,6 +4,7 @@
 
 ### Added
 1. Added auto-send _interval_ parameter to _get-listener_ and _set-listener_ API functions.
+2. Added `MustParseDateTime` and `ParseDateTime` utility functions.
 
 
 ## [0.8.9](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.9) - 2024-09-06
