@@ -56,7 +56,7 @@ func TestBroadcastAddressRequest(t *testing.T) {
 	u := uhppote{
 		devices:       make(map[uint32]Device),
 		debug:         false,
-		broadcastAddr: types.MustParseBroadcastAddr("127.0.0.1:60000"),
+		broadcastAddr: types.MustParseBroadcastAddr("127.0.0.1:59999"),
 		driver: &ut0311{
 			bindAddr: bind.AddrPort,
 			timeout:  5000 * time.Millisecond,
@@ -65,7 +65,7 @@ func TestBroadcastAddressRequest(t *testing.T) {
 	}
 
 	closed := make(chan int)
-	c := listen(423187757, "127.0.0.1:60000", 0*time.Millisecond, closed, t)
+	c := listen(423187757, "127.0.0.1:59999", 0*time.Millisecond, closed, t)
 
 	if c != nil {
 		defer func() {
