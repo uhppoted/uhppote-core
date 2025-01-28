@@ -15,12 +15,10 @@ Supported operating systems:
 
 ### Current Release
 
-**[v0.8.9](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.9) - 2024-09-06**
+**[v0.8.10](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.10) - 2025-01-29**
 
-1. Implemented TCP/IP transport support.
-2. Reworked UT0311-L0x driver to use connected UDP sockets.
-4. Updated `put-card` API to fail with 'invalid card' for card numbers 0, 0xffffffff and 0x00ffffff.
-5. Updated to Go 1.23.
+1. Added auto-send _interval_ parameter to _get-listener_ and _set-listener_ API functions.
+2. Added `MustParseDateTime` and `ParseDateTime` utility functions.
 
 
 ## Development
