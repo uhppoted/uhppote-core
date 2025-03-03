@@ -2,6 +2,8 @@ name: build
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron:  '30 1 1 * *'
   push:
     branches: [ main ]
   pull_request:
@@ -17,7 +19,7 @@ jobs:
     - name: Set up Go 1.x
       uses: actions/setup-go@v5
       with:
-        go-version: 1.24
+        go-version: ^1.24
 
     - name: Install staticcheck
       run: go install honnef.co/go/tools/cmd/staticcheck@latest
