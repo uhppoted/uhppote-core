@@ -74,6 +74,8 @@ go build -trimpath -o bin ./...
 - [`ActivateKeypads`](#activatekeypads)
 - [`SetSuperPasswords`](#setsuperpasswords)
 - [`SetInterlock`](#setinterlock)
+- [`GetAntiPassback`](#getantipassback)
+- [`SetAntiPassback`](#setantipassback)
 - [`RestoreDefaultParameters`](#restoredefaultparameters)
 - [`Listen`](#listen)
 
@@ -246,6 +248,24 @@ Sets the interlocking between doors, with support for the following operational 
 - `doors 1&2 and 3&4`
 - `doors 1&2&3`
 - `doors 1&2&3&4`
+
+#### `GetAntiPassback`
+
+Gets the controller anti-passback mode:
+- `disabled`
+- `readers 1:2,3:4 (independently)`
+- `readers (1,3):(2,4)`
+- `readers 1:(2,3)`
+- `readers 1:(2,3,4)`
+
+#### `SetsAntiPassback`
+
+Sets the controller anti-passback mode:
+- `disabled`
+- `readers 1:2,3:4 (independently)`
+- `readers (1,3):(2,4)`
+- `readers 1:(2,3)`
+- `readers 1:(2,3,4)`
 
 #### `RestoreDefaultParameters`
 

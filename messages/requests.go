@@ -19,6 +19,8 @@ var requests = map[byte]func() Request{
 	0x5c: func() Request { return new(GetCardByIndexRequest) },
 	0x80: func() Request { return new(SetDoorControlStateRequest) },
 	0x82: func() Request { return new(GetDoorControlStateRequest) },
+	0x84: func() Request { return new(SetAntiPassbackRequest) },
+	0x86: func() Request { return new(GetAntiPassbackRequest) },
 	0x88: func() Request { return new(SetTimeProfileRequest) },
 	0x8a: func() Request { return new(ClearTimeProfilesRequest) },
 	0x8c: func() Request { return new(SetDoorPasscodesRequest) },

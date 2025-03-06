@@ -19,6 +19,8 @@ var responses = map[byte]func() Response{
 	0x5c: func() Response { return new(GetCardByIndexResponse) },
 	0x80: func() Response { return new(SetDoorControlStateResponse) },
 	0x82: func() Response { return new(GetDoorControlStateResponse) },
+	0x84: func() Response { return new(SetAntiPassbackResponse) },
+	0x86: func() Response { return new(GetAntiPassbackResponse) },
 	0x88: func() Response { return new(SetTimeProfileResponse) },
 	0x8a: func() Response { return new(ClearTimeProfilesResponse) },
 	0x8c: func() Response { return new(SetDoorPasscodesResponse) },

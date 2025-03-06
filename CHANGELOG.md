@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Added
+1. API function for `get/set-anti-passback`.
+
 ### Updated
 1. Bumped Go version to 1.24
 
