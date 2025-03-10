@@ -7,7 +7,7 @@ import (
 type SetAntiPassbackRequest struct {
 	MsgType      types.MsgType      `uhppote:"value:0x84"`
 	SerialNumber types.SerialNumber `uhppote:"offset:4"`
-	Mode         uint8              `uhppote:"offset:8"`
+	AntiPassback uint8              `uhppote:"offset:8"`
 }
 
 type SetAntiPassbackResponse struct {

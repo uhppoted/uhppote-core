@@ -39,7 +39,7 @@ func TestUnmarshalGetAntiPassbackResponse(t *testing.T) {
 	expected := GetAntiPassbackResponse{
 		MsgType:      0x86,
 		SerialNumber: 405419896,
-		Mode:         0x04,
+		AntiPassback: 0x04,
 	}
 
 	reply := GetAntiPassbackResponse{}
@@ -62,7 +62,7 @@ func TestFactoryUnmarshalGetAntiPassbackResponse(t *testing.T) {
 	expected := GetAntiPassbackResponse{
 		MsgType:      0x86,
 		SerialNumber: 405419896,
-		Mode:         0x04,
+		AntiPassback: 0x04,
 	}
 
 	if response, err := UnmarshalResponse(message); err != nil {

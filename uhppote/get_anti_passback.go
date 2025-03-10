@@ -19,6 +19,6 @@ func (u *uhppote) GetAntiPassback(serialNumber uint32) (types.AntiPassback, erro
 	if reply, err := sendto[messages.GetAntiPassbackResponse](u, serialNumber, request); err != nil {
 		return 0, err
 	} else {
-		return types.AntiPassback(reply.Mode), nil
+		return types.AntiPassback(reply.AntiPassback), nil
 	}
 }

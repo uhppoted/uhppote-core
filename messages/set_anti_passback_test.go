@@ -17,7 +17,7 @@ func TestMarshalSetAntiPassbackRequest(t *testing.T) {
 
 	request := SetAntiPassbackRequest{
 		SerialNumber: 405419896,
-		Mode:         0x04,
+		AntiPassback: 0x04,
 	}
 
 	m, err := codec.Marshal(request)
