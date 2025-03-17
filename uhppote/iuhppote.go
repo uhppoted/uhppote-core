@@ -101,6 +101,29 @@ type IUHPPOTE interface {
 	SetInterlock(controllerID uint32, interlock types.Interlock) (bool, error) // sets door interlock mode
 	ActivateKeypads(controllerID uint32, readers map[uint8]bool) (bool, error) // enables/disables reader keypads
 
+	// Gets the controller anti-passback setting, which may be one of:
+	// - disabled
+	// - 1:2;3:4
+	// - 1:3;2:4
+	// - 1:23
+	// - 1:234
+	//
+	// Returns an error if the request could not be fulfilled or the received response is invalid.
+	GetAntiPassback(deviceID uint32) (types.AntiPassback, error)
+
+	// Sets the controller anti-passback setting.
+	//
+	// The setting may be one of:
+	// - disabled
+	// - 1:2;3:4
+	// - 1:3;2:4
+	// - 1:23
+	// - 1:234
+	//
+	// Returns true if the controller antipassback settings was set. Returns an error if something
+	// the setting was invalid or the controller did not respohd.
+	SetAntiPassback(deviceID uint32, antipassback types.AntiPassback) (bool, error)
+
 	// Sends a RestoreDefaultParameters request to the designated controller, to reset it to the
 	// manufacturer default configuration.
 	//
