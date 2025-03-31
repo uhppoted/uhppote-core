@@ -253,7 +253,7 @@ Sets the interlocking between doors, with support for the following operational 
 
 Gets the controller anti-passback mode:
 - `disabled`
-- `readers 1:2;3:4 (independently)`
+- `readers (1:2);(3:4) (independently)`
 - `readers (1,3):(2,4)`
 - `readers 1:(2,3)`
 - `readers 1:(2,3,4)`

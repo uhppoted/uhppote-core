@@ -103,10 +103,10 @@ type IUHPPOTE interface {
 
 	// Gets the controller anti-passback setting, which may be one of:
 	// - disabled
-	// - 1:2;3:4
-	// - 1:3;2:4
-	// - 1:23
-	// - 1:234
+	// - (1:2);(3:4)
+	// - (1:3);(2:4)
+	// - 1:(2,3)
+	// - 1:(2,3,4)
 	//
 	// Returns an error if the request could not be fulfilled or the received response is invalid.
 	GetAntiPassback(deviceID uint32) (types.AntiPassback, error)
@@ -115,10 +115,10 @@ type IUHPPOTE interface {
 	//
 	// The setting may be one of:
 	// - disabled
-	// - 1:2;3:4
-	// - 1:3;2:4
-	// - 1:23
-	// - 1:234
+	// - (1:2);(3:4)
+	// - (1:3);(2:4)
+	// - 1:(2,3)
+	// - 1:(2,3,4)
 	//
 	// Returns true if the controller antipassback settings was set. Returns an error if something
 	// the setting was invalid or the controller did not respohd.

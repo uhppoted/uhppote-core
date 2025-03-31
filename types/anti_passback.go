@@ -15,7 +15,7 @@ func (a AntiPassback) String() string {
 	case Disabled:
 		return "disabled"
 	case Readers12_34:
-		return "1:2;3:4"
+		return "(1:2);(3:4)"
 	case Readers13_24:
 		return "(1,3):(2,4)"
 	case Readers1_23:

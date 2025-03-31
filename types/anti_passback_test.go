@@ -11,7 +11,7 @@ func TestAntiPassbackString(t *testing.T) {
 		expected     string
 	}{
 		{Disabled, "disabled"},
-		{Readers12_34, "1:2;3:4"},
+		{Readers12_34, "(1:2);(3:4)"},
 		{Readers13_24, "(1,3):(2,4)"},
 		{Readers1_23, "1:(2,3)"},
 		{Readers1_234, "1:(2,3,4)"},
