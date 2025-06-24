@@ -46,15 +46,20 @@ func (u *ut0311) Broadcast(addr *net.UDPAddr, request []byte) ([][]byte, error) 
 	}
 
 	var connection *net.UDPConn
+
 	if conn, err := net.ListenUDP("udp", bind); err != nil {
 		return nil, fmt.Errorf("error creating UDP socket (%v)", err)
 	} else if conn == nil {
 		return nil, fmt.Errorf("open() created invalid UDP socket (%v)", conn)
 	} else {
+		defer conn.Close()
+
+		if v, ok := conn.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port {
+			return nil, fmt.Errorf("invalid UDP bind address: port %v used for broadcast", v.Port)
+		}
+
 		connection = conn
 	}
-
-	defer connection.Close()
 
 	if err := connection.SetWriteDeadline(time.Now().Add(1000 * time.Millisecond)); err != nil {
 		return nil, fmt.Errorf("failed to set UDP write timeout [%v]", err)
@@ -125,8 +130,11 @@ func (u *ut0311) BroadcastTo(addr *net.UDPAddr, request []byte, callback func([]
 	} else if connection == nil {
 		return nil, fmt.Errorf("open() created invalid UDP socket (%v)", connection)
 	} else {
-
 		defer connection.Close()
+
+		if v, ok := connection.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port {
+			return nil, fmt.Errorf("invalid UDP bind address: port %v used for broadcast", v.Port)
+		}
 
 		if err := connection.SetDeadline(deadline); err != nil {
 			return nil, err
@@ -155,7 +163,6 @@ func (u *ut0311) BroadcastTo(addr *net.UDPAddr, request []byte, callback func([]
 			}
 		}
 	}
-
 }
 
 /*

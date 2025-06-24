@@ -7,6 +7,7 @@
 
 ### Updated
 1. Bumped Go version to 1.24
+2. Added check to prevent UDP bind address from using broadcast port.
 
 
 ## [0.8.10](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.10) - 2025-01-29
