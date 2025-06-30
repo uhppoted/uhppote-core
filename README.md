@@ -15,10 +15,11 @@ Supported operating systems:
 
 ### Current Release
 
-**[v0.8.10](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.10) - 2025-01-29**
+**[v0.8.11](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.11) - 2025-06-30**
 
-1. Added auto-send _interval_ parameter to _get-listener_ and _set-listener_ API functions.
-2. Added `MustParseDateTime` and `ParseDateTime` utility functions.
+1. API function for `get/set-anti-passback`.
+2. Added check to prevent UDP bind address from using broadcast port.
+3. Bumped Go version to 1.24
 
 
 ## Development
