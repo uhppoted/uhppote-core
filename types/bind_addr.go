@@ -39,7 +39,7 @@ func ParseBindAddr(s string) (BindAddr, error) {
 		if addr, err := netip.ParseAddrPort(s); err != nil {
 			return BindAddr{}, err
 		} else if addr.Port() == CONTROLLER_PORT {
-			return BindAddr{}, fmt.Errorf("%v: invalid 'bind' port (%v)", addr, addr.Port()) // avoid broadcastto-self
+			return BindAddr{}, fmt.Errorf("%v: invalid 'bind' port (%v)", addr, addr.Port()) // avoid broadcast-to-self
 		} else {
 			return BindAddr{addr}, nil
 		}
