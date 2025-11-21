@@ -34,7 +34,7 @@ cd uhppote-core
 make build
 ```
 
-If you prefer not to build manually:
+If you prefer building manually:
 ```
 git clone https://github.com/uhppoted/uhppote-core.git
 cd uhppote-core

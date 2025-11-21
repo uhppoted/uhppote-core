@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## Unreleased
+
+
 ## [0.8.11](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.11) - 2025-06-30
 
 ### Added
