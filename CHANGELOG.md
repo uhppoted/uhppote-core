@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Updated
+1. Bumped Go version to 1.25.
+
 
 ## [0.8.11](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.11) - 2025-06-30
 
@@ -9,7 +12,7 @@
 1. API function for `get/set-anti-passback`.
 
 ### Updated
-1. Bumped Go version to 1.24
+1. Bumped Go version to 1.24.
 2. Added check to prevent UDP bind address from using broadcast port.
 
 

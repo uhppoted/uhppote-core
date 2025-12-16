@@ -1,8 +1,5 @@
 # TODO
 
-- [x] anti-passback (https://github.com/uhppoted/uhppoted/issues/60)
-- [x] check UDP bind port is not 60000 (cf. https://github.com/uhppoted/uhppoted/issues/59)
-
 - [ ] Rework any remaining DateTime pointers to rather use IsZero
 - [ ] Rework any remaining Time pointers
       - [ ] uhppote:GetTime
