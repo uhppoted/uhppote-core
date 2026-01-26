@@ -3,7 +3,7 @@
 ## Unreleased
 
 ### Updated
-1. Bumped Go version to 1.25.
+1. Updated to Go version 1.25.
 
 
 ## [0.8.11](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.11) - 2025-06-30
