@@ -7,7 +7,7 @@
 
 _In the (hopefully unlikely) event you are using `uhppoted-core` directly, please seriously consider migrating your
 project to [`uhppoted-lib-go`](https://github.com/uhppoted/uhppoted-lib-go), which is now the recommended base library
-for external Go applications. _If you can't (or simply don't want to) migrate, please:_
+for external Go applications. If you can't (or simply don't want to) migrate, please:_
 - _Vendor `uhppote-core` v0.9.0 (or pin the version in `go.mod`)._
 - _Add yourself to this [discussion](https://github.com/uhppoted/uhppote-core/discussions/22) so that I'm aware
   of your existence._
