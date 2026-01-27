@@ -4,6 +4,7 @@
 
 ### Updated
 1. Updated to Go version 1.25.
+2. Added deprecation notice.
 
 
 ## [0.8.11](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.11) - 2025-06-30

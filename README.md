@@ -1,5 +1,22 @@
 ![build](https://github.com/uhppoted/uhppote-core/workflows/build/badge.svg)
 
+---
+#### NOTICE OF DEPRECATION
+
+**Please note that as of v0.9.0, future releases of `uhppote-core` will be flagged for internal use only.**
+
+_In the (hopefully unlikely) event you are using `uhppoted-core` directly, please consider migrating your project
+to [`uhppoted-lib-go`](https://github.com/uhppoted/uhppoted-lib-go), which is now the recommended base library for
+external Go applications._
+
+_If you can't (or simply don't want to) migrate, please:_
+- _Vendor `uhppote-core` v0.9.0 (or pin the version in `go.mod`)._
+- _Please add yourself to this [discussion](https://github.com/uhppoted/uhppote-core/discussions/22) so that I'm aware
+  of your existence._
+
+
+---
+
 # uhppote-core
 
 Go API for low-level access to the UT0311-L0x* TCP/IP Wiegand access control boards. This module implements the
@@ -10,6 +27,7 @@ Supported operating systems:
 - MacOS
 - Windows
 - RaspberryPi (ARM7)
+
 
 ## Release Notes
 

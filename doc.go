@@ -19,5 +19,13 @@ The library consists of the following packages:
   - [uhppote-core/types] which defines the data types used in the `messages` package.
   - [uhppote-core/encoding/UTO311-L0x] which implements message marshalling and unmarshalling
     to and from the 64 byte packets exchangeed with the access controller.
+
+# Deprecation Notice
+
+Note that as of v0.9.0, uhppote-core is flagged for internal use only as the functionality is migrated 
+to uhppoted-lib. Please consider using:
+
+[uhppoted-lib-go]: https://github.com/uhppoted/uhppoted-lib-go
+
 */
 package core
