@@ -31,11 +31,10 @@ Supported operating systems:
 
 ### Current Release
 
-**[v0.8.11](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.11) - 2025-06-30**
+**[v0.9.0](https://github.com/uhppoted/uhppote-core/releases/tag/v0.9.0) - 2026-01-27**
 
-1. API function for `get/set-anti-passback`.
-2. Added check to prevent UDP bind address from using broadcast port.
-3. Bumped Go version to 1.24
+1. Updated to Go version 1.25.
+2. Added deprecation notice to README and godoc.
 
 
 ## Development

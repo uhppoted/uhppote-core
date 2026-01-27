@@ -1,10 +1,10 @@
 # CHANGELOG
 
-## Unreleased
+## [0.9.0](https://github.com/uhppoted/uhppote-core/releases/tag/v0.9.0) - 2026-01-27
 
 ### Updated
 1. Updated to Go version 1.25.
-2. Added deprecation notice.
+2. Added deprecation notice to README and godoc.
 
 
 ## [0.8.11](https://github.com/uhppoted/uhppote-core/releases/tag/v0.8.11) - 2025-06-30

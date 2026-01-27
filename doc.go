@@ -22,10 +22,9 @@ The library consists of the following packages:
 
 # Deprecation Notice
 
-Note that as of v0.9.0, uhppote-core is flagged for internal use only as the functionality is migrated 
+Note that as of v0.9.0, uhppote-core is flagged for internal use only as the functionality is migrated
 to uhppoted-lib. Please consider using:
 
 [uhppoted-lib-go]: https://github.com/uhppoted/uhppoted-lib-go
-
 */
 package core
