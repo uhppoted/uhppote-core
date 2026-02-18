@@ -30,7 +30,7 @@ func CardFormatFromString(v string) (CardFormat, error) {
 }
 
 func (f CardFormat) MarshalConf(tag string) ([]byte, error) {
-	return []byte(fmt.Sprintf("%v", f)), nil
+	return fmt.Appendf(nil, "%v", f), nil
 }
 
 func (f *CardFormat) UnmarshalConf(tag string, values map[string]string) (any, error) {

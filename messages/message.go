@@ -1,7 +1,5 @@
 package messages
 
-type Request interface {
-}
+type Request any
 
-type Response interface {
-}
+type Response any

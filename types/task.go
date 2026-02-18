@@ -11,10 +11,10 @@ import (
 type Task struct {
 	Task     TaskType `json:"task"`
 	Door     uint8    `json:"door,omitempty"`
-	From     Date     `json:"start-date,omitempty"`
-	To       Date     `json:"end-date,omitempty"`
+	From     Date     `json:"start-date"`
+	To       Date     `json:"end-date"`
 	Weekdays Weekdays `json:"weekdays,omitempty"`
-	Start    HHmm     `json:"start,omitempty"`
+	Start    HHmm     `json:"start"`
 	Cards    uint8    `json:"cards,omitempty"`
 }
 
@@ -123,7 +123,7 @@ func (tt *TaskType) UnmarshalJSON(b []byte) error {
 	return fmt.Errorf("invalid task type (%v)", string(b))
 }
 
-func (tt *TaskType) UnmarshalTSV(s string) (interface{}, error) {
+func (tt *TaskType) UnmarshalTSV(s string) (any, error) {
 	// ... numeric task type?
 	if regexp.MustCompile("^[0-9]+$").MatchString(s) {
 		if v, err := strconv.Atoi(s); err != nil {
@@ -201,7 +201,7 @@ func (t *Task) UnmarshalJSON(bytes []byte) error {
 		From     *Date    `json:"start-date,omitempty"`
 		To       *Date    `json:"end-date,omitempty"`
 		Weekdays Weekdays `json:"weekdays,omitempty"`
-		Start    HHmm     `json:"start,omitempty"`
+		Start    HHmm     `json:"start"`
 		Door     uint8    `json:"door,omitempty"`
 		Task     TaskType `json:"task"`
 		Cards    uint8    `json:"cards,omitempty"`

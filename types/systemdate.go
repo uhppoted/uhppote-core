@@ -36,7 +36,7 @@ func (d SystemDate) MarshalUT0311L0x() ([]byte, error) {
 	return *encoded, nil
 }
 
-func (d *SystemDate) UnmarshalUT0311L0x(b []byte) (interface{}, error) {
+func (d *SystemDate) UnmarshalUT0311L0x(b []byte) (any, error) {
 	if bytes.Equal(b[0:3], []byte{0, 0, 0}) {
 		return &SystemDate{}, nil
 	}

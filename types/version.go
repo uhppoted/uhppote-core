@@ -22,7 +22,7 @@ func (v Version) MarshalUT0311L0x() ([]byte, error) {
 	return bytes, nil
 }
 
-func (v *Version) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
+func (v *Version) UnmarshalUT0311L0x(bytes []byte) (any, error) {
 	vv := Version(binary.BigEndian.Uint16(bytes))
 
 	return &vv, nil

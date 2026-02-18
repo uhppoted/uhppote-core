@@ -9,8 +9,8 @@ import (
 type TimeProfile struct {
 	ID              uint8    `json:"id"`
 	LinkedProfileID uint8    `json:"linked-profile,omitempty"`
-	From            Date     `json:"start-date,omitempty"`
-	To              Date     `json:"end-date,omitempty"`
+	From            Date     `json:"start-date"`
+	To              Date     `json:"end-date"`
 	Weekdays        Weekdays `json:"weekdays,omitempty"`
 	Segments        Segments `json:"segments,omitempty"`
 }

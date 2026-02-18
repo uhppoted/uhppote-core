@@ -36,7 +36,7 @@ func (d *stub) SendTCP(addr *net.TCPAddr, m []byte) ([]byte, error) {
 	return d.sendtcp(addr, m)
 }
 
-func (d *stub) Listen(signal chan interface{}, done chan interface{}, handler func(bytes []byte)) error {
+func (d *stub) Listen(signal chan any, done chan any, handler func(bytes []byte)) error {
 	return fmt.Errorf("NOT IMPLEMENTED")
 }
 

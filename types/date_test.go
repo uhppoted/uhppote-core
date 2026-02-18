@@ -13,7 +13,7 @@ func TestDateString(t *testing.T) {
 	var date = Date(time.Date(2021, time.February, 28, 12, 34, 56, 789, time.Local))
 
 	tests := []struct {
-		dt       interface{}
+		dt       any
 		expected string
 	}{
 		{date, "2021-02-28"},

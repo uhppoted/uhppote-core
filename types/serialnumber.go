@@ -19,7 +19,7 @@ func (s SerialNumber) MarshalUT0311L0x() ([]byte, error) {
 	return bytes, nil
 }
 
-func (s *SerialNumber) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
+func (s *SerialNumber) UnmarshalUT0311L0x(bytes []byte) (any, error) {
 	v := SerialNumber(binary.LittleEndian.Uint32(bytes[:4]))
 
 	return &v, nil

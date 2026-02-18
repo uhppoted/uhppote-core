@@ -19,7 +19,7 @@ func (m MacAddress) MarshalUT0311L0x() ([]byte, error) {
 	return bytes, nil
 }
 
-func (m *MacAddress) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
+func (m *MacAddress) UnmarshalUT0311L0x(bytes []byte) (any, error) {
 	mac := make([]byte, 6)
 
 	copy(mac, bytes[0:6])

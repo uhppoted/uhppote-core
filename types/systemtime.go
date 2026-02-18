@@ -41,7 +41,7 @@ func (d SystemTime) MarshalUT0311L0x() ([]byte, error) {
 	return *encoded, nil
 }
 
-func (t *SystemTime) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
+func (t *SystemTime) UnmarshalUT0311L0x(bytes []byte) (any, error) {
 	decoded, err := bcd.Decode(bytes[0:3])
 	if err != nil {
 		return nil, err

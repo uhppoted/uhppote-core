@@ -9,8 +9,8 @@ import (
 type Segments map[uint8]Segment
 
 type Segment struct {
-	Start HHmm `json:"start,omitempty"`
-	End   HHmm `json:"end,omitempty"`
+	Start HHmm `json:"start"`
+	End   HHmm `json:"end"`
 }
 
 func (ss Segments) String() string {

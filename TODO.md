@@ -1,5 +1,12 @@
 # TODO
 
+- [ ] Unit test for Task.MarshalJSON
+    - `go fix` legitimately removed the omitempty from _From_ and _To_ fields
+    - still want those fields to not be ""
+    - [ ] Segment.MarshalJSON
+    - [ ] TimeProfile.MarshalJSON
+
+
 - [ ] Rework any remaining DateTime pointers to rather use IsZero
 - [ ] Rework any remaining Time pointers
       - [ ] uhppote:GetTime

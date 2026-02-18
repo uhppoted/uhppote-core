@@ -3,6 +3,7 @@ package uhppote
 import (
 	"encoding/binary"
 	"fmt"
+	"maps"
 	"net"
 	"net/netip"
 	"os"
@@ -65,9 +66,7 @@ func NewUHPPOTE(
 func (u *uhppote) DeviceList() map[uint32]Device {
 	list := map[uint32]Device{}
 	if u != nil {
-		for k, v := range u.devices {
-			list[k] = v
-		}
+		maps.Copy(list, u.devices)
 	}
 
 	return list

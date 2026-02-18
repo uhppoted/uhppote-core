@@ -20,10 +20,10 @@ func (t testType) MarshalUT0311L0x() ([]byte, error) {
 	return []byte{0x20, 0x18, 0x08, 0x16}, nil
 }
 
-func (t *testType) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
+func (t *testType) UnmarshalUT0311L0x(bytes []byte) (any, error) {
 	b := make([]byte, 4)
 
-	for i := 0; i < 4; i++ {
+	for i := range 4 {
 		b[i] = bytes[i] + byte(i)
 	}
 

@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"reflect"
 	"strconv"
+	"strings"
 	"testing"
 )
 
@@ -98,15 +99,15 @@ func TestDecodeInvalidBCD(t *testing.T) {
 }
 
 func BenchmarkEncode(b *testing.B) {
-	s := ""
+	var s strings.Builder
 
-	for i := 0; i < 256; i++ {
-		s += strconv.Itoa(rand.Intn(10))
+	for range 256 {
+		s.WriteString(strconv.Itoa(rand.Intn(10)))
 	}
 
 	b.Run("Encode", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
-			Encode(s)
+			Encode(s.String())
 		}
 	})
 }
@@ -114,7 +115,7 @@ func BenchmarkEncode(b *testing.B) {
 func BenchmarkDecode(b *testing.B) {
 	bytes := make([]byte, 128)
 
-	for i := 0; i < len(bytes); i++ {
+	for i := range bytes {
 		msb := rand.Intn(10)
 		lsb := rand.Intn(10)
 		bytes[i] = byte(msb<<4 + lsb)

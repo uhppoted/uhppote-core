@@ -74,7 +74,7 @@ func (h HHmm) Before(t HHmm) bool {
 	return h.before(t)
 }
 
-func (h HHmm) before(v interface{}) bool {
+func (h HHmm) before(v any) bool {
 	switch t := v.(type) {
 	case time.Time:
 		if h.hours < t.Hour() {
@@ -109,7 +109,7 @@ func (h HHmm) After(t HHmm) bool {
 	return h.after(t)
 }
 
-func (h HHmm) after(v interface{}) bool {
+func (h HHmm) after(v any) bool {
 	switch t := v.(type) {
 	case time.Time:
 		if h.hours > t.Hour() {
@@ -154,7 +154,7 @@ func (h HHmm) MarshalUT0311L0x() ([]byte, error) {
 	return *encoded, nil
 }
 
-func (h *HHmm) UnmarshalUT0311L0x(bytes []byte) (interface{}, error) {
+func (h *HHmm) UnmarshalUT0311L0x(bytes []byte) (any, error) {
 	decoded, err := bcd.Decode(bytes[0:2])
 	if err != nil {
 		return nil, err

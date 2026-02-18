@@ -18,31 +18,31 @@ type Marshaler interface {
 }
 
 type Unmarshaler interface {
-	UnmarshalUT0311L0x([]byte) (interface{}, error)
+	UnmarshalUT0311L0x([]byte) (any, error)
 }
 
 var (
-	tBool     = reflect.TypeOf(bool(false))
-	tByte     = reflect.TypeOf(byte(0))
-	tUint16   = reflect.TypeOf(uint16(0))
-	tUint32   = reflect.TypeOf(uint32(0))
+	tBool     = reflect.TypeFor[bool]()
+	tByte     = reflect.TypeFor[byte]()
+	tUint16   = reflect.TypeFor[uint16]()
+	tUint32   = reflect.TypeFor[uint32]()
 	tIPv4     = reflect.TypeOf(net.IPv4(0, 0, 0, 0))
-	tMAC      = reflect.TypeOf(net.HardwareAddr{})
-	tSOM      = reflect.TypeOf(types.SOM(0))
-	tMsgType  = reflect.TypeOf(types.MsgType(0))
-	tAddrPort = reflect.TypeOf(netip.AddrPort{})
+	tMAC      = reflect.TypeFor[net.HardwareAddr]()
+	tSOM      = reflect.TypeFor[types.SOM]()
+	tMsgType  = reflect.TypeFor[types.MsgType]()
+	tAddrPort = reflect.TypeFor[netip.AddrPort]()
 )
 
 var re = regexp.MustCompile(`offset:\s*([0-9]+)`)
 var vre = regexp.MustCompile(`value:\s*((?:0[xX])?[0-9a-fA-F]+)`)
 
-func Marshal(m interface{}) ([]byte, error) {
+func Marshal(m any) ([]byte, error) {
 	v := reflect.ValueOf(m)
 	bytes := make([]byte, 64)
 
 	bytes[0] = 0x17
 
-	if v.Type().Kind() == reflect.Ptr {
+	if v.Type().Kind() == reflect.Pointer {
 		if err := marshal(v.Elem(), bytes); err != nil {
 			return nil, err
 		}
@@ -59,7 +59,7 @@ func marshal(s reflect.Value, bytes []byte) error {
 	if s.Kind() == reflect.Struct {
 		N := s.NumField()
 
-		for i := 0; i < N; i++ {
+		for i := range N {
 			f := s.Field(i)
 			t := s.Type().Field(i)
 
@@ -100,7 +100,7 @@ func marshal(s reflect.Value, bytes []byte) error {
 						// Marshall with MarshalUT0311L0x{} interface
 						if m, ok := f.Interface().(Marshaler); ok {
 							// If f is a pointer type and the value is nil skips this field, leaving the buffer 'as is'
-							if f.Kind() != reflect.Ptr || !f.IsNil() {
+							if f.Kind() != reflect.Pointer || !f.IsNil() {
 								if b, err := m.MarshalUT0311L0x(); err == nil {
 									copy(bytes[offset:offset+len(b)], b)
 								}
@@ -164,20 +164,20 @@ func marshal(s reflect.Value, bytes []byte) error {
 	return nil
 }
 
-func Unmarshal(bytes []byte, m interface{}) error {
+func Unmarshal(bytes []byte, m any) error {
 	v := reflect.ValueOf(m)
 
-	if v.Kind() == reflect.Ptr && v.Elem().Kind() == reflect.Struct {
+	if v.Kind() == reflect.Pointer && v.Elem().Kind() == reflect.Struct {
 		return unmarshal(bytes, v.Elem())
 	}
 
 	return fmt.Errorf("cannot unmarshal value with kind '%s'", v.Type())
 }
 
-func UnmarshalAs(bytes []byte, m interface{}) (interface{}, error) {
+func UnmarshalAs(bytes []byte, m any) (any, error) {
 	v := reflect.ValueOf(m)
 
-	if v.Kind() != reflect.Ptr && v.Kind() == reflect.Struct {
+	if v.Kind() != reflect.Pointer && v.Kind() == reflect.Struct {
 		s := reflect.New(v.Type()).Elem()
 		if err := unmarshal(bytes, s); err != nil {
 			return nil, err
@@ -186,7 +186,7 @@ func UnmarshalAs(bytes []byte, m interface{}) (interface{}, error) {
 		return s.Interface(), nil
 	}
 
-	if v.Kind() == reflect.Ptr && v.Elem().Kind() == reflect.Struct {
+	if v.Kind() == reflect.Pointer && v.Elem().Kind() == reflect.Struct {
 		s := reflect.New(v.Elem().Type()).Elem()
 		if err := unmarshal(bytes, s); err != nil {
 			return nil, err
@@ -198,10 +198,10 @@ func UnmarshalAs(bytes []byte, m interface{}) (interface{}, error) {
 	return nil, fmt.Errorf("cannot unmarshal value with kind '%s'", v.Type())
 }
 
-func UnmarshalArray(bytes [][]byte, array interface{}) error {
+func UnmarshalArray(bytes [][]byte, array any) error {
 	v := reflect.ValueOf(array)
 
-	if v.Kind() == reflect.Ptr && v.Elem().Kind() == reflect.Slice {
+	if v.Kind() == reflect.Pointer && v.Elem().Kind() == reflect.Slice {
 		t := v.Elem().Type().Elem()
 		vv := reflect.MakeSlice(reflect.SliceOf(t), 0, 0)
 
@@ -222,10 +222,10 @@ func UnmarshalArray(bytes [][]byte, array interface{}) error {
 	return fmt.Errorf("cannot unmarshal array to value with kind '%s'", v.Type())
 }
 
-func UnmarshalArrayElement(bytes []byte, array interface{}) (interface{}, error) {
+func UnmarshalArrayElement(bytes []byte, array any) (any, error) {
 	v := reflect.ValueOf(array)
 
-	if v.Kind() == reflect.Ptr && v.Elem().Kind() == reflect.Slice {
+	if v.Kind() == reflect.Pointer && v.Elem().Kind() == reflect.Slice {
 		t := v.Elem().Type().Elem()
 		s := reflect.New(t).Elem()
 		if err := unmarshal(bytes, s); err != nil {
@@ -253,7 +253,7 @@ func unmarshal(bytes []byte, s reflect.Value) error {
 	if s.Kind() == reflect.Struct {
 		N := s.NumField()
 
-		for i := 0; i < N; i++ {
+		for i := range N {
 			f := s.Field(i)
 			t := s.Type().Field(i)
 			tag := t.Tag.Get("uhppote")

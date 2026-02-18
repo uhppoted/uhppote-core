@@ -22,6 +22,7 @@ format:
 
 update:
 	go mod tidy
+	go fix ./...
 
 update-release:
 	go mod tidy

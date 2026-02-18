@@ -50,8 +50,8 @@ func (w *Weekdays) UnmarshalJSON(bytes []byte) error {
 	(*w)[time.Saturday] = false
 	(*w)[time.Sunday] = false
 
-	tokens := strings.Split(s, ",")
-	for _, t := range tokens {
+	tokens := strings.SplitSeq(s, ",")
+	for t := range tokens {
 		switch strings.ToLower(t) {
 		case "monday":
 			(*w)[time.Monday] = true
