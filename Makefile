@@ -26,6 +26,7 @@ update:
 
 update-release:
 	go mod tidy
+	go fix ./...
 
 build: format
 	go build -trimpath ./...
