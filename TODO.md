@@ -1,5 +1,8 @@
 # TODO
 
+- [x] 'first card' API (cf. https://github.com/uhppoted/uhppoted/issues/82)
+
+
 - [ ] Unit test for Task.MarshalJSON
     - `go fix` legitimately removed the omitempty from _From_ and _To_ fields
     - still want those fields to not be ""
