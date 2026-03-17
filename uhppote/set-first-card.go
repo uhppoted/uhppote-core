@@ -1,0 +1,37 @@
+package uhppote
+
+import (
+	"fmt"
+	"time"
+
+	"github.com/uhppoted/uhppote-core/messages"
+	"github.com/uhppoted/uhppote-core/types"
+)
+
+func (u *uhppote) SetFirstCard(serialNumber uint32, firstcard types.FirstCard) (bool, error) {
+	if serialNumber == 0 {
+		return false, fmt.Errorf("invalid device ID (%v)", serialNumber)
+	}
+
+	request := messages.SetFirstCardRequest{
+		SerialNumber:     types.SerialNumber(serialNumber),
+		Door:             firstcard.Door,
+		StartTime:        firstcard.From,
+		EndTime:          firstcard.To,
+		StartDoorControl: uint8(firstcard.Active),
+		EndDoorControl:   uint8(firstcard.Inactive),
+		Monday:           firstcard.Weekdays[time.Monday],
+		Tuesday:          firstcard.Weekdays[time.Tuesday],
+		Wednesday:        firstcard.Weekdays[time.Wednesday],
+		Thursday:         firstcard.Weekdays[time.Thursday],
+		Friday:           firstcard.Weekdays[time.Friday],
+		Saturday:         firstcard.Weekdays[time.Saturday],
+		Sunday:           firstcard.Weekdays[time.Sunday],
+	}
+
+	if reply, err := sendto[messages.SetFirstCardResponse](u, serialNumber, request); err != nil {
+		return false, err
+	} else {
+		return reply.Ok, nil
+	}
+}

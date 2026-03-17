@@ -18,9 +18,9 @@ func TestMarshalSetFirstCardRequest(t *testing.T) {
 	request := SetFirstCardRequest{
 		SerialNumber:     423187757,
 		Door:             3,
-		Start:            *hhmm("08:30"),
+		StartTime:        *hhmm("08:30"),
 		StartDoorControl: 1,
-		End:              *hhmm("17:45"),
+		EndTime:          *hhmm("17:45"),
 		EndDoorControl:   2,
 		Monday:           true,
 		Tuesday:          true,
@@ -50,9 +50,9 @@ func TestFactoryUnmarshalSetFirstCardRequest(t *testing.T) {
 		MsgType:          0xAA,
 		SerialNumber:     423187757,
 		Door:             3,
-		Start:            *hhmm("08:30"),
+		StartTime:        *hhmm("08:30"),
 		StartDoorControl: 1,
-		End:              *hhmm("17:45"),
+		EndTime:          *hhmm("17:45"),
 		EndDoorControl:   2,
 		Monday:           true,
 		Tuesday:          true,
@@ -91,7 +91,7 @@ func TestUnmarshalSetFirstCardResponse(t *testing.T) {
 	expected := SetFirstCardResponse{
 		MsgType:      0xAA,
 		SerialNumber: 423187757,
-		Succeeded:    true,
+		Ok:           true,
 	}
 
 	reply := SetFirstCardResponse{}
@@ -116,7 +116,7 @@ func TestFactoryUnmarshalSetFirstCardResponse(t *testing.T) {
 	expected := SetFirstCardResponse{
 		MsgType:      0xAA,
 		SerialNumber: 423187757,
-		Succeeded:    true,
+		Ok:           true,
 	}
 
 	response, err := UnmarshalResponse(message)

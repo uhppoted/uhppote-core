@@ -15,6 +15,19 @@ type HHmm struct {
 	minutes int
 }
 
+// MustParseHHmm invokes ParseHHmm and panics on error.
+//
+// It is intended for use in tests with hard-coded strings.
+func MustParseHHmm(s string) HHmm {
+	if hhmm, err := ParseHHmm(s); err != nil {
+		panic(err)
+	} else if hhmm == nil {
+		panic(fmt.Sprintf("invalid HHmm (%v)", s))
+	} else {
+		return *hhmm
+	}
+}
+
 func NewHHmm(hours, minutes int) HHmm {
 	return HHmm{
 		hours:   hours,
@@ -30,7 +43,11 @@ func HHmmFromTime(t time.Time) HHmm {
 }
 
 func HHmmFromString(s string) (*HHmm, error) {
-	re := regexp.MustCompile("^([0-9]{2}):([0-9]{2})$")
+	return ParseHHmm(s)
+}
+
+func ParseHHmm(s string) (*HHmm, error) {
+	re := regexp.MustCompile("^([0-9]{1,2}):([0-9]{2})$")
 
 	match := re.FindStringSubmatch(s)
 	if match == nil || len(match) != 3 {

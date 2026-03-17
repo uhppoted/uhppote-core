@@ -92,6 +92,7 @@ go build -trimpath -o bin ./...
 - [`SetInterlock`](#setinterlock)
 - [`GetAntiPassback`](#getantipassback)
 - [`SetAntiPassback`](#setantipassback)
+- [`SetFirstCard`](#setfirstcard)
 - [`RestoreDefaultParameters`](#restoredefaultparameters)
 - [`Listen`](#listen)
 
@@ -289,7 +290,7 @@ it has been swiped through at either of doors 2 or 4. Likewise a card swiped thr
 of doors 2 or 4 will be denied access at doors 2 and 4 until is has been swiped through at 
 either of doors 1 or 3.
 
-#### `SetsAntiPassback`
+#### `SetAntiPassback`
 
 Sets the controller anti-passback mode:
 - `disabled`
@@ -312,6 +313,13 @@ a card swiped through at either of doors 1 or 3 will be denied access at doors 1
 it has been swiped through at either of doors 2 or 4. Likewise a card swiped through at either
 of doors 2 or 4 will be denied access at doors 2 and 4 until is has been swiped through at 
 either of doors 1 or 3.
+
+
+#### `SetFirstCard`
+
+Sets the controller 'first card' configuration to allow privileged card to set a 
+door control mode for a time period.
+
 
 #### `RestoreDefaultParameters`
 

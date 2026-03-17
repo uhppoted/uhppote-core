@@ -11,6 +11,7 @@
 
 
 - [ ] Rework any remaining DateTime pointers to rather use IsZero
+- [ ] Rework ParseHHmm to not return a pointer
 - [ ] Rework any remaining Time pointers
       - [ ] uhppote:GetTime
 - (?) Replace (* UHPPOTE) in API functions with non-pointer version

@@ -132,14 +132,14 @@ func TestTaskJSONUnmarshal(t *testing.T) {
   "cards": 23
 }`)
 
-	var profile Task
+	var task Task
 
-	if err := json.Unmarshal(bytes, &profile); err != nil {
+	if err := json.Unmarshal(bytes, &task); err != nil {
 		t.Fatalf("Error unmarshalling Task (%v)", err)
 	}
 
-	if !reflect.DeepEqual(profile, expected) {
-		t.Errorf("Task incorrectly unmarshalled\n   expected:%+v\n   got:     %+v", expected, profile)
+	if !reflect.DeepEqual(task, expected) {
+		t.Errorf("Task incorrectly unmarshalled\n   expected:%+v\n   got:     %+v", expected, task)
 	}
 }
 

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Added
+1. Added _set-first-card_ API function.
+
 ### Updated
 1. Updated to Go version 1.26.
 2. Updated _modern Go_ with `go fix`.

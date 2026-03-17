@@ -124,6 +124,12 @@ type IUHPPOTE interface {
 	// the setting was invalid or the controller did not respohd.
 	SetAntiPassback(deviceID uint32, antipassback types.AntiPassback) (bool, error)
 
+	// Sets the controller 'first card' configuration.
+	//
+	// Returns true if the controller 'first card' configuration was set. Returns an error if something
+	// the setting was invalid or the controller did not respohd.
+	SetFirstCard(deviceID uint32, firstcard types.FirstCard) (bool, error)
+
 	// Sends a RestoreDefaultParameters request to the designated controller, to reset it to the
 	// manufacturer default configuration.
 	//

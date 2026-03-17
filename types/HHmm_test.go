@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/json"
+	"reflect"
 	"testing"
 )
 
@@ -9,6 +10,15 @@ func hhmm(s string) HHmm {
 	t, _ := HHmmFromString(s)
 
 	return *t
+}
+
+func TestMustParseHHmm(t *testing.T) {
+	expected := NewHHmm(16, 45)
+	hhmm := MustParseHHmm("16:45")
+
+	if !reflect.DeepEqual(hhmm, expected) {
+		t.Errorf("HHmm incorrectly parsed - expected:%v, got:%v", expected, hhmm)
+	}
 }
 
 func TestHHmmMarshalJSON(t *testing.T) {

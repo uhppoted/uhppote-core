@@ -8,9 +8,9 @@ type SetFirstCardRequest struct {
 	MsgType          types.MsgType      `uhppote:"value:0xaa"`
 	SerialNumber     types.SerialNumber `uhppote:"offset:4"`
 	Door             uint8              `uhppote:"offset:8"`
-	Start            types.HHmm         `uhppote:"offset:9"`
+	StartTime        types.HHmm         `uhppote:"offset:9"`
 	StartDoorControl uint8              `uhppote:"offset:11"`
-	End              types.HHmm         `uhppote:"offset:12"`
+	EndTime          types.HHmm         `uhppote:"offset:12"`
 	EndDoorControl   uint8              `uhppote:"offset:14"`
 	Monday           bool               `uhppote:"offset:15"`
 	Tuesday          bool               `uhppote:"offset:16"`
@@ -24,5 +24,5 @@ type SetFirstCardRequest struct {
 type SetFirstCardResponse struct {
 	MsgType      types.MsgType      `uhppote:"value:0xaa"`
 	SerialNumber types.SerialNumber `uhppote:"offset:4"`
-	Succeeded    bool               `uhppote:"offset:8"`
+	Ok           bool               `uhppote:"offset:8"`
 }
