@@ -17,7 +17,6 @@ func TestSetFirstCard(t *testing.T) {
 	}
 
 	firstcard := types.FirstCard{
-		Door:     3,
 		From:     types.MustParseHHmm("08:30"),
 		To:       types.MustParseHHmm("16:45"),
 		Active:   types.NormallyOpen,
@@ -41,7 +40,7 @@ func TestSetFirstCard(t *testing.T) {
 		},
 	}
 
-	ok, err := u.SetFirstCard(405419896, firstcard)
+	ok, err := u.SetFirstCard(405419896, 3, firstcard)
 	if err != nil {
 		t.Fatalf("Unexpected error returned from SetFirstCard (%v)", err)
 	}
@@ -60,7 +59,6 @@ func TestSetFirstCardWithInvalidResponse(t *testing.T) {
 	}
 
 	firstcard := types.FirstCard{
-		Door:     3,
 		From:     types.MustParseHHmm("08:30"),
 		To:       types.MustParseHHmm("16:45"),
 		Active:   types.NormallyOpen,
@@ -84,7 +82,7 @@ func TestSetFirstCardWithInvalidResponse(t *testing.T) {
 		},
 	}
 
-	_, err := u.SetFirstCard(405419896, firstcard)
+	_, err := u.SetFirstCard(405419896, 3, firstcard)
 	if err == nil {
 		t.Fatalf("Expected error from SetFirstCard (%v)", err)
 	}
@@ -92,7 +90,6 @@ func TestSetFirstCardWithInvalidResponse(t *testing.T) {
 
 func TestSetFirstCardWithInvalidDeviceID(t *testing.T) {
 	firstcard := types.FirstCard{
-		Door:     3,
 		From:     types.MustParseHHmm("08:30"),
 		To:       types.MustParseHHmm("16:45"),
 		Active:   types.NormallyOpen,
@@ -110,7 +107,7 @@ func TestSetFirstCardWithInvalidDeviceID(t *testing.T) {
 
 	u := uhppote{}
 
-	_, err := u.SetFirstCard(0, firstcard)
+	_, err := u.SetFirstCard(0, 3, firstcard)
 	if err == nil {
 		t.Fatalf("Expected 'Invalid device ID' error, got %v", err)
 	}

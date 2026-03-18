@@ -128,7 +128,7 @@ type IUHPPOTE interface {
 	//
 	// Returns true if the controller 'first card' configuration was set. Returns an error if something
 	// the setting was invalid or the controller did not respohd.
-	SetFirstCard(deviceID uint32, firstcard types.FirstCard) (bool, error)
+	SetFirstCard(deviceID uint32, door uint8, firstcard types.FirstCard) (bool, error)
 
 	// Sends a RestoreDefaultParameters request to the designated controller, to reset it to the
 	// manufacturer default configuration.

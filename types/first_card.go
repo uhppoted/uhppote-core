@@ -7,7 +7,6 @@ import (
 )
 
 type FirstCard struct {
-	Door     uint8        `json:"door,omitempty"`
 	From     HHmm         `json:"start-time"`
 	To       HHmm         `json:"end-time"`
 	Active   ControlState `json:"active-state"`
@@ -28,13 +27,12 @@ func (f FirstCard) String() string {
 		times = "-" + to
 	}
 
-	door := fmt.Sprintf("door:%v", f.Door)
 	active := fmt.Sprintf("%4v", f.Active)
 	inactive := fmt.Sprintf("%4v", f.Inactive)
 	weekdays := fmt.Sprintf("%v", f.Weekdays)
 
 	list := []string{}
-	for _, s := range []string{door, "active:" + times, "control:" + active + "/" + inactive, "weekdays:" + weekdays} {
+	for _, s := range []string{"active:" + times, "control:" + active + "/" + inactive, "weekdays:" + weekdays} {
 		if s != "" {
 			list = append(list, s)
 		}
@@ -45,7 +43,6 @@ func (f FirstCard) String() string {
 
 func (f *FirstCard) UnmarshalJSON(bytes []byte) error {
 	firstcard := struct {
-		Door     uint8        `json:"door,omitempty"`
 		From     HHmm         `json:"start-time,omitempty"`
 		To       HHmm         `json:"end-time,omitempty"`
 		Active   ControlState `json:"active-state"`
@@ -59,7 +56,6 @@ func (f *FirstCard) UnmarshalJSON(bytes []byte) error {
 		return err
 	}
 
-	f.Door = firstcard.Door
 	f.From = firstcard.From
 	f.To = firstcard.To
 	f.Active = firstcard.Active

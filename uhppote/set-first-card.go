@@ -8,14 +8,14 @@ import (
 	"github.com/uhppoted/uhppote-core/types"
 )
 
-func (u *uhppote) SetFirstCard(serialNumber uint32, firstcard types.FirstCard) (bool, error) {
+func (u *uhppote) SetFirstCard(serialNumber uint32, door uint8, firstcard types.FirstCard) (bool, error) {
 	if serialNumber == 0 {
 		return false, fmt.Errorf("invalid device ID (%v)", serialNumber)
 	}
 
 	request := messages.SetFirstCardRequest{
 		SerialNumber:     types.SerialNumber(serialNumber),
-		Door:             firstcard.Door,
+		Door:             door,
 		StartTime:        firstcard.From,
 		EndTime:          firstcard.To,
 		StartDoorControl: uint8(firstcard.Active),

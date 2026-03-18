@@ -9,10 +9,9 @@ import (
 )
 
 func TestFirstCardToString(t *testing.T) {
-	expected := "door:3  active:08:30-16:45  control:normally open/normally closed  weekdays:Mon,Tue,Thurs,Sat,Sun"
+	expected := "active:08:30-16:45  control:normally open/normally closed  weekdays:Mon,Tue,Thurs,Sat,Sun"
 
 	firstcard := FirstCard{
-		Door:     3,
 		From:     MustParseHHmm("8:30"),
 		To:       MustParseHHmm("16:45"),
 		Active:   NormallyOpen,
@@ -37,7 +36,6 @@ func TestFirstCardToString(t *testing.T) {
 
 func TestFirstCardJSONMarshal(t *testing.T) {
 	expected := `{
-  "door": 3,
   "start-time": "08:30",
   "end-time": "16:45",
   "active-state": "normally open",
@@ -46,7 +44,6 @@ func TestFirstCardJSONMarshal(t *testing.T) {
 }`
 
 	firstcard := FirstCard{
-		Door:     3,
 		From:     MustParseHHmm("8:30"),
 		To:       MustParseHHmm("16:45"),
 		Active:   NormallyOpen,
@@ -74,7 +71,6 @@ func TestFirstCardJSONMarshal(t *testing.T) {
 
 func TestFirstCardJSONUnmarshal(t *testing.T) {
 	expected := FirstCard{
-		Door:     3,
 		From:     MustParseHHmm("8:30"),
 		To:       MustParseHHmm("16:45"),
 		Active:   NormallyOpen,
@@ -91,7 +87,6 @@ func TestFirstCardJSONUnmarshal(t *testing.T) {
 	}
 
 	bytes := []byte(`{
-  "door": 3,
   "start-time": "08:30",
   "end-time": "16:45",
   "active-state": "normally open",
