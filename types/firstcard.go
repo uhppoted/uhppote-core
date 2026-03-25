@@ -7,24 +7,24 @@ import (
 )
 
 type FirstCard struct {
-	From     HHmm         `json:"start-time"`
-	To       HHmm         `json:"end-time"`
-	Active   ControlState `json:"active-state"`
-	Inactive ControlState `json:"inactive-state"`
-	Weekdays Weekdays     `json:"weekdays,omitempty"`
+	StartTime HHmm         `json:"start-time"`
+	EndTime   HHmm         `json:"end-time"`
+	Active    ControlState `json:"active-state"`
+	Inactive  ControlState `json:"inactive-state"`
+	Weekdays  Weekdays     `json:"weekdays,omitempty"`
 }
 
 func (f FirstCard) String() string {
-	from := fmt.Sprintf("%v", f.From)
-	to := fmt.Sprintf("%v", f.To)
+	start := fmt.Sprintf("%v", f.StartTime)
+	end := fmt.Sprintf("%v", f.EndTime)
 	times := ""
 
-	if from != "" && to != "" {
-		times = from + "-" + to
-	} else if from != "" {
-		times = from + "-"
+	if start != "" && end != "" {
+		times = start + "-" + end
+	} else if start != "" {
+		times = start + "-"
 	} else {
-		times = "-" + to
+		times = "-" + end
 	}
 
 	active := fmt.Sprintf("%4v", f.Active)
@@ -43,11 +43,11 @@ func (f FirstCard) String() string {
 
 func (f *FirstCard) UnmarshalJSON(bytes []byte) error {
 	firstcard := struct {
-		From     HHmm         `json:"start-time,omitempty"`
-		To       HHmm         `json:"end-time,omitempty"`
-		Active   ControlState `json:"active-state"`
-		Inactive ControlState `json:"inactive-state"`
-		Weekdays Weekdays     `json:"weekdays,omitempty"`
+		StartTime HHmm         `json:"start-time,omitempty"`
+		EndTime   HHmm         `json:"end-time,omitempty"`
+		Active    ControlState `json:"active-state"`
+		Inactive  ControlState `json:"inactive-state"`
+		Weekdays  Weekdays     `json:"weekdays,omitempty"`
 	}{
 		Weekdays: Weekdays{},
 	}
@@ -56,8 +56,8 @@ func (f *FirstCard) UnmarshalJSON(bytes []byte) error {
 		return err
 	}
 
-	f.From = firstcard.From
-	f.To = firstcard.To
+	f.StartTime = firstcard.StartTime
+	f.EndTime = firstcard.EndTime
 	f.Active = firstcard.Active
 	f.Inactive = firstcard.Inactive
 	f.Weekdays = firstcard.Weekdays

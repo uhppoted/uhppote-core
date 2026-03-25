@@ -12,10 +12,10 @@ func TestFirstCardToString(t *testing.T) {
 	expected := "active:08:30-16:45  control:normally open/normally closed  weekdays:Mon,Tue,Thurs,Sat,Sun"
 
 	firstcard := FirstCard{
-		From:     MustParseHHmm("8:30"),
-		To:       MustParseHHmm("16:45"),
-		Active:   NormallyOpen,
-		Inactive: NormallyClosed,
+		StartTime: MustParseHHmm("8:30"),
+		EndTime:   MustParseHHmm("16:45"),
+		Active:    NormallyOpen,
+		Inactive:  NormallyClosed,
 		Weekdays: Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -44,10 +44,10 @@ func TestFirstCardJSONMarshal(t *testing.T) {
 }`
 
 	firstcard := FirstCard{
-		From:     MustParseHHmm("8:30"),
-		To:       MustParseHHmm("16:45"),
-		Active:   NormallyOpen,
-		Inactive: NormallyClosed,
+		StartTime: MustParseHHmm("8:30"),
+		EndTime:   MustParseHHmm("16:45"),
+		Active:    NormallyOpen,
+		Inactive:  NormallyClosed,
 		Weekdays: Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -71,10 +71,10 @@ func TestFirstCardJSONMarshal(t *testing.T) {
 
 func TestFirstCardJSONUnmarshal(t *testing.T) {
 	expected := FirstCard{
-		From:     MustParseHHmm("8:30"),
-		To:       MustParseHHmm("16:45"),
-		Active:   NormallyOpen,
-		Inactive: NormallyClosed,
+		StartTime: MustParseHHmm("8:30"),
+		EndTime:   MustParseHHmm("16:45"),
+		Active:    NormallyOpen,
+		Inactive:  NormallyClosed,
 		Weekdays: Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,

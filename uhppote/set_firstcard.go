@@ -16,8 +16,8 @@ func (u *uhppote) SetFirstCard(serialNumber uint32, door uint8, firstcard types.
 	request := messages.SetFirstCardRequest{
 		SerialNumber:     types.SerialNumber(serialNumber),
 		Door:             door,
-		StartTime:        firstcard.From,
-		EndTime:          firstcard.To,
+		StartTime:        firstcard.StartTime,
+		EndTime:          firstcard.EndTime,
 		StartDoorControl: uint8(firstcard.Active),
 		EndDoorControl:   uint8(firstcard.Inactive),
 		Monday:           firstcard.Weekdays[time.Monday],

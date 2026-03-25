@@ -17,10 +17,10 @@ func TestSetFirstCard(t *testing.T) {
 	}
 
 	firstcard := types.FirstCard{
-		From:     types.MustParseHHmm("08:30"),
-		To:       types.MustParseHHmm("16:45"),
-		Active:   types.NormallyOpen,
-		Inactive: types.NormallyClosed,
+		StartTime: types.MustParseHHmm("08:30"),
+		EndTime:   types.MustParseHHmm("16:45"),
+		Active:    types.NormallyOpen,
+		Inactive:  types.NormallyClosed,
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -59,10 +59,10 @@ func TestSetFirstCardWithInvalidResponse(t *testing.T) {
 	}
 
 	firstcard := types.FirstCard{
-		From:     types.MustParseHHmm("08:30"),
-		To:       types.MustParseHHmm("16:45"),
-		Active:   types.NormallyOpen,
-		Inactive: types.NormallyClosed,
+		StartTime: types.MustParseHHmm("08:30"),
+		EndTime:   types.MustParseHHmm("16:45"),
+		Active:    types.NormallyOpen,
+		Inactive:  types.NormallyClosed,
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -90,10 +90,10 @@ func TestSetFirstCardWithInvalidResponse(t *testing.T) {
 
 func TestSetFirstCardWithInvalidDeviceID(t *testing.T) {
 	firstcard := types.FirstCard{
-		From:     types.MustParseHHmm("08:30"),
-		To:       types.MustParseHHmm("16:45"),
-		Active:   types.NormallyOpen,
-		Inactive: types.NormallyClosed,
+		StartTime: types.MustParseHHmm("08:30"),
+		EndTime:   types.MustParseHHmm("16:45"),
+		Active:    types.NormallyOpen,
+		Inactive:  types.NormallyClosed,
 		Weekdays: types.Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
