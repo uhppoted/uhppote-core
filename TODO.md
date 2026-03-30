@@ -1,7 +1,13 @@
 # TODO
 
 - [x] 'first card' API (cf. https://github.com/uhppoted/uhppoted/issues/82)
-
+    - [ ] allow only first card swipe
+    - [ ] fix control1/control2:
+        - 0: controlled
+        - 1: door open
+        - 2: door closed
+        - 3: first card only
+    - [x] add first card privileges to _PutCard_
 
 - [ ] Unit test for Task.MarshalJSON
     - `go fix` legitimately removed the omitempty from _From_ and _To_ fields

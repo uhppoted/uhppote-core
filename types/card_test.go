@@ -8,7 +8,7 @@ import (
 )
 
 func TestCardToString(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y"
+	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y  Y,N,Y,Y"
 
 	card := Card{
 		CardNumber: 12345,
@@ -20,6 +20,12 @@ func TestCardToString(t *testing.T) {
 			3: 29,
 			4: 1,
 		},
+		FirstCard: map[uint8]bool{
+			1: true,
+			2: false,
+			3: true,
+			4: true,
+		},
 	}
 
 	s := fmt.Sprintf("%v", card)
@@ -30,7 +36,7 @@ func TestCardToString(t *testing.T) {
 }
 
 func TestCardWithPINToString(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y 987654"
+	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y 987654  Y,N,Y,Y"
 
 	card := Card{
 		CardNumber: 12345,
@@ -43,6 +49,12 @@ func TestCardWithPINToString(t *testing.T) {
 			4: 1,
 		},
 		PIN: 987654,
+		FirstCard: map[uint8]bool{
+			1: true,
+			2: false,
+			3: true,
+			4: true,
+		},
 	}
 
 	s := fmt.Sprintf("%v", card)
@@ -53,7 +65,7 @@ func TestCardWithPINToString(t *testing.T) {
 }
 
 func TestCardWithInvalidPINToString(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y"
+	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y  Y,N,Y,Y"
 
 	card := Card{
 		CardNumber: 12345,
@@ -66,6 +78,12 @@ func TestCardWithInvalidPINToString(t *testing.T) {
 			4: 1,
 		},
 		PIN: 1000000,
+		FirstCard: map[uint8]bool{
+			1: true,
+			2: false,
+			3: true,
+			4: true,
+		},
 	}
 
 	s := fmt.Sprintf("%v", card)
@@ -76,7 +94,7 @@ func TestCardWithInvalidPINToString(t *testing.T) {
 }
 
 func TestCardToStringWithMissingFromDate(t *testing.T) {
-	expected := "12345    -          2020-12-31 Y N N Y"
+	expected := "12345    -          2020-12-31 Y N N Y  Y,N,Y,Y"
 
 	card := Card{
 		CardNumber: 12345,
@@ -86,6 +104,12 @@ func TestCardToStringWithMissingFromDate(t *testing.T) {
 			2: 0,
 			3: 0,
 			4: 1,
+		},
+		FirstCard: map[uint8]bool{
+			1: true,
+			2: false,
+			3: true,
+			4: true,
 		},
 	}
 
@@ -97,7 +121,7 @@ func TestCardToStringWithMissingFromDate(t *testing.T) {
 }
 
 func TestCardToStringWithMissingToDate(t *testing.T) {
-	expected := "12345    2020-01-01 -          Y N N Y"
+	expected := "12345    2020-01-01 -          Y N N Y  Y,N,Y,Y"
 
 	from := MustParseDate("2020-01-01")
 	card := Card{
@@ -109,6 +133,12 @@ func TestCardToStringWithMissingToDate(t *testing.T) {
 			3: 0,
 			4: 1,
 		},
+		FirstCard: map[uint8]bool{
+			1: true,
+			2: false,
+			3: true,
+			4: true,
+		},
 	}
 
 	s := fmt.Sprintf("%v", card)
@@ -119,7 +149,7 @@ func TestCardToStringWithMissingToDate(t *testing.T) {
 }
 
 func TestCardToStringWithMissingDoors(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N N N"
+	expected := "12345    2020-01-01 2020-12-31 Y N N N  Y,N,Y,Y"
 
 	card := Card{
 		CardNumber: 12345,
@@ -128,6 +158,12 @@ func TestCardToStringWithMissingDoors(t *testing.T) {
 		Doors: map[uint8]uint8{
 			1: 1,
 			2: 0,
+		},
+		FirstCard: map[uint8]bool{
+			1: true,
+			2: false,
+			3: true,
+			4: true,
 		},
 	}
 
@@ -139,7 +175,7 @@ func TestCardToStringWithMissingDoors(t *testing.T) {
 }
 
 func TestCardToStringWithExtraDoors(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N N Y"
+	expected := "12345    2020-01-01 2020-12-31 Y N N Y  Y,N,Y,Y"
 
 	card := Card{
 		CardNumber: 12345,
@@ -152,6 +188,12 @@ func TestCardToStringWithExtraDoors(t *testing.T) {
 			4: 1,
 			5: 1,
 			6: 0,
+		},
+		FirstCard: map[uint8]bool{
+			1: true,
+			2: false,
+			3: true,
+			4: true,
 		},
 	}
 
@@ -174,6 +216,12 @@ func TestCardMarshalJSON(t *testing.T) {
 			3: 29,
 			4: 1,
 		},
+		FirstCard: map[uint8]bool{
+			1: true,
+			2: false,
+			3: true,
+			4: true,
+		},
 	}
 
 	expected := `{
@@ -185,6 +233,12 @@ func TestCardMarshalJSON(t *testing.T) {
     "2": 0,
     "3": 29,
     "4": 1
+  },
+  "first-card": {
+    "1": true,
+    "2": false,
+    "3": true,
+    "4": true
   }
 }`
 
@@ -211,6 +265,12 @@ func TestCardWithPINMarshalJSON(t *testing.T) {
 			4: 1,
 		},
 		PIN: 987654,
+		FirstCard: map[uint8]bool{
+			1: true,
+			2: false,
+			3: true,
+			4: true,
+		},
 	}
 
 	expected := `{
@@ -223,7 +283,13 @@ func TestCardWithPINMarshalJSON(t *testing.T) {
     "3": 29,
     "4": 1
   },
-  "PIN": "987654"
+  "PIN": "987654",
+  "first-card": {
+    "1": true,
+    "2": false,
+    "3": true,
+    "4": true
+  }
 }`
 
 	blob, err := json.MarshalIndent(card, "", "  ")
@@ -249,6 +315,12 @@ func TestCardWithInvalidPINMarshalJSON(t *testing.T) {
 			4: 1,
 		},
 		PIN: 98765432,
+		FirstCard: map[uint8]bool{
+			1: true,
+			2: false,
+			3: true,
+			4: true,
+		},
 	}
 
 	expected := `{
@@ -260,6 +332,12 @@ func TestCardWithInvalidPINMarshalJSON(t *testing.T) {
     "2": 0,
     "3": 29,
     "4": 1
+  },
+  "first-card": {
+    "1": true,
+    "2": false,
+    "3": true,
+    "4": true
   }
 }`
 
@@ -286,6 +364,12 @@ func TestUnmarshalCard(t *testing.T) {
 			4: 1,
 		},
 		PIN: 0,
+		FirstCard: map[uint8]bool{
+			1: true,
+			2: false,
+			3: true,
+			4: true,
+		},
 	}
 
 	blob := `{
@@ -297,6 +381,12 @@ func TestUnmarshalCard(t *testing.T) {
     "2": 0,
     "3": 29,
     "4": 1
+  },
+  "first-card": {
+    "1": true,
+    "2": false,
+    "3": true,
+    "4": true
   }
 } `
 
@@ -324,6 +414,12 @@ func TestUnmarshalCardWithPIN(t *testing.T) {
 			4: 1,
 		},
 		PIN: 987654,
+		FirstCard: map[uint8]bool{
+			1: true,
+			2: false,
+			3: true,
+			4: true,
+		},
 	}
 
 	blob := `{
@@ -336,7 +432,13 @@ func TestUnmarshalCardWithPIN(t *testing.T) {
     "3": 29,
     "4": 1
   },
-  "PIN": "987654"
+  "PIN": "987654",
+  "first-card": {
+    "1": true,
+    "2": false,
+    "3": true,
+    "4": true
+  }
 } `
 
 	card := Card{}
@@ -362,6 +464,12 @@ func TestUnmarshalCardWithMissingCardNumber(t *testing.T) {
 			3: 0,
 			4: 1,
 		},
+		FirstCard: map[uint8]bool{
+			1: true,
+			2: false,
+			3: true,
+			4: true,
+		},
 	}
 
 	blob := `{
@@ -372,6 +480,12 @@ func TestUnmarshalCardWithMissingCardNumber(t *testing.T) {
     "2":0,
     "3":0,
     "4":1
+  },
+  "first-card": {
+    "1": true,
+    "2": false,
+    "3": true,
+    "4": true
   }
 } `
 
@@ -396,7 +510,13 @@ func TestUnmarshalCardWithMissingStartDate(t *testing.T) {
     "2": false,
     "3": false,
     "4": true
-  ]
+  ],
+  "first-card": {
+    "1": true,
+    "2": false,
+    "3": true,
+    "4": true
+  }
 } `
 	card := Card{}
 	err := json.Unmarshal([]byte(blob), &card)
@@ -415,7 +535,13 @@ func TestUnmarshalCardWithMissingEndDate(t *testing.T) {
     "2": false,
     "3": false,
     "4": true
-  ]
+  ],
+  "first-card": {
+    "1": true,
+    "2": false,
+    "3": true,
+    "4": true
+  }
 } `
 	card := Card{}
 	err := json.Unmarshal([]byte(blob), &card)
@@ -436,6 +562,12 @@ func TestUnmarshalCardWithMissingDoors(t *testing.T) {
 			3: 0,
 			4: 0,
 		},
+		FirstCard: map[uint8]bool{
+			1: true,
+			2: false,
+			3: true,
+			4: true,
+		},
 	}
 
 	blob := `{
@@ -444,6 +576,12 @@ func TestUnmarshalCardWithMissingDoors(t *testing.T) {
   "end-date": "2020-12-31",
   "doors": {
     "2": 1
+  },
+  "first-card": {
+    "1": true,
+    "2": false,
+    "3": true,
+    "4": true
   }
 } `
 
@@ -470,6 +608,12 @@ func TestUnmarshalCardWithInvalidDoors(t *testing.T) {
 			3: 0,
 			4: 0,
 		},
+		FirstCard: map[uint8]bool{
+			1: true,
+			2: false,
+			3: true,
+			4: true,
+		},
 	}
 
 	blob := `{
@@ -479,6 +623,12 @@ func TestUnmarshalCardWithInvalidDoors(t *testing.T) {
   "doors": {
     "1": 1,
     "5": 0
+  },
+  "first-card": {
+    "1": true,
+    "2": false,
+    "3": true,
+    "4": true
   }
 } `
 	card := Card{}
@@ -504,12 +654,158 @@ func TestUnmarshalCardWithInvalidPIN(t *testing.T) {
     "3": 29,
     "4": 1
   },
-  "PIN": "1000000"
+  "PIN": "1000000",
+  "first-card": {
+    "1": true,
+    "2": false,
+    "3": true,
+    "4": true
+  }
 } `
 
 	card := Card{}
 
 	if err := json.Unmarshal([]byte(blob), &card); err == nil {
 		t.Errorf("Expected error unmarshalling card with invalid PIN, got:%v", err)
+	}
+}
+
+func TestUnmarshalCardWithoutFirstCard(t *testing.T) {
+	expected := Card{
+		CardNumber: 12345,
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
+		Doors: map[uint8]uint8{
+			1: 1,
+			2: 0,
+			3: 29,
+			4: 1,
+		},
+		PIN: 0,
+		FirstCard: map[uint8]bool{
+			1: false,
+			2: false,
+			3: false,
+			4: false,
+		},
+	}
+
+	blob := `{
+  "card-number": 12345,
+  "start-date": "2020-01-01",
+  "end-date": "2020-12-31",
+  "doors": {
+    "1": 1,
+    "2": 0,
+    "3": 29,
+    "4": 1
+  }
+} `
+
+	card := Card{}
+	err := json.Unmarshal([]byte(blob), &card)
+
+	if err != nil {
+		t.Errorf("Unexpected error unmarshalling card (%v)", err)
+	}
+
+	if !reflect.DeepEqual(card, expected) {
+		t.Errorf("Card incorrectly unmarshalled\n   expected:%#v\n   got:     %#v", expected, card)
+	}
+}
+
+func TestUnmarshalCardWithPartialFirstCard(t *testing.T) {
+	expected := Card{
+		CardNumber: 12345,
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
+		Doors: map[uint8]uint8{
+			1: 1,
+			2: 0,
+			3: 29,
+			4: 1,
+		},
+		PIN: 0,
+		FirstCard: map[uint8]bool{
+			1: true,
+			2: false,
+			3: false,
+			4: true,
+		},
+	}
+
+	blob := `{
+  "card-number": 12345,
+  "start-date": "2020-01-01",
+  "end-date": "2020-12-31",
+  "doors": {
+    "1": 1,
+    "2": 0,
+    "3": 29,
+    "4": 1
+  },
+  "first-card": {
+    "1": true,
+    "4": true
+  }
+} `
+
+	card := Card{}
+	err := json.Unmarshal([]byte(blob), &card)
+
+	if err != nil {
+		t.Errorf("Unexpected error unmarshalling card (%v)", err)
+	}
+
+	if !reflect.DeepEqual(card, expected) {
+		t.Errorf("Card incorrectly unmarshalled\n   expected:%#v\n   got:     %#v", expected, card)
+	}
+}
+
+func TestUnmarshalCardWithIncorrectFirstCard(t *testing.T) {
+	expected := Card{
+		CardNumber: 12345,
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
+		Doors: map[uint8]uint8{
+			1: 1,
+			2: 0,
+			3: 29,
+			4: 1,
+		},
+		PIN: 0,
+		FirstCard: map[uint8]bool{
+			1: false,
+			2: true,
+			3: false,
+			4: false,
+		},
+	}
+
+	blob := `{
+  "card-number": 12345,
+  "start-date": "2020-01-01",
+  "end-date": "2020-12-31",
+  "doors": {
+    "1": 1,
+    "2": 0,
+    "3": 29,
+    "4": 1
+  },
+  "first-card": {
+    "2": true,
+    "5": true
+  }
+} `
+
+	card := Card{}
+	err := json.Unmarshal([]byte(blob), &card)
+
+	if err != nil {
+		t.Errorf("Unexpected error unmarshalling card (%v)", err)
+	}
+
+	if !reflect.DeepEqual(card, expected) {
+		t.Errorf("Card incorrectly unmarshalled\n   expected:%#v\n   got:     %#v", expected, card)
 	}
 }

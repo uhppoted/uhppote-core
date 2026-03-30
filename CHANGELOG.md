@@ -4,6 +4,7 @@
 
 ### Added
 1. Added _set-first-card_ API function.
+2. Added _first-card_ to card APIs.
 
 ### Updated
 1. Updated to Go version 1.26.

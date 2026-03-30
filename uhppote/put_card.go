@@ -25,6 +25,24 @@ func (u *uhppote) PutCard(deviceID uint32, card types.Card, formats ...types.Car
 		return false, fmt.Errorf("invalid PIN (%v)", card.PIN)
 	}
 
+	firstcard := uint8(0x00)
+
+	if v, ok := card.FirstCard[1]; v && ok {
+		firstcard = firstcard | 0x01
+	}
+
+	if v, ok := card.FirstCard[2]; v && ok {
+		firstcard = firstcard | 0x02
+	}
+
+	if v, ok := card.FirstCard[3]; v && ok {
+		firstcard = firstcard | 0x04
+	}
+
+	if v, ok := card.FirstCard[4]; v && ok {
+		firstcard = firstcard | 0x08
+	}
+
 	request := messages.PutCardRequest{
 		SerialNumber: types.SerialNumber(deviceID),
 		CardNumber:   card.CardNumber,
@@ -35,6 +53,7 @@ func (u *uhppote) PutCard(deviceID uint32, card types.Card, formats ...types.Car
 		Door3:        uint8(card.Doors[3]),
 		Door4:        uint8(card.Doors[4]),
 		PIN:          card.PIN,
+		FirstCard:    firstcard,
 	}
 
 	if reply, err := sendto[messages.PutCardResponse](u, deviceID, request); err != nil {

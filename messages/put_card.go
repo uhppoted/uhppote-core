@@ -15,6 +15,7 @@ type PutCardRequest struct {
 	Door3        uint8              `uhppote:"offset:22"`
 	Door4        uint8              `uhppote:"offset:23"`
 	PIN          types.PIN          `uhppote:"offset:24"`
+	FirstCard    uint8              `uhppote:"offset:27"`
 }
 
 type PutCardResponse struct {
