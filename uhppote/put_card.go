@@ -27,19 +27,19 @@ func (u *uhppote) PutCard(deviceID uint32, card types.Card, formats ...types.Car
 
 	firstcard := uint8(0x00)
 
-	if v, ok := card.FirstCard[1]; v && ok {
+	if card.FirstCard.Door1 {
 		firstcard = firstcard | 0x01
 	}
 
-	if v, ok := card.FirstCard[2]; v && ok {
+	if card.FirstCard.Door2 {
 		firstcard = firstcard | 0x02
 	}
 
-	if v, ok := card.FirstCard[3]; v && ok {
+	if card.FirstCard.Door3 {
 		firstcard = firstcard | 0x04
 	}
 
-	if v, ok := card.FirstCard[4]; v && ok {
+	if card.FirstCard.Door4 {
 		firstcard = firstcard | 0x08
 	}
 

@@ -7,12 +7,19 @@ import (
 )
 
 type Card struct {
-	CardNumber uint32          `json:"card-number"`
-	From       Date            `json:"start-date"`
-	To         Date            `json:"end-date"`
-	Doors      map[uint8]uint8 `json:"doors"`
-	PIN        PIN             `json:"PIN,omitempty"`
-	FirstCard  map[uint8]bool  `json:"first-card"`
+	CardNumber uint32              `json:"card-number"`
+	From       Date                `json:"start-date"`
+	To         Date                `json:"end-date"`
+	Doors      map[uint8]uint8     `json:"doors"`
+	PIN        PIN                 `json:"PIN,omitempty"`
+	FirstCard  FirstCardPrivileges `json:"first-card"`
+}
+
+type FirstCardPrivileges struct {
+	Door1 bool
+	Door2 bool
+	Door3 bool
+	Door4 bool
 }
 
 func (c Card) String() string {
@@ -32,14 +39,6 @@ func (c Card) String() string {
 		}
 	}
 
-	g := func(d uint8) string {
-		if v, ok := c.FirstCard[d]; v && ok {
-			return "Y"
-		} else {
-			return "N"
-		}
-	}
-
 	var from string
 	if c.From.IsZero() {
 		from = "-"
@@ -54,23 +53,21 @@ func (c Card) String() string {
 		to = fmt.Sprintf("%v", c.To)
 	}
 
-	firstcard := strings.Join([]string{g(1), g(2), g(3), g(4)}, ",")
-
 	if c.PIN == 0 || c.PIN > 999999 {
-		return fmt.Sprintf("%-8v %-10v %-10v %v %v %v %v  %v", c.CardNumber, from, to, f(c.Doors[1]), f(c.Doors[2]), f(c.Doors[3]), f(c.Doors[4]), firstcard)
+		return fmt.Sprintf("%-8v %-10v %-10v %v %v %v %v %v", c.CardNumber, from, to, f(c.Doors[1]), f(c.Doors[2]), f(c.Doors[3]), f(c.Doors[4]), c.FirstCard)
 	} else {
-		return fmt.Sprintf("%-8v %-10v %-10v %v %v %v %v %v  %v", c.CardNumber, from, to, f(c.Doors[1]), f(c.Doors[2]), f(c.Doors[3]), f(c.Doors[4]), c.PIN, firstcard)
+		return fmt.Sprintf("%-8v %-10v %-10v %v %v %v %v %v %v", c.CardNumber, from, to, f(c.Doors[1]), f(c.Doors[2]), f(c.Doors[3]), f(c.Doors[4]), c.PIN, c.FirstCard)
 	}
 }
 
 func (c Card) MarshalJSON() ([]byte, error) {
 	card := struct {
-		CardNumber uint32          `json:"card-number"`
-		From       Date            `json:"start-date"`
-		To         Date            `json:"end-date"`
-		Doors      map[uint8]uint8 `json:"doors"`
-		PIN        PIN             `json:"PIN,omitempty"`
-		FirstCard  map[uint8]bool  `json:"first-card,omitempty"`
+		CardNumber uint32              `json:"card-number"`
+		From       Date                `json:"start-date"`
+		To         Date                `json:"end-date"`
+		Doors      map[uint8]uint8     `json:"doors"`
+		PIN        PIN                 `json:"PIN,omitempty"`
+		FirstCard  FirstCardPrivileges `json:"first-card,omitempty"`
 	}{
 		CardNumber: c.CardNumber,
 		From:       c.From,
@@ -89,15 +86,14 @@ func (c Card) MarshalJSON() ([]byte, error) {
 
 func (c *Card) UnmarshalJSON(bytes []byte) error {
 	card := struct {
-		CardNumber uint32         `json:"card-number"`
-		From       string         `json:"start-date"`
-		To         string         `json:"end-date"`
-		Doors      map[uint8]int  `json:"doors"`
-		PIN        PIN            `json:"PIN"`
-		FirstCard  map[uint8]bool `json:"first-card"`
+		CardNumber uint32              `json:"card-number"`
+		From       string              `json:"start-date"`
+		To         string              `json:"end-date"`
+		Doors      map[uint8]int       `json:"doors"`
+		PIN        PIN                 `json:"PIN"`
+		FirstCard  FirstCardPrivileges `json:"first-card"`
 	}{
-		Doors:     map[uint8]int{1: 0, 2: 0, 3: 0, 4: 0},
-		FirstCard: map[uint8]bool{1: false, 2: false, 3: false, 4: false},
+		Doors: map[uint8]int{1: 0, 2: 0, 3: 0, 4: 0},
 	}
 
 	if err := json.Unmarshal(bytes, &card); err != nil {
@@ -123,20 +119,12 @@ func (c *Card) UnmarshalJSON(bytes []byte) error {
 		3: 0,
 		4: 0,
 	}
+
 	c.PIN = card.PIN
-	c.FirstCard = map[uint8]bool{
-		1: false,
-		2: false,
-		3: false,
-		4: false,
-	}
+	c.FirstCard = card.FirstCard
 
 	for _, i := range []uint8{1, 2, 3, 4} {
 		c.Doors[i] = uint8(card.Doors[i])
-	}
-
-	for _, i := range []uint8{1, 2, 3, 4} {
-		c.FirstCard[i] = card.FirstCard[i]
 	}
 
 	return nil
@@ -153,8 +141,65 @@ func (c *Card) Clone() Card {
 			3: c.Doors[3],
 			4: c.Doors[4],
 		},
-		PIN: c.PIN,
+		PIN:       c.PIN,
+		FirstCard: c.FirstCard,
 	}
 
 	return card
+}
+
+func (f FirstCardPrivileges) ForEach(fn func(door uint8, enabled bool)) {
+	if fn != nil {
+		fn(1, f.Door1)
+		fn(2, f.Door2)
+		fn(3, f.Door3)
+		fn(4, f.Door4)
+	}
+}
+
+func (f FirstCardPrivileges) String() string {
+	v := []string{}
+
+	f.ForEach(func(d uint8, enabled bool) {
+		if enabled {
+			v = append(v, fmt.Sprintf("%v", d))
+		}
+	})
+
+	if len(v) == 0 {
+		return "-"
+	}
+
+	return strings.Join(v, ",")
+}
+
+func (f FirstCardPrivileges) MarshalJSON() ([]byte, error) {
+	m := map[uint8]bool{
+		1: f.Door1,
+		2: f.Door2,
+		3: f.Door3,
+		4: f.Door4,
+	}
+
+	return json.Marshal(m)
+}
+
+func (f *FirstCardPrivileges) UnmarshalJSON(bytes []byte) error {
+	m := map[uint8]bool{
+		1: false,
+		2: false,
+		3: false,
+		4: false,
+	}
+
+	if err := json.Unmarshal(bytes, &m); err != nil {
+		return err
+	}
+
+	f.Door1 = m[1]
+	f.Door2 = m[2]
+	f.Door3 = m[3]
+	f.Door4 = m[4]
+
+	return nil
 }

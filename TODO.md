@@ -8,6 +8,8 @@
         - 2: door closed
         - 3: first card only
     - [x] add first card privileges to _PutCard_
+    - [ ] replace _FirstCard_ map with struct
+    - [ ] replace _Doors_ map with struct
 
 - [ ] Unit test for Task.MarshalJSON
     - `go fix` legitimately removed the omitempty from _From_ and _To_ fields

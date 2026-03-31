@@ -40,11 +40,11 @@ func TestPutCard(t *testing.T) {
 				4: 1,
 			},
 			PIN: 54321,
-			FirstCard: map[uint8]bool{
-				1: true,
-				2: false,
-				3: true,
-				4: true,
+			FirstCard: types.FirstCardPrivileges{
+				Door1: true,
+				Door2: false,
+				Door3: true,
+				Door4: true,
 			},
 		},
 	}
@@ -72,11 +72,11 @@ func TestPutCard(t *testing.T) {
 			4: 1,
 		},
 		PIN: 54321,
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: true,
-			4: true,
+		FirstCard: types.FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: true,
+			Door4: true,
 		},
 	}
 

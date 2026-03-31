@@ -8,7 +8,7 @@ import (
 )
 
 func TestCardToString(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y  Y,N,Y,Y"
+	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y 1,3,4"
 
 	card := Card{
 		CardNumber: 12345,
@@ -20,11 +20,11 @@ func TestCardToString(t *testing.T) {
 			3: 29,
 			4: 1,
 		},
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: true,
-			4: true,
+		FirstCard: FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: true,
+			Door4: true,
 		},
 	}
 
@@ -35,8 +35,8 @@ func TestCardToString(t *testing.T) {
 	}
 }
 
-func TestCardWithPINToString(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y 987654  Y,N,Y,Y"
+func TestCardToStringWithPIN(t *testing.T) {
+	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y 987654 1,3,4"
 
 	card := Card{
 		CardNumber: 12345,
@@ -49,11 +49,11 @@ func TestCardWithPINToString(t *testing.T) {
 			4: 1,
 		},
 		PIN: 987654,
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: true,
-			4: true,
+		FirstCard: FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: true,
+			Door4: true,
 		},
 	}
 
@@ -64,8 +64,8 @@ func TestCardWithPINToString(t *testing.T) {
 	}
 }
 
-func TestCardWithInvalidPINToString(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y  Y,N,Y,Y"
+func TestCardToStringWithInvalidPIN(t *testing.T) {
+	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y 1,3,4"
 
 	card := Card{
 		CardNumber: 12345,
@@ -78,11 +78,11 @@ func TestCardWithInvalidPINToString(t *testing.T) {
 			4: 1,
 		},
 		PIN: 1000000,
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: true,
-			4: true,
+		FirstCard: FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: true,
+			Door4: true,
 		},
 	}
 
@@ -94,7 +94,7 @@ func TestCardWithInvalidPINToString(t *testing.T) {
 }
 
 func TestCardToStringWithMissingFromDate(t *testing.T) {
-	expected := "12345    -          2020-12-31 Y N N Y  Y,N,Y,Y"
+	expected := "12345    -          2020-12-31 Y N N Y 1,3,4"
 
 	card := Card{
 		CardNumber: 12345,
@@ -105,11 +105,11 @@ func TestCardToStringWithMissingFromDate(t *testing.T) {
 			3: 0,
 			4: 1,
 		},
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: true,
-			4: true,
+		FirstCard: FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: true,
+			Door4: true,
 		},
 	}
 
@@ -121,7 +121,7 @@ func TestCardToStringWithMissingFromDate(t *testing.T) {
 }
 
 func TestCardToStringWithMissingToDate(t *testing.T) {
-	expected := "12345    2020-01-01 -          Y N N Y  Y,N,Y,Y"
+	expected := "12345    2020-01-01 -          Y N N Y 1,3,4"
 
 	from := MustParseDate("2020-01-01")
 	card := Card{
@@ -133,11 +133,11 @@ func TestCardToStringWithMissingToDate(t *testing.T) {
 			3: 0,
 			4: 1,
 		},
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: true,
-			4: true,
+		FirstCard: FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: true,
+			Door4: true,
 		},
 	}
 
@@ -149,7 +149,7 @@ func TestCardToStringWithMissingToDate(t *testing.T) {
 }
 
 func TestCardToStringWithMissingDoors(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N N N  Y,N,Y,Y"
+	expected := "12345    2020-01-01 2020-12-31 Y N N N 1,3,4"
 
 	card := Card{
 		CardNumber: 12345,
@@ -159,11 +159,11 @@ func TestCardToStringWithMissingDoors(t *testing.T) {
 			1: 1,
 			2: 0,
 		},
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: true,
-			4: true,
+		FirstCard: FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: true,
+			Door4: true,
 		},
 	}
 
@@ -175,7 +175,7 @@ func TestCardToStringWithMissingDoors(t *testing.T) {
 }
 
 func TestCardToStringWithExtraDoors(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N N Y  Y,N,Y,Y"
+	expected := "12345    2020-01-01 2020-12-31 Y N N Y 1,3,4"
 
 	card := Card{
 		CardNumber: 12345,
@@ -189,11 +189,40 @@ func TestCardToStringWithExtraDoors(t *testing.T) {
 			5: 1,
 			6: 0,
 		},
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: true,
-			4: true,
+		FirstCard: FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: true,
+			Door4: true,
+		},
+	}
+
+	s := fmt.Sprintf("%v", card)
+
+	if s != expected {
+		t.Errorf("Card incorrectly stringified\n   expected:%+v\n   got:     %+v", expected, s)
+	}
+}
+
+func TestCardToStringWithoutFirstCardPrivileges(t *testing.T) {
+	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y 987654 -"
+
+	card := Card{
+		CardNumber: 12345,
+		From:       MustParseDate("2020-01-01"),
+		To:         MustParseDate("2020-12-31"),
+		Doors: map[uint8]uint8{
+			1: 1,
+			2: 0,
+			3: 29,
+			4: 1,
+		},
+		PIN: 987654,
+		FirstCard: FirstCardPrivileges{
+			Door1: false,
+			Door2: false,
+			Door3: false,
+			Door4: false,
 		},
 	}
 
@@ -216,11 +245,11 @@ func TestCardMarshalJSON(t *testing.T) {
 			3: 29,
 			4: 1,
 		},
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: true,
-			4: true,
+		FirstCard: FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: true,
+			Door4: true,
 		},
 	}
 
@@ -265,11 +294,11 @@ func TestCardWithPINMarshalJSON(t *testing.T) {
 			4: 1,
 		},
 		PIN: 987654,
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: true,
-			4: true,
+		FirstCard: FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: true,
+			Door4: true,
 		},
 	}
 
@@ -315,11 +344,11 @@ func TestCardWithInvalidPINMarshalJSON(t *testing.T) {
 			4: 1,
 		},
 		PIN: 98765432,
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: true,
-			4: true,
+		FirstCard: FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: true,
+			Door4: true,
 		},
 	}
 
@@ -364,11 +393,11 @@ func TestUnmarshalCard(t *testing.T) {
 			4: 1,
 		},
 		PIN: 0,
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: true,
-			4: true,
+		FirstCard: FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: true,
+			Door4: true,
 		},
 	}
 
@@ -414,11 +443,11 @@ func TestUnmarshalCardWithPIN(t *testing.T) {
 			4: 1,
 		},
 		PIN: 987654,
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: true,
-			4: true,
+		FirstCard: FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: true,
+			Door4: true,
 		},
 	}
 
@@ -464,11 +493,11 @@ func TestUnmarshalCardWithMissingCardNumber(t *testing.T) {
 			3: 0,
 			4: 1,
 		},
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: true,
-			4: true,
+		FirstCard: FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: true,
+			Door4: true,
 		},
 	}
 
@@ -562,11 +591,11 @@ func TestUnmarshalCardWithMissingDoors(t *testing.T) {
 			3: 0,
 			4: 0,
 		},
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: true,
-			4: true,
+		FirstCard: FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: true,
+			Door4: true,
 		},
 	}
 
@@ -608,11 +637,11 @@ func TestUnmarshalCardWithInvalidDoors(t *testing.T) {
 			3: 0,
 			4: 0,
 		},
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: true,
-			4: true,
+		FirstCard: FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: true,
+			Door4: true,
 		},
 	}
 
@@ -682,11 +711,11 @@ func TestUnmarshalCardWithoutFirstCard(t *testing.T) {
 			4: 1,
 		},
 		PIN: 0,
-		FirstCard: map[uint8]bool{
-			1: false,
-			2: false,
-			3: false,
-			4: false,
+		FirstCard: FirstCardPrivileges{
+			Door1: false,
+			Door2: false,
+			Door3: false,
+			Door4: false,
 		},
 	}
 
@@ -726,11 +755,11 @@ func TestUnmarshalCardWithPartialFirstCard(t *testing.T) {
 			4: 1,
 		},
 		PIN: 0,
-		FirstCard: map[uint8]bool{
-			1: true,
-			2: false,
-			3: false,
-			4: true,
+		FirstCard: FirstCardPrivileges{
+			Door1: true,
+			Door2: false,
+			Door3: false,
+			Door4: true,
 		},
 	}
 
@@ -774,11 +803,11 @@ func TestUnmarshalCardWithIncorrectFirstCard(t *testing.T) {
 			4: 1,
 		},
 		PIN: 0,
-		FirstCard: map[uint8]bool{
-			1: false,
-			2: true,
-			3: false,
-			4: false,
+		FirstCard: FirstCardPrivileges{
+			Door1: false,
+			Door2: true,
+			Door3: false,
+			Door4: false,
 		},
 	}
 

@@ -47,11 +47,11 @@ func (u *uhppote) GetCardByID(deviceID, cardNumber uint32) (*types.Card, error) 
 				4: reply.Door4,
 			},
 			PIN: reply.PIN,
-			FirstCard: map[uint8]bool{
-				1: reply.FirstCard&0x01 == 0x01,
-				2: reply.FirstCard&0x02 == 0x02,
-				3: reply.FirstCard&0x04 == 0x04,
-				4: reply.FirstCard&0x08 == 0x08,
+			FirstCard: types.FirstCardPrivileges{
+				Door1: reply.FirstCard&0x01 == 0x01,
+				Door2: reply.FirstCard&0x02 == 0x02,
+				Door3: reply.FirstCard&0x04 == 0x04,
+				Door4: reply.FirstCard&0x08 == 0x08,
 			},
 		}
 
@@ -97,11 +97,11 @@ func (u *uhppote) GetCardByIndex(deviceID, index uint32) (*types.Card, error) {
 				4: reply.Door4,
 			},
 			PIN: reply.PIN,
-			FirstCard: map[uint8]bool{
-				1: reply.FirstCard&0x01 == 0x01,
-				2: reply.FirstCard&0x02 == 0x02,
-				3: reply.FirstCard&0x04 == 0x04,
-				4: reply.FirstCard&0x08 == 0x08,
+			FirstCard: types.FirstCardPrivileges{
+				Door1: reply.FirstCard&0x01 == 0x01,
+				Door2: reply.FirstCard&0x02 == 0x02,
+				Door3: reply.FirstCard&0x04 == 0x04,
+				Door4: reply.FirstCard&0x08 == 0x08,
 			},
 		}
 
