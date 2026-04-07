@@ -8,7 +8,7 @@ import (
 )
 
 func TestCardToString(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y 1,3,4"
+	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y firstcard:1,3,4"
 
 	card := Card{
 		CardNumber: 12345,
@@ -36,7 +36,7 @@ func TestCardToString(t *testing.T) {
 }
 
 func TestCardToStringWithPIN(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y 987654 1,3,4"
+	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y 987654 firstcard:1,3,4"
 
 	card := Card{
 		CardNumber: 12345,
@@ -65,7 +65,7 @@ func TestCardToStringWithPIN(t *testing.T) {
 }
 
 func TestCardToStringWithInvalidPIN(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y 1,3,4"
+	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y firstcard:1,3,4"
 
 	card := Card{
 		CardNumber: 12345,
@@ -94,7 +94,7 @@ func TestCardToStringWithInvalidPIN(t *testing.T) {
 }
 
 func TestCardToStringWithMissingFromDate(t *testing.T) {
-	expected := "12345    -          2020-12-31 Y N N Y 1,3,4"
+	expected := "12345    -          2020-12-31 Y N N Y firstcard:1,3,4"
 
 	card := Card{
 		CardNumber: 12345,
@@ -121,7 +121,7 @@ func TestCardToStringWithMissingFromDate(t *testing.T) {
 }
 
 func TestCardToStringWithMissingToDate(t *testing.T) {
-	expected := "12345    2020-01-01 -          Y N N Y 1,3,4"
+	expected := "12345    2020-01-01 -          Y N N Y firstcard:1,3,4"
 
 	from := MustParseDate("2020-01-01")
 	card := Card{
@@ -149,7 +149,7 @@ func TestCardToStringWithMissingToDate(t *testing.T) {
 }
 
 func TestCardToStringWithMissingDoors(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N N N 1,3,4"
+	expected := "12345    2020-01-01 2020-12-31 Y N N N firstcard:1,3,4"
 
 	card := Card{
 		CardNumber: 12345,
@@ -175,7 +175,7 @@ func TestCardToStringWithMissingDoors(t *testing.T) {
 }
 
 func TestCardToStringWithExtraDoors(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N N Y 1,3,4"
+	expected := "12345    2020-01-01 2020-12-31 Y N N Y firstcard:1,3,4"
 
 	card := Card{
 		CardNumber: 12345,
@@ -205,7 +205,7 @@ func TestCardToStringWithExtraDoors(t *testing.T) {
 }
 
 func TestCardToStringWithoutFirstCardPrivileges(t *testing.T) {
-	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y 987654 -"
+	expected := "12345    2020-01-01 2020-12-31 Y N 29 Y 987654"
 
 	card := Card{
 		CardNumber: 12345,

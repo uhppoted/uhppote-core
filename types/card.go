@@ -53,10 +53,15 @@ func (c Card) String() string {
 		to = fmt.Sprintf("%v", c.To)
 	}
 
+	firstcard := ""
+	if !c.FirstCard.IsZero() {
+		firstcard = fmt.Sprintf(" firstcard:%v", c.FirstCard)
+	}
+
 	if c.PIN == 0 || c.PIN > 999999 {
-		return fmt.Sprintf("%-8v %-10v %-10v %v %v %v %v %v", c.CardNumber, from, to, f(c.Doors[1]), f(c.Doors[2]), f(c.Doors[3]), f(c.Doors[4]), c.FirstCard)
+		return fmt.Sprintf("%-8v %-10v %-10v %v %v %v %v%v", c.CardNumber, from, to, f(c.Doors[1]), f(c.Doors[2]), f(c.Doors[3]), f(c.Doors[4]), firstcard)
 	} else {
-		return fmt.Sprintf("%-8v %-10v %-10v %v %v %v %v %v %v", c.CardNumber, from, to, f(c.Doors[1]), f(c.Doors[2]), f(c.Doors[3]), f(c.Doors[4]), c.PIN, c.FirstCard)
+		return fmt.Sprintf("%-8v %-10v %-10v %v %v %v %v %v%v", c.CardNumber, from, to, f(c.Doors[1]), f(c.Doors[2]), f(c.Doors[3]), f(c.Doors[4]), c.PIN, firstcard)
 	}
 }
 
@@ -157,6 +162,18 @@ func (f FirstCardPrivileges) ForEach(fn func(door uint8, enabled bool)) {
 	}
 }
 
+func (f FirstCardPrivileges) IsZero() bool {
+	isZero := true
+
+	f.ForEach(func(d uint8, enabled bool) {
+		if enabled {
+			isZero = false
+		}
+	})
+
+	return isZero
+}
+
 func (f FirstCardPrivileges) String() string {
 	v := []string{}
 
@@ -167,7 +184,7 @@ func (f FirstCardPrivileges) String() string {
 	})
 
 	if len(v) == 0 {
-		return "-"
+		return ""
 	}
 
 	return strings.Join(v, ",")
