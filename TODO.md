@@ -1,14 +1,10 @@
 # TODO
 
 - [x] 'first card' API (cf. https://github.com/uhppoted/uhppoted/issues/82)
-    - [ ] allow only first card swipe
-    - [ ] fix control1/control2:
-        - 0: controlled
-        - 1: door open
-        - 2: door closed
-        - 3: first card only
+    - [x] replace _FirstCard_ map with struct
     - [x] add first card privileges to _PutCard_
-    - [ ] replace _FirstCard_ map with struct
+    - [x] fix control1/control2:
+    - [ ] unit test for control state translation
     - [ ] replace _Doors_ map with struct
 
 - [ ] Unit test for Task.MarshalJSON
@@ -17,8 +13,8 @@
     - [ ] Segment.MarshalJSON
     - [ ] TimeProfile.MarshalJSON
 
-
 - [ ] Rework any remaining DateTime pointers to rather use IsZero
+- [ ] Fix DateTime Unmarshal to set nanos etc to 0
 - [ ] Rework ParseHHmm to not return a pointer
 - [ ] Rework any remaining Time pointers
       - [ ] uhppote:GetTime
@@ -27,11 +23,9 @@
 ## TODO
 
 - [ ] Replace messy UDP broadcast wait implementation with WaitGroup
-- [ ] Fix DateTime Unmarshal to set nanos etc to 0
 - [ ] (?)EventNotFoundError
 - [ ] (?)EventOverwrittenError
 
-- [ ] Set first card
 - [ ] See if there's anything worth taking from CloudFlare blog post on UDP:
       https://blog.cloudflare.com/everything-you-ever-wanted-to-know-about-udp-sockets-but-were-afraid-to-ask-part-1/
 

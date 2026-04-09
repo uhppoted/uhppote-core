@@ -11,6 +11,7 @@ const (
 	NormallyOpen ControlState = iota + 1
 	NormallyClosed
 	Controlled
+	FirstCardOnly
 )
 
 const (
@@ -18,14 +19,15 @@ const (
 	ModeNormallyOpen
 	ModeNormallyClosed
 	ModeControlled
+	ModeFirstCardOnly
 )
 
 func (v ControlState) String() string {
-	return [...]string{"", "normally open", "normally closed", "controlled"}[v]
+	return [...]string{"", "normally open", "normally closed", "controlled", "firstcard"}[v]
 }
 
 func (v ControlState) MarshalJSON() ([]byte, error) {
-	s := [...]string{"", "normally open", "normally closed", "controlled"}[v]
+	s := [...]string{"", "normally open", "normally closed", "controlled", "firstcard"}[v]
 
 	return json.Marshal(s)
 }
@@ -39,11 +41,13 @@ func (v *ControlState) UnmarshalJSON(b []byte) error {
 
 	switch s {
 	case "normally open":
-		*v = NormallyOpen
+		*v = ModeNormallyOpen
 	case "normally closed":
-		*v = NormallyClosed
+		*v = ModeNormallyClosed
 	case "controlled":
-		*v = Controlled
+		*v = ModeControlled
+	case "firstcard":
+		*v = ModeFirstCardOnly
 
 	default:
 		return fmt.Errorf("invalid door control state value '%v'", s)

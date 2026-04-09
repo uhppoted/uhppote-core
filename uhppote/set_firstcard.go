@@ -13,13 +13,35 @@ func (u *uhppote) SetFirstCard(serialNumber uint32, door uint8, firstcard types.
 		return false, fmt.Errorf("invalid device ID (%v)", serialNumber)
 	}
 
+	active := uint8(0)
+	switch firstcard.Active {
+	case types.ModeControlled:
+		active = uint8(0)
+	case types.ModeNormallyOpen:
+		active = uint8(1)
+	case types.ModeNormallyClosed:
+		active = uint8(2)
+	}
+
+	inactive := uint8(0)
+	switch firstcard.Active {
+	case types.ModeControlled:
+		active = uint8(0)
+	case types.ModeNormallyOpen:
+		active = uint8(1)
+	case types.ModeNormallyClosed:
+		active = uint8(2)
+	case types.ModeFirstCardOnly:
+		active = uint8(3)
+	}
+
 	request := messages.SetFirstCardRequest{
 		SerialNumber:     types.SerialNumber(serialNumber),
 		Door:             door,
 		StartTime:        firstcard.StartTime,
 		EndTime:          firstcard.EndTime,
-		StartDoorControl: uint8(firstcard.Active),
-		EndDoorControl:   uint8(firstcard.Inactive),
+		StartDoorControl: active,
+		EndDoorControl:   inactive,
 		Monday:           firstcard.Weekdays[time.Monday],
 		Tuesday:          firstcard.Weekdays[time.Tuesday],
 		Wednesday:        firstcard.Weekdays[time.Wednesday],
