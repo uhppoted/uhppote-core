@@ -24,15 +24,15 @@ func (u *uhppote) SetFirstCard(serialNumber uint32, door uint8, firstcard types.
 	}
 
 	inactive := uint8(0)
-	switch firstcard.Active {
+	switch firstcard.Inactive {
 	case types.ModeControlled:
-		active = uint8(0)
+		inactive = uint8(0)
 	case types.ModeNormallyOpen:
-		active = uint8(1)
+		inactive = uint8(1)
 	case types.ModeNormallyClosed:
-		active = uint8(2)
+		inactive = uint8(2)
 	case types.ModeFirstCardOnly:
-		active = uint8(3)
+		inactive = uint8(3)
 	}
 
 	request := messages.SetFirstCardRequest{
