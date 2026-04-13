@@ -43,8 +43,8 @@ func (f FirstCard) String() string {
 
 func (f *FirstCard) UnmarshalJSON(bytes []byte) error {
 	firstcard := struct {
-		StartTime HHmm         `json:"start-time,omitempty"`
-		EndTime   HHmm         `json:"end-time,omitempty"`
+		StartTime HHmm         `json:"start-time"`
+		EndTime   HHmm         `json:"end-time"`
 		Active    ControlState `json:"active-state"`
 		Inactive  ControlState `json:"inactive-state"`
 		Weekdays  Weekdays     `json:"weekdays,omitempty"`

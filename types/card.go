@@ -72,7 +72,7 @@ func (c Card) MarshalJSON() ([]byte, error) {
 		To         Date                `json:"end-date"`
 		Doors      map[uint8]uint8     `json:"doors"`
 		PIN        PIN                 `json:"PIN,omitempty"`
-		FirstCard  FirstCardPrivileges `json:"first-card,omitempty"`
+		FirstCard  FirstCardPrivileges `json:"first-card"`
 	}{
 		CardNumber: c.CardNumber,
 		From:       c.From,
