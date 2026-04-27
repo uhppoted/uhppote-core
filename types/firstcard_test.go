@@ -38,8 +38,8 @@ func TestFirstCardJSONMarshal(t *testing.T) {
 	expected := `{
   "start-time": "08:30",
   "end-time": "16:45",
-  "active-state": "normally open",
-  "inactive-state": "normally closed",
+  "active-mode": "normally open",
+  "inactive-mode": "normally closed",
   "weekdays": "Monday,Tuesday,Thursday,Saturday,Sunday"
 }`
 
@@ -89,8 +89,8 @@ func TestFirstCardJSONUnmarshal(t *testing.T) {
 	bytes := []byte(`{
   "start-time": "08:30",
   "end-time": "16:45",
-  "active-state": "normally open",
-  "inactive-state": "normally closed",
+  "active-mode": "normally open",
+  "inactive-mode": "normally closed",
   "weekdays": "Monday,Tuesday,Thursday,Saturday,Sunday"
 }`)
 

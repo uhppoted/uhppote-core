@@ -37,19 +37,21 @@ func TestDoorControlStateMarsall(t *testing.T) {
 }
 
 func TestDoorControlStateUnmarsall(t *testing.T) {
-	tests := map[ControlState]string{
-		NormallyOpen:   `"normally open"`,
-		NormallyClosed: `"normally closed"`,
-		Controlled:     `"controlled"`,
+	tests := map[string]ControlState{
+		`"normally open"`:   NormallyOpen,
+		`"normally closed"`: NormallyClosed,
+		`"normally-open"`:   NormallyOpen,
+		`"normally-closed"`: NormallyClosed,
+		`"controlled"`:      Controlled,
 	}
 
-	for k, s := range tests {
-		var v ControlState
+	for k, v := range tests {
+		var s ControlState
 
-		if err := json.Unmarshal([]byte(s), &v); err != nil {
+		if err := json.Unmarshal([]byte(k), &s); err != nil {
 			t.Fatalf("Unexpected error (%[2]v) unmarshalling %[1]v", k, err)
-		} else if v != k {
-			t.Errorf("Expected %v, got %v", k, v)
+		} else if s != v {
+			t.Errorf("Expected %v, got %v", v, s)
 		}
 	}
 }

@@ -9,8 +9,8 @@ import (
 type FirstCard struct {
 	StartTime HHmm         `json:"start-time"`
 	EndTime   HHmm         `json:"end-time"`
-	Active    ControlState `json:"active-state"`
-	Inactive  ControlState `json:"inactive-state"`
+	Active    ControlState `json:"active-mode"`
+	Inactive  ControlState `json:"inactive-mode"`
 	Weekdays  Weekdays     `json:"weekdays,omitempty"`
 }
 
@@ -45,8 +45,8 @@ func (f *FirstCard) UnmarshalJSON(bytes []byte) error {
 	firstcard := struct {
 		StartTime HHmm         `json:"start-time"`
 		EndTime   HHmm         `json:"end-time"`
-		Active    ControlState `json:"active-state"`
-		Inactive  ControlState `json:"inactive-state"`
+		Active    ControlState `json:"active-mode"`
+		Inactive  ControlState `json:"inactive-mode"`
 		Weekdays  Weekdays     `json:"weekdays,omitempty"`
 	}{
 		Weekdays: Weekdays{},
