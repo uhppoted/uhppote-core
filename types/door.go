@@ -23,11 +23,11 @@ const (
 )
 
 func (v ControlState) String() string {
-	return [...]string{"", "normally open", "normally closed", "controlled", "firstcard"}[v]
+	return [...]string{"", "normally open", "normally closed", "controlled", "firstcard only"}[v]
 }
 
 func (v ControlState) MarshalJSON() ([]byte, error) {
-	s := [...]string{"", "normally open", "normally closed", "controlled", "firstcard"}[v]
+	s := [...]string{"", "normally open", "normally closed", "controlled", "firstcard only"}[v]
 
 	return json.Marshal(s)
 }
@@ -46,7 +46,7 @@ func (v *ControlState) UnmarshalJSON(b []byte) error {
 		*v = ModeNormallyClosed
 	case "controlled":
 		*v = ModeControlled
-	case "firstcard":
+	case "firstcard", "firstcard only":
 		*v = ModeFirstCardOnly
 
 	default:

@@ -9,13 +9,13 @@ import (
 )
 
 func TestFirstCardToString(t *testing.T) {
-	expected := "active:08:30-16:45  control:normally open/normally closed  weekdays:Mon,Tue,Thurs,Sat,Sun"
+	expected := "active:08:30-16:45  control:normally open/firstcard only  weekdays:Mon,Tue,Thurs,Sat,Sun"
 
 	firstcard := FirstCard{
 		StartTime: MustParseHHmm("8:30"),
 		EndTime:   MustParseHHmm("16:45"),
 		Active:    NormallyOpen,
-		Inactive:  NormallyClosed,
+		Inactive:  FirstCardOnly,
 		Weekdays: Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -39,7 +39,7 @@ func TestFirstCardJSONMarshal(t *testing.T) {
   "start-time": "08:30",
   "end-time": "16:45",
   "active-mode": "normally open",
-  "inactive-mode": "normally closed",
+  "inactive-mode": "firstcard only",
   "weekdays": "Monday,Tuesday,Thursday,Saturday,Sunday"
 }`
 
@@ -47,7 +47,7 @@ func TestFirstCardJSONMarshal(t *testing.T) {
 		StartTime: MustParseHHmm("8:30"),
 		EndTime:   MustParseHHmm("16:45"),
 		Active:    NormallyOpen,
-		Inactive:  NormallyClosed,
+		Inactive:  FirstCardOnly,
 		Weekdays: Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -74,7 +74,7 @@ func TestFirstCardJSONUnmarshal(t *testing.T) {
 		StartTime: MustParseHHmm("8:30"),
 		EndTime:   MustParseHHmm("16:45"),
 		Active:    NormallyOpen,
-		Inactive:  NormallyClosed,
+		Inactive:  FirstCardOnly,
 		Weekdays: Weekdays{
 			time.Monday:    true,
 			time.Tuesday:   true,
@@ -90,7 +90,43 @@ func TestFirstCardJSONUnmarshal(t *testing.T) {
   "start-time": "08:30",
   "end-time": "16:45",
   "active-mode": "normally open",
-  "inactive-mode": "normally closed",
+  "inactive-mode": "firstcard only",
+  "weekdays": "Monday,Tuesday,Thursday,Saturday,Sunday"
+}`)
+
+	var firstcard FirstCard
+
+	if err := json.Unmarshal(bytes, &firstcard); err != nil {
+		t.Fatalf("Error unmarshalling FirstCard (%v)", err)
+	}
+
+	if !reflect.DeepEqual(firstcard, expected) {
+		t.Errorf("Task incorrectly unmarshalled\n   expected:%+v\n   got:     %+v", expected, firstcard)
+	}
+}
+
+func TestFirstCardJSONUnmarshalVariant(t *testing.T) {
+	expected := FirstCard{
+		StartTime: MustParseHHmm("8:30"),
+		EndTime:   MustParseHHmm("16:45"),
+		Active:    NormallyOpen,
+		Inactive:  FirstCardOnly,
+		Weekdays: Weekdays{
+			time.Monday:    true,
+			time.Tuesday:   true,
+			time.Wednesday: false,
+			time.Thursday:  true,
+			time.Friday:    false,
+			time.Saturday:  true,
+			time.Sunday:    true,
+		},
+	}
+
+	bytes := []byte(`{
+  "start-time": "08:30",
+  "end-time": "16:45",
+  "active-mode": "normally open",
+  "inactive-mode": "firstcard",
   "weekdays": "Monday,Tuesday,Thursday,Saturday,Sunday"
 }`)
 

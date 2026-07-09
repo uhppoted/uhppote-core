@@ -11,6 +11,7 @@ func TestDoorControlStateString(t *testing.T) {
 		NormallyOpen:   "normally open",
 		NormallyClosed: "normally closed",
 		Controlled:     "controlled",
+		FirstCardOnly:  "firstcard only",
 	}
 
 	for k, v := range tests {
@@ -25,6 +26,7 @@ func TestDoorControlStateMarsall(t *testing.T) {
 		NormallyOpen:   `"normally open"`,
 		NormallyClosed: `"normally closed"`,
 		Controlled:     `"controlled"`,
+		FirstCardOnly:  `"firstcard only"`,
 	}
 
 	for k, v := range tests {
@@ -43,6 +45,8 @@ func TestDoorControlStateUnmarsall(t *testing.T) {
 		`"normally-open"`:   NormallyOpen,
 		`"normally-closed"`: NormallyClosed,
 		`"controlled"`:      Controlled,
+		`"firstcard only"`:  FirstCardOnly,
+		`"firstcard"`:       FirstCardOnly,
 	}
 
 	for k, v := range tests {
