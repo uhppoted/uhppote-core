@@ -34,6 +34,32 @@ func TestFirstCardToString(t *testing.T) {
 	}
 }
 
+func TestFirstCardIsZero(t *testing.T) {
+	tests := []struct {
+		firstcard FirstCard
+		expected  bool
+	}{
+		{FirstCard{}, true},
+		{FirstCard{StartTime: MustParseHHmm("00:01")}, false},
+		{FirstCard{EndTime: MustParseHHmm("00:01")}, false},
+		{FirstCard{Active: Controlled}, true},
+		{FirstCard{Inactive: Controlled}, true},
+		{FirstCard{Weekdays: Weekdays{time.Monday: true}}, false},
+		{FirstCard{Weekdays: Weekdays{time.Tuesday: true}}, false},
+		{FirstCard{Weekdays: Weekdays{time.Wednesday: true}}, false},
+		{FirstCard{Weekdays: Weekdays{time.Thursday: true}}, false},
+		{FirstCard{Weekdays: Weekdays{time.Friday: true}}, false},
+		{FirstCard{Weekdays: Weekdays{time.Saturday: true}}, false},
+		{FirstCard{Weekdays: Weekdays{time.Sunday: true}}, false},
+	}
+
+	for _, test := range tests {
+		if zero := test.firstcard.IsZero(); zero != test.expected {
+			t.Errorf("incorrect IsZero for %#v - expected:%v   got:%v", test.firstcard, test.expected, zero)
+		}
+	}
+}
+
 func TestFirstCardJSONMarshal(t *testing.T) {
 	expected := `{
   "start-time": "08:30",

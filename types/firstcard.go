@@ -3,7 +3,9 @@ package types
 import (
 	"encoding/json"
 	"fmt"
+	"slices"
 	"strings"
+	"time"
 )
 
 type FirstCard struct {
@@ -39,6 +41,24 @@ func (f FirstCard) String() string {
 	}
 
 	return strings.Join(list, "  ")
+}
+
+// Returns true if the both start and end times are 00:00 and none of the weekdays
+// is enabled.
+func (f FirstCard) IsZero() bool {
+	all := []bool{
+		!f.StartTime.Equals(HHmm{}),
+		!f.EndTime.Equals(HHmm{}),
+		f.Weekdays[time.Monday],
+		f.Weekdays[time.Tuesday],
+		f.Weekdays[time.Wednesday],
+		f.Weekdays[time.Thursday],
+		f.Weekdays[time.Friday],
+		f.Weekdays[time.Saturday],
+		f.Weekdays[time.Sunday],
+	}
+
+	return !slices.Contains(all, true)
 }
 
 func (f *FirstCard) UnmarshalJSON(bytes []byte) error {
