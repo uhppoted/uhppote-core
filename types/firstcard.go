@@ -11,8 +11,8 @@ import (
 type FirstCard struct {
 	StartTime HHmm         `json:"start-time"`
 	EndTime   HHmm         `json:"end-time"`
-	Active    ControlState `json:"active-mode"`
-	Inactive  ControlState `json:"inactive-mode"`
+	Active    ControlState `json:"active-mode,omitempty"`
+	Inactive  ControlState `json:"inactive-mode,omitempty"`
 	Weekdays  Weekdays     `json:"weekdays,omitempty"`
 }
 

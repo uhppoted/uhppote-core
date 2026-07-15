@@ -1,6 +1,7 @@
 package uhppote
 
 import (
+	"fmt"
 	"net"
 	"slices"
 	"testing"
@@ -124,5 +125,86 @@ func TestSetFirstCardWithInvalidDeviceID(t *testing.T) {
 	_, err := u.SetFirstCard(0, 3, firstcard)
 	if err == nil {
 		t.Fatalf("Expected 'Invalid device ID' error, got %v", err)
+	}
+}
+
+func TestSetFirstCardWithInvalidActiveMode(t *testing.T) {
+	firstcard := types.FirstCard{
+		StartTime: types.MustParseHHmm("08:30"),
+		EndTime:   types.MustParseHHmm("16:45"),
+		Active:    types.ModeUnknown,
+		Inactive:  types.NormallyClosed,
+		Weekdays: types.Weekdays{
+			time.Monday:    true,
+			time.Tuesday:   true,
+			time.Wednesday: false,
+			time.Thursday:  true,
+			time.Friday:    false,
+			time.Saturday:  true,
+			time.Sunday:    true,
+		},
+	}
+
+	u := uhppote{}
+
+	_, err := u.SetFirstCard(405419896, 3, firstcard)
+	if err == nil {
+		t.Fatalf("Expected 'Invalid first-card active mode' error, got %v", err)
+	} else if fmt.Sprintf("%v", err) != "invalid first-card active mode (unknown)" {
+		t.Errorf("Expected 'Invalid first-card active mode' error, got %v", err)
+	}
+}
+
+func TestSetFirstCardWithFirstCardOnlyActiveMode(t *testing.T) {
+	firstcard := types.FirstCard{
+		StartTime: types.MustParseHHmm("08:30"),
+		EndTime:   types.MustParseHHmm("16:45"),
+		Active:    types.FirstCardOnly,
+		Inactive:  types.FirstCardOnly,
+		Weekdays: types.Weekdays{
+			time.Monday:    true,
+			time.Tuesday:   true,
+			time.Wednesday: false,
+			time.Thursday:  true,
+			time.Friday:    false,
+			time.Saturday:  true,
+			time.Sunday:    true,
+		},
+	}
+
+	u := uhppote{}
+
+	_, err := u.SetFirstCard(405419896, 3, firstcard)
+	if err == nil {
+		t.Fatalf("Expected 'Invalid first-card active mode' error, got %v", err)
+	} else if fmt.Sprintf("%v", err) != "invalid first-card active mode (firstcard only)" {
+		t.Errorf("Expected 'Invalid first-card active mode' error, got %v", err)
+	}
+}
+
+func TestSetFirstCardWithInvalidInactiveMode(t *testing.T) {
+	firstcard := types.FirstCard{
+		StartTime: types.MustParseHHmm("08:30"),
+		EndTime:   types.MustParseHHmm("16:45"),
+		Active:    types.NormallyOpen,
+		Inactive:  types.ModeUnknown,
+		Weekdays: types.Weekdays{
+			time.Monday:    true,
+			time.Tuesday:   true,
+			time.Wednesday: false,
+			time.Thursday:  true,
+			time.Friday:    false,
+			time.Saturday:  true,
+			time.Sunday:    true,
+		},
+	}
+
+	u := uhppote{}
+
+	_, err := u.SetFirstCard(405419896, 3, firstcard)
+	if err == nil {
+		t.Fatalf("Expected 'Invalid first-card inactive mode' error, got %v", err)
+	} else if fmt.Sprintf("%v", err) != "invalid first-card inactive mode (unknown)" {
+		t.Errorf("Expected 'Invalid first-card inactive mode' error, got %v", err)
 	}
 }

@@ -21,6 +21,12 @@ func (u *uhppote) SetFirstCard(serialNumber uint32, door uint8, firstcard types.
 		active = uint8(1)
 	case types.ModeNormallyClosed:
 		active = uint8(2)
+	default:
+		if firstcard.Active == types.ModeUnknown {
+			return false, fmt.Errorf("invalid first-card active mode (unknown)")
+		} else {
+			return false, fmt.Errorf("invalid first-card active mode (%v)", firstcard.Active)
+		}
 	}
 
 	inactive := uint8(0)
@@ -33,6 +39,12 @@ func (u *uhppote) SetFirstCard(serialNumber uint32, door uint8, firstcard types.
 		inactive = uint8(2)
 	case types.ModeFirstCardOnly:
 		inactive = uint8(3)
+	default:
+		if firstcard.Inactive == types.ModeUnknown {
+			return false, fmt.Errorf("invalid first-card inactive mode (unknown)")
+		} else {
+			return false, fmt.Errorf("invalid first-card inactive mode (%v)", firstcard.Inactive)
+		}
 	}
 
 	request := messages.SetFirstCardRequest{
