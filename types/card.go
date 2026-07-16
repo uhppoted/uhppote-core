@@ -174,6 +174,10 @@ func (f FirstCardPrivileges) IsZero() bool {
 	return isZero
 }
 
+func (f FirstCardPrivileges) Equal(g FirstCardPrivileges) bool {
+	return f.Door1 == g.Door1 && f.Door2 == g.Door2 && f.Door3 == g.Door3 && f.Door4 == g.Door4
+}
+
 func (f FirstCardPrivileges) String() string {
 	v := []string{}
 

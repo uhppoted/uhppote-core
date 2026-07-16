@@ -233,6 +233,44 @@ func TestCardToStringWithoutFirstCardPrivileges(t *testing.T) {
 	}
 }
 
+func TestFirstCardPrivilegesEqual(t *testing.T) {
+	tests := []struct {
+		p        FirstCardPrivileges
+		q        FirstCardPrivileges
+		expected bool
+	}{
+		{FirstCardPrivileges{false, false, false, false}, FirstCardPrivileges{false, false, false, false}, true},
+		{FirstCardPrivileges{true, true, true, true}, FirstCardPrivileges{true, true, true, true}, true},
+		{FirstCardPrivileges{true, false, false, false}, FirstCardPrivileges{true, false, false, false}, true},
+		{FirstCardPrivileges{false, true, false, false}, FirstCardPrivileges{false, true, false, false}, true},
+		{FirstCardPrivileges{false, false, true, false}, FirstCardPrivileges{false, false, true, false}, true},
+		{FirstCardPrivileges{false, false, false, true}, FirstCardPrivileges{false, false, false, true}, true},
+
+		{FirstCardPrivileges{false, false, false, false}, FirstCardPrivileges{true, false, false, false}, false},
+		{FirstCardPrivileges{false, false, false, false}, FirstCardPrivileges{false, true, false, false}, false},
+		{FirstCardPrivileges{false, false, false, false}, FirstCardPrivileges{false, false, true, false}, false},
+		{FirstCardPrivileges{false, false, false, false}, FirstCardPrivileges{false, false, false, true}, false},
+
+		{FirstCardPrivileges{true, false, false, false}, FirstCardPrivileges{false, false, false, false}, false},
+		{FirstCardPrivileges{false, true, false, false}, FirstCardPrivileges{false, false, false, false}, false},
+		{FirstCardPrivileges{false, false, true, false}, FirstCardPrivileges{false, false, false, false}, false},
+		{FirstCardPrivileges{false, false, false, true}, FirstCardPrivileges{false, false, false, false}, false},
+	}
+
+	// 	FirstCard: FirstCardPrivileges{
+	// 		Door1: false,
+	// 		Door2: false,
+	// 		Door3: false,
+	// 		Door4: false,
+	// 	},
+
+	for _, test := range tests {
+		if equal := test.p.Equal(test.q); equal != test.expected {
+			t.Errorf("FirstCardPrivileges.Equal incorrect for %v and %v - expected:%v, got:%v", test.p, test.q, test.expected, equal)
+		}
+	}
+}
+
 func TestCardMarshalJSON(t *testing.T) {
 
 	card := Card{
