@@ -40,17 +40,165 @@ func TestFirstCardIsZero(t *testing.T) {
 		expected  bool
 	}{
 		{FirstCard{}, true},
-		{FirstCard{StartTime: MustParseHHmm("00:01")}, false},
-		{FirstCard{EndTime: MustParseHHmm("00:01")}, false},
-		{FirstCard{Active: Controlled}, true},
-		{FirstCard{Inactive: Controlled}, true},
-		{FirstCard{Weekdays: Weekdays{time.Monday: true}}, false},
-		{FirstCard{Weekdays: Weekdays{time.Tuesday: true}}, false},
-		{FirstCard{Weekdays: Weekdays{time.Wednesday: true}}, false},
-		{FirstCard{Weekdays: Weekdays{time.Thursday: true}}, false},
-		{FirstCard{Weekdays: Weekdays{time.Friday: true}}, false},
-		{FirstCard{Weekdays: Weekdays{time.Saturday: true}}, false},
-		{FirstCard{Weekdays: Weekdays{time.Sunday: true}}, false},
+		{FirstCard{StartTime: MustParseHHmm("00:01")}, true},
+		{FirstCard{EndTime: MustParseHHmm("00:01")}, true},
+		{FirstCard{Active: ModeNormallyOpen}, true},
+		{FirstCard{Inactive: ModeFirstCardOnly}, true},
+		{FirstCard{Weekdays: Weekdays{time.Monday: true}}, true},
+		{FirstCard{Weekdays: Weekdays{time.Tuesday: true}}, true},
+		{FirstCard{Weekdays: Weekdays{time.Wednesday: true}}, true},
+		{FirstCard{Weekdays: Weekdays{time.Thursday: true}}, true},
+		{FirstCard{Weekdays: Weekdays{time.Friday: true}}, true},
+		{FirstCard{Weekdays: Weekdays{time.Saturday: true}}, true},
+		{FirstCard{Weekdays: Weekdays{time.Sunday: true}}, true},
+
+		{FirstCard{
+			StartTime: MustParseHHmm("01:00"),
+			EndTime:   MustParseHHmm("02:00"),
+			Active:    ModeNormallyOpen,
+			Inactive:  ModeFirstCardOnly,
+			Weekdays: Weekdays{
+				time.Monday:    true,
+				time.Tuesday:   true,
+				time.Wednesday: true,
+				time.Thursday:  true,
+				time.Friday:    true,
+				time.Saturday:  true,
+				time.Sunday:    true,
+			}}, false},
+
+		{FirstCard{
+			EndTime:  MustParseHHmm("02:00"),
+			Active:   ModeNormallyOpen,
+			Inactive: ModeFirstCardOnly,
+			Weekdays: Weekdays{
+				time.Monday:    true,
+				time.Tuesday:   true,
+				time.Wednesday: true,
+				time.Thursday:  true,
+				time.Friday:    true,
+				time.Saturday:  true,
+				time.Sunday:    true,
+			}}, true},
+
+		{FirstCard{
+			StartTime: MustParseHHmm("01:00"),
+			// EndTime:  MustParseHHmm("02:00"),
+			Active:   ModeNormallyOpen,
+			Inactive: ModeFirstCardOnly,
+			Weekdays: Weekdays{
+				time.Monday:    true,
+				time.Tuesday:   true,
+				time.Wednesday: true,
+				time.Thursday:  true,
+				time.Friday:    true,
+				time.Saturday:  true,
+				time.Sunday:    true,
+			}}, true},
+
+		{FirstCard{
+			StartTime: MustParseHHmm("01:00"),
+			EndTime:   MustParseHHmm("02:00"),
+			Inactive:  ModeFirstCardOnly,
+			Weekdays: Weekdays{
+				time.Monday:    true,
+				time.Tuesday:   true,
+				time.Wednesday: true,
+				time.Thursday:  true,
+				time.Friday:    true,
+				time.Saturday:  true,
+				time.Sunday:    true,
+			}}, true},
+
+		{FirstCard{
+			StartTime: MustParseHHmm("01:00"),
+			EndTime:   MustParseHHmm("02:00"),
+			Active:    ModeNormallyOpen,
+			Weekdays: Weekdays{
+				time.Monday:    true,
+				time.Tuesday:   true,
+				time.Wednesday: true,
+				time.Thursday:  true,
+				time.Friday:    true,
+				time.Saturday:  true,
+				time.Sunday:    true,
+			}}, true},
+
+		{FirstCard{
+			StartTime: MustParseHHmm("01:00"),
+			EndTime:   MustParseHHmm("02:00"),
+			Active:    ModeNormallyOpen,
+			Inactive:  ModeFirstCardOnly,
+			Weekdays: Weekdays{
+				time.Tuesday:   true,
+				time.Wednesday: true,
+				time.Thursday:  true,
+				time.Friday:    true,
+				time.Saturday:  true,
+				time.Sunday:    true,
+			}}, false},
+
+		{FirstCard{
+			StartTime: MustParseHHmm("01:00"),
+			EndTime:   MustParseHHmm("02:00"),
+			Active:    ModeNormallyOpen,
+			Inactive:  ModeFirstCardOnly,
+			Weekdays: Weekdays{
+				time.Wednesday: true,
+				time.Thursday:  true,
+				time.Friday:    true,
+				time.Saturday:  true,
+				time.Sunday:    true,
+			}}, false},
+
+		{FirstCard{
+			StartTime: MustParseHHmm("01:00"),
+			EndTime:   MustParseHHmm("02:00"),
+			Active:    ModeNormallyOpen,
+			Inactive:  ModeFirstCardOnly,
+			Weekdays: Weekdays{
+				time.Thursday: true,
+				time.Friday:   true,
+				time.Saturday: true,
+				time.Sunday:   true,
+			}}, false},
+
+		{FirstCard{
+			StartTime: MustParseHHmm("01:00"),
+			EndTime:   MustParseHHmm("02:00"),
+			Active:    ModeNormallyOpen,
+			Inactive:  ModeFirstCardOnly,
+			Weekdays: Weekdays{
+				time.Friday:   true,
+				time.Saturday: true,
+				time.Sunday:   true,
+			}}, false},
+
+		{FirstCard{
+			StartTime: MustParseHHmm("01:00"),
+			EndTime:   MustParseHHmm("02:00"),
+			Active:    ModeNormallyOpen,
+			Inactive:  ModeFirstCardOnly,
+			Weekdays: Weekdays{
+				time.Saturday: true,
+				time.Sunday:   true,
+			}}, false},
+
+		{FirstCard{
+			StartTime: MustParseHHmm("01:00"),
+			EndTime:   MustParseHHmm("02:00"),
+			Active:    ModeNormallyOpen,
+			Inactive:  ModeFirstCardOnly,
+			Weekdays: Weekdays{
+				time.Sunday: true,
+			}}, false},
+
+		{FirstCard{
+			StartTime: MustParseHHmm("01:00"),
+			EndTime:   MustParseHHmm("02:00"),
+			Active:    ModeNormallyOpen,
+			Inactive:  ModeFirstCardOnly,
+			Weekdays:  Weekdays{}}, true},
 	}
 
 	for _, test := range tests {

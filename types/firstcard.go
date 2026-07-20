@@ -3,7 +3,6 @@ package types
 import (
 	"encoding/json"
 	"fmt"
-	"slices"
 	"strings"
 	"time"
 )
@@ -46,19 +45,19 @@ func (f FirstCard) String() string {
 // Returns true if the both start and end times are 00:00 and none of the weekdays
 // is enabled.
 func (f FirstCard) IsZero() bool {
-	all := []bool{
-		!f.StartTime.Equals(HHmm{}),
-		!f.EndTime.Equals(HHmm{}),
-		f.Weekdays[time.Monday],
-		f.Weekdays[time.Tuesday],
-		f.Weekdays[time.Wednesday],
-		f.Weekdays[time.Thursday],
-		f.Weekdays[time.Friday],
-		f.Weekdays[time.Saturday],
-		f.Weekdays[time.Sunday],
+	if f.StartTime.Equals(HHmm{}) || f.EndTime.Equals(HHmm{}) {
+		return true
 	}
 
-	return !slices.Contains(all, true)
+	if f.Active == ModeUnknown || f.Inactive == ModeUnknown {
+		return true
+	}
+
+	if !f.Weekdays[time.Monday] && !f.Weekdays[time.Tuesday] && !f.Weekdays[time.Wednesday] && !f.Weekdays[time.Thursday] && !f.Weekdays[time.Friday] && !f.Weekdays[time.Saturday] && !f.Weekdays[time.Sunday] {
+		return true
+	}
+
+	return false
 }
 
 func (f *FirstCard) UnmarshalJSON(bytes []byte) error {
