@@ -44,14 +44,14 @@ Supported operating systems:
 Assuming you have `Go` and `make` installed:
 
 ```
-git clone https://github.com/uhppoted/uhppote-core.git
+git clone https://codeberg.org/uhppoted/uhppoted-core.git
 cd uhppote-core
 make build
 ```
 
 If you prefer building manually:
 ```
-git clone https://github.com/uhppoted/uhppote-core.git
+git clone https://codeberg.org/uhppoted/uhppoted-core.git
 cd uhppote-core
 mkdir bin
 go build -trimpath -o bin ./...
