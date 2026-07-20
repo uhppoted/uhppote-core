@@ -1,3 +1,3 @@
-module github.com/uhppoted/uhppote-core
+module codeberg.org/uhppoted/uhppoted-core
 
 go 1.26
