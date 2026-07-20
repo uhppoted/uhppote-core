@@ -3,7 +3,7 @@ package messages
 import (
 	"fmt"
 
-	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
+	codec "codeberg.org/uhppoted/uhppoted-core/encoding/UTO311-L0x"
 )
 
 var responses = map[byte]func() Response{

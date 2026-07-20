@@ -4,8 +4,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/uhppoted/uhppote-core/messages"
-	"github.com/uhppoted/uhppote-core/types"
+	"codeberg.org/uhppoted/uhppoted-core/messages"
+	"codeberg.org/uhppoted/uhppoted-core/types"
 )
 
 type event messages.GetStatusResponse

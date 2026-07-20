@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/uhppoted/uhppote-core/encoding/bcd"
+	"codeberg.org/uhppoted/uhppoted-core/encoding/bcd"
 )
 
 type DateTime time.Time

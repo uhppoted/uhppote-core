@@ -3,8 +3,8 @@ package uhppote
 import (
 	"fmt"
 
-	"github.com/uhppoted/uhppote-core/messages"
-	"github.com/uhppoted/uhppote-core/types"
+	"codeberg.org/uhppoted/uhppoted-core/messages"
+	"codeberg.org/uhppoted/uhppoted-core/types"
 )
 
 func (u *uhppote) DeleteCard(deviceID uint32, cardNumber uint32) (bool, error) {

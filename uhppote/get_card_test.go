@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/uhppoted/uhppote-core/types"
+	"codeberg.org/uhppoted/uhppoted-core/types"
 )
 
 func TestGetCardByID(t *testing.T) {

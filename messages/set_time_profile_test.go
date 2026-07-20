@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
-	"github.com/uhppoted/uhppote-core/types"
+	codec "codeberg.org/uhppoted/uhppoted-core/encoding/UTO311-L0x"
+	"codeberg.org/uhppoted/uhppoted-core/types"
 )
 
 func TestMarshalSetTimeProfileRequest(t *testing.T) {

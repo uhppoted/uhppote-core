@@ -3,7 +3,7 @@ package uhppote
 import (
 	"time"
 
-	"github.com/uhppoted/uhppote-core/types"
+	"codeberg.org/uhppoted/uhppoted-core/types"
 )
 
 // Configuration information for an access controller declared in the common uhppoted.conf configuration.

@@ -4,7 +4,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/uhppoted/uhppote-core/types"
+	"codeberg.org/uhppoted/uhppoted-core/types"
 )
 
 func TestGetAntiPassback(t *testing.T) {

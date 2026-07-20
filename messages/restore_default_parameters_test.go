@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	codec "github.com/uhppoted/uhppote-core/encoding/UTO311-L0x"
+	codec "codeberg.org/uhppoted/uhppoted-core/encoding/UTO311-L0x"
 )
 
 func TestMarshalRestoreDefaultParametersRequest(t *testing.T) {

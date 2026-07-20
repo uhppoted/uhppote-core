@@ -1,7 +1,7 @@
 package messages
 
 import (
-	"github.com/uhppoted/uhppote-core/types"
+	"codeberg.org/uhppoted/uhppoted-core/types"
 )
 
 // Request message to set the supervisor passcodes assigned to a door.

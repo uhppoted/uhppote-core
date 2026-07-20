@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/uhppoted/uhppote-core/messages"
-	"github.com/uhppoted/uhppote-core/types"
+	"codeberg.org/uhppoted/uhppoted-core/messages"
+	"codeberg.org/uhppoted/uhppoted-core/types"
 )
 
 func (u *uhppote) SetAddress(serialNumber uint32, address, mask, gateway net.IP) (*types.Result, error) {

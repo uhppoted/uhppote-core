@@ -1,8 +1,8 @@
 package UTO311_L0x
 
 import (
+	"codeberg.org/uhppoted/uhppoted-core/types"
 	"encoding/hex"
-	"github.com/uhppoted/uhppote-core/types"
 	"math/rand"
 	"net"
 	"net/netip"

@@ -1,7 +1,7 @@
 package messages
 
 import (
-	"github.com/uhppoted/uhppote-core/types"
+	"codeberg.org/uhppoted/uhppoted-core/types"
 )
 
 // Request message layout for 'restore default parameters' (function code 0xc8).
