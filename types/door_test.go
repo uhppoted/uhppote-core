@@ -42,12 +42,12 @@ func TestDoorControlStateUnmarsall(t *testing.T) {
 	tests := map[string]ControlState{
 		`"normally open"`:   NormallyOpen,
 		`"normally closed"`: NormallyClosed,
-		`"normally-open"`:   NormallyOpen,
-		`"normally-closed"`: NormallyClosed,
-		`"controlled"`:      Controlled,
-		`"firstcard"`:       FirstCardOnly,
-		`"firstcard-only"`:  FirstCardOnly,
-		`"firstcard only"`:  FirstCardOnly,
+		// `"normally-open"`:   NormallyOpen,
+		// `"normally-closed"`: NormallyClosed,
+		`"controlled"`: Controlled,
+		// `"firstcard"`:       FirstCardOnly,
+		// `"firstcard-only"`:  FirstCardOnly,
+		`"firstcard only"`: FirstCardOnly,
 	}
 
 	for k, v := range tests {
