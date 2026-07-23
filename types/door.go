@@ -46,7 +46,7 @@ func (v *ControlState) UnmarshalJSON(b []byte) error {
 		*v = ModeNormallyClosed
 	case "controlled":
 		*v = ModeControlled
-	case "firstcard", "firstcard only":
+	case "firstcard", "firstcard only", "firstcard-only":
 		*v = ModeFirstCardOnly
 
 	default:

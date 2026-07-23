@@ -45,8 +45,9 @@ func TestDoorControlStateUnmarsall(t *testing.T) {
 		`"normally-open"`:   NormallyOpen,
 		`"normally-closed"`: NormallyClosed,
 		`"controlled"`:      Controlled,
-		`"firstcard only"`:  FirstCardOnly,
 		`"firstcard"`:       FirstCardOnly,
+		`"firstcard-only"`:  FirstCardOnly,
+		`"firstcard only"`:  FirstCardOnly,
 	}
 
 	for k, v := range tests {
