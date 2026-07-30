@@ -4,7 +4,7 @@
     - [x] replace _FirstCard_ map with struct
     - [x] add first card privileges to _PutCard_
     - [x] fix control1/control2:
-    - [ ] unit test for control state translation
+    - [x] unit test for control state translation
     - [ ] replace _Doors_ map with struct
 
 - [ ] Unit test for Task.MarshalJSON
