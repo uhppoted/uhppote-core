@@ -12,7 +12,7 @@ type Card struct {
 	To         Date                `json:"end-date"`
 	Doors      map[uint8]uint8     `json:"doors"`
 	PIN        PIN                 `json:"PIN,omitempty"`
-	FirstCard  FirstCardPrivileges `json:"first-card"`
+	FirstCard  FirstCardPrivileges `json:"first-card,omitempty"`
 }
 
 type FirstCardPrivileges struct {
