@@ -45,20 +45,54 @@ func (u *ut0311) Broadcast(addr *net.UDPAddr, request []byte) ([][]byte, error) 
 		defer guard.Unlock()
 	}
 
+	sockets := []*net.UDPConn{}
+
+	defer func() {
+		for _, sock := range sockets {
+			sock.Close()
+		}
+	}()
+
 	var connection *net.UDPConn
 
-	if conn, err := net.ListenUDP("udp", bind); err != nil {
+	if sock, err := net.ListenUDP("udp", bind); err != nil {
 		return nil, fmt.Errorf("error creating UDP socket (%v)", err)
-	} else if conn == nil {
-		return nil, fmt.Errorf("open() created invalid UDP socket (%v)", conn)
+	} else if sock == nil {
+		return nil, fmt.Errorf("open() created invalid UDP socket (%v)", sock)
 	} else {
-		defer conn.Close()
+		sockets = append(sockets, sock)
 
-		if v, ok := conn.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port {
-			return nil, fmt.Errorf("invalid UDP bind address: port %v used for broadcast", v.Port)
+		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port && bind.Port == 0 {
+			return nil, fmt.Errorf("UDP bind address: port %v reserved for broadcast", v.Port)
 		}
 
-		connection = conn
+		// broadcast-to-self handling
+		//
+		// If the bind port is 0, retries (up to 5 times) until the OS binds to a port that is not the
+		// destination port. The interim sockets are retained to prevent the OS from reusing the invalid
+		// port, which it will happily do if the socket is closed immediately (hence the defer())
+		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port {
+			retries := 0
+			for {
+				if sock, err = net.ListenUDP("udp", bind); err != nil {
+					return nil, fmt.Errorf("error creating UDP socket (%v)", err)
+				} else if sock == nil {
+					return nil, fmt.Errorf("open() created invalid UDP socket (%v)", sock)
+				} else {
+					sockets = append(sockets, sock)
+					if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port != addr.Port {
+						break
+					}
+				}
+
+				retries++
+				if retries >= 5 {
+					return nil, fmt.Errorf("OS bound UDP socket to port %v reserved for broadcast", sock.LocalAddr().(*net.UDPAddr).Port)
+				}
+			}
+		}
+
+		connection = sock
 	}
 
 	if err := connection.SetWriteDeadline(time.Now().Add(1000 * time.Millisecond)); err != nil {
@@ -125,42 +159,80 @@ func (u *ut0311) BroadcastTo(addr *net.UDPAddr, request []byte, callback func([]
 		defer guard.Unlock()
 	}
 
-	if connection, err := net.ListenUDP("udp", bind); err != nil {
+	sockets := []*net.UDPConn{}
+
+	defer func() {
+		for _, sock := range sockets {
+			sock.Close()
+		}
+	}()
+
+	var connection *net.UDPConn
+
+	if sock, err := net.ListenUDP("udp", bind); err != nil {
 		return nil, fmt.Errorf("error creating UDP socket (%v)", err)
-	} else if connection == nil {
-		return nil, fmt.Errorf("open() created invalid UDP socket (%v)", connection)
+	} else if sock == nil {
+		return nil, fmt.Errorf("open() created invalid UDP socket (%v)", sock)
 	} else {
-		defer connection.Close()
+		sockets = append(sockets, sock)
 
-		if v, ok := connection.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port {
-			return nil, fmt.Errorf("invalid UDP bind address: port %v used for broadcast", v.Port)
+		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port && bind.Port == 0 {
+			return nil, fmt.Errorf("UDP bind address: port %v reserved for broadcast", v.Port)
 		}
 
-		if err := connection.SetDeadline(deadline); err != nil {
-			return nil, err
-		}
+		// broadcast-to-self handling
+		//
+		// If the bind port is 0, retries (up to 5 times) until the OS binds to a port that is not the
+		// destination port. The interim sockets are retained to prevent the OS from reusing the invalid
+		// port, which it will happily do if the socket is closed immediately (hence the defer())
+		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port {
+			retries := 0
+			for {
+				if sock, err = net.ListenUDP("udp", bind); err != nil {
+					return nil, fmt.Errorf("error creating UDP socket (%v)", err)
+				} else if sock == nil {
+					return nil, fmt.Errorf("open() created invalid UDP socket (%v)", sock)
+				} else {
+					sockets = append(sockets, sock)
+					if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port != addr.Port {
+						break
+					}
+				}
 
-		if N, err := connection.WriteToUDP(request, addr); err != nil {
-			return nil, fmt.Errorf("failed to write to UDP socket [%v]", err)
-		} else {
-			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v (UDP)\n", N, addr), nil)
-		}
-
-		// NTS: set-ip doesn't return a reply
-		if request[1] == 0x96 {
-			return nil, nil
-		}
-
-		for {
-			reply := make([]byte, 2048)
-
-			if N, remote, err := connection.ReadFromUDP(reply); err != nil {
-				return nil, err
-			} else if callback(reply[:N]) {
-				u.debugf(fmt.Sprintf(" ... received %v bytes from %v (UDP)\n%s", N, remote, codec.Dump(reply[:N], " ...          ")), nil)
-
-				return reply[:N], err
+				retries++
+				if retries >= 5 {
+					return nil, fmt.Errorf("OS bound UDP socket to port %v reserved for broadcast", sock.LocalAddr().(*net.UDPAddr).Port)
+				}
 			}
+		}
+
+		connection = sock
+	}
+
+	if err := connection.SetDeadline(deadline); err != nil {
+		return nil, err
+	}
+
+	if N, err := connection.WriteToUDP(request, addr); err != nil {
+		return nil, fmt.Errorf("failed to write to UDP socket [%v]", err)
+	} else {
+		u.debugf(fmt.Sprintf(" ... sent %v bytes to %v (UDP)\n", N, addr), nil)
+	}
+
+	// NTS: set-ip doesn't return a reply
+	if request[1] == 0x96 {
+		return nil, nil
+	}
+
+	for {
+		reply := make([]byte, 2048)
+
+		if N, remote, err := connection.ReadFromUDP(reply); err != nil {
+			return nil, err
+		} else if callback(reply[:N]) {
+			u.debugf(fmt.Sprintf(" ... received %v bytes from %v (UDP)\n%s", N, remote, codec.Dump(reply[:N], " ...          ")), nil)
+
+			return reply[:N], err
 		}
 	}
 }
@@ -208,40 +280,81 @@ func (u *ut0311) SendUDP(addr *net.UDPAddr, request []byte) ([]byte, error) {
 		},
 	}
 
-	if connection, err := dialer.Dial("udp4", address); err != nil {
+	sockets := []net.Conn{}
+
+	defer func() {
+		for _, sock := range sockets {
+			sock.Close()
+		}
+	}()
+
+	var connection net.Conn
+
+	if sock, err := dialer.Dial("udp4", address); err != nil {
 		return nil, err
-	} else if connection == nil {
-		return nil, fmt.Errorf("invalid UDP socket (%v)", connection)
+	} else if sock == nil {
+		return nil, fmt.Errorf("invalid UDP socket (%v)", sock)
 	} else {
-		defer connection.Close()
+		sockets = append(sockets, sock)
 
-		deadline := time.Now().Add(u.timeout)
-		buffer := make([]byte, 1024)
-
-		if err := connection.SetDeadline(deadline); err != nil {
-			return nil, err
+		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port && bind.Port == 0 {
+			return nil, fmt.Errorf("UDP bind address: port %v reserved for broadcast", v.Port)
 		}
 
-		if N, err := connection.Write(request); err != nil {
-			return nil, fmt.Errorf("failed to write to UDP socket [%v]", err)
-		} else {
-			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v (UDP)", N, addr), nil)
-			u.debugf(fmt.Sprintf(" ... request\n%s\n", codec.Dump(request, " ...          ")), nil)
+		// send-to-self handling
+		//
+		// If the bind port is 0, retries (up to 5 times) until the OS binds to a port that is not the
+		// destination port. The interim sockets are retained to prevent the OS from reusing the invalid
+		// port, which it will happily do if the socket is closed immediately (hence the defer())
+		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port {
+			retries := 0
+			for {
+				if sock, err = dialer.Dial("udp4", address); err != nil {
+					return nil, fmt.Errorf("error creating UDP socket (%v)", err)
+				} else if sock == nil {
+					return nil, fmt.Errorf("open() created invalid UDP socket (%v)", sock)
+				} else {
+					sockets = append(sockets, sock)
+					if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port != addr.Port {
+						break
+					}
+				}
+
+				retries++
+				if retries >= 5 {
+					return nil, fmt.Errorf("OS bound UDP socket to port %v reserved for broadcast", sock.LocalAddr().(*net.UDPAddr).Port)
+				}
+			}
 		}
 
-		// NTS: set-ip doesn't return a reply
-		if request[1] == 0x96 {
-			return nil, nil
-		}
+		connection = sock
+	}
 
-		if N, err := connection.Read(buffer); err != nil {
-			u.debugf(" ... receive error", err)
-			return nil, err
-		} else {
-			u.debugf(fmt.Sprintf(" ... received %v bytes from %v (UDP)\n ... response\n%s", N, addr, codec.Dump(buffer[:N], " ...          ")), nil)
+	buffer := make([]byte, 1024)
 
-			return buffer[0:N], nil
-		}
+	if err := connection.SetDeadline(deadline); err != nil {
+		return nil, err
+	}
+
+	if N, err := connection.Write(request); err != nil {
+		return nil, fmt.Errorf("failed to write to UDP socket [%v]", err)
+	} else {
+		u.debugf(fmt.Sprintf(" ... sent %v bytes to %v (UDP)", N, addr), nil)
+		u.debugf(fmt.Sprintf(" ... request\n%s\n", codec.Dump(request, " ...          ")), nil)
+	}
+
+	// NTS: set-ip doesn't return a reply
+	if request[1] == 0x96 {
+		return nil, nil
+	}
+
+	if N, err := connection.Read(buffer); err != nil {
+		u.debugf(" ... receive error", err)
+		return nil, err
+	} else {
+		u.debugf(fmt.Sprintf(" ... received %v bytes from %v (UDP)\n ... response\n%s", N, addr, codec.Dump(buffer[:N], " ...          ")), nil)
+
+		return buffer[0:N], nil
 	}
 }
 
@@ -287,43 +400,85 @@ func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
 		},
 	}
 
-	if connection, err := dialer.Dial("tcp4", address); err != nil {
+	sockets := []net.Conn{}
+
+	defer func() {
+		for _, sock := range sockets {
+			sock.Close()
+		}
+	}()
+
+	var connection net.Conn
+
+	if sock, err := dialer.Dial("tcp4", address); err != nil {
 		return nil, err
-	} else if connection == nil {
-		return nil, fmt.Errorf("invalid TCP socket (%v)", connection)
+	} else if sock == nil {
+		return nil, fmt.Errorf("invalid TCP socket (%v)", sock)
 	} else {
-		defer connection.Close()
+		sockets = append(sockets, sock)
 
-		buffer := make([]byte, 1024)
-
-		if err := connection.SetDeadline(deadline); err != nil {
-			return nil, err
+		if v, ok := sock.LocalAddr().(*net.TCPAddr); ok && v.Port == addr.Port && bind.Port == 0 {
+			return nil, fmt.Errorf("socket bind address: port %v reserved for broadcast", v.Port)
 		}
 
-		if N, err := connection.Write(request); err != nil {
-			return nil, fmt.Errorf("failed to write to TCP socket [%v]", err)
-		} else {
-			u.debugf(fmt.Sprintf(" ... sent %v bytes to %v (TCP)", N, connection.RemoteAddr()), nil)
-			u.debugf(fmt.Sprintf(" ... request\n%s\n", codec.Dump(request, " ...          ")), nil)
+		// send-to-self handling
+		//
+		// If the bind port is 0, retries (up to 5 times) until the OS binds to a port that is not the
+		// destination port. The interim sockets are retained to prevent the OS from reusing the invalid
+		// port, which it will happily do if the socket is closed immediately (hence the defer())
+		if v, ok := sock.LocalAddr().(*net.TCPAddr); ok && v.Port == addr.Port {
+			retries := 0
+			for {
+				if sock, err = dialer.Dial("tcp4", address); err != nil {
+					return nil, fmt.Errorf("error creating TCP socket (%v)", err)
+				} else if sock == nil {
+					return nil, fmt.Errorf("open() created invalid TCP socket (%v)", sock)
+				} else {
+					sockets = append(sockets, sock)
+					if v, ok := sock.LocalAddr().(*net.TCPAddr); ok && v.Port != addr.Port {
+						break
+					}
+				}
+
+				retries++
+				if retries >= 5 {
+					return nil, fmt.Errorf("OS bound TCP socket to port %v reserved for broadcast", sock.LocalAddr().(*net.TCPAddr).Port)
+				}
+			}
 		}
 
-		// NTS: set-ip doesn't return a reply
-		if request[1] == 0x96 {
-			return nil, nil
-		}
+		connection = sock
+	}
 
-		if N, err := connection.Read(buffer); err != nil {
-			u.debugf(" ... receive error", err)
-			return nil, err
-		} else {
-			u.debugf(fmt.Sprintf(" ... received %v bytes from %v (TCP)\n ... response\n%s",
-				N,
-				connection.RemoteAddr(),
-				codec.Dump(buffer[:N], " ...          ")),
-				nil)
+	buffer := make([]byte, 1024)
 
-			return buffer[0:N], nil
-		}
+	if err := connection.SetDeadline(deadline); err != nil {
+		return nil, err
+	}
+
+	if N, err := connection.Write(request); err != nil {
+		return nil, fmt.Errorf("failed to write to TCP socket [%v]", err)
+	} else {
+		u.debugf(fmt.Sprintf(" ... sent %v bytes to %v (TCP)", N, connection.RemoteAddr()), nil)
+		u.debugf(fmt.Sprintf(" ... request\n%s\n", codec.Dump(request, " ...          ")), nil)
+	}
+
+	// NTS: set-ip doesn't return a reply
+	if request[1] == 0x96 {
+		return nil, nil
+	}
+
+	if N, err := connection.Read(buffer); err != nil {
+		u.debugf(" ... receive error", err)
+		return nil, err
+	} else {
+		u.debugf(fmt.Sprintf(" ... received %v bytes from %v (TCP)\n ... response\n%s",
+			N,
+			connection.RemoteAddr(),
+			codec.Dump(buffer[:N], " ...          ")),
+			nil)
+
+		return buffer[0:N], nil
 	}
 }
 

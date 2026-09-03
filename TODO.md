@@ -1,11 +1,17 @@
 # TODO
 
+## In Progress
+
 - [x] 'first card' API (cf. https://github.com/uhppoted/uhppoted/issues/82)
-    - [x] replace _FirstCard_ map with struct
-    - [x] add first card privileges to _PutCard_
-    - [x] fix control1/control2:
-    - [x] unit test for control state translation
-    - [ ] replace _Doors_ map with struct
+
+- [ ] Implement retry on UDP/TCP connect-to-self (cf. https://codeberg.org/uhppoted/uhppoted/issues/4)
+    - [x] broadcast
+    - [x] broadcast-to
+    - [x] UDP send-to
+    - [x] TCP
+
+
+## To Be Done
 
 - [ ] Unit test for Task.MarshalJSON
     - `go fix` legitimately removed the omitempty from _From_ and _To_ fields
@@ -20,8 +26,8 @@
       - [ ] uhppote:GetTime
 - (?) Replace (* UHPPOTE) in API functions with non-pointer version
 
-## TODO
 
+- (?) replace _Doors_ map with struct
 - [ ] Replace messy UDP broadcast wait implementation with WaitGroup
 - [ ] (?)EventNotFoundError
 - [ ] (?)EventOverwrittenError
