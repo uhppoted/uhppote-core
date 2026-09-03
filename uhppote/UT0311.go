@@ -62,7 +62,7 @@ func (u *ut0311) Broadcast(addr *net.UDPAddr, request []byte) ([][]byte, error) 
 	} else {
 		sockets = append(sockets, sock)
 
-		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port && bind.Port == 0 {
+		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port && bind.Port != 0 {
 			return nil, fmt.Errorf("UDP bind address: port %v reserved for broadcast", v.Port)
 		}
 
@@ -176,7 +176,7 @@ func (u *ut0311) BroadcastTo(addr *net.UDPAddr, request []byte, callback func([]
 	} else {
 		sockets = append(sockets, sock)
 
-		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port && bind.Port == 0 {
+		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port && bind.Port != 0 {
 			return nil, fmt.Errorf("UDP bind address: port %v reserved for broadcast", v.Port)
 		}
 
@@ -297,7 +297,7 @@ func (u *ut0311) SendUDP(addr *net.UDPAddr, request []byte) ([]byte, error) {
 	} else {
 		sockets = append(sockets, sock)
 
-		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port && bind.Port == 0 {
+		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port && bind.Port != 0 {
 			return nil, fmt.Errorf("UDP bind address: port %v reserved for broadcast", v.Port)
 		}
 
@@ -417,7 +417,7 @@ func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
 	} else {
 		sockets = append(sockets, sock)
 
-		if v, ok := sock.LocalAddr().(*net.TCPAddr); ok && v.Port == addr.Port && bind.Port == 0 {
+		if v, ok := sock.LocalAddr().(*net.TCPAddr); ok && v.Port == addr.Port && bind.Port != 0 {
 			return nil, fmt.Errorf("socket bind address: port %v reserved for broadcast", v.Port)
 		}
 
