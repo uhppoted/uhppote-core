@@ -10,7 +10,7 @@
 1. Updated to Go version 1.26.
 2. Updated _modern Go_ with `go fix`.
 3. Migrated from _github.com/uhppoted/uhppote-core_ to _codeberg.org/uhppoted/uhppoted-core_.
-4. Added retries for _send-to-self_ to UDP and TCP transports.
+4. Added retries on _send-to-self_ to UDP and TCP transports.
 
 
 ## [0.9.0](https://codeberg.org/uhppoted/uhppote-core/releases/tag/v0.9.0) - 2026-01-27

@@ -3,12 +3,7 @@
 ## In Progress
 
 - [x] 'first card' API (cf. https://github.com/uhppoted/uhppoted/issues/82)
-
-- [ ] Implement retry on UDP/TCP connect-to-self (cf. https://codeberg.org/uhppoted/uhppoted/issues/4)
-    - [x] broadcast
-    - [x] broadcast-to
-    - [x] UDP send-to
-    - [x] TCP
+- [x] Implement retry on UDP/TCP connect-to-self (cf. https://codeberg.org/uhppoted/uhppoted/issues/4)
 
 
 ## To Be Done
