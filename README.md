@@ -1,4 +1,5 @@
-![build](https://img.shields.io/badge/dynamic/json?url=https://gist.github.com/twystd/2609d9356470acaf904386ce4a74f54e/raw/uhppoted-core.json&query=$.message&label=build&color=brightgreen)
+![build](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/twystd/2609d9356470acaf904386ce4a74f54e/raw/uhppoted-core.json)
+
 
 ---
 #### NOTICE OF DEPRECATION
