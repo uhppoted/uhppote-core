@@ -63,7 +63,7 @@ func (u *ut0311) Broadcast(addr *net.UDPAddr, request []byte) ([][]byte, error) 
 		sockets = append(sockets, sock)
 
 		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port && bind.Port != 0 {
-			return nil, fmt.Errorf("UDP bind address: port %v reserved for broadcast", v.Port)
+			return nil, fmt.Errorf("UDP bind address:port %v reserved for broadcast", v.Port)
 		}
 
 		// broadcast-to-self handling
@@ -177,7 +177,7 @@ func (u *ut0311) BroadcastTo(addr *net.UDPAddr, request []byte, callback func([]
 		sockets = append(sockets, sock)
 
 		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port && bind.Port != 0 {
-			return nil, fmt.Errorf("UDP bind address: port %v reserved for broadcast", v.Port)
+			return nil, fmt.Errorf("UDP bind address:port %v reserved for broadcast", v.Port)
 		}
 
 		// broadcast-to-self handling
@@ -191,7 +191,7 @@ func (u *ut0311) BroadcastTo(addr *net.UDPAddr, request []byte, callback func([]
 				if sock, err = net.ListenUDP("udp", bind); err != nil {
 					return nil, fmt.Errorf("error creating UDP socket (%v)", err)
 				} else if sock == nil {
-					return nil, fmt.Errorf("open() created invalid UDP socket (%v)", sock)
+					return nil, fmt.Errorf("invalid UDP socket (%v)", sock)
 				} else {
 					sockets = append(sockets, sock)
 					if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port != addr.Port {
@@ -298,7 +298,7 @@ func (u *ut0311) SendUDP(addr *net.UDPAddr, request []byte) ([]byte, error) {
 		sockets = append(sockets, sock)
 
 		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port && bind.Port != 0 {
-			return nil, fmt.Errorf("UDP bind address: port %v reserved for broadcast", v.Port)
+			return nil, fmt.Errorf("UDP bind address:port %v reserved for broadcast", v.Port)
 		}
 
 		// send-to-self handling
@@ -306,6 +306,9 @@ func (u *ut0311) SendUDP(addr *net.UDPAddr, request []byte) ([]byte, error) {
 		// If the bind port is 0, retries (up to 5 times) until the OS binds to a port that is not the
 		// destination port. The interim sockets are retained to prevent the OS from reusing the invalid
 		// port, which it will happily do if the socket is closed immediately (hence the defer())
+	    //
+	    // This should check the destination address as well as the port but multiple network cards, etc
+	    // make that complicated.
 		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port {
 			retries := 0
 			for {
@@ -418,7 +421,7 @@ func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
 		sockets = append(sockets, sock)
 
 		if v, ok := sock.LocalAddr().(*net.TCPAddr); ok && v.Port == addr.Port && bind.Port != 0 {
-			return nil, fmt.Errorf("socket bind address: port %v reserved for broadcast", v.Port)
+			return nil, fmt.Errorf("socket bind address:port %v reserved for broadcast", v.Port)
 		}
 
 		// send-to-self handling
@@ -426,6 +429,9 @@ func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
 		// If the bind port is 0, retries (up to 5 times) until the OS binds to a port that is not the
 		// destination port. The interim sockets are retained to prevent the OS from reusing the invalid
 		// port, which it will happily do if the socket is closed immediately (hence the defer())
+        //
+	    // This should check the destination address as well as the port but multiple network cards, etc
+	    // make that complicated.
 		if v, ok := sock.LocalAddr().(*net.TCPAddr); ok && v.Port == addr.Port {
 			retries := 0
 			for {
