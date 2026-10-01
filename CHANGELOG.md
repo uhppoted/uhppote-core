@@ -7,7 +7,7 @@
 2. Added _first-card_ privileges to card APIs.
 
 ### Updated
-1. Updated to Go version 1.26.
+1. Updated to Go version 1.27.
 2. Updated _modern Go_ with `go fix`.
 3. Migrated from _github.com/uhppoted/uhppote-core_ to _codeberg.org/uhppoted/uhppoted-core_.
 4. Added retries on _send-to-self_ to UDP and TCP transports.
