@@ -306,9 +306,9 @@ func (u *ut0311) SendUDP(addr *net.UDPAddr, request []byte) ([]byte, error) {
 		// If the bind port is 0, retries (up to 5 times) until the OS binds to a port that is not the
 		// destination port. The interim sockets are retained to prevent the OS from reusing the invalid
 		// port, which it will happily do if the socket is closed immediately (hence the defer())
-	    //
-	    // This should check the destination address as well as the port but multiple network cards, etc
-	    // make that complicated.
+		//
+		// This should check the destination address as well as the port but multiple network cards, etc
+		// make that complicated.
 		if v, ok := sock.LocalAddr().(*net.UDPAddr); ok && v.Port == addr.Port {
 			retries := 0
 			for {
@@ -429,9 +429,9 @@ func (u *ut0311) SendTCP(addr *net.TCPAddr, request []byte) ([]byte, error) {
 		// If the bind port is 0, retries (up to 5 times) until the OS binds to a port that is not the
 		// destination port. The interim sockets are retained to prevent the OS from reusing the invalid
 		// port, which it will happily do if the socket is closed immediately (hence the defer())
-        //
-	    // This should check the destination address as well as the port but multiple network cards, etc
-	    // make that complicated.
+		//
+		// This should check the destination address as well as the port but multiple network cards, etc
+		// make that complicated.
 		if v, ok := sock.LocalAddr().(*net.TCPAddr); ok && v.Port == addr.Port {
 			retries := 0
 			for {
