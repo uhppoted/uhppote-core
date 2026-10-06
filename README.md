@@ -32,10 +32,13 @@ Supported operating systems:
 
 ### Current Release
 
-**[v0.9.0](https://github.com/uhppoted/uhppote-core/releases/tag/v0.9.0) - 2026-01-27**
+## [0.9.1](https://codeberg.org/uhppoted/uhppote-core/releases/tag/v0.9.1) - 2026-10-06
 
-1. Updated to Go version 1.25.
-2. Added deprecation notice to README and godoc.
+1. Migrated from _github_ to _codeberg_.
+2. Updated to Go version 1.27.
+3. Added _set-first-card_ API function.
+4. Added _first-card_ privileges to card APIs.
+5. Added retries on _send-to-self_ to UDP and TCP transports.
 
 
 ## Development

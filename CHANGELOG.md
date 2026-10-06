@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [0.9.1](https://codeberg.org/uhppoted/uhppote-core/releases/tag/v0.9.1) - 2026-10-06
 
 ### Added
 1. Added _set-first-card_ API function.
