@@ -2,12 +2,8 @@
 
 ## In Progress
 
-- [x] 'first card' API (cf. https://github.com/uhppoted/uhppoted/issues/82)
-- [x] Implement retry on UDP/TCP connect-to-self (cf. https://codeberg.org/uhppoted/uhppoted/issues/4)
-
 
 ## To Be Done
-
 - [ ] Unit test for Task.MarshalJSON
     - `go fix` legitimately removed the omitempty from _From_ and _To_ fields
     - still want those fields to not be ""

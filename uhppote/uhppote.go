@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	VERSION string = "v0.9.1" // common version number used across uhppoted ecosystem
+	VERSION string = "v0.9.2" // common version number used across uhppoted ecosystem
 )
 
 type none struct{}
