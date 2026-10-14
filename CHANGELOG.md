@@ -16,7 +16,7 @@
 4. Added retries on _send-to-self_ to UDP and TCP transports.
 
 
-## [0.9.0](https://codeberg.org/uhppoted/uhppote-core/releases/tag/v0.9.0) - 2026-01-27
+## [0.9.0](https://github.com/uhppoted/uhppote-core/releases/tag/v0.9.0) - 2026-01-27
 
 ### Updated
 1. Updated to Go version 1.25.
