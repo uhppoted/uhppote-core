@@ -2,7 +2,7 @@
 
 <div align="center">
 
-_This project has migrated to codeberg:_
+_-- This project has migrated to codeberg --_
 
 _https://codeberg.org/uhppoted/uhppoted-core_
 
