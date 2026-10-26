@@ -27,7 +27,6 @@ Supported operating systems:
 - Windows
 - RaspberryPi (ARM7)
 
-
 ## Release Notes
 
 ### Current Release
