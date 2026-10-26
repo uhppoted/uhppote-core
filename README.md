@@ -1,28 +1,14 @@
 ![build](https://github.com/uhppoted/uhppote-core/workflows/build/badge.svg)
 
 <div align="center">
+
 _This project has migrated to codeberg:_
 
 _https://codeberg.org/uhppoted/uhppoted-core_
 
-_The [github repository](https://github.com/uhppoted/uhppote-core) will be kept up to date and maintained as a courtesy but please use 
-_codeberg_ for reporting issues, etc._
+_The [github repository](https://github.com/uhppoted/uhppote-core) will be kept up to date and maintained as a courtesy and for archival
+releases but please use _codeberg_ for reporting issues, etc._
 </div>
-
----
-#### NOTICE OF DEPRECATION
-
-**Please note that as of v0.9.0, future releases of `uhppote-core` will be flagged for internal use only.**
-
-_In the (hopefully unlikely) event you are using `uhppoted-core` directly, please seriously consider migrating your
-project to [`uhppoted-lib-go`](https://codeberg.org/uhppoted/uhppoted-lib-go), which is now the recommended base library
-for external Go applications. If you can't (or simply don't want to) migrate, please:_
-- _Vendor `uhppote-core` v0.9.0 (or pin the version in `go.mod`)._
-- _Add yourself to this [discussion](https://github.com/uhppoted/uhppote-core/discussions/22) so that I'm aware
-  of your existence._
-
-
----
 
 # uhppote-core
 
@@ -34,6 +20,20 @@ Supported operating systems:
 - MacOS
 - Windows
 - RaspberryPi (ARM7)
+
+---
+**NOTICE OF DEPRECATION**
+
+**Please note that as of v0.9.0, future releases of `uhppote-core` will be flagged for internal use only.**
+
+_In the (hopefully unlikely) event you are using `uhppoted-core` directly, please seriously consider migrating your
+project to [`uhppoted-lib-go`](https://codeberg.org/uhppoted/uhppoted-lib-go), which is now the recommended base library
+for external Go applications. If you can't (or simply don't want to) migrate, please:_
+- _Vendor `uhppote-core` v0.9.0 (or pin the version in `go.mod`)._
+- _Add yourself to this [discussion](https://github.com/uhppoted/uhppote-core/discussions/22) so that I'm aware
+  of your existence._
+---
+
 
 ## Release Notes
 
