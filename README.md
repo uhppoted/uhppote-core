@@ -2,9 +2,7 @@
 
 <div align="center">
 
-The primary repository for this project is hosted on codeberg:
-
-_https://codeberg.org/uhppoted/uhppoted-core_
+_The primary repository for this project is hosted on codeberg: https://codeberg.org/uhppoted/uhppoted-core_
 
 _The [github repository](https://github.com/uhppoted/uhppote-core) will be kept up to date and maintained as a courtesy (and for archival
 releases) but please use _codeberg_ for reporting issues, etc._
