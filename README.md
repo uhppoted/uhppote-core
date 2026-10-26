@@ -1,5 +1,13 @@
 ![build](https://github.com/uhppoted/uhppote-core/workflows/build/badge.svg)
 
+<div align="center">
+_This project has migrated to codeberg:_
+
+_https://codeberg.org/uhppoted/uhppoted-core_
+
+_The [github repository](https://github.com/uhppoted/uhppote-core) will be kept up to date and maintained as a courtesy but please use 
+_codeberg_ for reporting issues, etc._
+</div>
 
 ---
 #### NOTICE OF DEPRECATION
